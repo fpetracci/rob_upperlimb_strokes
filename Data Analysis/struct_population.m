@@ -68,9 +68,7 @@ for z = 1:folder_h_num
 				
 				eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
 					'.stroke_side'  '= -1;']);
-				
-				
-				
+
 			end
 		end
 	end
@@ -136,7 +134,7 @@ for z = 1:folder_s_num
 					'.left_side.trial' num2str(j) '.stroke_task = task_side;']);
 				
 					eval(['strokes_data.task' num2str(i) '.subject' num2str(k), ...
-					'.left_side.trial' num2str(j) '.stroke_side = eval(strokesLabel(3,k);']);
+					'.left_side.trial' num2str(j) '.stroke_side = eval(strokesLabel(3,k));']);
 				end
 				if (isfile(filenameR))
 					eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
