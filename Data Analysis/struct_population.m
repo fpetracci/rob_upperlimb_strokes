@@ -4,6 +4,7 @@
 % a subject and a single trial).
 
 
+
 Manual_stroke = 12; % select the id AFA for the Popolation
 strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25" "28" "29" "30";... % number of patient in the data
 				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20";... % non so come dirlo
@@ -14,6 +15,7 @@ strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20
 fprintf('Preparing Healthy_data \n')
 
 foldername_array_h = ['Healthies\H01_SoftProTasks\'; 'Healthies\H02_SoftProTasks\'; 'Healthies\H03_SoftProTasks\'; 'Healthies\H04_SoftProTasks\'; 'Healthies\H05_SoftProTasks\'];
+
 
 folder_h_num = size(foldername_array_h,1);
 for z = 1:folder_h_num
@@ -44,30 +46,31 @@ for z = 1:folder_h_num
 				fprintf(str)
 			
 				if (isfile(filenameL))
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.left_side.trial' num2str(j) '= struct_dataload(filenameL);']);
-			
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.left_side.trial' num2str(j) '.stroke_task = 0;']);
 					
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-						'.left_side.trial' num2str(j) '.stroke_side = -1;']);
+					healthy_task(i).subject(k).left_side_trial(j) = struct_dataload(filenameL);
+					
+					if j == nTrial
+						for jj = 1:nTrial
+							healthy_task(i).subject(k).left_side_trial(jj).stroke_task = 0;
+							healthy_task(i).subject(k).left_side_trial(jj).stroke_side = -1;
+						end
+					end
 				
 				end
 				if (isfile(filenameR))
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.right_side.trial' num2str(j) '= struct_dataload(filenameR);']);
-			
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.right_side.trial' num2str(j) '.stroke_task = 0;']);
-				
-					eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.right_side.trial' num2str(j) '.stroke_side = -1;']);
-			
+					
+					healthy_task(i).subject(k).right_side_trial(j) = struct_dataload(filenameR);
+					
+					if j == nTrial
+						for jj = 1:nTrial
+							healthy_task(i).subject(k).right_side_trial(jj).stroke_task = 0;
+							healthy_task(i).subject(k).right_side_trial(jj).stroke_side = -1;
+						end
+					end
+
 				end
 				
-				eval(['healthy_data.task' num2str(i) '.subject' num2str(k) ...
-					'.stroke_side'  '= -1;']);
+				healthy_task(i).subject(k).stroke_side= -1;
 
 			end
 		end
