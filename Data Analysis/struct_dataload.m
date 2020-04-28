@@ -229,7 +229,7 @@ end
 joint = 13;  
 data.J_Elbow_L = zeros(nSamples,3);
 if isfield(struct_mvnx.subject.frames.frame(1),'jointAngleXZY')
-    for i=[1:nSamples]
+    for i=1:nSamples
         data.J_Elbow_L(i,:)= struct_mvnx.subject.frames.frame(i+skip).jointAngleXZY((joint*3-2):(joint*3));
     end
 end
