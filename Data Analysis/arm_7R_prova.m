@@ -16,7 +16,7 @@ l_h = 0.15; 	% wrist - hand
 
 % right
 %add L1 and L8 to connect our arm to the neck and to the hand
-%link definitions (to do)link tra giunti
+%link definitions (to do) link tra giunti
 
 %% Costruction, right arm
 
@@ -93,19 +93,4 @@ qtry = Left_Arm.ikunc(T0Hand_l);
 
 Left_Arm.plot(qtry)
 Right_Arm.plot(qtry)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
