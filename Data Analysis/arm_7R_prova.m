@@ -8,11 +8,11 @@ clear healthy_task;
 
 %% define link of our serial links manipulator
 
-P_Shoulder_R = trial.P_Shoulder_R(1,:);
-P_Shoulder_L = trial.P_Shoulder_L(1,:);
+P_Shoulder_R = trial.P_Shoulder_R(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
+P_Shoulder_L = trial.P_Shoulder_L(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
 a = lengths_arm(trial);
 l_u_l = a(1); l_u_r = a(2); l_f_l = a(3); l_f_r = a(4); 
-l_hand = 0.15; 	% wrist - hand
+l_h = 0.15; 	% wrist - hand
 
 % right
 %add L1 and L8 to connect our arm to the neck and to the hand
@@ -29,7 +29,7 @@ Link_r = [	Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% spalla1-spalla2:	the
 			Link('d', 0,	'a',	l_f_r,	'alpha', -pi/2),...						% gomito-polso1:	theta gomito
 			Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% polso1-polso2:	theta polso pitch
 			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', -pi/2),...	% polso2-polso3:	theta polso yaw
-			Link('d', -l_hand,'a',	0,		'alpha', +pi, 'offset', +pi/2)];		% polso3-ee:		theta polso pronosupinazione
+			Link('d', -l_h,	'a',	0,		'alpha', +pi, 'offset', +pi/2)];		% polso3-ee:		theta polso pronosupinazione
 
 Right_Arm = SerialLink(Link_r, 'name', 'Right arm');
 Right_Arm.base = T01_right;
@@ -45,7 +45,7 @@ Link_l = [	Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% spalla1-spalla2:	the
 			Link('d', 0,	'a',	l_f_l,	'alpha', +pi/2),...						% gomito-polso1:	theta gomito
 			Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% polso1-polso2:	theta polso pitch
 			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', -pi/2),...	% polso2-polso3:	theta polso yaw
- 			Link('d', l_hand,	'a',	0,		'alpha', 0,		'offset', +pi/2)];		% polso3-ee:		theta polso pronosupinazione
+ 			Link('d', l_h,	'a',	0,		'alpha', 0,		'offset', +pi/2)];		% polso3-ee:		theta polso pronosupinazione
 
 Left_Arm = SerialLink(Link_l, 'name', 'Left arm');
 Left_Arm.base = T01_left;
@@ -75,9 +75,19 @@ q0_l = zeros(1, Left_Arm.n);
 %% inv kine?
 
 T0Hand_l = zeros(4, 4, size(trial.P_Hand_L,1));
-for i=1:size(trial.P_Hand_L,1)
-	T0Hand_l(:,:,i) = rt2tr(rotz(pi/2), trial.P_Hand_L(i,:)');
+
+quat_n = quaternion(trial.P_Neck_Quat);
+quat_s = quaternion(trial.P_Shoulder_L_Quat);
+quat_u = quaternion(trial.P_Upperarm_L_Quat);
+quat_f = quaternion(trial.P_Forearm_L_Quat);
+quat_h = quaternion(trial.P_Hand_L_Quat);
+for i=1:size(quat_s,1)
+	quat_hand(i,1) = quat_n(i) * quat_s(i) * quat_u(i) * quat_f(i) * quat_h(i);
 end
+for i=1:size(trial.P_Hand_L,1)
+	T0Hand_l(:,:,i) = rt2tr(quat2rotm(quat_hand(i,1)), trial.P_Hand_L(i,:)');
+end
+
 
 qtry = Left_Arm.ikunc(T0Hand_l);
 
