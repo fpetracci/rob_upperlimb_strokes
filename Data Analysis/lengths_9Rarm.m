@@ -4,17 +4,17 @@ function lengths = lengths_9Rarm(trial)
 % example [l_upperarm, l_forearm] =
 % lengths_arm( healthy_task(1).subject(1).right_side_trial(1) )
 
-l_shoulder_l = lsq_order0_norm(trial.P_Shoulder_L - trial.P_Neck);
-l_shoulder_r = lsq_order0_norm(trial.P_Shoulder_R - trial.P_Neck);
+l_shoulder_l = lsq_order0_norm(trial.Shoulder_L.Pos - trial.Neck.Pos);
+l_shoulder_r = lsq_order0_norm(trial.Shoulder_R.Pos - trial.Neck.Pos);
 
-l_upperarm_l = lsq_order0_norm(trial.P_Upperarm_L - trial.P_Forearm_L);
-l_upperarm_r = lsq_order0_norm(trial.P_Upperarm_R - trial.P_Forearm_R);
+l_upperarm_l = lsq_order0_norm(trial.Upperarm_L.Pos - trial.Forearm_L.Pos);
+l_upperarm_r = lsq_order0_norm(trial.Upperarm_R.Pos - trial.Forearm_R.Pos);
 
-l_forearm_l = lsq_order0_norm(trial.P_Forearm_L - trial.P_Hand_L);
-l_forearm_r = lsq_order0_norm(trial.P_Forearm_R - trial.P_Hand_R);
+l_forearm_l = lsq_order0_norm(trial.Forearm_L.Pos - trial.Hand_L.Pos);
+l_forearm_r = lsq_order0_norm(trial.Forearm_R.Pos - trial.Hand_R.Pos);
 
-h_torso = lsq_order0_norm(trial.P_Neck(:,3) - trial.P_Pelvis(:,3));
-d_neck = lsq_order0_norm(trial.P_Neck(:,1:2) - trial.P_Pelvis(:,1:2));
+h_torso = lsq_order0_norm(trial.Neck.Pos(:,3) - trial.Pelvis.Pos(:,3));
+d_neck = lsq_order0_norm(trial.Neck.Pos(:,1:2) - trial.Pelvis.Pos(:,1:2)); % Da guardare bene
 
 
 

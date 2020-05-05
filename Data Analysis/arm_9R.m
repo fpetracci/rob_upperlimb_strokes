@@ -11,7 +11,7 @@ clear healthy_task;
 lenghts = lengths_arm(trial);
 l_h = 0.15; 	% wrist - hand
 
-pos_pelvis = trial.P_Pelvis(1,:); %BARBATRUCCO
+pos_pelvis = trial.Pelvis.Pos(1,:); %BARBATRUCCO
 %% Costruction, right arm
 T01_right = rt2tr(eye(3), pos_pelvis');
 

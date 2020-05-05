@@ -8,8 +8,8 @@ clear healthy_task;
 
 %% define link of our serial links manipulator
 
-P_Shoulder_R = trial.P_Shoulder_R(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
-P_Shoulder_L = trial.P_Shoulder_L(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
+P_Shoulder_R = trial.Shoulder_R.Pos(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
+P_Shoulder_L = trial.Shoulder_L.Pos(1,:);		% BARBATRUCCO, dobbiamo implementare spost spalla
 a = lengths_arm(trial);
 l_u_l = a(1); l_u_r = a(2); l_f_l = a(3); l_f_r = a(4); 
 l_h = 0.15; 	% wrist - hand
@@ -20,7 +20,7 @@ l_h = 0.15; 	% wrist - hand
 
 %% Costruction, right arm
 
-T01_right = rt2tr(rotx(+pi/2), P_Shoulder_R');
+T01_right = rt2tr(rotx(+pi/2), Shoulder_R.Pos');
 
 % serial links connection
 Link_r = [	Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% spalla1-spalla2:	theta spalla pronosupinazione
@@ -36,7 +36,7 @@ Right_Arm.base = T01_right;
 
 %% Costruction, left arm
 
-T01_left = rt2tr(rotx(-pi/2)*rotz(pi), P_Shoulder_L');
+T01_left = rt2tr(rotx(-pi/2)*rotz(pi), Shoulder_L.Pos');
 
 % serial links connection
 Link_l = [	Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% spalla1-spalla2:	theta spalla pronosupinazione
@@ -74,13 +74,13 @@ q0_l = zeros(1, Left_Arm.n);
  
 %% inv kine?
 
-T0Hand_l = zeros(4, 4, size(trial.P_Hand_L,1));
+T0Hand_l = zeros(4, 4, size(trial.Hand_L.Pos,1));
 
-quat_n = quaternion(trial.P_Neck_Quat);
-quat_s = quaternion(trial.P_Shoulder_L_Quat);
-quat_u = quaternion(trial.P_Upperarm_L_Quat);
-quat_f = quaternion(trial.P_Forearm_L_Quat);
-quat_h = quaternion(trial.P_Hand_L_Quat);
+quat_n = quaternion(trial.Neck.Quat);
+quat_s = quaternion(trial.Shoulder_L.Quat);
+quat_u = quaternion(trial.Upperarm_L.Quat);
+quat_f = quaternion(trial.Forearm_L.Quat);
+quat_h = quaternion(trial.Hand_L.Quat);
 for i=1:size(quat_s,1)
 	quat_hand(i,1) = quat_n(i) * quat_s(i) * quat_u(i) * quat_f(i) * quat_h(i);
 end
