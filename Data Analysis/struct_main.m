@@ -1,6 +1,8 @@
 %main structure script
 clear; clc; close;
 
+tic
+
 %global constant definition
 nTasks = 30;
 nTrial = 3;
@@ -10,6 +12,8 @@ nSubject_healthy = 5;
 % script execution
 struct_creation
 struct_population
+
+toc
 
 %%------------------------COMMENT------------------------%% 
 
