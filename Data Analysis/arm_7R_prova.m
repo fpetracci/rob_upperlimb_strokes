@@ -85,7 +85,7 @@ for i=1:size(quat_s,1)
 	quat_hand(i,1) = quat_n(i) * quat_s(i) * quat_u(i) * quat_f(i) * quat_h(i);
 end
 for i=1:size(trial.P_Hand_L,1)
-	T0Hand_l(:,:,i) = rt2tr(quat2rotm(quat_hand(i,1)), trial.P_Hand_L(i,:)');
+	T0Hand_l(:,:,i) = rt2tr(quat2rotm(quat_hand(i,1)), trial.Hand_L.Pos(i,:)');
 end
 
 
