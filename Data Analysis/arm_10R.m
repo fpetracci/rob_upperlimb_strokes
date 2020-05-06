@@ -70,12 +70,12 @@ Left_Arm.base = T01_left;
 % CHE non si specifichi Bot.base
 
 %% plot
-q0 = zeros(1, Right_Arm.n);		%initial config
-q0 = Left_Arm.ikunc( rt2tr(quat2rotm(trial.Hand_L.Quat), trial.Hand_L.Pos') );
-Right_Arm.plot(q0)
-view([25 10 45])
-figure(2)
-Left_Arm.plot(q0)
+% q0 = zeros(1, Right_Arm.n);		%initial config
+% q0 = Left_Arm.ikunc( rt2tr(quat2rotm(trial.Hand_L.Quat), trial.Hand_L.Pos') );
+% Right_Arm.plot(q0)
+% view([25 10 45])
+% figure(2)
+% Left_Arm.plot(q0)
 
 %% inv kine?
 
