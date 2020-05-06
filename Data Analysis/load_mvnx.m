@@ -20,7 +20,7 @@ fclose(fid);
 lines = find(content == 10);
 cellContent = cell(1,length(lines));
 
-hWaitbar = waitbar(0, 'MVNX import: importing data...');
+%hWaitbar = waitbar(0, 'MVNX import: importing data...');
 for n=1:length(lines)
     if n==1
         cellContent{n} = content(1:lines(n)-1);
@@ -119,9 +119,9 @@ end
 
 %% get values
 for n=1:length(wordvalue)
-    if mod(n,5000) == 0
-        waitbar((n/length(wordvalue))/2, hWaitbar);
-    end
+%     if mod(n,5000) == 0
+%         waitbar((n/length(wordvalue))/2, hWaitbar);
+%     end
     
     if iscell(wordvalue{n})
         if length(wordvalue{n}) == 1
@@ -161,9 +161,9 @@ nFrames = length(cell2mat(placeofallendwords(strcmp(kindofendwords,'frame'))));
 lastwordisendword = false;lastendword = '';
 superstruct = struct;name = cell(1,max(index)+1);namecounter = ones(1,max(index));endplace = inf(1,max(index));
 for iWord=1:length(word)
-    if mod(iWord,5000) == 0
-        waitbar(iWord/length(word) + 0.5, hWaitbar);
-    end
+%     if mod(iWord,5000) == 0
+%         waitbar(iWord/length(word) + 0.5, hWaitbar);
+%     end
     if word{iWord}(1)=='/'
         startword = word{iWord}(2:end);
         if any(strcmp(startword,name))
@@ -235,7 +235,7 @@ end
 %% get output
 mvnx = superstruct.mvnx;
 
-delete(hWaitbar);
+%delete(hWaitbar);
 end
 function superstruct = setvalue(superstruct,index,value,name,fields,namecounter)
 %superstruct = setvalue(superstruct,index,value,name,fields,namecounter)
