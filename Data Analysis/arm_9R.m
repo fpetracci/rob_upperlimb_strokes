@@ -7,7 +7,7 @@ clear; clc; close;
 
 
 %% define link of our serial links manipulator
-trial = struct_dataload('H01_T07_L1.mvnx')
+trial = struct_dataload('H01_T07_L1.mvnx');
 lengths = lengths_9Rarm(trial);
 l_h = 0.15; 	% wrist - hand
 
@@ -39,7 +39,7 @@ Right_Arm.base = T01_right;
 %% Costruction, left arm
 T01_left = rt2tr(roty(pi), pos_pelvis');
 
-d1 = lengths.h_torso;
+d1 = -lengths.h_torso;
 d2 = lengths.d_neck;
 a2 = lengths.shoulder.left;
 a5 = lengths.upperarm.left;

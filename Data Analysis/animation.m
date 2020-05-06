@@ -21,7 +21,7 @@ skiframe = 2;		% how many frame it skips every update
 nSamples = size(animate.Head.Pos,1);
 
 % colours
-col_Head.Pos = 'ko';	% colour Head.Pos and Neck.Pos
+col_Head.Pos = 'ko';	% colour Head.Pos, Neck.Pos and Pelvis.Pos
 col_Head.Pos_in = 'k';	% colour inside of the Head.Pos and Neck.Pos
 col_h = 'go';		% colour healthy arm
 col_h_in = 'g';		% colour inside healthy arm
@@ -54,7 +54,7 @@ end
 dim_small = 10;		% small marker dimension (shoulder, Neck.Pos, elbow)
 dim_big = 15;		% big marker dimension (hands, Head.Pos)
 
-% limits for plot
+%% limits for plot
 lim_gap = 0.2;
 xmin = min([ ...
 	min(animate.Head.Pos(:,1)), ...
@@ -120,14 +120,27 @@ zmax = max([ ...
 
 %% Animation
 for i=1:skiframe:(nSamples)
-    
+    %% Pelvis
+	plot3(animate.Pelvis.Pos(i,1),...
+        animate.Pelvis.Pos(i,2),...
+        animate.Pelvis.Pos(i,3),...
+        col_Head.Pos,'MarkerSize', dim_big,'MarkerFaceColor',col_Head.Pos_in)
+    grid on
+    hold on
+	
+	% Pelvis - Neck
+    plot3([animate.Pelvis.Pos(i,1); animate.Neck.Pos(i,1)],...
+        [animate.Pelvis.Pos(i,2); animate.Neck.Pos(i,2)],...
+        [animate.Pelvis.Pos(i,3); animate.Neck.Pos(i,3)],...
+         col_segm)
+	
+	
+	
 	%% Head.Pos
 	plot3(animate.Head.Pos(i,1),...
         animate.Head.Pos(i,2),...
         animate.Head.Pos(i,3),...
         col_Head.Pos,'MarkerSize', dim_big,'MarkerFaceColor',col_Head.Pos_in)
-    grid on
-    hold on
     
     % Head.Pos - Neck.Pos
     plot3([animate.Head.Pos(i,1); animate.Neck.Pos(i,1)],...

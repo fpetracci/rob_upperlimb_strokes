@@ -56,8 +56,8 @@ quatPlot = quaternion(trial.Hand_L.Quat);
 samplePeriod = 1/100;
 SamplePlotFreq = 1;
 Spin = 120;
-rotPlot = zeros(3,3,259);
-for i= 1:259
+rotPlot = zeros(3, 3, size(posPlot,1));
+for i= 1:size(posPlot,1)
 	rotPlot(:,:,i) = roty(-pi/2)*rotx(-pi/2)*quat2rotm(quatPlot(i));
 end
 
