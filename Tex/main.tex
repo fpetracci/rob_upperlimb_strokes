@@ -12,7 +12,44 @@
 
 \input{title.tex}
  
-\section{First section}
+\section{Kalman, Discorsi}
+
+
+State: 
+\begin{equation}
+	\textbf{x}(k) = \left[q_1 (k) q_2 (k) \dots q_{10} (k) \right]^T
+\end{equation}
+State Update Function:
+\begin{equation}
+	\textbf{x}(k) = f(\textbf{x}(k-1), \textbf{u}(k-1) ) + \textbf{w}(k-1)
+\end{equation}
+\begin{equation}
+	f(\textbf{x}(k-1), \textbf{u}(k-1) ) = \textbf{x}(k-1)
+\end{equation}
+
+
+Measures:
+Hand, Elbow, Shoulder, T8 and T12.
+\begin{equation}
+\textbf{y}(k) = \left[ 	pos_{\text{Hand}}(k) \ quat_{\text{Hand}}(k) \dots
+%						pos_{\text{Elbow}} quat_{\text{Elbow}} 
+%						pos_{\text{Shoulder}} quat_{\text{Shoulder}} 
+%						pos_{\text{T8}} quat_{\text{T8}} 
+						pos_{\text{T12}}(k) \ quat_{\text{T12}}(k) 
+						 \right]^T \in \mathbb{R}^{35 \cross 1}
+\end{equation}
+
+Measure Function, we will use the data at sample $k$
+\begin{equation}
+	\textbf{y}(k) = h(\textbf{x}(k), \textbf{u}(k), \textbf{v}(k) ) = \text{data}(k)
+\end{equation}
+
+Error, innovation:
+\begin{equation}
+	\textbf{e}(k) = \textbf{y}(k) -  \text{forward\_kinematics}(q(k)) \in \mathbb{R}^{35 \cross 1}
+\end{equation}
+
+
 
 	
 \end{document}

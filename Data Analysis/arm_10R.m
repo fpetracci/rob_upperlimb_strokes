@@ -47,7 +47,7 @@ d3 = lengths.w_chest.left;
 a3 = lengths.shoulder_l.left;
 a6 = lengths.upperarm.left;
 a7 = lengths.forearm.left;
-d10 = -l_h;
+d10 = l_h;
 
 
 % serial links connection
@@ -76,6 +76,7 @@ Right_Arm.plot(q0)
 view([25 10 45])
 figure(2)
 Left_Arm.plot(q0)
+
 %% inv kine?
 
 

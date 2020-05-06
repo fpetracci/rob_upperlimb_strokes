@@ -3,18 +3,20 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-. sistema riferimento base del dataset struttura -> aggiustare la struct_dataload di conseguenza
-. ampliare 7R -> 9R (10R?)
 . salvare cinematica diretta simbolica in una funzione
 
-. costruire stima con UKF e PF
+. costruire stima con UKF e PF: In orizzontale o in verticale?? cosacosacosa
 
-. structure con gli angoli del 7R del braccio che compie il task
+. structure con gli angoli del 10R del braccio che compie il task
+
 
 MODELLL
 . modello per dinamica e poi simulink
 . modello muscolo - hill?
 -------------------------------------------------------------------
+
+
+
 
 LOG
 
