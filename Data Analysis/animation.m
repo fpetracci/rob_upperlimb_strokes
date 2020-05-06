@@ -16,7 +16,6 @@ function animation(task)
 
 %% Constant definition
 animate = task;		% stores into a local variable the selected task structure
-stroke_side = task.stroke_side;
 skiframe = 2;		% how many frame it skips every update
 nSamples = size(animate.Head.Pos,1);
 
@@ -31,23 +30,28 @@ col_segm = 'k-';	% colour segment
 
 % check if right / left arm is healthy or not
 % upper limb with strokes 0-->Left 1--> Right, -1-->Both arm healthy
-if stroke_side == -1
+if task.stroke_side == -1
 	col_r = col_h;			% colour right arm
 	col_r_in = col_h_in;	% colour inside right arm
 	col_l = col_h;			% colour left arm
 	col_l_in = col_h_in;	% colour left arm inside
-elseif stroke_side == 0
+elseif task.stroke_side == 0
 	col_r = col_h;			% colour right arm
 	col_r_in = col_h_in;	% colour inside right arm
 	col_l = col_s;			% colour stroke - left arm 
 	col_l_in = col_s_in;	% colour inside stroke - left arm 
-elseif stroke_side == 1
+elseif task.stroke_side == 1
 	col_r = col_s;			% colour stroke - right arm
 	col_r_in = col_s_in;	% colour inside stroke - right arm
 	col_l = col_h;			% colour left arm
 	col_l_in = col_h_in;	% colour left arm inside
 else
-	error('stroke_side not found!')
+	disp('stroke_side not found! Grey colour used instead')
+	col_r = 'e';			% colour right arm
+	col_r_in = 'e';			% colour inside right arm
+	col_l = 'e';			% colour left arm
+	col_l_in = 'e';			% colour left arm inside
+	
 end
 
 % marker dimensions
@@ -120,20 +124,47 @@ zmax = max([ ...
 
 %% Animation
 for i=1:skiframe:(nSamples)
-    %% Pelvis
-	plot3(animate.Pelvis.Pos(i,1),...
-        animate.Pelvis.Pos(i,2),...
-        animate.Pelvis.Pos(i,3),...
+%     %% Pelvis
+% 	plot3(animate.Pelvis.Pos(i,1),...
+%         animate.Pelvis.Pos(i,2),...
+%         animate.Pelvis.Pos(i,3),...
+%         col_Head.Pos,'MarkerSize', dim_big,'MarkerFaceColor',col_Head.Pos_in)
+%     grid on
+%     hold on
+% 	
+% 	% Pelvis - T12
+%     plot3([animate.Pelvis.Pos(i,1); animate.T12.Pos(i,1)],...
+%         [animate.Pelvis.Pos(i,2); animate.T12.Pos(i,2)],...
+%         [animate.Pelvis.Pos(i,3); animate.T12.Pos(i,3)],...
+%          col_segm)
+	 
+	%% T12
+	plot3(animate.T12.Pos(i,1),...
+        animate.T12.Pos(i,2),...
+        animate.T12.Pos(i,3),...
         col_Head.Pos,'MarkerSize', dim_big,'MarkerFaceColor',col_Head.Pos_in)
     grid on
     hold on
 	
-	% Pelvis - Neck
-    plot3([animate.Pelvis.Pos(i,1); animate.Neck.Pos(i,1)],...
-        [animate.Pelvis.Pos(i,2); animate.Neck.Pos(i,2)],...
-        [animate.Pelvis.Pos(i,3); animate.Neck.Pos(i,3)],...
+	% T12 - T8
+    plot3([animate.T8.Pos(i,1); animate.T12.Pos(i,1)],...
+        [animate.T8.Pos(i,2); animate.T12.Pos(i,2)],...
+        [animate.T8.Pos(i,3); animate.T12.Pos(i,3)],...
          col_segm)
+	 
+	 %% T8
+	plot3(animate.T8.Pos(i,1),...
+        animate.T8.Pos(i,2),...
+        animate.T8.Pos(i,3),...
+        col_Head.Pos,'MarkerSize', dim_small,'MarkerFaceColor',col_Head.Pos_in)
+    grid on
+    hold on
 	
+	% T8 - Neck
+    plot3([animate.Neck.Pos(i,1); animate.T8.Pos(i,1)],...
+        [animate.Neck.Pos(i,2); animate.T8.Pos(i,2)],...
+        [animate.Neck.Pos(i,3); animate.T8.Pos(i,3)],...
+         col_segm)
 	
 	
 	%% Head.Pos

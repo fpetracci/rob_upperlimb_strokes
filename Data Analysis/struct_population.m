@@ -163,7 +163,7 @@ for z = 1:folder_s_num
 
 				end
 				
-				strokes_task(i).subject(k).stroke_side= strokesLabel(3,k);
+				strokes_task(i).subject(k).stroke_side= str2double(strokesLabel(3,k));
 				
 				%if (isfile(filenameL))
 					%eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...

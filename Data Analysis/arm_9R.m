@@ -1,22 +1,29 @@
 %% Intro
 clear; clc; close;
 
-% load('healthy.mat');
-% trial = healthy_task(1).subject(1).left_side_trial(1);
-% clear healthy_task;
+load('healthy_task.mat');
+trial = healthy_task(1).subject(1).left_side_trial(1);
+clear healthy_task;
+ % trial = struct_dataload('H01_T07_L1.mvnx');
+
+ 
+% sistema 
+
+
 
 
 %% define link of our serial links manipulator
-trial = struct_dataload('H01_T07_L1.mvnx');
+
 lengths = lengths_9Rarm(trial);
 l_h = 0.15; 	% wrist - hand
 
 pos_pelvis = trial.Pelvis.Pos(1,:); %BARBATRUCCO
 %% Costruction, right arm
-T01_right = rt2tr(eye(3), pos_pelvis');
+
+T01_right = rt2tr(rotz(-pi/2), pos_pelvis');
 
 d1 = lengths.h_torso;
-d2 = lengths.d_neck;
+d2 = -lengths.d_neck;
 a2 = lengths.shoulder.right;
 a5 = lengths.upperarm.right;
 a6 = lengths.forearm.right;
@@ -37,7 +44,7 @@ Right_Arm = SerialLink(Link_r, 'name', 'Right arm');
 Right_Arm.base = T01_right;
 
 %% Costruction, left arm
-T01_left = rt2tr(roty(pi), pos_pelvis');
+T01_left = rt2tr(rotz(-pi/2)*roty(pi), pos_pelvis');
 
 d1 = -lengths.h_torso;
 d2 = lengths.d_neck;
@@ -67,7 +74,7 @@ Left_Arm.base = T01_left;
 
 %% plot
 q0 = zeros(1, Right_Arm.n);		%initial config
-%q0 = Left_Arm.ikunc rt2tr(quat2rotm(trial.Hand_L.Quat(:,:)),trial.Hand_L.Pos(:,:)')
+q0 = Left_Arm.ikunc( rt2tr(quat2rotm(trial.Hand_L.Quat), trial.Hand_L.Pos') );
 Right_Arm.plot(q0)
 view([25 10 45])
 figure(2)

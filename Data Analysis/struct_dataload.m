@@ -23,21 +23,54 @@ nSamples = nSamples_plus - skip; % number of sample with temporal values
 
 data = struct; %struct definition
 %% Position and quaternions
-%Pelvis
-segment = 1;
-data.Pelvis.Pos = zeros(nSamples,3);
+% %Pelvis
+% segment = 1;
+% data.Pelvis.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.Pelvis.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.Pelvis.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.Pelvis.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
+
+%T12
+segment = 4;
+data.T12.Pos = zeros(nSamples,3);
 if isfield(struct_mvnx.subject.frames.frame(1),'position')
     for i = 1:nSamples
-        data.Pelvis.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+        data.T12.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
     end
 end
 
-data.Pelvis.Quat = zeros(nSamples,4);
+data.T12.Quat = zeros(nSamples,4);
 if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
     for i = 1:nSamples
-        data.Pelvis.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+        data.T12.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
     end
 end
+
+%T8
+segment = 5;
+data.T8.Pos = zeros(nSamples,3);
+if isfield(struct_mvnx.subject.frames.frame(1),'position')
+    for i = 1:nSamples
+        data.T8.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+    end
+end
+
+data.T8.Quat = zeros(nSamples,4);
+if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+    for i = 1:nSamples
+        data.T8.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+    end
+end
+
 
 %Neck
 segment = 6;
