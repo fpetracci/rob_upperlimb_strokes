@@ -1,10 +1,10 @@
 %% Intro
 clear; clc; close;
 
-% load('healthy_task.mat');
-% trial = healthy_task(1).subject(1).left_side_trial(1);
-% clear healthy_task;
- trial = struct_dataload('H01_T07_L1.mvnx');
+load('healthy_task.mat');
+trial = healthy_task(1).subject(1).left_side_trial(1);
+clear healthy_task;
+ %trial = struct_dataload('H01_T07_L1.mvnx');
 
 %% define link of our serial links manipulator
 
