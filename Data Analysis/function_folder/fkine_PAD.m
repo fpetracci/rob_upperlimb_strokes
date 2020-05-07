@@ -4,8 +4,7 @@ function [Quat, Tr] = fkine_PAD(Arm_DH, q, n)
 % 			    7 for the forearm(elbow), 
 % 				6 for the upperarm(shoulder)
 %				3 for T8
-T_xsens_f_0 = rt2tr(rotz(-pi/2)*rotz(pi/2)*rotx(-pi/2), pos_sist0');
-a = T_xsens_0 * Arm_DH.links(1).A(q(1));
+a = Arm_DH.base * Arm_DH.links(1).A(q(1));
 b = eye(4);
 if n == 1
 	[Rt, Tr] = tr2rt(a);
