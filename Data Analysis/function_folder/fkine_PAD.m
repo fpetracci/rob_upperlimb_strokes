@@ -8,7 +8,7 @@ a = Arm_DH.base * Arm_DH.links(1).A(q(1));
 b = eye(4);
 if n == 1
 	[Rt, Tr] = tr2rt(a);
-	Quat = rotm2quat(Rt);
+	Quat = rotm2quat(Rt)';
 	
 elseif n > 1 && n <= length(q)
 	for i = 2:n

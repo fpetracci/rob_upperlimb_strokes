@@ -9,7 +9,7 @@ clear healthy_task;
 %% define link of our serial links manipulator
 
 lengths = lengths_10Rarm(trial);
-l_h = 0.15; 	% wrist - hand
+l_h = 0; 	% wrist - hand
 
 pos_sist0 = trial.T12.Pos(1,:); %BARBATRUCCO
 
