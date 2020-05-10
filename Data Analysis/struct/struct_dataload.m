@@ -39,90 +39,122 @@ data = struct; %struct definition
 %     end
 % end
 
-%T12
-segment = 4;
-data.T12.Pos = zeros(nSamples,3);
+%L5
+segment = 2;
+data.L5.Pos = zeros(nSamples,3);
 if isfield(struct_mvnx.subject.frames.frame(1),'position')
     for i = 1:nSamples
-        data.T12.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+        data.L5.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
     end
 end
 
-data.T12.Quat = zeros(nSamples,4);
+data.L5.Quat = zeros(nSamples,4);
 if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
     for i = 1:nSamples
-        data.T12.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+        data.L5.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
     end
 end
 
-%T8
-segment = 5;
-data.T8.Pos = zeros(nSamples,3);
-if isfield(struct_mvnx.subject.frames.frame(1),'position')
-    for i = 1:nSamples
-        data.T8.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
-    end
-end
+% %L3
+% segment = 3;
+% data.L3.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.L3.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.L3.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.L3.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
 
-data.T8.Quat = zeros(nSamples,4);
-if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
-    for i = 1:nSamples
-        data.T8.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
-    end
-end
+% %T12
+% segment = 4;
+% data.T12.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.T12.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.T12.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.T12.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
+
+% %T8
+% segment = 5;
+% data.T8.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.T8.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.T8.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.T8.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
+% 
+% 
+% %Neck
+% segment = 6;
+% data.Neck.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.Neck.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.Neck.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.Neck.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
+% 
+% 
+% %Head
+% segment = 7;
+% data.Head.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.Head.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.Head.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.Head.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
+
+% %Right Shoulder
+% segment = 8;
+% data.Shoulder_R.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.Shoulder_R.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.Shoulder_R.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.Shoulder_R.Quat(i,:)= struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
 
 
-%Neck
-segment = 6;
-data.Neck.Pos = zeros(nSamples,3);
-if isfield(struct_mvnx.subject.frames.frame(1),'position')
-    for i = 1:nSamples
-        data.Neck.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
-    end
-end
-
-data.Neck.Quat = zeros(nSamples,4);
-if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
-    for i = 1:nSamples
-        data.Neck.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
-    end
-end
-
-
-%Head
-segment = 7;
-data.Head.Pos = zeros(nSamples,3);
-if isfield(struct_mvnx.subject.frames.frame(1),'position')
-    for i = 1:nSamples
-        data.Head.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
-    end
-end
-
-data.Head.Quat = zeros(nSamples,4);
-if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
-    for i = 1:nSamples
-        data.Head.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
-    end
-end
-
-%Right Shoulder
-segment = 8;
-data.Shoulder_R.Pos = zeros(nSamples,3);
-if isfield(struct_mvnx.subject.frames.frame(1),'position')
-    for i = 1:nSamples
-        data.Shoulder_R.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
-    end
-end
-
-data.Shoulder_R.Quat = zeros(nSamples,4);
-if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
-    for i = 1:nSamples
-        data.Shoulder_R.Quat(i,:)= struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
-    end
-end
-
-
-%Right Upper Arm
+%Right Upperarm
 segment = 9;
 data.Upperarm_R.Pos = zeros(nSamples,3);
 if isfield(struct_mvnx.subject.frames.frame(1),'position')
@@ -171,23 +203,23 @@ if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
     end
 end
 
-%Left Shoulder
-segment = 12;
-data.Shoulder_L.Pos = zeros(nSamples,3);
-if isfield(struct_mvnx.subject.frames.frame(1),'position')
-    for i = 1:nSamples
-        data.Shoulder_L.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
-    end
-end
+% %Left Shoulder
+% segment = 12;
+% data.Shoulder_L.Pos = zeros(nSamples,3);
+% if isfield(struct_mvnx.subject.frames.frame(1),'position')
+%     for i = 1:nSamples
+%         data.Shoulder_L.Pos(i,:) = struct_mvnx.subject.frames.frame(i+skip).position((segment*3-2):(segment*3));
+%     end
+% end
+% 
+% data.Shoulder_L.Quat = zeros(nSamples,4);
+% if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
+%     for i = 1:nSamples
+%         data.Shoulder_L.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
+%     end
+% end
 
-data.Shoulder_L.Quat = zeros(nSamples,4);
-if isfield(struct_mvnx.subject.frames.frame(1),'orientation')
-    for i = 1:nSamples
-        data.Shoulder_L.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
-    end
-end
-
-%Left Upper Arm
+%Left Upperarm
 segment = 13;
 data.Upperarm_L.Pos = zeros(nSamples,3);
 if isfield(struct_mvnx.subject.frames.frame(1),'position')
