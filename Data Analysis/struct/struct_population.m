@@ -5,6 +5,7 @@
 
 
 
+
 Manual_stroke = 12; % select the id AFA for the Popolation
 strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25" "28" "29" "30";... % number of patient in the data
 				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20";... % non so come dirlo
@@ -53,6 +54,7 @@ for z = 1:folder_h_num
 						for jj = 1:nTrial
 							healthy_task(i).subject(k).left_side_trial(jj).stroke_task = 0;
 							healthy_task(i).subject(k).left_side_trial(jj).stroke_side = -1;
+							healthy_task(i).subject(k).left_side_trial(jj).task_side = 0;
 						end
 					end
 				
@@ -65,6 +67,7 @@ for z = 1:folder_h_num
 						for jj = 1:nTrial
 							healthy_task(i).subject(k).right_side_trial(jj).stroke_task = 0;
 							healthy_task(i).subject(k).right_side_trial(jj).stroke_side = -1;
+							healthy_task(i).subject(k).right_side_trial(jj).task_side = 1;
 						end
 					end
 
@@ -137,6 +140,7 @@ for z = 1:folder_s_num
 							
 							strokes_task(i).subject(k).left_side_trial(jj).stroke_task = task_side;
 							strokes_task(i).subject(k).left_side_trial(jj).stroke_side = strokesLabel(3,k);
+							strokes_task(i).subject(k).left_side_trial(jj).task_side = 0;
 						end
 					end
 				
@@ -158,55 +162,14 @@ for z = 1:folder_s_num
 						for jj = 1:nTrial
 							strokes_task(i).subject(k).right_side_trial(jj).stroke_task = task_side;
 							strokes_task(i).subject(k).right_side_trial(jj).stroke_side = strokesLabel(3,k);
+							strokes_task(i).subject(k).right_side_trial(jj).task_side = 1;
 						end
 					end
 
 				end
 				
-				strokes_task(i).subject(k).stroke_side= str2double(strokesLabel(3,k));
-				
-				%if (isfile(filenameL))
-					%eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-					%'.left_side.trial' num2str(j) '= struct_dataload(filenameL);']);
-					
-					%task_side = not(eval(strokesLabel(3,k)));
-					
-					%here subject executes the task using his left arm, so
-					%if stroke affected his left side(eval(strokesLabel(3,k))=0),
-					%he actually does it using the injured side (side has 
-					%to be = 1), instead if stroke affected his right 
-					%side, he actually does it using the healthy side
-					%(side has to be = 0)
-				
-					%eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-					%'.left_side.trial' num2str(j) '.stroke_task = task_side;']);
-				
-					%eval(['strokes_data.task' num2str(i) '.subject' num2str(k), ...
-					%'.left_side.trial' num2str(j) '.stroke_side = eval(strokesLabel(3,k));']);
-				%end
-				%if (isfile(filenameR))
-				%	eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-				%	'.right_side.trial' num2str(j) '= struct_dataload(filenameR);']);
+				strokes_task(i).subject(k).stroke_side = str2double(strokesLabel(3,k));
 			
-				%	task_side = eval(strokesLabel(3,k));
-				
-					%here subject executes the task using his right arm, so
-					%if stroke affected his right side(eval(strokesLabel(3,k))=1),
-					%he actually does it using the injured side (side has 
-					%to be = 1), instead if stroke affected his left 
-					%side, he actually does it using the healthy side
-					%(side has to be = 0)
-					
-				%	eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-				%	'.right_side.trial' num2str(j) '.stroke_task = task_side;']);
-				
-				%	eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-				%	'.right_side.trial' num2str(j) '.stroke_side = eval(strokesLabel(3,k));']);
-
-				%end
-				
-				%eval(['strokes_data.task' num2str(i) '.subject' num2str(k) ...
-				%	'.stroke_side'  '= eval(strokesLabel(3,k));']);
 			end
 		end
 	end

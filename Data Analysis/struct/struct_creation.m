@@ -32,36 +32,3 @@ fprintf('Structures created! \n')
 % % both post-strokes and healthy patients' data.
 
 
-%% Old
-
-%dataset.stroke_side = 0; %1 if task is executed using the side affected by stroke, 0 instead
-%
-% creation of 'subject' structure to contain all necessary data of a single subject
-%
-% for i = 1:nTrial %% number of executed tasks
-%     eval(['subject.left_side.trial' num2str(i) '=dataset;'])
-% 	eval(['subject.right_side.trial' num2str(i) '=dataset;'])
-% end
-% 
-% subject.stroke_side = 0; %-1 = no strokes, 0 = left, 1 = right
-% 
-% %creation of 'strokes_data.task' and 'healthy_data.task' structures to
-% %contain all data regarding every tasks execution from all subjects.
-% 
-% for i = 1:nTasks %% number of executed tasks
-%     for j=1:nSubject_strokes %% number of subject affected to strokes
-%         eval(['task' num2str(i) '.subject' num2str(j) ' =subject;'])
-%     end
-%     eval(['strokes_data.task' num2str(i) '=task' num2str(i) ';'])
-% end
-% 
-% for i = 1:nTasks %% number of executed tasks
-%     for k=1:nSubject_healthy %% number of healthy subjects
-%         eval(['h_task' num2str(i) '.subject' num2str(k) ' =subject;'])
-%     end
-%     eval(['healthy_data.task' num2str(i) '=h_task' num2str(i) ';'])
-% end
-% 
-
-% 
-% %clear all
