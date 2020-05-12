@@ -75,7 +75,7 @@ k_max = 100;								% number of the vertical kalman iteration in the worst case 
 k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
-e_tol = 0.01;								% tolerance to break the filter iteration
+e_tol = 0.1;								% tolerance to break the filter iteration
 % e_init = ones(size(yMeas, 1), 1);			% initialization of error
 
 xCorrected = zeros(arm.n, 1, t_tot, k_max);
@@ -86,6 +86,8 @@ Q = 1;										% Variance of the process noise
 for t = 1:t_tot
 	% e(:,:,t,1) = e_init;
 
+	
+	%filter definition
 	filter = extendedKalmanFilter(...
 		@StateFcn,... % State transition function
 		@MeasurementNoiseFcn,... % Measurement function
@@ -103,7 +105,7 @@ for t = 1:t_tot
 % %		fa un passo in piu`, da correggere se ne abbiamo voglia => BREAK?
 % 	end
 % 	
-	while k < 2 * k_max
+	while k < (2 * k_max)
 		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter.State, arm);
 		[xCorrected(:,:,t,k), PCorrected(:,:,t,k)] = correct(filter, yMeas(:, :, t), arm);
 		predict(filter);
@@ -115,8 +117,10 @@ for t = 1:t_tot
 
 	k_iter(:,t) = k;
 	q(:,1,t) = mod(xCorrected(:,:,t,k), 2*pi);
+	
 	% e_plot(t,:) = e';
 	initialStateGuess = xCorrected(:,:,t,k);
+	k = 1;
 	
 end
 
