@@ -1,7 +1,6 @@
-clear; close; clc;
+%% loading data
+clear; clc;
 
-
-% loading data
 trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 
 arms = create_arms(trial);
@@ -47,6 +46,7 @@ elseif 1 == 0 %trial.task_side == right
 
 end
 
+%% yMeas Generation
 % general variables outside chosing left or right
 % yMeas = [	eul_L5_meas;		...
 % 			pos_shoulder_meas;	...
@@ -56,7 +56,9 @@ end
 % 			pos_wrist_meas;		...
 % 			eul_wrist_meas];
 		
-yMeas = [pos_shoulder_meas];
+yMeas = [	pos_elbow_meas;		...
+			pos_wrist_meas;		...
+			eul_wrist_meas];
 
 
 yMeas_EE_rot = eul2rotm(eul_wrist_meas(:,1,1)');
@@ -66,27 +68,28 @@ yMeas_EE_pos = pos_wrist_meas(:,1,1);
 % step
 TgEE_i = rt2tr(yMeas_EE_rot, yMeas_EE_pos);
 
-
 %% KALMAN VERTICALE
 
-% init
+%% Kalman Init
 t_tot = size(yMeas,3);						% number of time step in the chosen trial
 q = zeros(arm.n, 1, t_tot);					% initialization of joint angles
-initialStateGuess = arm.ikunc(TgEE_i);		% init vector for kalman
+q0_ikunc = arm.ikunc(TgEE_i);				% init vector for kalman
+initialStateGuess = q0_ikunc;
 
 k = 1;										% initialization of filter step-index
-k_max = 10000;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
+k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
 k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
-e_tol = 0.1;								% tolerance to break the filter iteration
+e_tol = 1;									% tolerance to break the filter iteration
 % e_init = ones(size(yMeas, 1), 1);			% initialization of error
 
 xCorrected = zeros(arm.n, 1, t_tot, k_max);
 PCorrected = zeros(arm.n, arm.n, t_tot, k_max);
-R = 1;										% Variance of the measurement noise v[k]
+R = 100;										% Variance of the measurement noise v[k]
 Q = 1;										% Variance of the process noise
 
+%% Kalman iteration
 for t = 1:t_tot
 	% e(:,:,t,1) = e_init;
 
@@ -128,6 +131,27 @@ for t = 1:t_tot
 	
 end
 
+%%
+armplot(q,arm);
+figure
+plot(k_iter)
+
+%%
+t_fisso = 1;
+q_tfisso = zeros(arm.n, k_iter(t_fisso));
+for k_plot = 1:k_iter(t_fisso)
+	q_tfisso(:,k_plot) = xCorrected(:,1,t_fisso,k_plot);
+end
+arm.plot(q_tfisso');
+
+%% prove
+arm.plot(q0_ikunc)
+
+arm.plot(q_tfisso(:,k_iter(t_fisso))' )
+
+arm.plot(zeros(1,arm.n))
+
+%%
 % 
 % for t=1:t_tot
 % 	initialStateGuess =Left_Arm.ikcon(rt2tr(quat2rotm(trial.Hand_L.Quat(t,:)),trial.Hand_L.Pos(t,:)'));

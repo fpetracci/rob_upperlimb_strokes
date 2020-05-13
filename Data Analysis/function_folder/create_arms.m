@@ -14,7 +14,7 @@ function arm_10R = create_arms(trial)
 par = par_10R(trial);
 
 %first omogeneous transform from xsens to our frame_0
-Txsens_0 = rt2tr(rotz(-pi/2)*rotz(pi/2)*rotx(-pi/2), par.L5_pos); 
+Tg0 = rt2tr(rotx(-pi/2), par.L5_pos); 
 %% Costruction, right arm
 
 d3 = par.depth_shoulder.right;
@@ -39,7 +39,8 @@ Link_r = [	Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% L5-L5:				theta tors
 			Link('d', d10,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2)];		% wrist2-hand:			theta wrist (yaw)
 
 Right_Arm = SerialLink(Link_r, 'name', 'Right arm');
-Right_Arm.base = Txsens_0;
+Right_Arm.base = Tg0;
+
 
 %% Costruction, left arm
 
@@ -65,7 +66,7 @@ Link_l = [	Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% L5-L5:				theta tors
 			Link('d', d10,	'a',	0,		'alpha', -pi/2, 'offset', -pi/2)];		% wrist2-hand:			theta wrist (yaw)
 
 Left_Arm = SerialLink(Link_l, 'name', 'Left arm');
-Left_Arm.base = Txsens_0;
+Left_Arm.base = Tg0;
 
 % attenzione: il sistema di riferimento dell'ambiente 3D di Bot.plot e` il
 % sistema di riferimento del primo Link (che crede essere il telaio) A MENO

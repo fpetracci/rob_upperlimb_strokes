@@ -60,8 +60,8 @@ eul_wrist = tr2eul(rot_wrist)';
 % 		eul_wrist];
 
 % PROVE
-Tg4	= arm_fkine(Arm, qk, 4);
-tr_shoulder = Tg4(1:3, 4);
-yk = [tr_shoulder];
+yk = [	tr_elbow; ...
+		tr_wrist; ...
+		eul_wrist];
 
 end
