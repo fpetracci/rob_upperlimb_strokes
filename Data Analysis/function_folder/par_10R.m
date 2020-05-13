@@ -5,7 +5,9 @@ function par = par_10R(trial)
 % example: par =
 % par_10R( healthy_task(1).subject(1).right_side_trial(1) )
 
-L5_pos = [lsq_order0_norm(trial.L5.Pos(:,1)), lsq_order0_norm(trial.L5.Pos(:,2)), lsq_order0_norm(trial.L5.Pos(:,3))]';
+L5_pos = [sign(trial.L5.Pos(1,1))*lsq_order0_norm(trial.L5.Pos(:,1)),... 
+          sign(trial.L5.Pos(1,2))*lsq_order0_norm(trial.L5.Pos(:,2)),...
+          sign(trial.L5.Pos(1,3))*lsq_order0_norm(trial.L5.Pos(:,3))]';
 
 L5_shoulder_l = lsq_order0_norm(trial.Upperarm_L.Pos(:,2:3) - trial.L5.Pos(:,2:3));
 L5_shoulder_r = lsq_order0_norm(trial.Upperarm_R.Pos(:,2:3) - trial.L5.Pos(:,2:3));
