@@ -48,19 +48,23 @@ elseif 1 == 0 %trial.task_side == right
 end
 
 % general variables outside chosing left or right
-yMeas = [	eul_L5_meas;		...
-			pos_shoulder_meas;	...
-			eul_shoulder_meas;	...
-			pos_elbow_meas;		...
-			eul_elbow_meas;		...
-			pos_wrist_meas;		...
-			eul_wrist_meas];
-yMeas_EE_rot = yMeas(end-2:end, 1, 1)';
-yMeas_EE_pos = yMeas(end-5:end-3, 1, 1);
+% yMeas = [	eul_L5_meas;		...
+% 			pos_shoulder_meas;	...
+% 			eul_shoulder_meas;	...
+% 			pos_elbow_meas;		...
+% 			eul_elbow_meas;		...
+% 			pos_wrist_meas;		...
+% 			eul_wrist_meas];
+		
+yMeas = [pos_shoulder_meas];
+
+
+yMeas_EE_rot = eul2rotm(eul_wrist_meas(:,1,1)');
+yMeas_EE_pos = pos_wrist_meas(:,1,1);
 
 % homogeneous transform between global frame and EE frame in the first time
 % step
-TgEE_i = rt2tr(eul2rotm(yMeas_EE_rot), yMeas_EE_pos);
+TgEE_i = rt2tr(yMeas_EE_rot, yMeas_EE_pos);
 
 
 %% KALMAN VERTICALE
@@ -71,7 +75,7 @@ q = zeros(arm.n, 1, t_tot);					% initialization of joint angles
 initialStateGuess = arm.ikunc(TgEE_i);		% init vector for kalman
 
 k = 1;										% initialization of filter step-index
-k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
+k_max = 10000;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
 k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
