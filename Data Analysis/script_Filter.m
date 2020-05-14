@@ -1,10 +1,11 @@
-%% loading data
+%% init
 clear; clc;
 
 trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 
 arms = create_arms(trial);
-
+par = par_10R(trial);
+%% load
 % Measurement vector, copied here for reference
 % yk = [	eul_L5; ...
 % 		tr_shoulder; ...
@@ -13,7 +14,15 @@ arms = create_arms(trial);
 % 		eul_elbow; ...
 % 		tr_wrist; ...
 % 		eul_wrist];
-			
+
+% rotation matrix xsens -> dh frames
+%nome non ci piace ma e` la rotazione che 
+% porta xs in sistema di riferimento su wrist "nostro" dovuto a dh
+Rs210_l = rotx(-pi/2);
+Rs28_l = rotz(pi)*rotx(pi);
+Rs23_l = roty(pi/2)*rotx(pi-par.theta_shoulder.left);
+
+
 if 1 == 1 %trial.task_side == left
 	
 	arm = arms.left;
@@ -21,8 +30,14 @@ if 1 == 1 %trial.task_side == left
 	% construction of measurement vector 
 	eul_L5_meas = reshape_data(tr2eul(quat2rotm(trial.L5.Quat) ));
 	eul_shoulder_meas = reshape_data(tr2eul(quat2rotm(trial.Upperarm_L.Quat) ));
-	eul_elbow_meas = reshape_data(tr2eul(quat2rotm(trial.Forearm_L.Quat) ));
-	eul_wrist_meas = reshape_data(tr2eul(quat2rotm(trial.Hand_L.Quat) ));
+	
+	
+	for i=1:size(trial.Hand_L.Quat,1)
+		eul_wrist_meas(:,i) = tr2eul(quat2rotm(trial.Hand_L.Quat(i,:)) * Rs210_l);
+		eul_elbow_meas(:,i) = tr2eul( quat2rotm(trial.Forearm_L.Quat(i,:)) * Rs28_l);
+	end
+ 	eul_wrist_meas = reshape_data(eul_wrist_meas');
+	eul_elbow_meas = reshape_data(eul_elbow_meas');
 	
 	pos_shoulder_meas = reshape_data(trial.Upperarm_L.Pos);
 	pos_elbow_meas = reshape_data(trial.Forearm_L.Pos);
@@ -56,19 +71,20 @@ end
 % 			pos_wrist_meas;		...
 % 			eul_wrist_meas];
 		
-yMeas = [	pos_elbow_meas;		...
+yMeas = [	eul_L5_meas; ...
+			pos_shoulder_meas;	...
+			%eul_elbow_meas;		...
 			pos_wrist_meas;		...
 			eul_wrist_meas];
 
 
-yMeas_EE_rot = eul2rotm(eul_wrist_meas(:,1,1)');
+yMeas_EE_rot = eul2r(eul_wrist_meas(:,1,1)'); % peter corke function
+%yMeas_EE_rot = eul2rotm(eul_wrist_meas(:,1,1)',  'ZYZ');
 yMeas_EE_pos = pos_wrist_meas(:,1,1);
 
 % homogeneous transform between global frame and EE frame in the first time
 % step
 TgEE_i = rt2tr(yMeas_EE_rot, yMeas_EE_pos);
-
-%% KALMAN VERTICALE
 
 %% Kalman Init
 t_tot = size(yMeas,3);						% number of time step in the chosen trial
@@ -81,13 +97,19 @@ k_max = 100;								% number of the vertical kalman iteration in the worst case 
 k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
-e_tol = 1;									% tolerance to break the filter iteration
+e_tol = 0.001;								% tolerance to break the filter iteration
 % e_init = ones(size(yMeas, 1), 1);			% initialization of error
 
 xCorrected = zeros(arm.n, 1, t_tot, k_max);
 PCorrected = zeros(arm.n, arm.n, t_tot, k_max);
-R = 100;										% Variance of the measurement noise v[k]
-Q = 1;										% Variance of the process noise
+R = 0.5;										% Variance of the measurement noise v[k]
+Q = 0.1;										% Variance of the process noise
+
+%% PROVE PAR
+e_tol = 0.01;	
+R = 1;	% Variance of the measurement noise v[k]
+Q = 1;	% Variance of the process noise
+
 
 %% Kalman iteration
 for t = 1:t_tot
@@ -123,8 +145,9 @@ for t = 1:t_tot
 	end
 
 	k_iter(:,t) = k;
-	q(:,1,t) = mod(xCorrected(:,:,t,k), 2*pi);
-	
+	%q(:,1,t) = mod(xCorrected(:,:,t,k), 2*pi);
+	q(:,1,t) = xCorrected(:,:,t,k);
+
 	% e_plot(t,:) = e';
 	initialStateGuess = xCorrected(:,:,t,k);
 	k = 1;
@@ -132,11 +155,18 @@ for t = 1:t_tot
 end
 
 %%
+figure(1)
 armplot(q,arm);
-figure
-plot(k_iter)
 
-%%
+figure(2)
+plot(k_iter, '*')
+
+figure(3)
+qfirst = reshape( q, size(q,1), size(q,3), size(q,2));
+plot(qfirst')
+
+%% q in t fisso
+figure(1)
 t_fisso = 1;
 q_tfisso = zeros(arm.n, k_iter(t_fisso));
 for k_plot = 1:k_iter(t_fisso)
@@ -144,12 +174,28 @@ for k_plot = 1:k_iter(t_fisso)
 end
 arm.plot(q_tfisso');
 
+%% e in t fisso
+figure(5)
+t_fisso = 1;
+e_tfisso = zeros(size(yMeas,1), k_iter(t_fisso));
+for k_plot = 1:k_iter(t_fisso)
+	e_tfisso(:,k_plot) = e(:,1,t_fisso,k_plot);
+end
+
+grid on
+plot(e_tfisso')
+legend('x elbow','y elbow','z elbow',...
+		'x wrist','y wrist', 'z wrist',...
+		'phi','theta','psi')
+
 %% prove
 arm.plot(q0_ikunc)
 
 arm.plot(q_tfisso(:,k_iter(t_fisso))' )
 
 arm.plot(zeros(1,arm.n))
+
+
 
 %%
 % 
