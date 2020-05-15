@@ -3,9 +3,11 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-. salvare cinematica diretta simbolica in una funzione
-
-. costruire stima con UKF e PF: In orizzontale o in verticale?? cosacosacosa
+.
+. correggere il 2pi negli angoli di eulero
+. tagliare ultimi frame???
+. verificare orientazione mano destra vs sinistra
+. costruire stima con UKF e PF
 
 . structure con gli angoli del 10R del braccio che compie il task
 
@@ -30,6 +32,9 @@ Struct definita,il file PopulationStruct.m sembra ordinare correttamente il file
 
 02 Maggio 
 UPDATEMI
+
+15 Maggio
+ALLORA??
 
 
 _____________________________________________________
