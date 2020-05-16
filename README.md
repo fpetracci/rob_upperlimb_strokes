@@ -4,8 +4,8 @@ TO DO LIST
 
 DATA ANALYSISISISIS
 .
-. correggere il 2pi negli angoli di eulero
-. tagliare ultimi frame???
+. correggere il 2pi negli angoli di eulero -------Fatto
+. tagliare ultimi frame??? -------------basta cambiare t_tot Fatto oppure possiamo agire su struct_data_load
 . verificare orientazione mano destra vs sinistra
 . costruire stima con UKF e PF
 

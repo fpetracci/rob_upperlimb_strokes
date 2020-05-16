@@ -34,10 +34,12 @@ if 1 == 1 %trial.task_side == left
 		eul_L5_meas(:,i)		=	tr2eul(quat2rotm(trial.L5.Quat(i,:))		* Rs23_l);
 	end
 	
- 	eul_wrist_meas		= reshape_data(eul_wrist_meas');
-	eul_elbow_meas		= reshape_data(eul_elbow_meas');
-	eul_shoulder_meas	= reshape_data(eul_shoulder_meas');
-	eul_L5_meas			= reshape_data(eul_L5_meas');
+
+	
+	eul_wrist_meas		= reshape_data(correct2pi_err(eul_wrist_meas)');
+	eul_elbow_meas		= reshape_data(correct2pi_err(eul_elbow_meas)');
+	eul_shoulder_meas	= reshape_data(correct2pi_err(eul_shoulder_meas)');
+	eul_L5_meas			= reshape_data(correct2pi_err(eul_L5_meas)');
 	
 	% positions
 	pos_shoulder_meas = reshape_data(trial.Upperarm_L.Pos);
@@ -114,7 +116,6 @@ Q = 0.02;	% Variance of the process noise
 tol_nochange = 0.05;		% percent of norm
 k_nochange = 0;
 k_nochange_max = 10;
-
 %% Kalman iteration
 tic
 for t = 1:t_tot
@@ -169,23 +170,34 @@ end
 toc
 
 %%
-figure(1)
-armplot(q,arm);
-title('q results animation')
-
-figure(2)
-plot(k_iter, '*')
-title('k iterations')
-
-figure(3)
-title('q results rad')
-qfirst = reshape( q, size(q,1), size(q,3), size(q,2));
-plot(qfirst')
-
-figure(3)
-title('q results grad')
 qsecond = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2));
-plot(qsecond')
+figure(1)
+	subplot(2,1,1)
+	title('q results animation')
+	subplot(2,1,2)
+	title('q results grad')
+for i=1:t_tot
+	subplot(2,1,1)
+	armplot(q(:,1,i),arm);
+
+% %figure(2)
+% plot(k_iter, '*')
+% title('k iterations')
+% 
+% figure(3)
+% title('q results rad')
+% qfirst = reshape( q, size(q,1), size(q,3), size(q,2));
+% plot(qfirst')
+
+%figure(3)
+
+	subplot(2,1,2)
+	plot_angle(qsecond,i)
+	xlim([0 size(qsecond,2)])
+	drawnow()
+	hold on
+
+end
 
 
 %% q in t fisso
