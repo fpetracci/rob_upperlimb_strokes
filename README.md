@@ -9,6 +9,16 @@ DATA ANALYSISISISIS
 . verificare orientazione mano destra vs sinistra
 . costruire stima con UKF e PF
 
+. ogni segment 3 vettori posizione, origine frame, traslazione lungo x. traslazione lungo y
+. costruire jacobian function (da derivata simbolica di fkine_kalman) ( da vedere se par e` possibile o meno )
+
+. costruire kalman filter verticale con le equazioni carine 
+. ricostruire indicizazzione con 4 "termini": es size1 x size2 x t x k
+
+. FORSE, e` possibile ricreare ogni volta il braccio dentro le funzioni? vediamo
+. DUBBIO: simbolico nel DH da provare!!
+
+
 . structure con gli angoli del 10R del braccio che compie il task
 
 

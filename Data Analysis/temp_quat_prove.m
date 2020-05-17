@@ -53,7 +53,7 @@ end
 
 posPlot = t;
 
-samplePeriod = 1/100;
+samplePeriod = 1/60;
 SamplePlotFreq = 1;
 Spin = 120;
 

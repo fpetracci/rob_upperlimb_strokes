@@ -118,47 +118,71 @@ k_nochange = 0;
 k_nochange_max = 10;
 %% Kalman iteration
 tic
-for t = 1:t_tot
-	% e(:,:,t,1) = e_init;
+q = q0_ikunc;
+%Hn = zeros(size(yMeas,1), size(yMeas,2));
+hn = fkine_kalman(q0_ikunc, arm);
 
-	%filter definition
-	filter = extendedKalmanFilter(...
-		@StateFcn,... % State transition function
-		@MeasurementNoiseFcn,... % Measurement function
-		initialStateGuess);
-	%	'HasAdditiveMeasurementNoise', true);
-	%HasAdditiveProcessNoise
-	filter.MeasurementNoise = R;
-	filter.ProcessNoise = Q; 
-	
-	while k < (2 * k_max)
-		
-		[xCorrected(:,:,t,k), PCorrected(:,:,t,k)] = correct(filter, yMeas(:, :, t), arm);
-		predict(filter);
-		
-		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter.State, arm);
-		
-		if k ~= 1
-			if norm(e(:,:,t,k-1)- e(:,:,t,k),2) < tol_nochange*norm(e(:,:,1,k),2)
-				k_nochange = k_nochange + 1;
-			end
-		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max == k_nochange))
-			break
-		end
-		
-		k = k + 1;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% initialize the innovation vector
+innovation = zeros(size(yMeas,1),1);
+
+% initialize the innovation variance vector (96x96)
+varInnov = zeros(size(yMeas,1),size(yMeas,1));
+
+% Define the measurement covariance
+R_OBS = 0.01*eye(size(yMeas,1)); 
+
+%Define P and Q
+P = 0.01*eye(arm.n); %incertezza c.i.  ok 0.001
+processNoise = 0.001*eye(arm.n); %Q %incertezza modello
+
+%initialize a matrix that will contains all estimed angles
+EstimatedQ = [];
+
+hnvalues = [];
+
+
+
+for i = 1:t_tot
+
+	qold = q; %Project the state ahead 
+	hnold = hn;
+
+	% Add the process noise  (Pk = I*Pk-1*I + Q)
+	for j = 1:arm.n
+		P(j,j) = P(j,j) + processNoise(j,j); %Project the error covariance ahead
 	end
-	
-	k_iter(:,t) = k;
-	q(:,1,t) = xCorrected(:,:,t,k);
 
-	initialStateGuess = xCorrected(:,:,t,k);
-	
-	k_nochange = 0;
-	k = 1;
-	
+	% Define the observation vector (96x1)
+	observation = yMeas(:,1,i);
+
+	hn = fkine_kalman(qold, arm);
+	Hn = (hn-hnold)*60;
+	%Hn = jacobianfun(NumericParameters, qold');
+
+	hnvalues = [hnvalues hn]; 
+
+	innovation = observation - hn;
+
+	%innovation = observation - hn; % 
+	varInnov = Hn*P*Hn' + R_OBS; %
+
+	% Kalman Gain P 
+	K = P*Hn'*varInnov^-1;   
+
+	% Calculate state corrections
+	q = qold + K * innovation;
+
+	% Update the covariance 
+	P = P - K*Hn*P;
+
+	%save estimated angles (in columns) 
+	EstimatedQ = [EstimatedQ qold];
+	%EstimatedQ = [EstimatedQ sinqold']; 
+	q(:,1,i) = qold;
 end
+
 toc
 %% init plots
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
@@ -213,7 +237,7 @@ title('q iterations given t - animation')
 %% e in t fisso
 figure(5)
 
-t_fisso = 160;
+t_fisso = 1;
 e_tfisso = zeros(size(yMeas,1), k_iter(t_fisso));
 for k_plot = 1:k_iter(t_fisso)
 	e_tfisso(:,k_plot) = e(:,1,t_fisso,k_plot);
