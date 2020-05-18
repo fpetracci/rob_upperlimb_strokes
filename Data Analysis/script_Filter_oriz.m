@@ -1,8 +1,8 @@
 %% init
 clear; clc;
 
-trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-%trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+trial = struct_dataload('H01_T07_L1'); % barbatrucco finchÃ© non abbiamo la struttura per bene... PEPOO LAVORA
+%trial = struct_dataload('H03_T11_L1'); % barbatrucco finchÃ© non abbiamo la struttura per bene... PEPOO LAVORA
 
 arms = create_arms(trial);
 par = par_10R(trial);
@@ -93,7 +93,7 @@ q0_ikunc = arm.ikunc(TgEE_i);				% init vector for kalman
 initialStateGuess = q0_ikunc;
 
 k = 1;										% initialization of filter step-index
-k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
+k_max = 1;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
 k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
@@ -106,7 +106,7 @@ R = 0.5;										% Variance of the measurement noise v[k]
 Q = 0.1;										% Variance of the process noise
 %% PROVE PARAMETRI
 
-a_cov_m = 10*pi/180;		% covariance of measured angles
+a_cov_m = 10*pi/180;	% covariance of measured angles
 p_cov_m = 0.001;	% covariance of measured positions
 
 % covariance measures' matrix calculation
@@ -142,53 +142,32 @@ Q = cov_vector_q.*Q;
 e_tol = 0.005;	
 tol_nochange = 0.05;		% percent of norm
 k_nochange = 0;
-k_nochange_max = 5;
+k_nochange_max = 10;
 %% Kalman iteration
 tic
-for t = 1:t_tot
-	% filter definition
-	filter = unscentedKalmanFilter(...
+% filter definition
+filter = unscentedKalmanFilter(...
 		@StateFcn,... % State transition function
 		@MeasurementNoiseFcn,... % Measurement function
 		initialStateGuess);
+filter.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
+filter.ProcessNoise = Q;		% Variance of the process noise (10x10)
 
-	filter.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
-	filter.ProcessNoise = Q;		% Variance of the process noise (10x10)
-		
-	% kalman iterations
-	while k < (2 * k_max)
-		
-		[xCorrected(:,:,t,k), PCorrected(:,:,t,k)] = correct(filter, yMeas(:, :, t), arm);
-		predict(filter);
-		
-		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter.State, arm);
-		
-		% exit conditions
-		if k ~= 1
-			if norm(e(:,:,t,k-1)- e(:,:,t,k),2) < tol_nochange*norm(e(:,:,1,k),2)
-				k_nochange = k_nochange + 1;
-			end
-		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max == k_nochange))
-			break
-		end
-		
-		% increment k iter number
-		k = k + 1;
-	end
+for t = 1:t_tot
 	
+	[xCorrected(:,:,t,k), PCorrected(:,:,t,k)] = correct(filter, yMeas(:, :, t), arm);
+	predict(filter);
 	
+	e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter.State, arm);
 	k_iter(:,t) = k;
 	q(:,1,t) = xCorrected(:,:,t,k);
 
-	% save for the next time step iteration
-	initialStateGuess = xCorrected(:,:,t,k);
-	
 	k_nochange = 0;
 	k = 1;
 	
 end
 toc
+
 %% init plots
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
 q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2)); %from rad to deg, reshape for having q in the right way

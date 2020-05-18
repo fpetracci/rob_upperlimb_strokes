@@ -79,8 +79,8 @@ yMeas = [	eul_L5_meas;		...
 			pos_wrist_meas;		...
 			eul_wrist_meas];
 %% Kalman Init
-t_tot = size(yMeas,3) - 10;						% number of time step in the chosen trial
-q = zeros(arm.n, 1, t_tot);					% initialization of joint angles
+t_tot = size(yMeas,3) - 10;			% number of time step in the chosen trial
+q = zeros(arm.n, 1, t_tot);			% initialization of joint angles
 
 % construction of the homogeneous transform between global frame and EE 
 %frame in the first time step TgEE_i
@@ -88,9 +88,9 @@ yMeas_EE_rot = eul2r(eul_wrist_meas(:,1,1)'); % peter corke function
 %yMeas_EE_rot = eul2rotm(eul_wrist_meas(:,1,1)',  'ZYZ');
 yMeas_EE_pos = pos_wrist_meas(:,1,1);
 TgEE_i = rt2tr(yMeas_EE_rot, yMeas_EE_pos);
+q0_ikunc = arm.ikunc(TgEE_i);				
 
-q0_ikunc = arm.ikunc(TgEE_i);				% init vector for kalman
-initialStateGuess = q0_ikunc;
+initialStateGuess = q0_ikunc;				% init vector for kalman
 
 k = 1;										% initialization of filter step-index
 k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
@@ -100,13 +100,17 @@ e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
 e_tol = 0.001;								% tolerance to break the filter iteration
 % e_init = ones(size(yMeas, 1), 1);			% initialization of error
 
-xCorrected = zeros(arm.n, 1, t_tot, k_max);
-PCorrected = zeros(arm.n, arm.n, t_tot, k_max);
-R = 0.5;										% Variance of the measurement noise v[k]
-Q = 0.1;										% Variance of the process noise
+% vert filter state and cov init
+xCorrected_vert = zeros(arm.n, 1, t_tot, k_max);
+PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
+
+% oriz filter state and cov init
+xCorrected_oriz = zeros(arm.n, 1, t_tot);
+PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
+
 %% PROVE PARAMETRI
 
-a_cov_m = 10*pi/180;		% covariance of measured angles
+a_cov_m = 5*pi/180;		% covariance of measured angles
 p_cov_m = 0.001;	% covariance of measured positions
 
 % covariance measures' matrix calculation
@@ -145,23 +149,36 @@ k_nochange = 0;
 k_nochange_max = 5;
 %% Kalman iteration
 tic
-for t = 1:t_tot
-	% filter definition
-	filter = unscentedKalmanFilter(...
+filter_oriz  = unscentedKalmanFilter(...
 		@StateFcn,... % State transition function
 		@MeasurementNoiseFcn,... % Measurement function
 		initialStateGuess);
 
-	filter.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
-	filter.ProcessNoise = Q;		% Variance of the process noise (10x10)
+filter_oriz.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
+filter_oriz.ProcessNoise = Q;		% Variance of the process noise (10x10)
+
+for t = 1:t_tot
+	
+	%oriz step kalman filter
+	[xCorrected_oriz(:,:,t), PCorrected_oriz(:,:,t)] = correct(filter_oriz, yMeas(:, :, t), arm);
+	predict(filter_oriz);
+	
+	% vertical filter definition
+	filter_vert = unscentedKalmanFilter(...
+		@StateFcn,... % State transition function
+		@MeasurementNoiseFcn,... % Measurement function
+		xCorrected_oriz(:,:,t));
+
+	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
+	filter_vert.ProcessNoise = Q;		% Variance of the process noise (10x10)
 		
 	% kalman iterations
 	while k < (2 * k_max)
 		
-		[xCorrected(:,:,t,k), PCorrected(:,:,t,k)] = correct(filter, yMeas(:, :, t), arm);
-		predict(filter);
+		[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = correct(filter_vert, yMeas(:, :, t), arm);
+		predict(filter_vert);
 		
-		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter.State, arm);
+		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter_vert.State, arm);
 		
 		% exit conditions
 		if k ~= 1
@@ -177,12 +194,11 @@ for t = 1:t_tot
 		k = k + 1;
 	end
 	
-	
 	k_iter(:,t) = k;
-	q(:,1,t) = xCorrected(:,:,t,k);
-
+	q(:,1,t) = xCorrected_vert(:,:,t,k);
+	
 	% save for the next time step iteration
-	initialStateGuess = xCorrected(:,:,t,k);
+	filter_oriz.State = xCorrected_vert(:,:,t,k);
 	
 	k_nochange = 0;
 	k = 1;
