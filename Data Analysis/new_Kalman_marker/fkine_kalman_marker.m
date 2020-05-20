@@ -39,7 +39,7 @@ Tg6	= arm_fkine(Arm, qk, 6);
 Tg6_trasl_x =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; % ho riportato Tg6 nella forma correttta orientazione di Tg6, posizione di Tg3
 Tg6_trasl_y =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 	
-%plot_arrows(Tg6); %% non è proprio esatto perche la posizione è quella di Tg3
+% plot_arrows(Tg6); %% non è proprio esatto perche la posizione è quella di Tg3
 
 tr_shoulder = Tg3(1:3, 4);
 tr_shoulder_x = Tg6_trasl_x(1:3, 4);

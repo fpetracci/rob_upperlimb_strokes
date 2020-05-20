@@ -48,21 +48,21 @@ Right_Arm.base = Tg0;
 
 d3 = -par.depth_shoulder.left;
 a3 = par.L5_shoulder.left;
-a6 = par.upperarm.left;
+d6 = -par.upperarm.left;
 d8 = par.forearm.left;
 d10 = par.hand;
 
 th3_l = -pi/2 - par.theta_shoulder.left;
-th4_l = -pi/2 + par.theta_shoulder.left;
+al4_l = +pi/2 + par.theta_shoulder.left;
 
 % serial links connection
 Link_l = [	Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% L5-L5:				theta torso flexion  (pitch)
 			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2),...	% L5-L5:				theta torso twist
-			Link('d', d3,	'a',	a3,		'alpha', 0,		'offset', +th3_l),...	% L5-shoulder:			theta shoulder "raise" 
-			Link('d', 0,	'a',	0,		'alpha', +pi/2,	'offset', +th4_l),...	% shoulder1-shoulder2:	theta shoulder pronosupination
-			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2),...	% shoulder2-shoulder3:	theta shoulder lateral opening
-			Link('d', 0,	'a',	a6,		'alpha', -pi/2),...						% shoulder3-elbow1:		theta shoulder front opening
-			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', -pi/2),...	% elbow1-elbow2:		theta elbow flexion
+			Link('d', d3,	'a',	a3,		'alpha', -pi/2,	'offset', +th3_l),...	% L5-shoulder:			theta shoulder "raise" 
+			Link('d', 0,	'a',	0,		'alpha', al4_l,	'offset', -pi/2),...	% shoulder1-shoulder2:	theta shoulder pronosupination
+			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', -pi/2),...	% shoulder2-shoulder3:	theta shoulder lateral opening
+			Link('d', d6,	'a',	0,		'alpha', +pi/2, 'offset', +pi),...						% shoulder3-elbow1:		theta shoulder front opening
+			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', +pi),...	% elbow1-elbow2:		theta elbow flexion
 			Link('d', d8,	'a',	0,		'alpha', +pi/2),...						% elbow2-wrist1:		theta forearm pronosupination
 			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2),...	% wrist1-wrist2:		theta wrist flexion
 			Link('d', d10,	'a',	0,		'alpha', -pi/2, 'offset', -pi/2)];		% wrist2-hand:			theta wrist (yaw)

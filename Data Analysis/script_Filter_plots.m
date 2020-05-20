@@ -123,6 +123,8 @@ title( 'check angles')
 for i = 1:t_tot
 	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
 end
+
+
 y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
 error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 %posizione polso misurata

@@ -1,7 +1,7 @@
 %% init
 clear; clc;
 
-trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 %trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 
 arms = create_arms(trial);
@@ -16,8 +16,8 @@ par = par_10R(trial);
 
 Rs210_l = rotx(-pi/2);
 Rs28_l = rotz(pi)*rotx(pi);
-Rs26_l = rotx(pi)*rotz(-pi/2);
-Rs23_l = roty(pi/2)*rotz(pi-par.theta_shoulder.left);
+Rs26_l = rotx(+pi);
+Rs23_l = rotx(pi/2 - par.theta_shoulder.left)*rotz(pi/2);
 d_trasl = 0.05;
 
 if 1 == 1 %trial.task_side == left
