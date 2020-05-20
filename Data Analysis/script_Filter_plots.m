@@ -112,8 +112,8 @@ fprintf('Animation stopped. \n');
 figure(6)
 %eul_prova = eul_L5_meas;
 %eul_prova = eul_shoulder_meas;
-%eul_prova = eul_elbow_meas;
-eul_prova = eul_wrist_meas;
+eul_prova = eul_elbow_meas;
+%eul_prova = eul_wrist_meas;
 
 prova = reshape(eul_prova, size(eul_prova,1), size(eul_prova,3) );
 plot(prova')
@@ -121,13 +121,13 @@ title( 'check angles')
 %% errors!
 
 for i = 1:t_tot
-	yMeas_virt(:,i) = fkine_kalman(q_rad(:,i),arm);
+	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
 end
 
 %posizione polso misurata
 pos_wrist_test = reshape(pos_wrist_meas, size(pos_wrist_meas,1), size(pos_wrist_meas,3), size(pos_wrist_meas,2));
 %posizione polso ricostruita
-pos_wrist_reconst = yMeas_virt(16:18,:);
+pos_wrist_reconst = yMeas_virt(10:12,:);
 
 %errore posizione polso
 err_polso = pos_wrist_reconst - pos_wrist_test(:,1:t_tot);
