@@ -1,8 +1,8 @@
 %% init
 clear; clc;
 
-%trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+%trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 
 arms = create_arms(trial);
 par = par_10R(trial);
@@ -18,7 +18,7 @@ Rs210_l = rotx(-pi/2);
 Rs28_l = rotz(pi)*rotx(pi);
 Rs26_l = rotx(pi)*rotz(-pi/2);
 Rs23_l = roty(pi/2)*rotz(pi-par.theta_shoulder.left);
-
+d_trasl = 0.05;
 
 if 1 == 1 %trial.task_side == left
 	
@@ -37,7 +37,7 @@ if 1 == 1 %trial.task_side == left
 	eul_shoulder_meas	= reshape_data(correct2pi_err(eul_shoulder_meas)');
 	eul_L5_meas			= reshape_data(correct2pi_err(eul_L5_meas)');
 	
-	% euler angles
+	% rotation matrix 
 	for i = 1:size(trial.Hand_L.Quat,1)
 		rot_wrist_meas(:,:,i)		=	quat2rotm(trial.Hand_L.Quat(i,:))	 * Rs210_l;
 		rot_elbow_meas(:,:,i)		=	quat2rotm(trial.Forearm_L.Quat(i,:)) * Rs28_l;
@@ -49,20 +49,26 @@ if 1 == 1 %trial.task_side == left
 	pos_shoulder_meas = reshape_data(trial.Upperarm_L.Pos);
 	pos_elbow_meas = reshape_data(trial.Forearm_L.Pos);
 	pos_wrist_meas = reshape_data(trial.Hand_L.Pos);
+	pos_L5_meas = reshape_data(trial.L5.Pos);
 	
  	%T_wrist = rt2tr(rot_wrist_meas, pos_wrist_meas)	
 	for i = 1:size(trial.Hand_L.Quat,1)
 		T_wrist(:,:,i) = [rot_wrist_meas(:,:,i) pos_wrist_meas(:,:,i) ; 0 0 0 1];
-		T_wrist_x(:,:,i) = T_wrist(:,:,i) * [eye(3) [0.05 0 0]'; 0 0 0 1];
-		T_wrist_y(:,:,i) = T_wrist(:,:,i) * [eye(3) [0 0.05 0]'; 0 0 0 1];
+		T_wrist_x(:,:,i) = T_wrist(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_wrist_y(:,:,i) = T_wrist(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
 		T_elbow(:,:,i) = [rot_elbow_meas(:,:,i) pos_elbow_meas(:,:,i) ; 0 0 0 1];
-		T_elbow_x(:,:,i) = T_elbow(:,:,i) * [eye(3) [0.05 0 0]'; 0 0 0 1];
-		T_elbow_y(:,:,i) = T_elbow(:,:,i) * [eye(3) [0 0.05 0]'; 0 0 0 1];
+		T_elbow_x(:,:,i) = T_elbow(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_elbow_y(:,:,i) = T_elbow(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
 		T_shoulder(:,:,i) = [rot_shoulder_meas(:,:,i) pos_shoulder_meas(:,:,i) ; 0 0 0 1];
-		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0.05 0 0]'; 0 0 0 1];
-		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 0.05 0]'; 0 0 0 1];
+		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
+		T_L5(:,:,i) = [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5_x(:,:,i) = T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_L5_y(:,:,i) = T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
 	end
 	
 	pos_wrist_meas_x = T_wrist_x(1:3, 4, :);
@@ -71,6 +77,8 @@ if 1 == 1 %trial.task_side == left
 	pos_elbow_meas_y = T_elbow_y(1:3, 4, :);
 	pos_shoulder_meas_x = T_shoulder_x(1:3, 4, :);
 	pos_shoulder_meas_y = T_shoulder_y(1:3, 4, :);
+	pos_L5_meas_x = T_L5_x(1:3, 4, :);
+	pos_L5_meas_y = T_L5_y(1:3, 4, :);
 	
 elseif 1 == 0 %trial.task_side == right
 	
@@ -97,9 +105,12 @@ end
 % 			pos_wrist_meas;		...
 % 			eul_wrist_meas];
 		
-yMeas = [	pos_shoulder_meas;		...
-			pos_shoulder_meas_x;	...
-			pos_shoulder_meas_y;	...
+yMeas = [	pos_L5_meas;		...
+			pos_L5_meas_x;		...
+			pos_L5_meas_y;		...
+			pos_shoulder_meas;	...
+			pos_shoulder_meas_x;...
+			pos_shoulder_meas_y;...
 			pos_elbow_meas;		...
 			pos_elbow_meas_x;	...
 			pos_elbow_meas_y;	...
@@ -135,7 +146,6 @@ PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
 % oriz filter state and cov init
 xCorrected_oriz = zeros(arm.n, 1, t_tot);
 PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
-
 %% PROVE PARAMETRI
 
 a_cov_m = 5*pi/180;		% covariance of measured angles
@@ -151,21 +161,24 @@ cov_vector_meas = [	p_cov_m p_cov_m p_cov_m ...
 					p_cov_m p_cov_m p_cov_m ...
 					p_cov_m p_cov_m p_cov_m ...
 					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m];
+					p_cov_m p_cov_m p_cov_m ...
+					p_cov_m p_cov_m p_cov_m ...
+					p_cov_m p_cov_m p_cov_m ...		% 
+					p_cov_m p_cov_m p_cov_m];		% cov pos wrist y
 				
 R = eye(size(yMeas,1));	% Variance of the measurement noise v[k]
 R = cov_vector_meas.*R;
 
 cov_vector_q = [	0.0001 ... % cov associated to joint angle 1
-					0.0001 ... % cov associated to joint angle 2
-					0.0001 ... % cov associated to joint angle 3
-					0.0001 ... % cov associated to joint angle 4
-					0.0001 ... % cov associated to joint angle 5
-					0.0001 ... % cov associated to joint angle 6
-					0.0001 ... % cov associated to joint angle 7
-					0.0001 ... % cov associated to joint angle 8
-					0.0001 ... % cov associated to joint angle 9
-					0.0001 ... % cov associated to joint angle 10
+					0.001 ... % cov associated to joint angle 2
+					0.001 ... % cov associated to joint angle 3
+					0.001 ... % cov associated to joint angle 4
+					0.001 ... % cov associated to joint angle 5
+					0.001 ... % cov associated to joint angle 6
+					0.001 ... % cov associated to joint angle 7
+					0.001 ... % cov associated to joint angle 8
+					0.001 ... % cov associated to joint angle 9
+					0.001 ... % cov associated to joint angle 10
 					];
 				% 0.01 rad = 0.57 grad
 				
@@ -177,6 +190,7 @@ tol_nochange = 0.05;		% percent of norm
 k_nochange = 0;
 k_nochange_max = 10;
 %% Kalman iteration
+fprintf('Kalman iteration started! \n')
 tic
 filter_oriz  = unscentedKalmanFilter(...
 		@StateFcn,... % State transition function
@@ -233,7 +247,12 @@ for t = 1:t_tot
 	k = 1;
 	
 end
-toc
+iter_time = toc;
+if iter_time > 30
+	fprintf('Kalman iteration takes a long time... &3.2f sec \n', iter_time)
+else
+	fprintf('Kalman iteration took: &3.2f sec!\n', iter_time)
+end
 %% init plots
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
 q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2)); %from rad to deg, reshape for having q in the right way

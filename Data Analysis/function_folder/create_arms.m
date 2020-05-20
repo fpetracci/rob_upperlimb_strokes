@@ -19,21 +19,21 @@ Tg0 = rt2tr(rotx(-pi/2), par.L5_pos);
 
 d3 = par.depth_shoulder.right;
 a3 = par.L5_shoulder.right;
-a6 = par.upperarm.right;
+d6 = par.upperarm.right;
 d8 = -par.forearm.right;
 d10 = par.hand;
 
 th3_r = -pi/2 - par.theta_shoulder.right;
-th4_r = -pi/2 + par.theta_shoulder.right;
+al4_r = +pi/2 + par.theta_shoulder.right;
 
 % serial links connection
 Link_r = [	Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% L5-L5:				theta torso flexion  (pitch)
 			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', +pi/2),...	% L5-L5:				theta torso twist
-			Link('d', d3,	'a',	a3,		'alpha', 0,		'offset', +th3_r),...	% L5-shoulder:			theta shoulder "raise" 
-			Link('d', 0,	'a',	0,		'alpha', -pi/2,	'offset', +th4_r),...	% shoulder1-shoulder2:	theta shoulder pronosupination
-			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', +pi/2),...	% shoulder2-shoulder3:	theta shoulder lateral opening
-			Link('d', 0,	'a',	a6,		'alpha', +pi/2),...						% shoulder3-elbow1:		theta shoulder front opening
-			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', -pi/2),...	% elbow1-elbow2:		theta elbow flexion
+			Link('d', d3,	'a',	a3,		'alpha', +pi/2,	'offset', +th3_r),...	% L5-shoulder:			theta shoulder "raise" 
+			Link('d', 0,	'a',	0,		'alpha', al4_r ,	'offset', +pi/2),...% shoulder1-shoulder2:	theta shoulder front opening
+			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', -pi/2),...	% shoulder2-shoulder3:	theta shoulder lateral opening
+			Link('d', d6,	'a',	0,		'alpha', -pi/2),...						% shoulder3-elbow1:		theta shoulder pronosupination
+			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', pi),...		% elbow1-elbow2:		theta elbow flexion
 			Link('d', d8,	'a',	0,		'alpha', -pi/2),...						% elbow2-wrist1:		theta forearm pronosupination
 			Link('d', 0,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2),...	% wrist1-wrist2:		theta wrist flexion
 			Link('d', d10,	'a',	0,		'alpha', +pi/2, 'offset', +pi/2)];		% wrist2-hand:			theta wrist (yaw)
@@ -43,6 +43,8 @@ Right_Arm.base = Tg0;
 
 
 %% Costruction, left arm
+
+% TO DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
 d3 = -par.depth_shoulder.left;
 a3 = par.L5_shoulder.left;

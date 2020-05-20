@@ -123,7 +123,8 @@ title( 'check angles')
 for i = 1:t_tot
 	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
 end
-
+y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
+error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 %posizione polso misurata
 pos_wrist_test = reshape(pos_wrist_meas, size(pos_wrist_meas,1), size(pos_wrist_meas,3), size(pos_wrist_meas,2));
 %posizione polso ricostruita
@@ -140,6 +141,6 @@ figure(10)
 plot(pos_wrist_test'); hold on
 plot(pos_wrist_reconst')
 hold off
-
+%%
 %plot(euler(:,:)')
 %title('stimation angle and position')

@@ -13,7 +13,7 @@ function yk = fkine_kalman_marker(qk, Arm)
 
 % xsense frame = global (g) frame
 % eul_* are the ZYZ Euler angles
-
+d_trasl = 0.05;
 %% L5
 % Tg0 = arm_fkine(Arm, qk, 0);
 % tr_L5 = Tg0(1:3, 4);			
@@ -22,6 +22,13 @@ function yk = fkine_kalman_marker(qk, Arm)
 % computational errors.
 
 Tg3	= arm_fkine(Arm, qk, 3);
+Tg3_trasl_x =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; 
+Tg3_trasl_y =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+
+tr_L5 = Arm.base(1:3,4);
+tr_L5_x = Tg3_trasl_x(1:3, 4);
+tr_L5_y = Tg3_trasl_y(1:3, 4);
+
 rot_L5 = Tg3(1:3, 1:3);
 eul_L5 = rotm2eul(rot_L5,'ZYZ')';
 
@@ -29,8 +36,8 @@ eul_L5 = rotm2eul(rot_L5,'ZYZ')';
 % Tg3 = arm_fkine(Arm, qk, 3);
 
 Tg6	= arm_fkine(Arm, qk, 6);
-Tg6_trasl_x =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [0.05 0 0]'; 0 0 0 1]; % ho riportato Tg6 nella forma correttta orientazione di Tg6, posizione di Tg3
-Tg6_trasl_y =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [0 0.05 0]'; 0 0 0 1];
+Tg6_trasl_x =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; % ho riportato Tg6 nella forma correttta orientazione di Tg6, posizione di Tg3
+Tg6_trasl_y =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 	
 %plot_arrows(Tg6); %% non è proprio esatto perche la posizione è quella di Tg3
 
@@ -46,8 +53,8 @@ eul_shoulder = rotm2eul(rot_shoulder,'ZYZ')';
 % Tg6 = arm_fkine(Arm, qk, 6);
 
 Tg8	= arm_fkine(Arm, qk, 8);
-Tg8_trasl_x =  [Tg8(:,1:3) Tg6(:,4)] * [eye(3) [0.05 0 0]'; 0 0 0 1]; 
-Tg8_trasl_y =  [Tg8(:,1:3) Tg6(:,4)] * [eye(3) [0 0.05 0]'; 0 0 0 1];
+Tg8_trasl_x =  [Tg8(:,1:3) Tg6(:,4)] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; 
+Tg8_trasl_y =  [Tg8(:,1:3) Tg6(:,4)] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 
 tr_elbow = Tg6(1:3, 4);
 tr_elbow_x = Tg8_trasl_x(1:3, 4);
@@ -60,8 +67,8 @@ eul_elbow = rotm2eul(rot_elbow,'ZYZ')';
 % Tg8 = arm_fkine(Arm, qk, 8);
 
 Tg10 = arm_fkine(Arm, qk, 10);
-Tg10_trasl_x =  [Tg10(:,1:3) Tg8(:,4)] * [eye(3) [0.05 0 0]'; 0 0 0 1]; 
-Tg10_trasl_y =  [Tg10(:,1:3) Tg8(:,4)] * [eye(3) [0 0.05 0]'; 0 0 0 1];
+Tg10_trasl_x =  [Tg10(:,1:3) Tg8(:,4)] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; 
+Tg10_trasl_y =  [Tg10(:,1:3) Tg8(:,4)] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 
 tr_wrist = Tg8(1:3, 4);
 tr_wrist_x = Tg10_trasl_x(1:3, 4);
@@ -80,7 +87,10 @@ eul_wrist = rotm2eul(rot_wrist,'ZYZ')';
 % 		tr_wrist; ...
 % 		eul_wrist];
 
-yk = [	tr_shoulder; ...
+yk = [	tr_L5; ...
+		tr_L5_x; ...
+		tr_L5_y; ...
+		tr_shoulder; ...
 		tr_shoulder_x; ...
 		tr_shoulder_y; ...
 		tr_elbow; ...
