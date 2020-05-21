@@ -27,7 +27,6 @@ plot(q_grad')
 
 figure(1)
 arm.plot(q_rad')
-
 %% Synchronized plot arm with 
 
 figure(1)
@@ -118,31 +117,161 @@ eul_prova = eul_elbow_meas;
 prova = reshape(eul_prova, size(eul_prova,1), size(eul_prova,3) );
 plot(prova')
 title( 'check angles')
-%% errors!
+%% Error Segments plot
+% new vectors of real measurements for plot
+pos_L5_plot			= reshape(pos_L5_meas, size(pos_L5_meas,1), size(pos_L5_meas,3), size(pos_L5_meas,2));
+pos_wrist_plot		= reshape(pos_wrist_meas, size(pos_wrist_meas,1), size(pos_wrist_meas,3), size(pos_wrist_meas,2));
+pos_elbow_plot		= reshape(pos_elbow_meas, size(pos_elbow_meas,1), size(pos_elbow_meas,3), size(pos_elbow_meas,2));
+pos_shoulder_plot	= reshape(pos_shoulder_meas, size(pos_shoulder_meas,1), size(pos_shoulder_meas,3), size(pos_shoulder_meas,2));
 
-for i = 1:t_tot
-	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
+% which segment do you want to plot?
+segment = input(' Which segment do you want to plot? \n L5 - 0, \n Shoulder - 1, \n Elbow - 2, \n Wrist - 3 \n segment = ');
+% L5		- 0
+% Shoulder	- 1
+% Elbow		- 2
+% Wrist		- 3
+
+index = segment*9+1;
+pos_segment_reconst = yMeas_virt(index:index+2,:);
+if segment == 0			% L5		- 0
+	err = pos_segment_reconst - pos_L5_plot(:,1:t_tot);
+	figure(10)
+
+	plot(pos_L5_plot'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('L5')
+	
+elseif segment == 1		% Shoulder	- 1
+	err = pos_segment_reconst - pos_shoulder_plot(:,1:t_tot);
+	figure(10)
+	plot(pos_shoulder_plot'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Shoulder')
+	
+elseif segment == 2		% Elbow		- 2
+	err = pos_segment_reconst - pos_elbow_plot(:,1:t_tot);
+	figure(10)
+	
+	plot(pos_elbow_plot'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Elbow')
+	
+elseif segment == 3		% Wrist		- 3
+	err = pos_segment_reconst - pos_wrist_plot(:,1:t_tot);
+	figure(10)
+	plot(pos_wrist_plot'); hold on
+	plot(pos_segment_reconst'); hold off
+	hold off
+	title('Wrist')
+	
 end
-
-
-y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
-error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
-%posizione polso misurata
-pos_wrist_test = reshape(pos_wrist_meas, size(pos_wrist_meas,1), size(pos_wrist_meas,3), size(pos_wrist_meas,2));
-%posizione polso ricostruita
-pos_wrist_reconst = yMeas_virt(10:12,:);
-
-%errore posizione polso
-err_polso = pos_wrist_reconst - pos_wrist_test(:,1:t_tot);
-
 %
 figure(9)
-plot(err_polso');
+plot(err');
+title('Error')
 
-figure(10)
-plot(pos_wrist_test'); hold on
-plot(pos_wrist_reconst')
-hold off
-%%
-%plot(euler(:,:)')
-%title('stimation angle and position')
+% TO DO RICOSTRUIRE eul angles from marker position 
+%% Error Segments Marker X plot
+% which segment do you want to plot?
+segment = input(' Which segment x-Marker do you want to plot? \n L5 - 0, \n Shoulder - 1, \n Elbow - 2, \n Wrist - 3 \n segment = ');
+% L5		- 0
+% Shoulder	- 1
+% Elbow		- 2
+% Wrist		- 3
+
+index = segment*9+4;
+pos_segment_reconst = yMeas_virt(index:index+2,:);
+if segment == 0			% L5		- 0
+
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('L5 x-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on L5 x-Marker')
+	
+elseif segment == 1		% Shoulder	- 1
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Shoulder x-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on Shoulder x-Marker')
+	
+elseif segment == 2		% Elbow		- 2
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Elbow x-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on elbow x-Marker')
+	
+elseif segment == 3		% Wrist		- 3
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Wrist x-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on Wrist x-Marker')
+	
+end
+%% Error Segments Marker Y plot
+% which segment do you want to plot?
+segment = input(' Which segment y-Marker do you want to plot? \n L5 - 0, \n Shoulder - 1, \n Elbow - 2, \n Wrist - 3 \n segment = ');
+% L5		- 0
+% Shoulder	- 1
+% Elbow		- 2
+% Wrist		- 3
+
+index = segment*9+7;
+pos_segment_reconst = yMeas_virt(index:index+2,:);
+if segment == 0			% L5		- 0
+
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('L5 y-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on L5 y-Marker')
+	
+elseif segment == 1		% Shoulder	- 1
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Shoulder y-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on Shoulder y-Marker')
+	
+elseif segment == 2		% Elbow		- 2
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Elbow y-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on elbow y-Marker')
+	
+elseif segment == 3		% Wrist		- 3
+	figure(10)
+	plot(y_real(index:index+2,:)'); hold on
+	plot(pos_segment_reconst'); hold off
+	title('Wrist y-Marker')
+	
+	figure(9)
+	plot(error(index:index+2,:)');
+	title('Error on Wrist y-Marker')
+	
+end

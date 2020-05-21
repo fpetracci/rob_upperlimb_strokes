@@ -3,7 +3,7 @@ clear; clc;
 
 trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 %trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-
+%trial = struct_dataload('H01_T07_L1');
 arms = create_arms(trial);
 par = par_10R(trial);
 %% load
@@ -116,7 +116,7 @@ yMeas = [	pos_L5_meas;		...
 			pos_elbow_meas_y;	...
 			pos_wrist_meas;		...
 			pos_wrist_meas_x;	...
-			pos_wrist_meas_y];
+			pos_wrist_meas_y];	
 %% Kalman Init
 t_tot = size(yMeas,3) - 10;			% number of time step in the chosen trial
 q = zeros(arm.n, 1, t_tot);			% initialization of joint angles
@@ -149,7 +149,7 @@ PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
 %% PROVE PARAMETRI
 
 a_cov_m = 5*pi/180;		% covariance of measured angles
-p_cov_m = 0.001;	% covariance of measured positions
+p_cov_m = 0.005;		% covariance of measured positions
 
 % covariance measures' matrix calculation
 
@@ -166,24 +166,25 @@ cov_vector_meas = [	p_cov_m p_cov_m p_cov_m ...
 					p_cov_m p_cov_m p_cov_m ...		% 
 					p_cov_m p_cov_m p_cov_m];		% cov pos wrist y
 				
-R = eye(size(yMeas,1));	% Variance of the measurement noise v[k]
-R = cov_vector_meas.*R;
-
-cov_vector_q = [	0.0001 ... % cov associated to joint angle 1
-					0.001 ... % cov associated to joint angle 2
-					0.001 ... % cov associated to joint angle 3
-					0.001 ... % cov associated to joint angle 4
-					0.001 ... % cov associated to joint angle 5
-					0.001 ... % cov associated to joint angle 6
-					0.001 ... % cov associated to joint angle 7
-					0.001 ... % cov associated to joint angle 8
-					0.001 ... % cov associated to joint angle 9
-					0.001 ... % cov associated to joint angle 10
+%R = eye(size(yMeas,1));	% Variance of the measurement noise v[k]
+%R = cov_vector_meas.*R;
+R = diag(cov_vector_meas);
+cov_vector_q = [	0.001/2 ...	% cov associated to joint angle 1
+					0.001/2 ...	% cov associated to joint angle 2
+					0.001/2 ...	% cov associated to joint angle 3
+					0.001 ...	% cov associated to joint angle 4
+					0.001 ...	% cov associated to joint angle 5
+					0.001 ...	% cov associated to joint angle 6
+					0.001 ...	% cov associated to joint angle 7
+					0.001 ...	% cov associated to joint angle 8
+					0.001 ...	% cov associated to joint angle 9
+					0.001 ...	% cov associated to joint angle 10
 					];
 				% 0.01 rad = 0.57 grad
 				
-Q = eye(arm.n);			% Variance of the process noise
-Q = cov_vector_q.*Q;
+%Q = eye(arm.n);			% Variance of the process noise
+%Q = cov_vector_q.*Q;
+Q = diag(cov_vector_q);
 
 e_tol = 0.005;	
 tol_nochange = 0.05;		% percent of norm
@@ -249,10 +250,19 @@ for t = 1:t_tot
 end
 iter_time = toc;
 if iter_time > 30
-	fprintf('Kalman iteration takes a long time... &3.2f sec \n', iter_time)
+	fprintf('Kalman iteration takes a long time... %3.2f sec \n', iter_time)
 else
-	fprintf('Kalman iteration took: &3.2f sec!\n', iter_time)
+	fprintf('Kalman iteration took: %3.2f sec!\n', iter_time)
 end
 %% init plots
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
 q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2)); %from rad to deg, reshape for having q in the right way
+%% errors for plots
+
+for i = 1:t_tot
+	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
+end
+
+y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
+error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
+%plot(error')
