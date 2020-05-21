@@ -1,12 +1,12 @@
 %% init
 clear; clc;
 
-trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-%trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+%trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 %trial = struct_dataload('H01_T07_L1');
 arms = create_arms(trial);
 par = par_10R(trial);
-%% load
+%% load right or left side
 % Rotation matrices from sens default frame (see fig 55 in MVN manual) and
 % our DH driven frame on the robotic arm. 
 % s stands for xsens, number for the n-frame on the robotic arm, 
@@ -14,11 +14,21 @@ par = par_10R(trial);
 % Example: Rs210_l is the rot matrix from hand frame of xsens to 10th frame
 % of the left robotic arm described in arm.left
 
+d_trasl = 0.05;
+
+% left
 Rs210_l = rotx(-pi/2);
-Rs28_l = rotz(pi)*rotx(pi);
+Rs28_l = roty(-pi/2);
 Rs26_l = rotx(+pi);
 Rs23_l = rotx(pi/2 - par.theta_shoulder.left)*rotz(pi/2);
-d_trasl = 0.05;
+
+% right
+Rs210_r = rotx(pi/2);
+Rs28_r = roty(pi/2)*rotz(pi);
+Rs26_r = eye(3); % MMMMMMMMMMMMMMMMMMMMMMM
+Rs23_r = rotx(pi/2 + par.theta_shoulder.right)*rotz(pi/2); %
+
+
 
 if 1 == 1 %trial.task_side == left
 	
@@ -84,27 +94,63 @@ elseif 1 == 0 %trial.task_side == right
 	
 	arm = arms.right;
 	
-	error('NON ANCORA SVILUPPATO')
+	for i=1:size(trial.Hand_L.Quat,1)
+		eul_wrist_meas(:,i)		=	tr2eul(quat2rotm(trial.Hand_L.Quat(i,:))	* Rs210_l);
+		eul_elbow_meas(:,i)		=	tr2eul(quat2rotm(trial.Forearm_L.Quat(i,:)) * Rs28_l);
+		eul_shoulder_meas(:,i)	=	tr2eul(quat2rotm(trial.Upperarm_L.Quat(i,:))* Rs26_l);
+		eul_L5_meas(:,i)		=	tr2eul(quat2rotm(trial.L5.Quat(i,:))		* Rs23_l);
+	end
+	
+	eul_wrist_meas		= reshape_data(correct2pi_err(eul_wrist_meas)');
+	eul_elbow_meas		= reshape_data(correct2pi_err(eul_elbow_meas)');
+	eul_shoulder_meas	= reshape_data(correct2pi_err(eul_shoulder_meas)');
+	eul_L5_meas			= reshape_data(correct2pi_err(eul_L5_meas)');
+	
+	% rotation matrix 
+	for i = 1:size(trial.Hand_L.Quat,1)
+		rot_wrist_meas(:,:,i)		=	quat2rotm(trial.Hand_L.Quat(i,:))	 * Rs210_l;
+		rot_elbow_meas(:,:,i)		=	quat2rotm(trial.Forearm_L.Quat(i,:)) * Rs28_l;
+		rot_shoulder_meas(:,:,i)	=	quat2rotm(trial.Upperarm_L.Quat(i,:))* Rs26_l;
+		rot_L5_meas(:,:,i)			=	quat2rotm(trial.L5.Quat(i,:))		 * Rs23_l;
+	end
+	
+	% positions
+	pos_shoulder_meas = reshape_data(trial.Upperarm_L.Pos);
+	pos_elbow_meas = reshape_data(trial.Forearm_L.Pos);
+	pos_wrist_meas = reshape_data(trial.Hand_L.Pos);
+	pos_L5_meas = reshape_data(trial.L5.Pos);
+	
+ 	%T_wrist = rt2tr(rot_wrist_meas, pos_wrist_meas)	
+	for i = 1:size(trial.Hand_L.Quat,1)
+		T_wrist(:,:,i) = [rot_wrist_meas(:,:,i) pos_wrist_meas(:,:,i) ; 0 0 0 1];
+		T_wrist_x(:,:,i) = T_wrist(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_wrist_y(:,:,i) = T_wrist(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
+		T_elbow(:,:,i) = [rot_elbow_meas(:,:,i) pos_elbow_meas(:,:,i) ; 0 0 0 1];
+		T_elbow_x(:,:,i) = T_elbow(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_elbow_y(:,:,i) = T_elbow(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
+		T_shoulder(:,:,i) = [rot_shoulder_meas(:,:,i) pos_shoulder_meas(:,:,i) ; 0 0 0 1];
+		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
+		T_L5(:,:,i) = [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5_x(:,:,i) = T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
+		T_L5_y(:,:,i) = T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		
+	end
+	
+	pos_wrist_meas_x = T_wrist_x(1:3, 4, :);
+	pos_wrist_meas_y = T_wrist_y(1:3, 4, :);
+	pos_elbow_meas_x = T_elbow_x(1:3, 4, :);
+	pos_elbow_meas_y = T_elbow_y(1:3, 4, :);
+	pos_shoulder_meas_x = T_shoulder_x(1:3, 4, :);
+	pos_shoulder_meas_y = T_shoulder_y(1:3, 4, :);
+	pos_L5_meas_x = T_L5_x(1:3, 4, :);
+	pos_L5_meas_y = T_L5_y(1:3, 4, :);
 
 end
-%% yMeas Generation
-% Virtual measurement vector, copied here for reference
-% yk = [	eul_L5; ...
-% 		tr_shoulder; ...
-% 		eul_shoulder; ...
-% 		tr_elbow; ...
-% 		eul_elbow; ...
-% 		tr_wrist; ...
-% 		eul_wrist];
-% 
-% yMeas = [	eul_L5_meas;		...
-% 			pos_shoulder_meas;	...
-% 			eul_shoulder_meas;	...
-% 			pos_elbow_meas;		...
-% 			eul_elbow_meas;		...
-% 			pos_wrist_meas;		...
-% 			eul_wrist_meas];
-		
+%% yMeas Generation	
 yMeas = [	pos_L5_meas;		...
 			pos_L5_meas_x;		...
 			pos_L5_meas_y;		...
@@ -197,12 +243,10 @@ filter_oriz  = unscentedKalmanFilter(...
 		@StateFcn,... % State transition function
 		@MeasurementNoiseFcn,... % Measurement function
 		initialStateGuess);
-
 filter_oriz.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
 filter_oriz.ProcessNoise = Q;		% Variance of the process noise (10x10)
 
 for t = 1:t_tot
-	
 	%oriz step kalman filter
 	[xCorrected_oriz(:,:,t), PCorrected_oriz(:,:,t)] = correct(filter_oriz, yMeas(:, :, t), arm);
 	predict(filter_oriz);
@@ -215,7 +259,7 @@ for t = 1:t_tot
 
 	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
 	filter_vert.ProcessNoise = Q;		% Variance of the process noise (10x10)
-		
+	
 	% kalman iterations
 	while k < (2 * k_max)
 		
