@@ -80,9 +80,9 @@ for z = 1:folder_h_num
 	end
 end
 
-fprintf('Saving Healthy_data.mat... \n')
-save('healthy_data', 'healthy_data');
-fprintf('healthy_data.mat saved! \n')
+fprintf('Saving Healthy_task.mat... \n')
+save('healthy_task', 'healthy_task');
+fprintf('healthy_task.mat saved! \n')
 				
 %% Population of stroke Subject
 
@@ -175,6 +175,6 @@ for z = 1:folder_s_num
 	end
 end
 fprintf('Saving strokes_data.mat... \n')
-save('strokes_data', 'strokes_data');
-fprintf('strokes_data.mat saved! \n')
+save('strokes_task', 'strokes_task');
+fprintf('strokes_task.mat saved! \n')
 fprintf('All done! \n')
