@@ -1,9 +1,14 @@
 %% init
 clear; clc;
+load('healthy_task.mat');
+load('strokes_task.mat');
+trial = strokes_task(27).subject(3).left_side_trial(1);
+clear healthy_task strokes_task
 
-%trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-%trial = struct_dataload('H01_T07_L1');
+% % %trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+% % trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
+% % %trial = struct_dataload('H01_T07_L1');
+
 arms = create_arms(trial);
 par = par_10R(trial);
 %% load right or left side
@@ -194,27 +199,27 @@ xCorrected_oriz = zeros(arm.n, 1, t_tot);
 PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
 %% PROVE PARAMETRI
 
-a_cov_m = 5*pi/180;		% covariance of measured angles
-p_cov_m = 0.001;		% covariance of measured positions
-
+p_cov_m			= 0.001;	% covariance of measured positions [m]
+p_cov_marker	= 0.001;		% covariance of marker positions [m]
 % covariance measures' matrix calculation
 
-cov_vector_meas = [	p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...
-					p_cov_m p_cov_m p_cov_m ...		% 
-					p_cov_m p_cov_m p_cov_m];		% cov pos wrist y
-				
-%R = eye(size(yMeas,1));	% Variance of the measurement noise v[k]
-%R = cov_vector_meas.*R;
+cov_vector_meas = [	p_cov_m			p_cov_m			p_cov_m ...			% L5
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% L5 x-Marker		
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% L5 y-Marker
+					p_cov_m			p_cov_m			p_cov_m ...			% Shoulder
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Shoulder x-Marker
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Shoulder y-Marker
+					p_cov_m			p_cov_m			p_cov_m ...			% Elbow
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Elbow x-Marker
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Elbow y-Marker
+					p_cov_m			p_cov_m			p_cov_m ...			% Wrist
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Wrist x-Marker
+					p_cov_marker	p_cov_marker	p_cov_marker ...	% Wrist-- y-Marker
+					];
+
 R = diag(cov_vector_meas);
+
+% 0.01 rad = 0.57 grad
 cov_vector_q = [	0.001/2 ...	% cov associated to joint angle 1
 					0.001/2 ...	% cov associated to joint angle 2
 					0.001/2 ...	% cov associated to joint angle 3
@@ -226,11 +231,8 @@ cov_vector_q = [	0.001/2 ...	% cov associated to joint angle 1
 					0.001 ...	% cov associated to joint angle 9
 					0.001 ...	% cov associated to joint angle 10
 					];
-				% 0.01 rad = 0.57 grad
-				
-%Q = eye(arm.n);			% Variance of the process noise
-%Q = cov_vector_q.*Q;
 Q = diag(cov_vector_q);
+
 
 e_tol = 0.005;	
 tol_nochange = 0.05;		% percent of norm
@@ -259,7 +261,7 @@ for t = 1:t_tot
 		xCorrected_oriz(:,:,t));
 
 	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
-	filter_vert.ProcessNoise = Q;		% Variance of the process noise (10x10)
+	filter_vert.ProcessNoise = PCorrected_oriz(:,:,t);		% Variance of the process noise (10x10)
 	
 	% kalman iterations
 	while k < (2 * k_max)
@@ -328,13 +330,13 @@ for t = 1:t_tot
 	predict(filter_oriz);
 	
 	% vertical filter definition
-	filter_vert = extendedKalmanFilter(...
+	filter_vert = unscentedKalmanFilter(...
 		@StateFcn,... % State transition function
 		@MeasurementNoiseFcn,... % Measurement function
 		xCorrected_oriz(:,:,t));
 
 	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise v[k] (21x21)
-	filter_vert.ProcessNoise = Q;		% Variance of the process noise (10x10)
+	filter_vert.ProcessNoise = PCorrected_oriz(:,:,t);		% Variance of the process noise (10x10)
 	
 	% kalman iterations
 	while k < (2 * k_max)
@@ -386,6 +388,7 @@ end
 y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
 error_UKF = y_real(:,1:size(yMeas_virt_UKF,2)) - yMeas_virt_UKF;
 %plot(error')
+
 
 %% iteration PF
 fprintf('Particle Filter iteration started! \n')
@@ -466,28 +469,88 @@ error_PF = y_real(:,1:size(yMeas_virt_PF,2)) - yMeas_virt_PF;
 
 %% Analisi
 
-max_norm_er_EKF = 0;
+max_norm_er_EKF = zeros(size(error_EKF,1),1);
+max_norm_er_UKF = zeros(size(error_UKF,1),1);
+
+max_yMeas = yMeas(:,1,1);
+min_yMeas = yMeas(:,1,1);
+
+exc = zeros(size(error_EKF,1),1);
+
+
 for i = 1:size(error_EKF,2)
-	max_norm_er_EKF = max(max_norm_er_EKF, norm(error_EKF(:,i)) );
+	for j = 1:size(error_EKF,1)
+		% EKF
+		max_norm_er_EKF(j,1)= max(max_norm_er_EKF(j,1), norm(error_EKF(j,i)) );
+		
+		% UKF
+		max_norm_er_UKF(j,1) = max(max_norm_er_UKF(j,1), norm(error_UKF(j,i)) );
+		
+		% non relativo all'EKF ma lo mettiamo qui lo stesso
+		max_yMeas(j,1) = max(max_yMeas(j,1), yMeas(j,1,i) );
+		min_yMeas(j,1) = min(min_yMeas(j,1), yMeas(j,1,i) );
+		
+		%
+		exc(j,1) = norm(max_yMeas(j,1) - min_yMeas(j,1));
+	end
 end
-max_norm_er_UKF = 0;
-for i = 1:size(error_UKF,2)
-	max_norm_er_UKF = max(max_norm_er_UKF, norm(error_UKF(:,i)) );
+
+% relative errors 
+er_rel_EKF = max_norm_er_EKF./exc;
+er_rel_UKF = max_norm_er_UKF./exc;
+
+%% SYNC PLOT
+figure(1)
+	subplot(1,2,1)
+	title('q_{ekf} results ')
+	subplot(1,2,2)
+	title('q_ukf results ')
+	
+for i=1:5:floor(t_tot)
+	% plot of robotic arm with PC.plot
+	subplot(1,2,1)
+	arm.plot(q_rad_EKF(:,i)','floorlevel', 0)
+	% plot of joint angle
+	subplot(1,2,2)
+	arm.plot(q_rad_UKF(:,i)','floorlevel', 0)
+
 end
 
 %% PLOTS
+arm.plot(q_rad_EKF', 'floorlevel', 0)
+arm.plot(q_rad_UKF', 'floorlevel', 0)
 
 figure(1)
 plot(q_grad_EKF')
 hold on; grid on;
 plot(q_grad_UKF')
-
+title('Confronto q[grad] EKF vs UKF')
 
 figure(2)
 plot(error_EKF')
 hold on; grid on;
 plot(error_UKF')
+title('Confronto error[m] EKF vs UKF')
+
+figure(3)
+plot(1:size(er_rel_EKF,1), er_rel_EKF, 'ro')
+hold on; grid on;
+plot(1:size(er_rel_UKF,1), er_rel_UKF, 'bo')
+hold off
+legend('EKF', 'UKF')
+title('Errore rel EKF vs UKF')
+
+figure(4)
+plot(1:size(max_norm_er_EKF,1), max_norm_er_EKF, 'ro')
+hold on; grid on;
+plot(1:size(max_norm_er_UKF,1), max_norm_er_UKF, 'bo')
+legend('EKF', 'UKF')
+title('Errore max norm EKF vs UKF')
+
+figure(5)
+plot(1:size(max_norm_er_UKF,1), exc, 'go')
+title('Escursione massima')
 
 
-figure(3) % ZAPPA
+figure(4) % ZAPPA
 plot((error_EKF'-error_UKF').^2)

@@ -1,34 +1,8 @@
 %%temp
 clear; clc; close
-% load('healthy.mat');
-% trial  = healthy_task(7).subject(1).right_side_trial(1);
-% clear healthy_task;
 
-trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-
-% 
-% t = trial.Forearm_L.Pos;
-% %quat_s = quaternion(trial.Shoulder_L.Quat);
-% quat_u = quaternion(trial.Upperarm_L.Quat);
-% quat_f = quaternion(trial.Forearm_L.Quat);
-% quat_h = quaternion(trial.Hand_L.Quat);
-% 
-% 
-% Rs210_l = rotx(-pi/2);
-% Rs28_l = rotz(pi)*rotx(pi);
-
-% % for i=1:size(quat_s,1)
-% % 	quat_hand(i,1) = quat_s(i) * quat_u(i) * quat_f(i) * quat_h(i);
-% % end
-
-% for i=1:size(t,1)
-% 	grid on
-% 	axis equal
-% 	xlabel('x');    ylabel('y');    zlabel('z');
-% 	xlim([-1, 1]);  ylim([-1, 1]); zlim([0, 2]);
-% 	plotTransforms(t(i,:), quat_hand(i,:), 'Meshfile', 'mattone.stl')
-% 	drawnow()
-% end
+trial = struct_dataload('H03_T11_L1'); 
+par = par_10R(trial);
 %rosso X
 %verde Y
 %blu Z
@@ -38,9 +12,6 @@ trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la stru
 % se i quaternioni vanno impilati per ottenere la generica matrice di
 % trasformazione T0i, per loro, quale segmento ci fornisce 0? Dobbiamo poi
 % calcolare tutte le trasformazioni da li` alla mano?
-
-
-
 %% HAND
 clear t rotPlot
 t = trial.Hand_L.Pos;
@@ -67,8 +38,6 @@ SixDofAnimation(posPlot, rotPlot, ...
                 'CreateAVI', false, 'AVIfileNameEnum', false, 'AVIfps', ((1/samplePeriod) / SamplePlotFreq));
 
 fprintf('bravi clap clap');
-
-
 %% HHHElbow
 clear rotPlot t
 t = trial.Forearm_L.Pos;
@@ -93,8 +62,6 @@ SixDofAnimation(posPlot, rotPlot, ...
                 'CreateAVI', false, 'AVIfileNameEnum', false, 'AVIfps', ((1/samplePeriod) / SamplePlotFreq));
 
 fprintf('bravi clap clap \n');
-
-
 %% L5
 clear rotPlot t
 t = trial.L5.Pos;
