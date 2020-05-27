@@ -27,7 +27,7 @@ th3_r = -pi/2 - par.theta_shoulder.right;
 al4_r = +pi/2 + par.theta_shoulder.right;
 
 % serial links connection
-Link_r = [	Link('d', 0,	'a',	0,		'alpha', -pi/2),...						% L5-L5:				theta torso flexion  (pitch)
+Link_r = [	Link('d', 0,	'a',	0,		'alpha', +pi/2),...						% L5-L5:				theta torso flexion  (pitch)
 			Link('d', 0,	'a',	0,		'alpha', -pi/2, 'offset', +pi/2),...	% L5-L5:				theta torso twist
 			Link('d', d3,	'a',	a3,		'alpha', +pi/2,	'offset', +th3_r),...	% L5-shoulder:			theta shoulder "raise" 
 			Link('d', 0,	'a',	0,		'alpha', al4_r, 'offset', +pi/2),...% shoulder1-shoulder2:	theta shoulder front opening
