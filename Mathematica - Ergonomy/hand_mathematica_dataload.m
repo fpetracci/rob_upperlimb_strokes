@@ -63,11 +63,32 @@ end
 %         data.Hand_L.Quat(i,:) = struct_mvnx.subject.frames.frame(i+skip).orientation((segment*4-3):(segment*4));
 %     end
 % end
+%% ikunc for q0
+
+trial = struct_dataload(filename);
+arms = create_arms(trial);
+
+% right
+yMeas_EE_rot_r = quat2rotm(trial.Hand_L.Quat(i,:))* Rs210_l;
+pos_wrist_meas_r = reshape_data(trial.Hand_L.Pos);
+yMeas_EE_pos_r = pos_wrist_meas_r(:,1,1);
+TgEE_i_r = rt2tr(yMeas_EE_rot_r, yMeas_EE_pos_r);		
+q0_r = arms.right.ikunc(TgEE_i_r);
+
+% left
+yMeas_EE_rot_l = quat2rotm(trial.Hand_L.Quat(i,:))* Rs210_l;
+pos_wrist_meas_l = reshape_data(trial.Hand_L.Pos);
+yMeas_EE_pos_l = pos_wrist_meas_l(:,1,1);
+TgEE_i_l = rt2tr(yMeas_EE_rot_l, yMeas_EE_pos_l);		
+q0_l = arms.left.ikunc(TgEE_i_l);
+q0 = [q0_r; q0_l];
 
 %% save data inside .csv file
+
 header_vel = ["vx", "vy", "vz", "wx", "wy", "wz"];
 vel_hand_R = [header_vel ;Hand_R_Vel, Hand_R_AngVel];
 vel_hand_L = [header_vel ;Hand_L_Vel, Hand_L_AngVel];
 
+writematrix(q0,			'H01_T07_L1_q0.csv')
 writematrix(vel_hand_R, 'H01_T07_L1_hand_vR.csv');
 writematrix(vel_hand_L, 'H01_T07_L1_hand_vL.csv');
