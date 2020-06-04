@@ -30,7 +30,7 @@ Rs23_r = rotx(pi/2 + par.theta_shoulder.right)*rotz(pi/2); %
 
 
 
-if 1 == 0 %trial.task_side == left
+if 1 == 1 %trial.task_side == left
 	
 	arm = arms.left;
 	for i=1:size(trial.Hand_L.Quat,1)
@@ -90,7 +90,7 @@ if 1 == 0 %trial.task_side == left
 	pos_L5_meas_x = T_L5_x(1:3, 4, :);
 	pos_L5_meas_y = T_L5_y(1:3, 4, :);
 	
-elseif 1 == 1 %trial.task_side == right
+elseif 1 == 0 %trial.task_side == right
 	
 	arm = arms.right;
 	

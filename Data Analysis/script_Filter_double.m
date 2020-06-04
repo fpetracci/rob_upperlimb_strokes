@@ -1,3 +1,4 @@
+
 %% init
 clear; clc;
 
@@ -7,6 +8,7 @@ trial = struct_dataload('H01_T07_L1'); % barbatrucco finché non abbiamo la strut
 arms = create_arms(trial);
 par = par_10R(trial);
 %% load
+
 % Rotation matrices from sens default frame (see fig 55 in MVN manual) and
 % our DH driven frame on the robotic arm. 
 % s stands for xsens, number for the n-frame on the robotic arm, 
