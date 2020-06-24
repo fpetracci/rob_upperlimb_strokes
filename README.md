@@ -3,10 +3,8 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-.
-. togliere pos L5 dal vettore misura
-. UKF VS EKF PERCHEE
-. structure con gli angoli del 10R del braccio che compie il task
+. Sistemare la generazione della struct con q NON timewarpati
+. timewarp : scegliere quale angolo per ogni task
 
 
 MODELLL
