@@ -4,7 +4,6 @@ TO DO LIST
 
 DATA ANALYSISISISIS
 .
-. costruire stima con PF
 . togliere pos L5 dal vettore misura
 . UKF VS EKF PERCHEE
 . structure con gli angoli del 10R del braccio che compie il task
@@ -33,6 +32,8 @@ UPDATEMI
 
 15 Maggio
 ALLORA??
+
+24 Giugno
 
 
 _____________________________________________________
