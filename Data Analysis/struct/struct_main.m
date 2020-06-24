@@ -36,7 +36,9 @@
 
 %% main structure script
 clear; clc; close;
-
+load('strokes_task.mat')
+load('healthy_task.mat')
+filename = healthy_task(1).subject(1).left_side_trial(1)
 tic
 
 %global constant definition
@@ -47,6 +49,7 @@ nSubject_healthy = 5;
 
 % script execution
 struct_creation
-struct_population
+%struct_population
+q_population
 
 toc

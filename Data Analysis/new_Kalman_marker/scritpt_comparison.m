@@ -9,6 +9,7 @@ clear healthy_task strokes_task
 % % trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 % % %trial = struct_dataload('H01_T07_L1');
 
+
 arms = create_arms(trial);
 par = par_10R(trial);
 %% load right or left side

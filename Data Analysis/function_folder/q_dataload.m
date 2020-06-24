@@ -1,9 +1,5 @@
+function data = q_dataload(trial)
 %% init
-clear; clc;
-
-%trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-%trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-trial = struct_dataload('H01_T07_L1');
 arms = create_arms(trial);
 par = par_10R(trial);
 %% load right or left side
@@ -309,3 +305,10 @@ end
 
 y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
 error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
+%%
+data.q_grad = q_grad;
+data.err = error;
+
+
+end
+
