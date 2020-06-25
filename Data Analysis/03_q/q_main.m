@@ -27,17 +27,19 @@
 
 %% main structure script
 tic
-clear; clc; close;
+%clear; clc; close;
 
 % load data
-oldfolder = cd;
-cd ../
-cd 99_folder_mat
-load('healthy_task.mat');
-load('strokes_task.mat');
-cd(oldfolder);
-clear oldfolder;
-
+% oldfolder = cd;
+% cd ../
+% cd 99_folder_mat
+% load('healthy_task.mat');
+% load('strokes_task.mat');
+% cd(oldfolder);
+% clear oldfolder;
+%% DA TROVARE CARTELLA 99
+% load('healthy_task.mat');
+% load('strokes_task.mat');
 %global constant definition
 nTasks = 30;
 nTrial = 3;

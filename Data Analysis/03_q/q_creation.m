@@ -6,13 +6,15 @@
 % load a single trial to generate the low level of the struct. Dirty trick
 % but it's auto_updating if we want to change the low level struct inside
 % the function q_trial2q
+empty_q = struct('q_grad', [], 'err', []);
 
-trial = healthy_task(1).subject(1).left_side_trial(1);
-single_trial_q = q_trial2q(trial);
-clear trial
+
+% trial = healthy_task(1).subject(1).left_side_trial(1);
+% single_trial_q = q_trial2q(trial);
+% clear trial
 
 % array of struct, each element is a single trial
-trial_struct = repmat(single_trial_q, 1, nTrial*2);
+trial_struct = repmat(empty_q, 1, nTrial*2);
 
 % creation of 'subject' structure to contain all the trials of the single
 % subject
