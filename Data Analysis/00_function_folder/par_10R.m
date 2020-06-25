@@ -1,5 +1,5 @@
 function par = par_10R(trial)
-%par_10R Summary of this function goes here
+%par_10R
 %   this function calculates all parameters needed to build the
 %   Denavit-Hartenberg table of the 10R arm. 
 % example: par =

@@ -35,21 +35,17 @@
 % 							task_side		% stores the side which executes the task: 0 = left, 1 = right.
 
 %% main structure script
-clear; clc; close;
-load('strokes_task.mat')
-load('healthy_task.mat')
-filename = healthy_task(1).subject(1).left_side_trial(1)
 tic
+clear; clc; close;
 
 %global constant definition
 nTasks = 30;
 nTrial = 3;
-nSubject_strokes = 20;
+nSubject_strokes = 19;
 nSubject_healthy = 5;
 
 % script execution
 struct_creation
-%struct_population
-q_population
+struct_population
 
 toc

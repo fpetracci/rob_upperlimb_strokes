@@ -7,10 +7,10 @@
 
 
 Manual_stroke = 12; % select the id AFA for the Popolation
-strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25" "28" "29" "30";... % number of patient in the data
-				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20";... % non so come dirlo
-				  "0"  "1"  "0"  "1"  "0"  "1"  "0"  "0"  "1"  "1"  "0"  "0"  "0"  "1"  "1"  "0"  "1"  "1"  "1"  "1";... % upper limb with strokes 0-->Left 1--> Right
-				  "1"  "1"  "0"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"];   % dominant upper limb     0-->Left 1--> Right
+strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25"  "29" "30";... % number of patient in the data
+				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17"  "18" "19";... % non so come dirlo
+				  "0"  "1"  "0"  "1"  "0"  "1"  "0"  "0"  "1"  "1"  "0"  "0"  "0"  "1"  "1"  "0"  "1"  "1"  "1";... % upper limb with strokes 0-->Left 1--> Right
+				  "1"  "1"  "0"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"];   % dominant upper limb     0-->Left 1--> Right
 %% Population of healthy Subject
 
 fprintf('Preparing Healthy_data \n')
