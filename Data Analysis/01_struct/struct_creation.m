@@ -3,16 +3,20 @@
 % It has to be executed only once in order to prepare the skeleton of this 
 % structure, that will be fullfilled later using struct_population.m.
 
-%filename = 'L:\UZH_data\ULF_in_ADL\Healthies\H02_SoftProTasks\H02_T01_L1.mvnx';
-
+%filename = 'L:\UZH_data\ULF_in_ADL\Healthies\H01_SoftProTasks\H01_T01_L1.mvnx';
 
 % load a single file to generate the low level of the struct. Dirty trick
 % but it's auto_updating if we want to change the low level struct inside
 % the function struct_dataload
-single_trial = struct_dataload(filename);
+
+empty_trial = struct('L5', [], ...
+					'Upperarm_R', [], 'Forearm_R', [], 'Hand_R' , [], ...
+					'Upperarm_L', [], 'Forearm_L', [], 'Hand_L' , []);
+
+%single_trial = struct_dataload(filename);
 
 % array of struct, each element is a single trial
-trial_struct = repmat(single_trial, 1, nTrial);
+trial_struct = repmat(empty_trial, 1, nTrial);
 
 % creation of 'subject' structure to contain all the trials of the single
 % subject

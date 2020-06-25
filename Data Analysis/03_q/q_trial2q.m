@@ -184,7 +184,6 @@ initialStateGuess = q0_ikunc;				% init vector for kalman
 % general kalman init
 k = 1;										% initialization of filter step-index
 k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
-k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
 e_tol = 0.005;								% tolerance to break the filter iteration
 tol_nochange = 0.05;						% percent of norm inside of which there is no more relevant corrections

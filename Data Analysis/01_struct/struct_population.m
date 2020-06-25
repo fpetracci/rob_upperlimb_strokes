@@ -4,13 +4,10 @@
 % a subject and a single trial).
 
 
-
-
-Manual_stroke = 12; % select the id AFA for the Popolation
-strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25"  "29" "30";... % number of patient in the data
-				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17"  "18" "19";... % non so come dirlo
-				  "0"  "1"  "0"  "1"  "0"  "1"  "0"  "0"  "1"  "1"  "0"  "0"  "0"  "1"  "1"  "0"  "1"  "1"  "1";... % upper limb with strokes 0-->Left 1--> Right
-				  "1"  "1"  "0"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"];   % dominant upper limb     0-->Left 1--> Right
+strokesLabel = [ "02" "03" "04" "05" "06" "08" "09" "10" "12" "16" "17" "19" "20" "21" "22" "24" "25"  "29" "30";...	% index of patient in the UZH data
+				  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" "10" "11" "12" "13" "14" "15" "16" "17"  "18" "19";...	% index of patient in our struct
+				  "0"  "1"  "0"  "1"  "0"  "1"  "0"  "0"  "1"  "1"  "0"  "0"  "0"  "1"  "1"  "0"  "1"  "1"  "1";...		% upper limb with strokes 0-->Left 1--> Right
+				  "1"  "1"  "0"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"  "1"];		% dominant upper limb     0-->Left 1--> Right
 %% Population of healthy Subject
 
 fprintf('Preparing Healthy_data \n')
@@ -42,38 +39,34 @@ for z = 1:folder_h_num
 					end
 				end
 				
-				% print of the current status in the command window
-				str = ['folder ', num2str(z) , '  subject ', num2str(k), '  task ', num2str(i), '  trial ', num2str(j), '\n'];
-				fprintf(str)
-			
+				if (k == z)
+ 					% print of the current status in the command window
+					str = ['folder ', num2str(z) , '  subject ', num2str(k), '  task ', num2str(i), '  trial ', num2str(j), '\n'];
+					fprintf(str)
+				end
 				if (isfile(filenameL))
-					
-					healthy_task(i).subject(k).left_side_trial(j) = struct_dataload(filenameL);
-					
-					if j == nTrial
-						for jj = 1:nTrial
-							healthy_task(i).subject(k).left_side_trial(jj).stroke_task = 0;
-							healthy_task(i).subject(k).left_side_trial(jj).stroke_side = -1;
-							healthy_task(i).subject(k).left_side_trial(jj).task_side = 0;
-						end
-					end
-				
+					healthy_task(i).subject(k).left_side_trial(j) = struct_dataload(filenameL);	
 				end
+				if (j == nTrial) && (k == z)
+					for jj = 1:nTrial
+						healthy_task(i).subject(k).left_side_trial(jj).stroke_task = 0;
+						healthy_task(i).subject(k).left_side_trial(jj).stroke_side = -1;
+						healthy_task(i).subject(k).left_side_trial(jj).task_side = 0;
+					end
+				end
+				
 				if (isfile(filenameR))
-					
 					healthy_task(i).subject(k).right_side_trial(j) = struct_dataload(filenameR);
-					
-					if j == nTrial
-						for jj = 1:nTrial
-							healthy_task(i).subject(k).right_side_trial(jj).stroke_task = 0;
-							healthy_task(i).subject(k).right_side_trial(jj).stroke_side = -1;
-							healthy_task(i).subject(k).right_side_trial(jj).task_side = 1;
-						end
-					end
-
 				end
-				
-				healthy_task(i).subject(k).stroke_side= -1;
+				if (j == nTrial) && (k == z)
+					for jj = 1:nTrial
+						healthy_task(i).subject(k).right_side_trial(jj).stroke_task = 0;
+						healthy_task(i).subject(k).right_side_trial(jj).stroke_side = -1;
+						healthy_task(i).subject(k).right_side_trial(jj).task_side = 1;
+					end
+				end
+
+				healthy_task(i).subject(k).stroke_side = -1;
 
 			end
 		end
@@ -119,56 +112,53 @@ for z = 1:folder_s_num
 					end
 				end
 				
-				% print of the current status in the command window
-				str = ['folder ', num2str(z) , '  subject ', num2str(k), '  task ', num2str(i), '  trial ', num2str(j), '\n'];
-				fprintf(str)
+				if (k == z)
+					% print of the current status in the command window
+					str = ['folder ', num2str(z) , '  subject ', num2str(k), '  task ', num2str(i), '  trial ', num2str(j), '\n'];
+					fprintf(str)
+				end
 			
 				if (isfile(filenameL))
-					
 					strokes_task(i).subject(k).left_side_trial(j) = struct_dataload(filenameL);
-					
-					if j == nTrial
-						task_side = not(eval(strokesLabel(3,k)));
-						%here subject executes the task using his left arm, so
-						%if stroke affected his left side(eval(strokesLabel(3,k))=0),
-						%he actually does it using the injured side (side has 
-						%to be = 1), instead if stroke affected his right 
-						%side, he actually does it using the healthy side
-						%(side has to be = 0)
-						
-						for jj = 1:nTrial
-							
-							strokes_task(i).subject(k).left_side_trial(jj).stroke_task = task_side;
-							strokes_task(i).subject(k).left_side_trial(jj).stroke_side = strokesLabel(3,k);
-							strokes_task(i).subject(k).left_side_trial(jj).task_side = 0;
-						end
-					end
-				
 				end
-				if (isfile(filenameR))
-					
-					strokes_task(i).subject(k).right_side_trial(j) = struct_dataload(filenameR);
-					
-					if j == nTrial
-						task_side = eval(strokesLabel(3,k));
 				
-						%here subject executes the task using his right arm, so
-						%if stroke affected his right side(eval(strokesLabel(3,k))=1),
-						%he actually does it using the injured side (side has 
-						%to be = 1), instead if stroke affected his left 
-						%side, he actually does it using the healthy side
-						%(side has to be = 0)
-						
-						for jj = 1:nTrial
-							strokes_task(i).subject(k).right_side_trial(jj).stroke_task = task_side;
-							strokes_task(i).subject(k).right_side_trial(jj).stroke_side = strokesLabel(3,k);
-							strokes_task(i).subject(k).right_side_trial(jj).task_side = 1;
-						end
-					end
+				if (j == nTrial) && (k == z)
+					task_side = not(eval(strokesLabel(3,k)));
+					%here subject executes the task using his left arm, so
+					%if stroke affected his left side(eval(strokesLabel(3,k))=0),
+					%he actually does it using the injured side (side has 
+					%to be = 1), instead if stroke affected his right 
+					%side, he actually does it using the healthy side
+					%(side has to be = 0)
 
+					for jj = 1:nTrial
+						strokes_task(i).subject(k).left_side_trial(jj).stroke_task = task_side;
+						strokes_task(i).subject(k).left_side_trial(jj).stroke_side = eval(strokesLabel(3,k));
+						strokes_task(i).subject(k).left_side_trial(jj).task_side = 0;
+					end
 				end
-				
-				strokes_task(i).subject(k).stroke_side = str2double(strokesLabel(3,k));
+
+				if (isfile(filenameR))
+					strokes_task(i).subject(k).right_side_trial(j) = struct_dataload(filenameR);
+				end
+				if (j == nTrial) && (k == z)
+					task_side = eval(strokesLabel(3,k));
+
+					%here subject executes the task using his right arm, so
+					%if stroke affected his right side(eval(strokesLabel(3,k))=1),
+					%he actually does it using the injured side (side has 
+					%to be = 1), instead if stroke affected his left 
+					%side, he actually does it using the healthy side
+					%(side has to be = 0)
+
+					for jj = 1:nTrial
+						strokes_task(i).subject(k).right_side_trial(jj).stroke_task = task_side;
+						strokes_task(i).subject(k).right_side_trial(jj).stroke_side = eval(strokesLabel(3,k));
+						strokes_task(i).subject(k).right_side_trial(jj).task_side = 1;
+					end
+				end
+
+				strokes_task(i).subject(k).stroke_side = eval(strokesLabel(3,k));
 			
 			end
 		end
