@@ -31,7 +31,7 @@ Rs26_r = eye(3);
 Rs23_r = rotx(pi/2 + par.theta_shoulder.right)*rotz(pi/2); 
 
 % distance between center of frame and virtual marker on x and y axis.
-d_trasl = 0.5;
+d_trasl = 0.005;
 
 % preallocating for speed efficiency
 rot_wrist_meas		= zeros(3,3,nsamples);
