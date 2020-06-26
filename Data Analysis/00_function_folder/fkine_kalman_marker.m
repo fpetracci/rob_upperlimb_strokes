@@ -1,11 +1,10 @@
 function yk = fkine_kalman_marker(qk, Arm)
-% This function generates the measurement vector (36x1) for kalman filter.
+% This function generates the measurement vector (33x1) for kalman filter.
 %
 % The measurement is the forward kinematics of the angular joints.
 % The output vector is ordered as follow:
 % 
-% yk = [	tr_L5; ...
-% 		tr_L5_x; ...
+% yk = [tr_L5_x; ...
 % 		tr_L5_y; ...
 % 		tr_shoulder; ...
 % 		tr_shoulder_x; ...
@@ -32,7 +31,7 @@ Tg3	= arm_fkine(Arm, qk, 3);
 Tg3_trasl_x =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; 
 Tg3_trasl_y =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 
-tr_L5 = Arm.base(1:3,4);
+%tr_L5 = Arm.base(1:3,4);
 tr_L5_x = Tg3_trasl_x(1:3, 4);
 tr_L5_y = Tg3_trasl_y(1:3, 4);
 
