@@ -177,7 +177,8 @@ q = zeros(arm.n, 1, t_tot);		% initialization of joint angles
 yMeas_EE_rot	= rot_wrist_meas(:,:,1);
 yMeas_EE_pos	= pos_wrist_meas(:,1,1);
 TgEE_i			= rt2tr(yMeas_EE_rot, yMeas_EE_pos);
-q0_ikunc		= arm.ikunc(TgEE_i);				
+q0_ikunc		= arm.ikunc(TgEE_i);
+%q0_ikcon		= arm.ikcon(TgEE_i);
 
 initialStateGuess = q0_ikunc;				% init vector for kalman
 
