@@ -196,7 +196,7 @@ q_sol = data.q_grad/180*pi;
 
 nsamples_calc = size(q_sol,2);
 
-yMeas_virt = zeros(36, nsamples);
+yMeas_virt = zeros(33, nsamples);
 for i=1:nsamples_calc
 	yMeas_virt(:,i) = fkine_kalman_marker(q_sol(:,i), arm);
 end
@@ -233,6 +233,8 @@ col_mk_in		= 'b';		% marker colour inside
 dim_mk_virt		= dim_mk;   % marker dimension virt 
 col_mk_virt		= 'ro';		% marker colour virt
 col_mk_in_virt	= 'r';		% marker colour inside virt
+col_mk_virt2	= 'go';		% marker of virtual position of frame origin
+col_mk_in_virt2 = 'g';		% marker of virtual position of frame origin in
 
 %% lim axis
 lim_gap = 0.3;
@@ -313,8 +315,9 @@ for t = 1:rate_anim:nsamples_calc
 	%%%%
 	% init anim
 	if t ~= 1
-		child_each_plot = 3 + 12 + 2*4 +2*4;
+		child_each_plot = 3 + 12 + 2*4 +3*4;
 		unplot(child_each_plot) ;
+		
 	end
 	
 	%L5
@@ -355,20 +358,24 @@ for t = 1:rate_anim:nsamples_calc
 
 	%%virt
 	%L5
-	pos_L5_x_virt_now		= yMeas_virt([4:6],t);
-	pos_L5_y_virt_now		= yMeas_virt([7:9],t);
+	%pos_L5_virt_now			= yMeas_virt([1:3],t);
+	pos_L5_x_virt_now		= yMeas_virt([1:3],t);
+	pos_L5_y_virt_now		= yMeas_virt([4:6],t);
 	
 	%shoulder
-	pos_shoulder_x_virt_now	= yMeas_virt([13:15],t);
-	pos_shoulder_y_virt_now	= yMeas_virt([16:18],t);
+	pos_shoulder_virt_now	= yMeas_virt([7:9],t);
+	pos_shoulder_x_virt_now	= yMeas_virt([10:12],t);
+	pos_shoulder_y_virt_now	= yMeas_virt([13:15],t);
 	
 	%elbow
-	pos_elbow_x_virt_now	= yMeas_virt([22:24],t);
-	pos_elbow_y_virt_now	= yMeas_virt([25:27],t);
+	pos_elbow_virt_now		= yMeas_virt([16:18],t);
+	pos_elbow_x_virt_now	= yMeas_virt([19:21],t);
+	pos_elbow_y_virt_now	= yMeas_virt([22:24],t);
 	
 	%wrist
-	pos_wrist_x_virt_now	= yMeas_virt([31:33],t);
-	pos_wrist_y_virt_now	= yMeas_virt([34:36],t);
+	pos_wrist_virt_now		= yMeas_virt([25:27],t);
+	pos_wrist_x_virt_now	= yMeas_virt([28:30],t);
+	pos_wrist_y_virt_now	= yMeas_virt([31:33],t);
 	
 	%%%%
 	% interconnection %3
@@ -436,6 +443,10 @@ for t = 1:rate_anim:nsamples_calc
 	
 	% marker virt
 	%L5
+% 	plot3(	pos_L5_virt_now(1),...
+% 			pos_L5_virt_now(2),...
+% 			pos_L5_virt_now(3),...
+% 			col_mk_virt2,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt2)
 	plot3(	pos_L5_x_virt_now(1),...
 			pos_L5_x_virt_now(2),...
 			pos_L5_x_virt_now(3),...
@@ -445,6 +456,10 @@ for t = 1:rate_anim:nsamples_calc
 			pos_L5_y_virt_now(3),...
 			col_mk_virt,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt)
 	% shoulder
+	plot3(	pos_shoulder_virt_now(1),...
+			pos_shoulder_virt_now(2),...
+			pos_shoulder_virt_now(3),...
+			col_mk_virt2,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt2)
 	plot3(	pos_shoulder_x_virt_now(1),...
 			pos_shoulder_x_virt_now(2),...
 			pos_shoulder_x_virt_now(3),...
@@ -454,6 +469,10 @@ for t = 1:rate_anim:nsamples_calc
 			pos_shoulder_y_virt_now(3),...
 			col_mk_virt,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt)
 	% elbow
+	plot3(	pos_elbow_virt_now(1),...
+			pos_elbow_virt_now(2),...
+			pos_elbow_virt_now(3),...
+			col_mk_virt2,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt2)
 	plot3(	pos_elbow_x_virt_now(1),...
 			pos_elbow_x_virt_now(2),...
 			pos_elbow_x_virt_now(3),...
@@ -463,6 +482,10 @@ for t = 1:rate_anim:nsamples_calc
 			pos_elbow_y_virt_now(3),...
 			col_mk_virt,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt)
 	% wrist
+	plot3(	pos_wrist_virt_now(1),...
+			pos_wrist_virt_now(2),...
+			pos_wrist_virt_now(3),...
+			col_mk_virt2,'MarkerSize', dim_mk_virt,'MarkerFaceColor',col_mk_in_virt2)
 	plot3(	pos_wrist_x_virt_now(1),...
 			pos_wrist_x_virt_now(2),...
 			pos_wrist_x_virt_now(3),...
@@ -495,7 +518,7 @@ x = pos(1);
 y = pos(2);
 z = pos(3);
 
-d = 0.2;
+d = 0.5;
 
 qx = rot * [d; 0; 0];
 qy = rot * [0; d; 0];

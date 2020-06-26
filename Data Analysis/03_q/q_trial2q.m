@@ -185,8 +185,7 @@ elseif trial.task_side == 1 % right side
 end
 
 % array of measurements including virtual markers
-yMeas = [	pos_L5_meas;		...
-			pos_L5_meas_x;		...
+yMeas = [	pos_L5_meas_x;		...
 			pos_L5_meas_y;		...
 			pos_shoulder_meas;	...
 			pos_shoulder_meas_x;...
@@ -231,12 +230,12 @@ xCorrected_horiz = zeros(arm.n, 1, t_tot);
 PCorrected_horiz = zeros(arm.n, arm.n, t_tot);
 
 % R covariance of measurements
-sigma_pos		= 0.01;			% std deviation of each measured positions [m]
+sigma_pos		= 0.001;		% std deviation of each measured positions [m]
 cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
 R				= diag(cov_vector_meas);
 
 % Q covariance of filter state (joint angles)
-sigma_q			= deg2rad(10);		% std deviation of joint angles [rad]
+sigma_q			= deg2rad(2);		% std deviation of joint angles [rad]
 cov_vector_q	= sigma_q^2 * ones(1, arm.n);
 weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
 cov_vector_q	= cov_vector_q .* weights_covq;
