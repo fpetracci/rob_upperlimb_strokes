@@ -1,4 +1,4 @@
-function data = q_trial2q(trial)
+function data = q_trial2q_bis(trial)
 %q_trial2q given a specific trial, computes and allocates 10R joint
 %angles.
 %   This function uses an EKF in order to get joint angles' estimate of a
@@ -319,6 +319,8 @@ error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 % save into data
 data.q_grad = q_grad;
 data.err = error;
+data.yMeas = yMeas;
+
 
 end
 

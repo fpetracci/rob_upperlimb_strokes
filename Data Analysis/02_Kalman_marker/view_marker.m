@@ -1,30 +1,22 @@
-function data = q_trial2q(trial)
-%q_trial2q given a specific trial, computes and allocates 10R joint
-%angles.
-%   This function uses an EKF in order to get joint angles' estimate of a
-%   10R serial robot representing a human torso-arm. This function relies
-%   on functions create_arms() and par_10R().
+function view_marker(trial)
+clf
+% %% DA ELIMINARE, SOLO PER TEST
+% % folder
+% oldfolder = cd;
+% cd ../
+% cd 99_folder_mat
+% load('healthy_task.mat');
+% load('strokes_task.mat');
+% cd(oldfolder);
+% clear oldfolder;
+% trial = healthy_task(7).subject(1).left_side_trial(1);
 
-
-%% initialization
-% to accomodate different subjects and trial executions we have decided to
-% reconstruct each time the 10R serial robot using the best fit of arm 
-% lengths.
+%% build marker
 arms = create_arms(trial);
 par = par_10R(trial);
 
-%% load right or left side
-% Rotation matrices from sens default frame (see fig 55 in MVN manual) and
-% our DH driven frame on the robotic arm. 
-% s stands for xsens, number for the n-frame on the robotic arm, 
-% l/r left or right. 
-% Example: Rs210_l is the rot matrix from hand frame of xsens to 10th frame
-% of the left robotic arm described in arm.left
-
 % general time initialization
 nsamples = size(trial.Hand_L.Quat,1); % number of time step in the chosen trial
-t_skip = 10;	% number of time step we have chosen to skip at the start 
-				% and at the end of the trial to avoid measurments errors
 
 % left side
 Rs210_l = rotx(-pi/2);
@@ -77,7 +69,7 @@ if trial.task_side == 0 % left side
 	uppe_rotm = quat2rotm(trial.Upperarm_L.Quat);
 	uppe_quat = rotm2quat(uppe_rotm);
 
-	arm = arms.left;
+	%arm = arms.left;
 	% rotation matrix 
 	for i = 1:nsamples
 		rot_wrist_meas(:,:,i)		= quat2rotm(hand_quat(i,:))	* Rs210_l;
@@ -137,7 +129,7 @@ elseif trial.task_side == 1 % right side
 	uppe_rotm = quat2rotm(trial.Upperarm_R.Quat);
 	uppe_quat = rotm2quat(uppe_rotm);
 	
-	arm = arms.right;
+	%arm = arms.right;
 	
 	% rotation matrix 
 	for i = 1:nsamples
@@ -184,141 +176,212 @@ elseif trial.task_side == 1 % right side
 
 end
 
-% array of measurements including virtual markers
-yMeas = [	pos_L5_meas;		...
-			pos_L5_meas_x;		...
-			pos_L5_meas_y;		...
-			pos_shoulder_meas;	...
-			pos_shoulder_meas_x;...
-			pos_shoulder_meas_y;...
-			pos_elbow_meas;		...
-			pos_elbow_meas_x;	...
-			pos_elbow_meas_y;	...
-			pos_wrist_meas;		...
-			pos_wrist_meas_x;	...
-			pos_wrist_meas_y];	
-
-%% Kalman Initialization					
-t_tot = nsamples - t_skip;		% reduced time steps
-q = zeros(arm.n, 1, t_tot);		% initialization of joint angles
-
-% initialStateGuess computation:
-% construction of the homogeneous transform between global frame and EE 
-%frame in the first time step TgEE_i
-yMeas_EE_rot	= rot_wrist_meas(:,:,1);
-yMeas_EE_pos	= pos_wrist_meas(:,1,1);
-TgEE_i			= rt2tr(yMeas_EE_rot, yMeas_EE_pos);
-q0_ikunc		= arm.ikunc(TgEE_i);
-%q0_ikcon		= arm.ikcon(TgEE_i);
-
-initialStateGuess = q0_ikunc;				% init vector for kalman
-
-% general kalman init
-k = 1;										% initialization of filter step-index
-k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
-e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
-e_tol = 0.005;								% tolerance to break the filter iteration
-tol_nochange = 0.05;						% percent of norm inside of which there is no more relevant corrections
-k_nochange = 0;								% init counter no relevant corrections
-k_nochange_max = 10;						% stop value for number of irrelevant corrections
-
-% vertical filter state and cov init
-xCorrected_vert = zeros(arm.n, 1, t_tot, k_max);
-PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
-
-% horizontal filter state and cov init
-xCorrected_horiz = zeros(arm.n, 1, t_tot);
-PCorrected_horiz = zeros(arm.n, arm.n, t_tot);
-
-% R covariance of measurements
-sigma_pos		= 0.01;			% std deviation of each measured positions [m]
-cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
-R				= diag(cov_vector_meas);
-
-% Q covariance of filter state (joint angles)
-sigma_q			= deg2rad(2);		% std deviation of joint angles [rad]
-cov_vector_q	= sigma_q^2 * ones(1, arm.n);
-weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
-cov_vector_q	= cov_vector_q .* weights_covq;
-Q				= diag(cov_vector_q);
-
-%% Kalman iteration
-
-filter_horiz  = extendedKalmanFilter(...
-		@StateFcn,...				% State transition function
-		@MeasurementNoiseFcn,...	% Measurement function
-		initialStateGuess);			% initial state guess
-
-filter_horiz.MeasurementNoise = R;	% Variance of the measurement noise
-filter_horiz.ProcessNoise = Q;		% Variance of the process noise
-
-for t = 1:t_tot
-	%horizontal step kalman filter
-	[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = correct(filter_horiz, yMeas(:, :, t), arm);
-	predict(filter_horiz);
-	
-	% vertical filter definition
-	filter_vert = extendedKalmanFilter(...
-		@StateFcn,...					% State transition function
-		@MeasurementNoiseFcn,...		% Measurement function
-		xCorrected_horiz(:,:,t));		% initial state = last corrected state of horiz filter
-
-	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise
-	filter_vert.ProcessNoise = Q;		% Variance of the process noise 
-	
-	% kalman iterations
-	while k <= k_max
+% % array of measurements including virtual markers
+% yMeas = [	pos_L5_meas;		...
+% 			pos_L5_meas_x;		...
+% 			pos_L5_meas_y;		...
+% 			pos_shoulder_meas;	...
+% 			pos_shoulder_meas_x;...
+% 			pos_shoulder_meas_y;...
+% 			pos_elbow_meas;		...
+% 			pos_elbow_meas_x;	...
+% 			pos_elbow_meas_y;	...
+% 			pos_wrist_meas;		...
+% 			pos_wrist_meas_x;	...
+% 			pos_wrist_meas_y];	
 		
-		[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = correct(filter_vert, yMeas(:, :, t), arm);
-		predict(filter_vert);
-		
-		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter_vert.State, arm);
-		
-		% exit conditions
-		if k ~= 1
-			if norm(e(:,:,t,k-1)- e(:,:,t,k),2) < tol_nochange*norm(e(:,:,1,k),2)
-				% there is not enough correction in this k-step
-				k_nochange = k_nochange + 1;
-			end
-		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max >= k_nochange))
-			% three exit conditions on the k-step:
-			% 1. norm innovation < tolerated error
-			% 2. number of k exceeds the max accepted
-			% 3. number of irrelevant corrections exceeds the max accepted
-			break
-		end
-		
-		% increment k iter number
-		k = k + 1;
+%% fig par
+
+rate_anim = 2;
+
+figure(1);
+hold on; grid on;
+View = [30 20];
+Xlabel = 'x Axis [m]';
+Ylabel = 'y Axis [m]';
+Zlabel = 'z Axis [m]';
+Title = 'PaSqualo Animazione';
+
+set(gca, 'drawmode', 'fast');
+lighting phong;
+set(gcf, 'Renderer', 'zbuffer');
+
+axis equal;
+grid on;
+view(View(1, 1), View(1, 2));
+title(Title);
+xlabel(Xlabel);
+ylabel(Ylabel);
+zlabel(Zlabel);
+
+col_segm	= 'k-';		% colour segment
+dim_mk		= 4;		% marker dimension
+col_mk		= 'bo';		% marker colour
+col_mk_in	= 'b';		% marker colour inside
+%% lim axis
+lim_gap = 0.3;
+xmin = min([ ...
+	min(pos_L5_meas(1,1,:)), ...
+	min(pos_shoulder_meas(1,1,:)), ...
+	min(pos_elbow_meas(1,1,:)), ...
+	min(pos_wrist_meas(1,1,:)), ...
+	]) - lim_gap;
+xmax = max([ ...
+	max(pos_L5_meas(1,1,:)), ...
+	max(pos_shoulder_meas(1,1,:)), ...
+	max(pos_elbow_meas(1,1,:)), ...
+	max(pos_wrist_meas(1,1,:)), ...
+	]) + lim_gap;
+ymin = min([ ...
+	min(pos_L5_meas(2,1,:)), ...
+	min(pos_shoulder_meas(2,1,:)), ...
+	min(pos_elbow_meas(2,1,:)), ...
+	min(pos_wrist_meas(2,1,:)), ...
+	]) - lim_gap;
+ymax = max([ ...
+	max(pos_L5_meas(2,1,:)), ...
+	max(pos_shoulder_meas(2,1,:)), ...
+	max(pos_elbow_meas(2,1,:)), ...
+	max(pos_wrist_meas(2,1,:)), ...
+	]) + lim_gap;
+zmin = 0;
+zmax = max([ ...
+	max(pos_L5_meas(3,1,:)), ...
+	max(pos_shoulder_meas(3,1,:)), ...
+	max(pos_elbow_meas(3,1,:)), ...
+	max(pos_wrist_meas(3,1,:)), ...
+	]) + lim_gap;
+
+%% animation
+for t = 1:rate_anim:nsamples
+	%%%%
+	% init anim
+	if t ~= 1
+		child_each_plot = 3 + 12 + 2*4;
+		unplot(child_each_plot) ;
 	end
 	
-	% save q at the end of vertical iterations
-	q(:,1,t) = xCorrected_vert(:,:,t,k);
+	%L5
+	pos_L5_now			= pos_L5_meas(:,1,t);
+	rot_L5_now			= rot_L5_meas(:,:,t);
+	pos_L5_x_now		= pos_L5_meas_x(:,1,t);
+	pos_L5_y_now		= pos_L5_meas_y(:,1,t);
 	
-	% save for the next time step iteration
-	filter_horiz.State = xCorrected_vert(:,:,t,k);
+	%shoulder
+	pos_shoulder_now	= pos_shoulder_meas(:,1,t);
+	rot_shoulder_now	= rot_shoulder_meas(:,:,t);
+	pos_shoulder_x_now	= pos_shoulder_meas_x(:,1,t);
+	pos_shoulder_y_now	= pos_shoulder_meas_y(:,1,t);
 	
-	% reset k counters
-	k_nochange = 0;
-	k = 1;
+	%elbow
+	pos_elbow_now		= pos_elbow_meas(:,1,t);
+	rot_elbow_now		= rot_elbow_meas(:,:,t);
+	pos_elbow_x_now		= pos_elbow_meas_x(:,1,t);
+	pos_elbow_y_now		= pos_elbow_meas_y(:,1,t);
+	
+	%wrist
+	pos_wrist_now		= pos_wrist_meas(:,1,t);
+	rot_wrist_now		= rot_wrist_meas(:,:,t);
+	pos_wrist_x_now		= pos_wrist_meas_x(:,1,t);
+	pos_wrist_y_now		= pos_wrist_meas_y(:,1,t);
+	
+	%%%%
+	% interconnection %3
+	
+	% L5 - Shoulder 
+    plot3(	[pos_L5_now(1); pos_shoulder_now(1)],...
+			[pos_L5_now(2); pos_shoulder_now(2)],...
+			[pos_L5_now(3);	pos_shoulder_now(3)],...
+			col_segm)
+	% Shoulder - Elbow
+	plot3(	[pos_elbow_now(1);	pos_shoulder_now(1)],...
+			[pos_elbow_now(2);	pos_shoulder_now(2)],...
+			[pos_elbow_now(3);	pos_shoulder_now(3)],...
+			col_segm)
+	
+	% Elbow - wrist
+	plot3(	[pos_elbow_now(1);	pos_wrist_now(1)],...
+			[pos_elbow_now(2);	pos_wrist_now(2)],...
+			[pos_elbow_now(3);	pos_wrist_now(3)],...
+			col_segm)
+	
+	% sist ref	%12 elem
+	draw_frame(pos_L5_now,			rot_L5_now);		%3 elem
+	draw_frame(pos_shoulder_now,	rot_shoulder_now);	%3
+	draw_frame(pos_elbow_now,		rot_elbow_now);		%3
+	draw_frame(pos_wrist_now,		rot_wrist_now);		%3
+	
+	% marker
+	%L5
+	plot3(	pos_L5_x_now(1),...
+			pos_L5_x_now(2),...
+			pos_L5_x_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	plot3(	pos_L5_y_now(1),...
+			pos_L5_y_now(2),...
+			pos_L5_y_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	% shoulder
+	plot3(	pos_shoulder_x_now(1),...
+			pos_shoulder_x_now(2),...
+			pos_shoulder_x_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	plot3(	pos_shoulder_y_now(1),...
+			pos_shoulder_y_now(2),...
+			pos_shoulder_y_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	% elbow
+	plot3(	pos_elbow_x_now(1),...
+			pos_elbow_x_now(2),...
+			pos_elbow_x_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	plot3(	pos_elbow_y_now(1),...
+			pos_elbow_y_now(2),...
+			pos_elbow_y_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	% wrist
+	plot3(	pos_wrist_x_now(1),...
+			pos_wrist_x_now(2),...
+			pos_wrist_x_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	plot3(	pos_wrist_y_now(1),...
+			pos_wrist_y_now(2),...
+			pos_wrist_y_now(3),...
+			col_mk,'MarkerSize', dim_mk,'MarkerFaceColor',col_mk_in)
+	
+	% end stuff	
+	Title = ['Animation (frame ', num2str(t), ' di ', num2str(nsamples), ')'];
+	title(Title)
+	axis equal;
+	xlim([xmin, xmax])
+	ylim([ymin, ymax])
+	zlim([zmin, zmax])
+	grid on;
+	drawnow;
+	
 	
 end
 
-%% end save
-q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
-q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2));
 
-yMeas_virt = zeros(size(yMeas,1),t_tot);
-for i = 1:t_tot
-	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
+
+
 end
-y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
-error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 
-% save into data
-data.q_grad = q_grad;
-data.err = error;
+function draw_frame(pos, rot)
+
+x = pos(1);
+y = pos(2);
+z = pos(3);
+
+d = 0.2;
+
+qx = rot * [d; 0; 0];
+qy = rot * [0; d; 0];
+qz = rot * [0; 0; d];
+
+quiver3(x,y,z,qx(1),qx(2),qx(3), 'r', 'ShowArrowHead', false)
+quiver3(x,y,z,qy(1),qy(2),qy(3), 'g', 'ShowArrowHead', false)
+quiver3(x,y,z,qz(1),qz(2),qz(3), 'b', 'ShowArrowHead', false)
 
 end
 
