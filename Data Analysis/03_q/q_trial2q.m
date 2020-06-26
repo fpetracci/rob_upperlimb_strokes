@@ -39,7 +39,7 @@ Rs26_r = eye(3);
 Rs23_r = rotx(pi/2 + par.theta_shoulder.right)*rotz(pi/2); 
 
 % distance between center of frame and virtual marker on x and y axis.
-d_trasl = 0.05;
+d_trasl = 0.5;
 
 % preallocating for speed efficiency
 rot_wrist_meas		= zeros(3,3,nsamples);
@@ -236,7 +236,7 @@ cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
 R				= diag(cov_vector_meas);
 
 % Q covariance of filter state (joint angles)
-sigma_q			= deg2rad(2);		% std deviation of joint angles [rad]
+sigma_q			= deg2rad(10);		% std deviation of joint angles [rad]
 cov_vector_q	= sigma_q^2 * ones(1, arm.n);
 weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
 cov_vector_q	= cov_vector_q .* weights_covq;
@@ -319,6 +319,6 @@ error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 % save into data
 data.q_grad = q_grad;
 data.err = error;
-
+data.yMeas_virt = yMeas_virt;
 end
 
