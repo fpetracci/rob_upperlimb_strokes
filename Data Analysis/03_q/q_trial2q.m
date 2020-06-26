@@ -39,7 +39,7 @@ Rs26_r = eye(3);
 Rs23_r = rotx(pi/2 + par.theta_shoulder.right)*rotz(pi/2); 
 
 % distance between center of frame and virtual marker on x and y axis.
-d_trasl = 0.005;
+d_trasl = 0.20;
 
 % preallocating for speed efficiency
 rot_wrist_meas		= zeros(3,3,nsamples);
@@ -208,6 +208,7 @@ yMeas_EE_rot	= rot_wrist_meas(:,:,1);
 yMeas_EE_pos	= pos_wrist_meas(:,1,1);
 TgEE_i			= rt2tr(yMeas_EE_rot, yMeas_EE_pos);
 q0_ikunc		= arm.ikunc(TgEE_i);
+disp(q0_ikunc)
 %q0_ikcon		= arm.ikcon(TgEE_i);
 
 initialStateGuess = q0_ikunc;				% init vector for kalman
@@ -235,7 +236,7 @@ cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
 R				= diag(cov_vector_meas);
 
 % Q covariance of filter state (joint angles)
-sigma_q			= deg2rad(2);		% std deviation of joint angles [rad]
+sigma_q			= deg2rad(0.2);		% std deviation of joint angles [rad]
 cov_vector_q	= sigma_q^2 * ones(1, arm.n);
 weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
 cov_vector_q	= cov_vector_q .* weights_covq;
