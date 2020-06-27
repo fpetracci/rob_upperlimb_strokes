@@ -3,7 +3,7 @@ function yk = MeasurementNoiseFcn_rel(xk, Arm)
 % yk = fkine_kalman(xk, Arm)(1 + vk);
 
 % additive
-yk = fkine_kalman_marker(xk, Arm);
+yk = fkine_kalman_marker_rel(xk, Arm);
 
 end
 
