@@ -3,8 +3,11 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-. Sistemare la generazione della struct con q NON timewarpati
-. timewarp : scegliere quale angolo per ogni task
+. tuning parametri ukf
+. data.err: errore norma 
+. fare struct_q
+. fare struct_timewarp - pensare a come fare tra i diversi task
+
 
 
 MODELLL
