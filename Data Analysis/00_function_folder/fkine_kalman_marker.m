@@ -18,7 +18,7 @@ function yk = fkine_kalman_marker(qk, Arm)
 		
 % xsense frame = global (g) frame
 % eul_* are the ZYZ Euler angles
-d_trasl = 0.20;
+d_trasl = 0.05;
 %% L5
 % Tg0 = arm_fkine(Arm, qk, 0);
 % tr_L5 = Tg0(1:3, 4);			

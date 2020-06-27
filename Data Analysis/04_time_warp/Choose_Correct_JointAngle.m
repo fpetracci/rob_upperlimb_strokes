@@ -1,3 +1,5 @@
+%% Function that doesn't need, we have decided to choose the 7th joint angle
+	
 %% this script has the objective to identify which one of the 10 joint angle maintain the same patter 
 
 %trial = "healthy_task_q(1).subject(1).left_side_trial(1).q_grad"

@@ -1,10 +1,12 @@
-function [s2_new] = TimeWarping(s1,s2)
+function [s2_new] = TimeWarping(s1,s2,p)
 %% Calcolo parametri di Time Shift e Stretch migliori
+%  the function take as input 2  joints angle struct, each struct is
+%  composed by 10 joint angle. We chosed the 7th angular joint as the
+%  referement forchoose the optimale strech and shift parameters
 
 % s1 movimento di riferimento
 % s2 movimento da modificare
-s1 = healthy_task_q(1).subject(1).left_side_trial(1).q_grad ;
-s2 = healthy_task_q(2).subject(1).left_side_trial(1).q_grad ;
+
 trial = s2;
 %creazione parametri per modificare s2 DA GUARDARE PER OTTIMIZZARE
 rapp = length(s2(1,:))/length(s1(1,:));
@@ -24,7 +26,7 @@ for i=1:length(TShift(1,:))
         
         time = 1 : length(s2tmp(1,:));
         nel = length(time);
-        ts1 = timeseries(s2tmp(1,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
+        ts1 = timeseries(s2tmp(7,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
 %         ts2 = timeseries(s2tmp(2,:),time); 
 %         ts3 = timeseries(s2tmp(3,:),time); 
 %         ts4 = timeseries(s2tmp(4,:),time); 
@@ -104,7 +106,7 @@ for i=1:length(TShift(1,:))
         s2tmp = s2tmp(1,1:Ls1);
         end
         
-        A1 = [s1tmp(1,:)' s2tmp(1,:)'];
+        A1 = [s1tmp(7,:)' s2tmp(1,:)'];
 %         A2 = [s1tmp(2,:)' s2tmp(2,:)'];
 %         A3 = [s1tmp(3,:)' s2tmp(3,:)'];
 %         A4 = [s1tmp(4,:)' s2tmp(4,:)'];
@@ -244,12 +246,20 @@ elseif Ls1 <Ls2
           s2(10,1:Ls1)];
 end
 
-%Salva s2 modificato nell'output
+%% plot s1,s2,s2new
 s2_new = s2;
-figure(1)
+
+figure(p)
 plot(s1')
-figure(2)
-plot(s2_new')
-figure(3)
+title('segnale di riferimento')
+
+figure(p + 1)
 plot(trial')
+title('segnale da warpare')
+
+figure(p + 2)
+plot(trial')
+plot(s2_new')
+title('segnale warpato')
+
 end
