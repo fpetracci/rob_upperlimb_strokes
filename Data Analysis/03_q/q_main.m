@@ -19,7 +19,6 @@
 tic
 clear; clc; close;
 
-load data
 oldfolder = cd;
 cd ../
 cd 99_folder_mat

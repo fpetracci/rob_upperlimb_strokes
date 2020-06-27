@@ -12,6 +12,29 @@ function data = q_trial2q(trial)
 % lengths.
 arms = create_arms(trial);
 par = par_10R(trial);
+%% Delete first 30 samples
+t_init_skip = 30;
+
+trial.L5.Pos(1:t_init_skip,:) = [];
+trial.L5.Quat(1:t_init_skip,:) = [];
+
+trial.Upperarm_L.Pos(1:t_init_skip,:) = [];
+trial.Upperarm_L.Quat(1:t_init_skip,:) = [];
+
+trial.Forearm_L.Pos(1:t_init_skip,:) = [];
+trial.Forearm_L.Quat(1:t_init_skip,:) = [];
+
+trial.Hand_L.Pos(1:t_init_skip,:) = [];
+trial.Hand_L.Quat(1:t_init_skip,:) = [];
+
+trial.Upperarm_R.Pos(1:t_init_skip,:) = [];
+trial.Upperarm_R.Quat(1:t_init_skip,:) = [];
+
+trial.Forearm_R.Pos(1:t_init_skip,:) = [];
+trial.Forearm_R.Quat(1:t_init_skip,:) = [];
+
+trial.Hand_R.Pos(1:t_init_skip,:) = [];
+trial.Hand_R.Quat(1:t_init_skip,:) = [];
 
 %% load right or left side
 % Rotation matrices from sens default frame (see fig 55 in MVN manual) and
@@ -207,11 +230,12 @@ q = zeros(arm.n, 1, t_tot);		% initialization of joint angles
 yMeas_EE_rot	= rot_wrist_meas(:,:,1);
 yMeas_EE_pos	= pos_wrist_meas(:,1,1);
 TgEE_i			= rt2tr(yMeas_EE_rot, yMeas_EE_pos);
-q0_ikunc		= arm.ikunc(TgEE_i);
-disp(q0_ikunc)
-%q0_ikcon		= arm.ikcon(TgEE_i);
 
-initialStateGuess = q0_ikunc;				% init vector for kalman
+%q0_ikunc		= arm.ikunc(TgEE_i);
+q0_ikcon		= arm.ikcon(TgEE_i);
+%disp((180/pi)*q0_ikunc)
+initialStateGuess = q0_ikcon;				% init vector for kalman
+
 
 % general kalman init
 k = 1;										% initialization of filter step-index
@@ -319,6 +343,6 @@ error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 % save into data
 data.q_grad = q_grad;
 data.err = error;
-data.yMeas_virt = yMeas_virt;
+%data.yMeas_virt = yMeas_virt;
 end
 
