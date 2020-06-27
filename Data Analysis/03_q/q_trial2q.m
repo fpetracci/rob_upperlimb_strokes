@@ -305,7 +305,7 @@ for t = 1:t_tot
 				k_nochange = k_nochange + 1;
 			end
 		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max >= k_nochange))
+		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
 			% three exit conditions on the k-step:
 			% 1. norm innovation < tolerated error
 			% 2. number of k exceeds the max accepted
