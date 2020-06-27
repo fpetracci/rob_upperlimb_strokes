@@ -111,7 +111,7 @@ if trial.task_side == 0 % left side
 		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
@@ -186,7 +186,7 @@ elseif trial.task_side == 1 % right side
 		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
@@ -258,7 +258,7 @@ k = 1;										% initialization of filter step-index
 k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
 e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
 e_tol = 0.005;									% tolerance to break the filter iteration
-tol_nochange = 0.05;							% percent of norm inside of which there is no more relevant corrections
+tol_nochange = 0.005;							% percent of norm inside of which there is no more relevant corrections
 k_nochange = 0;								% init counter no relevant corrections
 k_nochange_max = 50;						% stop value for number of irrelevant corrections
 
@@ -271,12 +271,12 @@ xCorrected_horiz = zeros(arm.n, 1, t_tot);
 PCorrected_horiz = zeros(arm.n, arm.n, t_tot);
 
 % R covariance of measurements
-sigma_pos		= 0.01;		% std deviation of each measured positions [m]
+sigma_pos		= 0.001;		% std deviation of each measured positions [m]
 cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
 R				= diag(cov_vector_meas);
 
 % Q covariance of filter state (joint angles)
-sigma_q			= deg2rad(2);		% std deviation of joint angles [rad]
+sigma_q			= deg2rad(1);		% std deviation of joint angles [rad]
 cov_vector_q	= sigma_q^2 * ones(1, arm.n);
 weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
 cov_vector_q	= cov_vector_q .* weights_covq;
@@ -316,7 +316,7 @@ for t = 1:t_tot
 		
 		% exit conditions
 		if k ~= 1
-			if norm(e(:,:,t,k-1)- e(:,:,t,k),2) < tol_nochange*norm(e(:,:,t,k-2)- e(:,:,t,k-1),2)
+			if norm(xCorrected_vert(:,:,t,k-1)- xCorrected_vert(:,:,t,k),2) < tol_nochange*norm(xCorrected_vert(:,:,t,k),2)
 				% there is not enough correction in this k-step
 				k_nochange = k_nochange + 1;
 			end
@@ -363,4 +363,5 @@ data.q_grad			= q_grad;
 data.err_rel		= error_rel;
 data.yMeas_virt_rel = yMeas_virt_rel;
 data.yMeas_rel		= y_real_rel(:,1:size(yMeas_virt_rel,2));
+%annodamacrop
 end
