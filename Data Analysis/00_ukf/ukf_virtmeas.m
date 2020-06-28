@@ -1,25 +1,26 @@
 function [y_virt, S_virt, C] = ukf_virtmeas(x, P, Arm)
- % propagazione_misure genera i sigma points, li propaga attraverso state2meas
- % e da` come output la media, la covarianza dei nuovi sigma points e la 
- % crosscovarianza stato-meas.
+ % ukf_virtmeas generates 2n+1 sigma points, it propagates them using
+ % state2meas and outputs the mean and the covariance of the new sigma 
+ % points distribution and the crosscorelation between state and virtual 
+ % measurements. 
  %
  % Input		
- % x			vettore media dello stato nx1
- % P			matrice covarianza dello stato nxn
- % Arm			braccio robotico
+ % x			state vector nx1
+ % P			state covariance matrix nxn
+ % Arm			robotic arm used in state2meas
  %
  % Output
- % y_virt		vettore media dello misure mx1
- % S_virt		matrice covarianza dello delle misure mxm
- % C			matrice crosscovarianza nxm
+ % y_virt		virtual measurements vector mx1
+ % S_virt		virtual measurements covariance matrix mxm
+ % C			state-measurements crosscorelation matrix nxm
 
-%generiamo sigma points dello stato
+% generation of sigmapoints and their weights
 [sp, wm, wc] = sigmapoint_gen(x, P);
 
-%propaghiamo
+% propagation of state vector using state2meas
 [~, y_virt, esse, C] = spstate2meas(sp, x, wm, wc, Arm);
 
-% prendiamo solo componente simmetrica 								
+% forced simmetry							
 S_virt = (esse + esse')/2;
 
 end
@@ -27,7 +28,7 @@ end
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 function meas = state2meas(q, Arm)
-%Prende in ingresso lo stato e genera delle misure virtuali.
+% given state vector it outputs its virtual measurements vector.
 
 meas = fkine_kalman_marker(q, Arm);
 
@@ -36,78 +37,85 @@ end
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 function [sp, wm, wc] = sigmapoint_gen(x, P)
-% questa funzione genera i sigma point e i loro pesi
-	n		= size(x,1);		% Dimensione dello spazio in cui vengono generati
-	nsp		= 2*n+1;			% numero di sigma points
+% function that generates sigma points and weights
+
+	n		= size(x,1);		% state dimension in which sigma points are generated
+	nsp		= 2*n+1;			% number of sigma points
+	P       = P;				% covariance matrix
 	
-	% parametri di generazione
+	% parameters for simmetric distribution
 	alpha	= 1;
 	beta	= 2;
 	k		= 0;
+    
 	lambda = alpha^2 * (n + k) -n;
 	
-	% generazione pesi per media
+	% generation of first order weights (weights mean)
 	wm = 1/(2*(n + lambda)) * ones(nsp, 1);
     wm(1) = lambda/(n + lambda);
 	
-	% generazione pesi per cov
+	% generation of second order weights (weights covariance)
 	wc = 1/(2*(n + lambda)) * ones(nsp, 1);
 	wc(1) = lambda/(n + lambda) + (1 - alpha^2 + beta);
 	
-	% generazione sigma points sp
-	%calcolo "radice" usando SVD
+	% generation sigma points sp
+	dist	= zeros(n,n);
+	sp		= zeros(n, nsp);
+	
+	% calculation of dist = sqrt((n+lambda)*P)
 	[U, SIGMA, ~] = svd((n+lambda)* P);
 	dist = U * sqrt(SIGMA);
-	
-	sp = zeros(n, nsp);
+
 	for i=1:nsp
 		if i == 1
 			sp(:,i) = x;
-		elseif i<=1+n
-			sp(:,i) = x+dist(:,i-1);
-		elseif i>1+n && i<=nsp
-			sp(:,i) = x-dist(:,i-1-n);
+		elseif i <= 1+n
+			sp(:,i) = x + dist(:,i-1);
+		elseif i > 1+n && i<=nsp
+			sp(:,i) = x - dist(:,i-1-n);
 		end
 	end
+
 
 end
 
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 function [sp_meas_new, y_virt, S_new, C] = spstate2meas(sp, x, wm, wc, Arm)
-% questa funzione propaga i sigma point usando state2meas e calcola media,
-% covarianza e crosscovarianza. 
+% this function propagates sigmapoint using state2meas and then computes
+% mean, covariance matrix and crosscorelation matrix
 	
-	n  = size(x,1);		
-	nsp = 2*n + 1;		%numero sigma points
+	n  = size(x,1);		% state dimension
+	nsp = 2*n + 1;		% number of sigma points
 	
-	%init sigma points propagati
+	% init sigma points propagated
 	n_meas = size(state2meas(x, Arm),1);
 	sp_meas_new = zeros(n_meas, nsp);
 	
-	%applico funzione di misura ai sigma points
+	% propagation through meas function
 	for j = 1:nsp
 		sp_meas_new(:,j) = state2meas(sp(:,j), Arm);
 	end
 	
-	% media misure virtuali
+	% virt meas mean
 	y_virt = zeros(n_meas, 1);
 	for j = 1:nsp
 		y_virt = y_virt + wm(j)*sp_meas_new(:,j);
 	end
 
-	% cov misure virtuali
+	% virt meas matrix covariance
 	S_new = zeros(n_meas, n_meas);  
 	for j = 1:nsp
 		 S_new = S_new + wc(j)*(sp_meas_new(:,j) - y_virt)*(sp_meas_new(:,j) - y_virt)';
 	end
 	
-	% crosscov stato -misure virt
+	% crosscov state - meas virt
 	C = zeros(n, n_meas);
 	for j = 1:nsp
-		% calcolo corretto tra misure angolari
-		ang = (sp(:,j)-x);				%scarto angolo
-		a = atan2(sin(ang),cos(ang));	%atan2 dello scarto
+		% angular difference obtained from cosin and sin of difference
+		% between angles
+		ang = (sp(:,j)-x);				% angle diff
+		a = atan2(sin(ang),cos(ang));	% atan2 of angle diff
 		
 		C = C + wc(j)*( a * (sp_meas_new(:,j)- y_virt(:,1))');
 	end

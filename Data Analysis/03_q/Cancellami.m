@@ -5,7 +5,7 @@ arm = arms.left;
 
 close;
 tic; 
-data = q_trial2qUKF(trial); 
+data = q_trial2qUKF_rel(trial); 
 toc;
 figure;
 plot(data.q_grad'); 
