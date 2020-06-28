@@ -1,4 +1,4 @@
-function [s2_new] = TimeWarping(s1,s2,p)
+function [s2_new] = TimeWarping(s1,s2)
 %% Calcolo parametri di Time Shift e Stretch migliori
 %  the function take as input 2  joints angle struct, each struct is
 %  composed by 10 joint angle. We chosed the 7th angular joint as the
@@ -135,6 +135,7 @@ end
 
 %% Modifica del segnale s2
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%% Stretch %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 time = 1 : length(s2(1,:));
 nel = length(time);
@@ -248,18 +249,18 @@ end
 
 %% plot s1,s2,s2new
 s2_new = s2;
-
-figure(p)
-plot(s1')
-title('segnale di riferimento')
-
-figure(p + 1)
-plot(trial')
-title('segnale da warpare')
-
-figure(p + 2)
-plot(trial')
-plot(s2_new')
-title('segnale warpato')
+% 
+% figure(p)
+% plot(s1')
+% title('segnale di riferimento')
+% 
+% figure(p + 1)
+% plot(trial')
+% title('segnale da warpare')
+% 
+% figure(p + 2)
+% plot(trial')
+% plot(s2_new')
+% title('segnale warpato')
 
 end
