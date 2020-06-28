@@ -412,17 +412,24 @@ end
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
 q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2));
 
+
+y_real = reshape(yMeas_fixL5,size(yMeas_fixL5,1),size(yMeas_fixL5,3),size(yMeas_fixL5,2));
+
 yMeas_virt = zeros(size(yMeas_fixL5,1),t_tot);
 for i = 1:t_tot
 	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
 end
-y_real = reshape(yMeas_fixL5,size(yMeas_fixL5,1),size(yMeas_fixL5,3),size(yMeas_fixL5,2));
 error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
+
+error_norm = zeros(t_tot,1);
+for i = 1:t_tot
+	error_norm(i) = norm(error(:,i),2);
+end
 
 % save into data
 data.q_grad = q_grad;
-data.err = error;
-%data.yMeas_virt = yMeas_virt;
-data.k_iter = k_iter;
+data.err = error_norm;
+% data.yMeas_virt = yMeas_virt;
+% data.k_iter = k_iter;
 end
 

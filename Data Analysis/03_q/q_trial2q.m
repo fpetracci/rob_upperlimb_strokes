@@ -1,7 +1,7 @@
 function data = q_trial2q(trial)
 %q_trial2q given a specific trial, computes and allocates 10R joint
 %angles.
-%   This function uses an EKF in order to get joint angles' estimate of a
+%   This function uses an UKF in order to get joint angles' estimate of a
 %   10R serial robot representing a human torso-arm. This function relies
 %   on functions create_arms() and par_10R().
 
@@ -12,29 +12,30 @@ function data = q_trial2q(trial)
 % lengths.
 arms = create_arms(trial);
 par = par_10R(trial);
-%% Delete first 30 samples
-t_init_skip = 30;
-
-trial.L5.Pos(1:t_init_skip,:) = [];
-trial.L5.Quat(1:t_init_skip,:) = [];
-
-trial.Upperarm_L.Pos(1:t_init_skip,:) = [];
-trial.Upperarm_L.Quat(1:t_init_skip,:) = [];
-
-trial.Forearm_L.Pos(1:t_init_skip,:) = [];
-trial.Forearm_L.Quat(1:t_init_skip,:) = [];
-
-trial.Hand_L.Pos(1:t_init_skip,:) = [];
-trial.Hand_L.Quat(1:t_init_skip,:) = [];
-
-trial.Upperarm_R.Pos(1:t_init_skip,:) = [];
-trial.Upperarm_R.Quat(1:t_init_skip,:) = [];
-
-trial.Forearm_R.Pos(1:t_init_skip,:) = [];
-trial.Forearm_R.Quat(1:t_init_skip,:) = [];
-
-trial.Hand_R.Pos(1:t_init_skip,:) = [];
-trial.Hand_R.Quat(1:t_init_skip,:) = [];
+%%
+% %% Delete first t_init_skip samples
+% t_init_skip = 5;
+% 
+% trial.L5.Pos(1:t_init_skip,:) = [];
+% trial.L5.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Upperarm_L.Pos(1:t_init_skip,:) = [];
+% trial.Upperarm_L.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Forearm_L.Pos(1:t_init_skip,:) = [];
+% trial.Forearm_L.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Hand_L.Pos(1:t_init_skip,:) = [];
+% trial.Hand_L.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Upperarm_R.Pos(1:t_init_skip,:) = [];
+% trial.Upperarm_R.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Forearm_R.Pos(1:t_init_skip,:) = [];
+% trial.Forearm_R.Quat(1:t_init_skip,:) = [];
+% 
+% trial.Hand_R.Pos(1:t_init_skip,:) = [];
+% trial.Hand_R.Quat(1:t_init_skip,:) = [];
 
 %% load right or left side
 % Rotation matrices from sens default frame (see fig 55 in MVN manual) and
@@ -81,7 +82,7 @@ T_shoulder_y		= zeros(4,4,nsamples);
 T_L5				= zeros(4,4,nsamples);
 T_L5_x				= zeros(4,4,nsamples);
 T_L5_y				= zeros(4,4,nsamples);
-
+T_L5_z				= zeros(4,4,nsamples);
 
 
 if trial.task_side == 0 % left side
@@ -115,34 +116,42 @@ if trial.task_side == 0 % left side
 	pos_wrist_meas		= reshape_data(trial.Hand_L.Pos);
 	pos_L5_meas			= reshape_data(trial.L5.Pos);
 		
+	pos_shoulder_meas_fixL5	= pos_shoulder_meas - pos_L5_meas + par.L5_pos; 
+	pos_elbow_meas_fixL5	= pos_elbow_meas	- pos_L5_meas + par.L5_pos;
+	pos_wrist_meas_fixL5	= pos_wrist_meas	- pos_L5_meas + par.L5_pos;
+	pos_L5_meas_fixL5		= pos_L5_meas		- pos_L5_meas + par.L5_pos;
+	
+	%marker construction
 	for i = 1:nsamples
-		T_wrist(:,:,i)		= [rot_wrist_meas(:,:,i) pos_wrist_meas(:,:,i) ; 0 0 0 1];
+		T_wrist(:,:,i)		= [rot_wrist_meas(:,:,i) pos_wrist_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_wrist_x(:,:,i)	= T_wrist(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_wrist_y(:,:,i)	= T_wrist(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_elbow(:,:,i)		= [rot_elbow_meas(:,:,i) pos_elbow_meas(:,:,i) ; 0 0 0 1];
+		T_elbow(:,:,i)		= [rot_elbow_meas(:,:,i) pos_elbow_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_elbow_x(:,:,i)	= T_elbow(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_elbow_y(:,:,i)	= T_elbow(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_shoulder(:,:,i)	= [rot_shoulder_meas(:,:,i) pos_shoulder_meas(:,:,i) ; 0 0 0 1];
+		T_shoulder(:,:,i)	= [rot_shoulder_meas(:,:,i) pos_shoulder_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		T_L5_z(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 0 d_trasl]'; 0 0 0 1];
 		
 	end
 	
 	% positions of virtual marker
-	pos_wrist_meas_x	= T_wrist_x(1:3, 4, :);
-	pos_wrist_meas_y	= T_wrist_y(1:3, 4, :);
-	pos_elbow_meas_x	= T_elbow_x(1:3, 4, :);
-	pos_elbow_meas_y	= T_elbow_y(1:3, 4, :);
-	pos_shoulder_meas_x = T_shoulder_x(1:3, 4, :);
-	pos_shoulder_meas_y = T_shoulder_y(1:3, 4, :);
-	pos_L5_meas_x		= T_L5_x(1:3, 4, :);
-	pos_L5_meas_y		= T_L5_y(1:3, 4, :);
+	pos_wrist_meas_x_fixL5		= T_wrist_x(1:3, 4, :);
+	pos_wrist_meas_y_fixL5		= T_wrist_y(1:3, 4, :);
+	pos_elbow_meas_x_fixL5		= T_elbow_x(1:3, 4, :);
+	pos_elbow_meas_y_fixL5		= T_elbow_y(1:3, 4, :);
+	pos_shoulder_meas_x_fixL5	= T_shoulder_x(1:3, 4, :);
+	pos_shoulder_meas_y_fixL5	= T_shoulder_y(1:3, 4, :);
+	pos_L5_meas_x_fixL5			= T_L5_x(1:3, 4, :);
+	pos_L5_meas_y_fixL5			= T_L5_y(1:3, 4, :);
+	pos_L5_meas_z_fixL5			= T_L5_z(1:3, 4, :);
 	
 elseif trial.task_side == 1 % right side
 	
@@ -176,156 +185,220 @@ elseif trial.task_side == 1 % right side
 	pos_wrist_meas		= reshape_data(trial.Hand_R.Pos);
 	pos_L5_meas			= reshape_data(trial.L5.Pos);
 		
+	pos_shoulder_meas_fixL5	= pos_shoulder_meas - pos_L5_meas + par.L5_pos; 
+	pos_elbow_meas_fixL5	= pos_elbow_meas	- pos_L5_meas + par.L5_pos;
+	pos_wrist_meas_fixL5	= pos_wrist_meas	- pos_L5_meas + par.L5_pos;
+	pos_L5_meas_fixL5		= pos_L5_meas		- pos_L5_meas + par.L5_pos;
+	
+	%marker construction
 	for i = 1:nsamples
-		T_wrist(:,:,i)		= [rot_wrist_meas(:,:,i) pos_wrist_meas(:,:,i) ; 0 0 0 1];
+		T_wrist(:,:,i)		= [rot_wrist_meas(:,:,i) pos_wrist_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_wrist_x(:,:,i)	= T_wrist(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_wrist_y(:,:,i)	= T_wrist(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_elbow(:,:,i)		= [rot_elbow_meas(:,:,i) pos_elbow_meas(:,:,i) ; 0 0 0 1];
+		T_elbow(:,:,i)		= [rot_elbow_meas(:,:,i) pos_elbow_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_elbow_x(:,:,i)	= T_elbow(:,:,i) * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_elbow_y(:,:,i)	= T_elbow(:,:,i) * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_shoulder(:,:,i)	= [rot_shoulder_meas(:,:,i) pos_shoulder_meas(:,:,i) ; 0 0 0 1];
+		T_shoulder(:,:,i)	= [rot_shoulder_meas(:,:,i) pos_shoulder_meas_fixL5(:,:,i) ; 0 0 0 1];
 		T_shoulder_x(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_shoulder_y(:,:,i) = T_shoulder(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 		
-		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) pos_L5_meas(:,:,i) ; 0 0 0 1];
+		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		T_L5_z(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 0 d_trasl]'; 0 0 0 1];
 		
 	end
 	
 	% positions of virtual marker
-	pos_wrist_meas_x	= T_wrist_x(1:3, 4, :);
-	pos_wrist_meas_y	= T_wrist_y(1:3, 4, :);
-	pos_elbow_meas_x	= T_elbow_x(1:3, 4, :);
-	pos_elbow_meas_y	= T_elbow_y(1:3, 4, :);
-	pos_shoulder_meas_x = T_shoulder_x(1:3, 4, :);
-	pos_shoulder_meas_y = T_shoulder_y(1:3, 4, :);
-	pos_L5_meas_x		= T_L5_x(1:3, 4, :);
-	pos_L5_meas_y		= T_L5_y(1:3, 4, :);
+	pos_wrist_meas_x_fixL5		= T_wrist_x(1:3, 4, :);
+	pos_wrist_meas_y_fixL5		= T_wrist_y(1:3, 4, :);
+	pos_elbow_meas_x_fixL5		= T_elbow_x(1:3, 4, :);
+	pos_elbow_meas_y_fixL5		= T_elbow_y(1:3, 4, :);
+	pos_shoulder_meas_x_fixL5	= T_shoulder_x(1:3, 4, :);
+	pos_shoulder_meas_y_fixL5	= T_shoulder_y(1:3, 4, :);
+	pos_L5_meas_x_fixL5			= T_L5_x(1:3, 4, :);
+	pos_L5_meas_y_fixL5			= T_L5_y(1:3, 4, :);
+	pos_L5_meas_z_fixL5			= T_L5_z(1:3, 4, :);
 
 end
 
 % array of measurements including virtual markers
-yMeas = [	pos_L5_meas_x;		...
-			pos_L5_meas_y;		...
-			pos_shoulder_meas;	...
-			pos_shoulder_meas_x;...
-			pos_shoulder_meas_y;...
-			pos_elbow_meas;		...
-			pos_elbow_meas_x;	...
-			pos_elbow_meas_y;	...
-			pos_wrist_meas;		...
-			pos_wrist_meas_x;	...
-			pos_wrist_meas_y];	
+yMeas_fixL5 = [	pos_L5_meas_x_fixL5;		...
+				pos_L5_meas_y_fixL5;		...
+				pos_L5_meas_z_fixL5;		...
+				pos_shoulder_meas_fixL5;	...
+				pos_shoulder_meas_x_fixL5;	...
+				pos_shoulder_meas_y_fixL5;	...
+				pos_elbow_meas_fixL5;		...
+				pos_elbow_meas_x_fixL5;		...
+				pos_elbow_meas_y_fixL5;		...
+				pos_wrist_meas_fixL5;		...
+				pos_wrist_meas_x_fixL5;		...
+				pos_wrist_meas_y_fixL5];	
 
 %% Kalman Initialization					
 t_tot = nsamples - t_skip;		% reduced time steps
 q = zeros(arm.n, 1, t_tot);		% initialization of joint angles
+only_horiz = 0;					% only_horiz flag used switched off vert iter 
 
 % initialStateGuess computation:
 % construction of the homogeneous transform between global frame and EE 
 %frame in the first time step TgEE_i
 yMeas_EE_rot	= rot_wrist_meas(:,:,1);
-yMeas_EE_pos	= pos_wrist_meas(:,1,1);
+yMeas_EE_pos	= pos_wrist_meas_fixL5(:,1,1);
 TgEE_i			= rt2tr(yMeas_EE_rot, yMeas_EE_pos);
-
-q0_ikunc		= arm.ikunc(TgEE_i);
-%q0_ikcon		= arm.ikcon(TgEE_i);
-%disp((180/pi)*q0_ikunc)
-initialStateGuess = q0_ikunc;				% init vector for kalman
+q0_ikcon		= arm.ikcon(TgEE_i);
+initialStateGuess = q0_ikcon';				% init vector for kalman
 
 
 % general kalman init
 k = 1;										% initialization of filter step-index
 k_max = 100;								% number of the vertical kalman iteration in the worst case where is not possible to reach the desidered tollerance e_tol
-e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
-e_tol = 0.005;								% tolerance to break the filter iteration
-tol_nochange = 0.05;						% percent of norm inside of which there is no more relevant corrections
+k_iter = zeros(1,t_tot);					% init vector to count kalman iterations for each frames
+e = ones(size(yMeas_fixL5,1), 1, t_tot, k_max);	% init of error vector
+e_tol = 0.001;								% tolerance to break the filter iteration
+tol_nochange = 0.01;						% percent of norm inside of which there is no more relevant corrections
 k_nochange = 0;								% init counter no relevant corrections
-k_nochange_max = 10;						% stop value for number of irrelevant corrections
+k_nochange_max = 5;							% stop value for number of irrelevant corrections
+tend_vert = 10;								% stop time step to use vertical filter
 
 % vertical filter state and cov init
 xCorrected_vert = zeros(arm.n, 1, t_tot, k_max);
 PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
+xPredicted_vert = zeros(arm.n, 1, t_tot, k_max);
+PPredicted_vert = zeros(arm.n, arm.n, t_tot, k_max);
 
-% horizontal filter state and cov init
+% horizontal filter init
 xCorrected_horiz = zeros(arm.n, 1, t_tot);
 PCorrected_horiz = zeros(arm.n, arm.n, t_tot);
+xPredicted_horiz = zeros(arm.n, 1, t_tot);
+PPredicted_horiz = zeros(arm.n, arm.n, t_tot);
+e_horiz			 = zeros(size(yMeas_fixL5,1), 1, t_tot);
 
 % R covariance of measurements
-sigma_pos		= 0.1;		% std deviation of each measured positions [m]
-cov_vector_meas = sigma_pos^2 * ones(size(yMeas,2), size(yMeas,1) );
+sigma_pos		= 0.005/3;		% std deviation of each measured positions [m]
+cov_vector_meas = sigma_pos^2 * ones(size(yMeas_fixL5,2), size(yMeas_fixL5,1) );
+cov_vector_meas(1,[19:27]) = cov_vector_meas(1,[19:27]);	% elbow measure are more accurate (lower std)
 R				= diag(cov_vector_meas);
 
-% Q covariance of filter state (joint angles)
+% P covariance of filter state (joint angles)
 sigma_q			= deg2rad(5);		% std deviation of joint angles [rad]
 cov_vector_q	= sigma_q^2 * ones(1, arm.n);
-weights_covq	= [1/2 1/2 1/2 1 1 1 1 1 1 1]; % weights for different q
+weights_covq	= [1 1 1 1 1 1 1 1 1 1]; % weights for different q
 cov_vector_q	= cov_vector_q .* weights_covq;
-Q				= diag(cov_vector_q);
+P_init			= diag(cov_vector_q);
+
+sigma_q_nolock		= deg2rad(2); % std deviation of noise on joint angles [rad]
+cov_vector_q_nolock	= sigma_q_nolock^2 * ones(1, arm.n);
+P_nolock			= diag(cov_vector_q_nolock);
 
 %% Kalman iteration
 
-filter_horiz  = extendedKalmanFilter(...
-		@StateFcn,...				% State transition function
-		@MeasurementNoiseFcn,...	% Measurement function
-		initialStateGuess);			% initial state guess
-
-filter_horiz.MeasurementNoise = R;	% Variance of the measurement noise
-filter_horiz.ProcessNoise = Q;		% Variance of the process noise
-
 for t = 1:t_tot
-	%horizontal step kalman filter
-	[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = correct(filter_horiz, yMeas(:, :, t), arm);
-	predict(filter_horiz);
 	
-	% vertical filter definition
-	filter_vert = extendedKalmanFilter(...
-		@StateFcn,...					% State transition function
-		@MeasurementNoiseFcn,...		% Measurement function
-		xCorrected_horiz(:,:,t));		% initial state = last corrected state of horiz filter
+	%%horizontal step kalman filter
+	% correction horiz
+	if t == 1
+		
+		[y_virt, S_first, C] = ukf_virtmeas(initialStateGuess, P_init, arm);
+		S = R + S_first;
+		e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
+		[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
+							initialStateGuess, P_init, ...
+							e_horiz(:,:,t), S, C);
 
-	filter_vert.MeasurementNoise = R;	% Variance of the measurement noise
-	filter_vert.ProcessNoise = Q;		% Variance of the process noise 
-	
-	% kalman iterations
-	while k <= k_max
-		
-		[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = correct(filter_vert, yMeas(:, :, t), arm);
-		predict(filter_vert);
-		
-		e(:,:,t,k) = yMeas(:,:,t) - MeasurementFcn(filter_vert.State, arm);
-		
-		% exit conditions
-		if k ~= 1
-			if norm(e(:,:,t,k-1)- e(:,:,t,k),2) < tol_nochange*norm(e(:,:,1,k),2)
-				% there is not enough correction in this k-step
-				k_nochange = k_nochange + 1;
-			end
+	else
+		if only_horiz == 1
+			[y_virt, S_first, C] = ukf_virtmeas(xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1), arm);
+			S = R + S_first;	% additive noise on measures
+			e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
+			[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
+								xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1),...
+								e_horiz(:,:,t), S, C);
+		elseif only_horiz == 0
+			[y_virt, S_first, C] = ukf_virtmeas(xCorrected_vert_final, PPredicted_horiz(:,:,t-1), arm);
+			S = R + S_first;	% additive noise on measures
+			e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
+			[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
+								xCorrected_vert_final, PPredicted_horiz(:,:,t-1),...
+								e_horiz(:,:,t), S, C);
 		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
-			% three exit conditions on the k-step:
-			% 1. norm innovation < tolerated error
-			% 2. number of k exceeds the max accepted
-			% 3. number of irrelevant corrections exceeds the max accepted
-			break
-		end
-		
-		% increment k iter number
-		k = k + 1;
 	end
 	
-	% save q at the end of vertical iterations
-	q(:,1,t) = xCorrected_vert(:,:,t,k);
+	% prediction horiz
+	[xPredicted_horiz(:,:,t), PPredicted_horiz(:,:,t)] = ukf_predict(...
+							xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)+P_nolock);
 	
-	% save for the next time step iteration
-	filter_horiz.State = xCorrected_vert(:,:,t,k);
 	
-	% reset k counters
-	k_nochange = 0;
-	k = 1;
+	if only_horiz == 0					
+		%%vertical step kalman filter
+		% kalman iterations
+		while k <= k_max
+				% correction vert
+				if k == 1	
+					[y_virt, S_first, C] = ukf_virtmeas(xCorrected_horiz(:,:,t), P_init, arm);
+					S = R + S_first;	% rumore additivo di misure
+					e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
+					[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
+										xCorrected_horiz(:,:,t), P_init, ...
+										e(:,:,t,k), S, C);
+
+				else
+					[y_virt, S_first, C] = ukf_virtmeas(xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), arm);
+					S = R + S_first;	% rumore additivo di misure
+					e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
+					[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
+										xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), ...
+										e(:,:,t,k), S, C);
+				end
+				% prediction vert
+				[xPredicted_vert(:,:,t,k), PPredicted_vert(:,:,t,k)] = ukf_predict(...
+									xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k));
+
+			% exit conditions
+			if k ~= 1
+				if norm(xCorrected_vert(:,:,t,k-1) - xCorrected_vert(:,:,t,k),2) < tol_nochange*norm(xCorrected_vert(:,:,t,k),2)
+					% there is not enough correction in this k-step
+					k_nochange = k_nochange + 1;
+				end
+			end
+			if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
+				% three exit conditions on the k-step:
+				% 1. norm innovation < tolerated error
+				% 2. number of k exceeds the max accepted
+				% 3. number of irrelevant corrections exceeds the max accepted
+				break
+			end
+
+			% increment k iter number
+			k = k + 1;
+		end
+
+		% save q
+		q(:,1,t) = xCorrected_vert(:,:,t,k);
+
+		% save for the next time step iteration
+		xCorrected_vert_final = xCorrected_vert(:,:,t,k);
+
+		% k counters
+		k_iter(:,t) = k;
+		k_nochange = 0;
+		k = 1;
+	
+	elseif only_horiz == 1
+		
+		% save q
+		q(:,1,t) = xCorrected_horiz(:,:,t);
+		
+	end
+	
+	% vert iterations are redundant after init phase, horiz filter is
+	% enough
+	if t == tend_vert
+		only_horiz = 1;
+	end
 	
 end
 
@@ -333,16 +406,36 @@ end
 q_rad = reshape( q, size(q,1), size(q,3), size(q,2));
 q_grad = 180/pi*reshape( q, size(q,1), size(q,3), size(q,2));
 
-yMeas_virt = zeros(size(yMeas,1),t_tot);
+
+y_real = reshape(yMeas_fixL5,size(yMeas_fixL5,1),size(yMeas_fixL5,3),size(yMeas_fixL5,2));
+
+yMeas_virt = zeros(size(yMeas_fixL5,1),t_tot);
 for i = 1:t_tot
 	yMeas_virt(:,i) = fkine_kalman_marker(q_rad(:,i),arm);
 end
-y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
 error = y_real(:,1:size(yMeas_virt,2)) - yMeas_virt;
 
-% save into data
-data.q_grad = q_grad;
-data.err = error;
-%data.yMeas_virt = yMeas_virt;
+% init each error
+error_L5		= zeros(1,t_tot);
+error_shoulder	= zeros(1,t_tot);
+error_elbow		= zeros(1,t_tot);
+error_wrist		= zeros(1,t_tot);
+for i = 1:t_tot
+	error_L5(1,i)		= norm(error([1:9],		i),2)/3;
+	error_shoulder(1,i) = norm(error([10:18],	i),2)/3;
+	error_elbow(1,i)	= norm(error([19:27],	i),2)/3;
+	error_wrist(1,i)	= norm(error([28:36],	i),2)/3;
+end
+
+% save into data struct
+data.q_grad			= q_grad;
+
+data.err			= struct;
+data.err.L5			= error_L5;
+data.err.shoulder	= error_shoulder;
+data.err.elbow		= error_elbow;
+data.err.wrist		= error_wrist;
+
+
 end
 
