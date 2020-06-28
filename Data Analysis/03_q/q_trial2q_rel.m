@@ -260,7 +260,7 @@ e = ones(size(yMeas,1), 1, t_tot, k_max);	% init of error vector
 e_tol = 0.005;									% tolerance to break the filter iteration
 tol_nochange = 0.005;							% percent of norm inside of which there is no more relevant corrections
 k_nochange = 0;								% init counter no relevant corrections
-k_nochange_max = 50;						% stop value for number of irrelevant corrections
+k_nochange_max = 10;						% stop value for number of irrelevant corrections
 
 % vertical filter state and cov init
 xCorrected_vert = zeros(arm.n, 1, t_tot, k_max);
@@ -321,7 +321,7 @@ for t = 1:t_tot
 				k_nochange = k_nochange + 1;
 			end
 		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max >= k_nochange))
+		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
 			% three exit conditions on the k-step:
 			% 1. norm innovation < tolerated error
 			% 2. number of k exceeds the max accepted
