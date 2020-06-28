@@ -13,7 +13,7 @@ function [y_virt, S_virt, C] = ukf_virtmeas(x, P, Arm)
  % y_virt		virtual measurements vector mx1
  % S_virt		virtual measurements covariance matrix mxm
  % C			state-measurements crosscorelation matrix nxm
-
+ 
 % generation of sigmapoints and their weights
 [sp, wm, wc] = sigmapoint_gen(x, P);
 

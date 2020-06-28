@@ -16,7 +16,6 @@ function yk = fkine_kalman_marker(qk, Arm)
 % 		tr_wrist_x; ...
 % 		tr_wrist_y];
 		
-
 % xsense frame = global (g) frame
 % eul_* are the ZYZ Euler angles
 d_trasl = 0.20;
@@ -30,10 +29,12 @@ d_trasl = 0.20;
 Tg3	= arm_fkine(Arm, qk, 3);
 Tg3_trasl_x =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; 
 Tg3_trasl_y =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+Tg3_trasl_z =  [Tg3(:,1:3) Arm.base(:,4) ] * [eye(3) [0 0 d_trasl]'; 0 0 0 1];
 
 %tr_L5 = Arm.base(1:3,4);
 tr_L5_x = Tg3_trasl_x(1:3, 4);
 tr_L5_y = Tg3_trasl_y(1:3, 4);
+tr_L5_z = Tg3_trasl_z(1:3, 4);
 
 rot_L5 = Tg3(1:3, 1:3);
 eul_L5 = rotm2eul(rot_L5,'ZYZ')';
@@ -88,6 +89,7 @@ eul_wrist = rotm2eul(rot_wrist,'ZYZ')';
 
  yk = [ tr_L5_x; ...
  		tr_L5_y; ...
+		tr_L5_z; ...
 		tr_shoulder; ...
 		tr_shoulder_x; ...
 		tr_shoulder_y; ...

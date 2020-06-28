@@ -1,9 +1,11 @@
-function data = q_trial2qUKF_rel(trial)
+function data = q_trial2qUKF_rel(trial, only_horiz)
 %q_trial2q given a specific trial, computes and allocates 10R joint
 %angles.
-%   This function uses an EKF in order to get joint angles' estimate of a
+%   This function uses an UKF in order to get joint angles' estimate of a
 %   10R serial robot representing a human torso-arm. This function relies
 %   on functions create_arms() and par_10R().
+%	only_horiz, boolean, toggles the to use only one filter, called 
+%	horizontal, to increase computation speed.
 
 
 %% initialization
@@ -82,7 +84,7 @@ T_shoulder_y		= zeros(4,4,nsamples);
 T_L5				= zeros(4,4,nsamples);
 T_L5_x				= zeros(4,4,nsamples);
 T_L5_y				= zeros(4,4,nsamples);
-
+T_L5_z				= zeros(4,4,nsamples);
 
 
 if trial.task_side == 0 % left side
@@ -138,6 +140,7 @@ if trial.task_side == 0 % left side
 		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		T_L5_z(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 0 d_trasl]'; 0 0 0 1];
 		
 	end
 	
@@ -150,6 +153,7 @@ if trial.task_side == 0 % left side
 	pos_shoulder_meas_y_fixL5	= T_shoulder_y(1:3, 4, :);
 	pos_L5_meas_x_fixL5			= T_L5_x(1:3, 4, :);
 	pos_L5_meas_y_fixL5			= T_L5_y(1:3, 4, :);
+	pos_L5_meas_z_fixL5			= T_L5_z(1:3, 4, :);
 	
 elseif trial.task_side == 1 % right side
 	
@@ -205,6 +209,7 @@ elseif trial.task_side == 1 % right side
 		T_L5(:,:,i)			= [rot_L5_meas(:,:,i) par.L5_pos ; 0 0 0 1];
 		T_L5_x(:,:,i)		= T_L5(:,:,i)  * [eye(3) [d_trasl 0 0]'; 0 0 0 1];
 		T_L5_y(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
+		T_L5_z(:,:,i)		= T_L5(:,:,i)  * [eye(3) [0 0 d_trasl]'; 0 0 0 1];
 		
 	end
 	
@@ -217,12 +222,14 @@ elseif trial.task_side == 1 % right side
 	pos_shoulder_meas_y_fixL5	= T_shoulder_y(1:3, 4, :);
 	pos_L5_meas_x_fixL5			= T_L5_x(1:3, 4, :);
 	pos_L5_meas_y_fixL5			= T_L5_y(1:3, 4, :);
+	pos_L5_meas_z_fixL5			= T_L5_z(1:3, 4, :);
 
 end
 
 % array of measurements including virtual markers
 yMeas_fixL5 = [	pos_L5_meas_x_fixL5;		...
 				pos_L5_meas_y_fixL5;		...
+				pos_L5_meas_z_fixL5;		...
 				pos_shoulder_meas_fixL5;	...
 				pos_shoulder_meas_x_fixL5;	...
 				pos_shoulder_meas_y_fixL5;	...
@@ -258,7 +265,8 @@ e = ones(size(yMeas_fixL5,1), 1, t_tot, k_max);	% init of error vector
 e_tol = 0.001;								% tolerance to break the filter iteration
 tol_nochange = 0.01;						% percent of norm inside of which there is no more relevant corrections
 k_nochange = 0;								% init counter no relevant corrections
-k_nochange_max = 5;						% stop value for number of irrelevant corrections
+k_nochange_max = 5;							% stop value for number of irrelevant corrections
+tend_vert = 10;								% stop time step to use vertical filter
 
 % vertical filter state and cov init
 xCorrected_vert = zeros(arm.n, 1, t_tot, k_max);
@@ -276,7 +284,7 @@ e_horiz			 = zeros(size(yMeas_fixL5,1), 1, t_tot);
 % R covariance of measurements
 sigma_pos		= 0.005/3;		% std deviation of each measured positions [m]
 cov_vector_meas = sigma_pos^2 * ones(size(yMeas_fixL5,2), size(yMeas_fixL5,1) );
-cov_vector_meas(1,[16:24]) = cov_vector_meas(1,[16:24])/5; %measure about elbow are more accurate (lower std)
+cov_vector_meas(1,[19:27]) = cov_vector_meas(1,[19:27])/5;	% elbow measure are more accurate (lower std)
 R				= diag(cov_vector_meas);
 
 % P covariance of filter state (joint angles)
@@ -306,81 +314,97 @@ for t = 1:t_tot
 							e_horiz(:,:,t), S, C);
 
 	else
-% 		[y_virt, S_first, C] = ukf_virtmeas(xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1), arm);
-% 		S = R + S_first;	% rumore additivo di misure
-% 		e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
-% 		[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
-% 							xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1),...
-% 							e_horiz(:,:,t), S, C);
-		[y_virt, S_first, C] = ukf_virtmeas(xCorrected_vert_final, PPredicted_horiz(:,:,t-1), arm);
-		S = R + S_first;	% additive noise on measures
-		e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
-		[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
-							xCorrected_vert_final, PPredicted_horiz(:,:,t-1),...
-							e_horiz(:,:,t), S, C);
+		if only_horiz == 1
+			[y_virt, S_first, C] = ukf_virtmeas(xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1), arm);
+			S = R + S_first;	% additive noise on measures
+			e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
+			[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
+								xPredicted_horiz(:,:,t-1), PPredicted_horiz(:,:,t-1),...
+								e_horiz(:,:,t), S, C);
+		elseif only_horiz == 0
+			[y_virt, S_first, C] = ukf_virtmeas(xCorrected_vert_final, PPredicted_horiz(:,:,t-1), arm);
+			S = R + S_first;	% additive noise on measures
+			e_horiz(:,:,t) = yMeas_fixL5(:, :, t) - y_virt;
+			[xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)] = ukf_correct(...
+								xCorrected_vert_final, PPredicted_horiz(:,:,t-1),...
+								e_horiz(:,:,t), S, C);
+		end
 	end
+	
 	% prediction horiz
 	%[x_new, P_new] = ukf_predict(x_old, P_old)
 	[xPredicted_horiz(:,:,t), PPredicted_horiz(:,:,t)] = ukf_predict(...
 							xCorrected_horiz(:,:,t), PCorrected_horiz(:,:,t)+P_nolock);
 	
 	
-						
-	%%vertical step kalman filter
-	% kalman iterations
-	while k <= k_max
-			% correction vert
-			if k == 1	
-				[y_virt, S_first, C] = ukf_virtmeas(xCorrected_horiz(:,:,t), P_init, arm);
-				S = R + S_first;	% rumore additivo di misure
-				e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
-				[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
-									xCorrected_horiz(:,:,t), P_init, ...
-									e(:,:,t,k), S, C);
+	if only_horiz == 0					
+		%%vertical step kalman filter
+		% kalman iterations
+		while k <= k_max
+				% correction vert
+				if k == 1	
+					[y_virt, S_first, C] = ukf_virtmeas(xCorrected_horiz(:,:,t), P_init, arm);
+					S = R + S_first;	% rumore additivo di misure
+					e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
+					[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
+										xCorrected_horiz(:,:,t), P_init, ...
+										e(:,:,t,k), S, C);
 
-			else
-				[y_virt, S_first, C] = ukf_virtmeas(xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), arm);
-				S = R + S_first;	% rumore additivo di misure
-				e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
-				[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
-									xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), ...
-									e(:,:,t,k), S, C);
+				else
+					[y_virt, S_first, C] = ukf_virtmeas(xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), arm);
+					S = R + S_first;	% rumore additivo di misure
+					e(:,:,t,k) = yMeas_fixL5(:, :, t) - y_virt;
+					[xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k)] = ukf_correct(...
+										xPredicted_vert(:,:,t,k-1), PPredicted_vert(:,:,t,k-1), ...
+										e(:,:,t,k), S, C);
+				end
+				% prediction vert
+				%[x_new, P_new] = ukf_predict(x_old, P_old)
+				[xPredicted_vert(:,:,t,k), PPredicted_vert(:,:,t,k)] = ukf_predict(...
+									xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k));
+
+			% exit conditions
+			if k ~= 1
+				if norm(xCorrected_vert(:,:,t,k-1) - xCorrected_vert(:,:,t,k),2) < tol_nochange*norm(xCorrected_vert(:,:,t,k),2)
+					% there is not enough correction in this k-step
+					k_nochange = k_nochange + 1;
+				end
 			end
-			% prediction vert
-			%[x_new, P_new] = ukf_predict(x_old, P_old)
-			[xPredicted_vert(:,:,t,k), PPredicted_vert(:,:,t,k)] = ukf_predict(...
-								xCorrected_vert(:,:,t,k), PCorrected_vert(:,:,t,k));
-		
-		% exit conditions
-		if k ~= 1
-			if norm(xCorrected_vert(:,:,t,k-1) - xCorrected_vert(:,:,t,k),2) < tol_nochange*norm(xCorrected_vert(:,:,t,k),2)
-				% there is not enough correction in this k-step
-				k_nochange = k_nochange + 1;
+			if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
+				% three exit conditions on the k-step:
+				% 1. norm innovation < tolerated error
+				% 2. number of k exceeds the max accepted
+				% 3. number of irrelevant corrections exceeds the max accepted
+				break
 			end
+
+			% increment k iter number
+			k = k + 1;
 		end
-		if ((norm(e(:,:,t,k),2) < e_tol) || (k >= k_max) || (k_nochange_max <= k_nochange))
-			% three exit conditions on the k-step:
-			% 1. norm innovation < tolerated error
-			% 2. number of k exceeds the max accepted
-			% 3. number of irrelevant corrections exceeds the max accepted
-			break
-		end
+
+		% save q
+		q(:,1,t) = xCorrected_vert(:,:,t,k);
+
+		% save for the next time step iteration
+		xCorrected_vert_final = xCorrected_vert(:,:,t,k);
+
+		% k counters
+		k_iter(:,t) = k;
+		k_nochange = 0;
+		k = 1;
+	
+	elseif only_horiz == 1
 		
-		% increment k iter number
-		k = k + 1;
+		% save q
+		q(:,1,t) = xCorrected_horiz(:,:,t);
+		
 	end
-								
-	% save q
-	q(:,1,t) = xCorrected_vert(:,:,t,k);
 	
-	% save for the next time step iteration
-	xCorrected_vert_final = xCorrected_vert(:,:,t,k);
-	
-	% k counters
-	k_iter(:,t) = k;
-	k_nochange = 0;
-	k = 1;
-	
+	% vert iterations are redundant after init phase, horiz filter is
+	% enough
+	if t == tend_vert
+		only_horiz = 1;
+	end
 	
 end
 
