@@ -72,7 +72,7 @@ for j = (nSubject_healthy+1):(nSubject_healthy+nSubject_strokes)
 				strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).stroke_side;
 			q_task(i).subject(j).trial(kk).task_side = ...
 				strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).task_side;
-		elseif kk > 3 && not(isempty(strokes_task(i).subject(j).left_side_trial(kk - 3).L5))
+		elseif kk > 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk - 3).L5))
 			kk_right = kk - 3;
 			q_task(i).subject(j).trial(kk).stroke_task = ...
 				strokes_task(i).subject(j -(nSubject_healthy+1)).right_side_trial(kk_right).stroke_task;
