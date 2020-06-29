@@ -50,12 +50,12 @@ for j = (nSubject_healthy+1):(nSubject_healthy+nSubject_strokes)
 	q_task(i).subject(j).stroke_side = ...
 		strokes_task(i).subject(j-nSubject_healthy).stroke_side;
 	for k = 1:(2*nTrial)
-		if k <= 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(k).L5))
-			trial = strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(k);
+		if k <= 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(k).L5))
+			trial = strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(k);
 			q_task(i).subject(j).trial(k) = q_trial2q(trial);
-		elseif k > 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy+1)).right_side_trial(k - 3).L5))
+		elseif k > 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy)).right_side_trial(k - 3).L5))
 			k_right = k-3;
-			trial = strokes_task(i).subject(j - (nSubject_healthy+1)).right_side_trial(k_right);
+			trial = strokes_task(i).subject(j - (nSubject_healthy)).right_side_trial(k_right);
 			q_task(i).subject(j).trial(k) = q_trial2q(trial);
 		end
 		
@@ -65,21 +65,21 @@ for j = (nSubject_healthy+1):(nSubject_healthy+nSubject_strokes)
 
 	% after task.subject is done, we complete the substructure
 	for kk = 1:(2*nTrial)
-		if kk <= 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).L5))
+		if kk <= 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(kk).L5))
 			q_task(i).subject(j).trial(kk).stroke_task = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).stroke_task;
+				strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(kk).stroke_task;
 			q_task(i).subject(j).trial(kk).stroke_side = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).stroke_side;
+				strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(kk).stroke_side;
 			q_task(i).subject(j).trial(kk).task_side = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk).task_side;
-		elseif kk > 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy+1)).left_side_trial(kk - 3).L5))
+				strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(kk).task_side;
+		elseif kk > 3 && not(isempty(strokes_task(i).subject(j -(nSubject_healthy)).left_side_trial(kk - 3).L5))
 			kk_right = kk - 3;
 			q_task(i).subject(j).trial(kk).stroke_task = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).right_side_trial(kk_right).stroke_task;
+				strokes_task(i).subject(j -(nSubject_healthy)).right_side_trial(kk_right).stroke_task;
 			q_task(i).subject(j).trial(kk).stroke_side = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).right_side_trial(kk_right).stroke_side;
+				strokes_task(i).subject(j -(nSubject_healthy)).right_side_trial(kk_right).stroke_side;
 			q_task(i).subject(j).trial(kk).task_side = ...
-				strokes_task(i).subject(j -(nSubject_healthy+1)).right_side_trial(kk_right).task_side;
+				strokes_task(i).subject(j -(nSubject_healthy)).right_side_trial(kk_right).task_side;
 		end	
 	end
 
