@@ -3,9 +3,7 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-. tuning parametri ukf
-. data.err: errore norma 
-. fare struct_q
+. visualizzatore di task, visualizzatore task con i marker
 . fare struct_timewarp - pensare a come fare tra i diversi task
 
 
