@@ -1,6 +1,6 @@
 function [s2_new] = TimeWarping(s1,s2)
 %% Calcolo parametri di Time Shift e Stretch migliori
-%  the function take as input 2  joints angle struct, each struct is
+%  the function take as input 2 joints angle struct, each struct is
 %  composed by 10 joint angle. We chosed the 7th angular joint as the
 %  referement forchoose the optimale strech and shift parameters
 
