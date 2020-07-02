@@ -16,9 +16,9 @@ load('q_task.mat');
 cd(oldfolder);
 clear oldfolder;
 
-trial = healthy_task(23).subject(1).left_side_trial(1);
-q = q_task(23).subject(1).trial(1).q_grad';
+q = q_task(23).subject(6).trial(1).q_grad';
 
+trial = healthy_task(23).subject(1).left_side_trial(1);
 arms = create_arms(trial);
 arm = arms.left;
 
@@ -40,28 +40,30 @@ pc1 = FD.fPCA{1};
 pc2 = FD.fPCA{2};
 pc3 = FD.fPCA{3};
  
-scores = lista_pca_nr.componenti;
+components = lista_pca_nr.componenti;
 media = lista_pca_nr.media;
+var = lista_pca_nr.perc_varianza;
 
-sc1=scores(:,1);
-sc2=scores(:,2);
-sc3=scores(:,3);
+comp1=components(:,1);
+comp2=components(:,2);
+comp3=components(:,3);
 
 PC1 = zeros(size(q));
 %PC1=[sc11.*pc1(:,1)+media(:,1)];
 for i = 1:length(pc1)
-	PC1(i,:) = pc1(i) * sc1 + media(i);
+	PC1(i,:) = pc1(i) * comp1 + media(i);
 end
 PC12 = zeros(size(q));
 for i = 1:length(pc1)
-	PC12(i,:) = pc2(i) * sc2 + pc1(i) * sc1 + media(i);
+	PC12(i,:) = pc2(i) * comp2 + pc1(i) * comp1 + media(i);
 end
 PC123 = zeros(size(q));
 for i = 1:length(pc1)
-	PC123(i,:) = pc3(i) * sc3 + pc2(i) * sc2 + pc1(i) * sc1 + media(i);
+	PC123(i,:) = pc3(i) * comp3 + pc2(i) * comp2 + pc1(i) * comp1 + media(i);
 end
 
-
+disp('all calculated press any key to continue')
+pause
 %% plots
 figure(1)
 grid on
