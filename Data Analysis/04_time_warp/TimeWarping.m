@@ -10,9 +10,9 @@ function [s2_new] = TimeWarping(s1,s2)
 trial = s2;
 %creazione parametri per modificare s2 DA GUARDARE PER OTTIMIZZARE
 rapp = length(s2(1,:))/length(s1(1,:));
-tshtmp = round(length(s2(1,:))/5);
+tshtmp = round(length(s2(1,:))/8);
 TShift = round(linspace(-tshtmp,tshtmp,10));
-NShap  = linspace(0.5,1.1,20);
+NShap  = linspace(0.4,2,45);
 
 %creazione variabile vuota
 ObjVal = zeros(length(TShift),length(NShap));
@@ -26,7 +26,7 @@ for i=1:length(TShift(1,:))
         
         time = 1 : length(s2tmp(1,:));
         nel = length(time);
-        ts1 = timeseries(s2tmp(7,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
+        ts1 = timeseries(s2tmp(4,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
 %         ts2 = timeseries(s2tmp(2,:),time); 
 %         ts3 = timeseries(s2tmp(3,:),time); 
 %         ts4 = timeseries(s2tmp(4,:),time); 
@@ -106,7 +106,7 @@ for i=1:length(TShift(1,:))
         s2tmp = s2tmp(1,1:Ls1);
         end
         
-        A1 = [s1tmp(7,:)' s2tmp(1,:)'];
+        A1 = [s1tmp(4,:)' s2tmp(1,:)'];
 %         A2 = [s1tmp(2,:)' s2tmp(2,:)'];
 %         A3 = [s1tmp(3,:)' s2tmp(3,:)'];
 %         A4 = [s1tmp(4,:)' s2tmp(4,:)'];
