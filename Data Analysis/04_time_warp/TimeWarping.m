@@ -12,7 +12,7 @@ trial = s2;
 rapp = length(s2(1,:))/length(s1(1,:));
 tshtmp = round(length(s2(1,:))/8);
 TShift = round(linspace(-tshtmp,tshtmp,10));
-NShap  = linspace(0.4,2,45);
+NShap  = linspace(0.4,2,30);
 
 %creazione variabile vuota
 ObjVal = zeros(length(TShift),length(NShap));
@@ -26,8 +26,8 @@ for i=1:length(TShift(1,:))
         
         time = 1 : length(s2tmp(1,:));
         nel = length(time);
-        ts1 = timeseries(s2tmp(4,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
-%         ts2 = timeseries(s2tmp(2,:),time); 
+        ts4 = timeseries(s2tmp(4,:),time); % 7 perchè è l'angolo scelto su cui fare il calcolo dei parametri
+        ts7 = timeseries(s2tmp(7,:),time); 
 %         ts3 = timeseries(s2tmp(3,:),time); 
 %         ts4 = timeseries(s2tmp(4,:),time); 
 %         ts5 = timeseries(s2tmp(5,:),time); 
@@ -36,8 +36,8 @@ for i=1:length(TShift(1,:))
         %Creazione nuovo asse temporale
         timenew = linspace(time(1),time(end),ceil(nel*NShap(j))); % ceil() -> arrotondamento per eccesso
         
-        ts1r = resample(ts1,timenew); 
-%         ts2r = resample(ts2,timenew); 
+        ts4r = resample(ts4,timenew); 
+        ts7r = resample(ts7,timenew); 
 %         ts3r = resample(ts3,timenew); 
 %         ts4r = resample(ts4,timenew); 
 %         ts5r = resample(ts5,timenew); 
@@ -49,7 +49,8 @@ for i=1:length(TShift(1,:))
 %                  ts4r.data(:)';...
 %                  ts5r.data(:)';...
 %                  ts6r.data(:)'];
-        s2tmp = ts1r.data(:)';
+        s2tmp = [ts4r.data(:)';...
+				 ts7r.data(:)'];
         
         %%%%%%%%%%%%%%%%%%%%%%% Time Shift %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
@@ -57,14 +58,14 @@ for i=1:length(TShift(1,:))
             % Con shift positivo aggiunge n=TShift(i) misure uguali al valore
             % del primo frame in testa al vettore delle misure (ritarda il
             % segnale)
-            tmpv1 = [ones(1, TShift(i))*s2tmp(1,1) s2tmp(1,:)]; 
-%             tmpv2 = [ones(1, TShift(i))*s2tmp(2,1) s2tmp(2,:)]; 
+            tmpv4 = [ones(1, TShift(i))*s2tmp(1,1) s2tmp(1,:)]; 
+            tmpv7 = [ones(1, TShift(i))*s2tmp(2,1) s2tmp(2,:)]; 
 %             tmpv3 = [ones(1, TShift(i))*s2tmp(3,1) s2tmp(3,:)]; 
 %             tmpv4 = [ones(1, TShift(i))*s2tmp(4,1) s2tmp(4,:)]; 
 %             tmpv5 = [ones(1, TShift(i))*s2tmp(5,1) s2tmp(5,:)]; 
 %             tmpv6 = [ones(1, TShift(i))*s2tmp(6,1) s2tmp(6,:)];
 %             s2tmp = [tmpv1; tmpv2; tmpv3; tmpv4; tmpv5; tmpv6];
-            s2tmp = tmpv1;
+            s2tmp = [tmpv4; tmpv7];
         elseif TShift(i) < 0
             % Con shift negativo taglia i primi n=TShift(i) campioni dalla
             % misura
@@ -74,7 +75,8 @@ for i=1:length(TShift(1,:))
 %                      s2tmp(4,abs(TShift(i)):end); ...
 %                      s2tmp(5,abs(TShift(i)):end); ...
 %                      s2tmp(6,abs(TShift(i)):end)];
-            s2tmp = s2tmp(1,abs(TShift(i)):end);
+            s2tmp = [s2tmp(1,abs(TShift(i)):end);...
+					 s2tmp(1,abs(TShift(i)):end)];
         end
         
         %%%%%%%%%%%%%%%%%%%%%%% Complete %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,14 +87,14 @@ for i=1:length(TShift(1,:))
         if Ls1 > Ls2
             %Allunga s2 copiando in coda Ls1-Ls2 volte l'ultimo valore del
             %segnale
-            tmpv1 = [s2tmp(1,:) ones(1,Ls1-Ls2)*s2tmp(1,end)]; 
-%             tmpv2 = [s2tmp(2,:) ones(1,Ls1-Ls2)*s2tmp(2,end)]; 
+            tmpv4 = [s2tmp(1,:) ones(1,Ls1-Ls2)*s2tmp(1,end)]; 
+            tmpv7 = [s2tmp(2,:) ones(1,Ls1-Ls2)*s2tmp(2,end)]; 
 %             tmpv3 = [s2tmp(3,:) ones(1,Ls1-Ls2)*s2tmp(3,end)]; 
 %             tmpv4 = [s2tmp(4,:) ones(1,Ls1-Ls2)*s2tmp(4,end)]; 
 %             tmpv5 = [s2tmp(5,:) ones(1,Ls1-Ls2)*s2tmp(5,end)]; 
 %             tmpv6 = [s2tmp(6,:) ones(1,Ls1-Ls2)*s2tmp(6,end)];
 %             s2tmp = [tmpv1; tmpv2; tmpv3; tmpv4; tmpv5; tmpv6];
-            s2tmp = tmpv1;
+            s2tmp = [tmpv4;tmpv7];
             
         elseif Ls1 < Ls2
             %Taglia gli ultimi valori di s2 per arrivare alla lunghezza di
@@ -103,19 +105,22 @@ for i=1:length(TShift(1,:))
 %                      s2tmp(4,1:Ls1);...
 %                      s2tmp(5,1:Ls1);...
 %                      s2tmp(6,1:Ls1)];
-        s2tmp = s2tmp(1,1:Ls1);
+        s2tmp = [s2tmp(1,1:Ls1);...
+				 s2tmp(2,1:Ls1)];
         end
         
-        A1 = [s1tmp(4,:)' s2tmp(1,:)'];
-%         A2 = [s1tmp(2,:)' s2tmp(2,:)'];
+        A4 = [s1tmp(4,:)' s2tmp(1,:)'];
+        A7 = [s1tmp(7,:)' s2tmp(2,:)'];
 %         A3 = [s1tmp(3,:)' s2tmp(3,:)'];
 %         A4 = [s1tmp(4,:)' s2tmp(4,:)'];
 %         A5 = [s1tmp(5,:)' s2tmp(5,:)'];
 %         A6 = [s1tmp(6,:)' s2tmp(6,:)'];
         
         %Calcolo delle matrici dei coefficienti di correlazione fra s1 e s2
-        matrix1 = corrcoef(A1);
-%         matrix2 = corrcoef(A2);
+        matrix4 = corrcoef(A4);
+        matrix7 = corrcoef(A7);
+		disp(matrix4(1,2))
+		disp(matrix7(1,2))
 %         matrix3 = corrcoef(A3);
 %         matrix4 = corrcoef(A4);
 %         matrix5 = corrcoef(A5);
@@ -124,7 +129,7 @@ for i=1:length(TShift(1,:))
         %Si salva il massimo dei coefficienti di correlazione in posto
         %(1,2) [Non so perchè sceglie quel posto]
         %ObjVal(i,j) = max([matrix1(1,2) matrix2(1,2) matrix3(1,2) matrix4(1,2) matrix5(1,2) matrix6(1,2)]);
-        ObjVal(i,j) = matrix1(1,2);
+        ObjVal(i,j) = max([matrix4(1,2) matrix7(1,2)]);
     end
 end
 
