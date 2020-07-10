@@ -76,7 +76,7 @@ for i=1:length(TShift(1,:))
 %                      s2tmp(5,abs(TShift(i)):end); ...
 %                      s2tmp(6,abs(TShift(i)):end)];
             s2tmp = [s2tmp(1,abs(TShift(i)):end);...
-					 s2tmp(1,abs(TShift(i)):end)];
+					 s2tmp(2,abs(TShift(i)):end)];
         end
         
         %%%%%%%%%%%%%%%%%%%%%%% Complete %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,8 +119,8 @@ for i=1:length(TShift(1,:))
         %Calcolo delle matrici dei coefficienti di correlazione fra s1 e s2
         matrix4 = corrcoef(A4);
         matrix7 = corrcoef(A7);
-		disp(matrix4(1,2))
-		disp(matrix7(1,2))
+% 		disp(matrix4(1,2))
+% 		disp(matrix7(1,2))
 %         matrix3 = corrcoef(A3);
 %         matrix4 = corrcoef(A4);
 %         matrix5 = corrcoef(A5);

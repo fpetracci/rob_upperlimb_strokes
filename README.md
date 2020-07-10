@@ -3,14 +3,28 @@
 TO DO LIST
 
 DATA ANALYSISISISIS
-. visualizzatore di task, visualizzatore task con i marker
+. visualizzatore di task, visualizzatore task con i marker  --- view_trial
 . fare struct_timewarp - pensare a come fare tra i diversi task
-
+. fpca studiare teoria, scrivere funzione
 
 
 MODELLL
 . modello per dinamica e poi simulink
 . modello muscolo - hill?
+
+Paper ICNR2020
+. Elenco bibliografia
+
+. Scrivere una bozza su tex con Lorem ipsum
+. Scrivere Abstract
+. Scriviere Introduzione
+. Scrivere Fpca ?
+. Scrivere Analisi 
+. Scrivere Conclusioni
+
+IDEE:
+. reverse engineering di un indice di ergonomia da come muovono il braccio i soggetti healthy
+
 -------------------------------------------------------------------
 
 

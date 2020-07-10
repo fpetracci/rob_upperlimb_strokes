@@ -86,7 +86,6 @@ disp(str_trial)
 switch task
     case 1
         disp('negative one')
-
 end
 %% task description
 
@@ -131,6 +130,7 @@ end
 % 28) Reach and grasp a doorknob (disk shape), turn it clockwise, and counterclockwise and open the door
 % 29) Reach and grasp a tennis ball (with fingertips) and place it in a basket placed on the floor (close to own chair)
 % 30) Reach and grasp a cap (2 fingers + thumb) of a bottle (held by left hand), unscrew it, and place it overhead on a shelf
+
 %% load
 oldfolder = cd;
 cd ../
@@ -141,8 +141,6 @@ load('q_task.mat');
 % load q warped
 cd(oldfolder);
 clear oldfolder;
-
-
 
 %% info on subject
 
