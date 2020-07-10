@@ -27,16 +27,27 @@ n_task = 22;
 s1 = q_task(n_task).subject(10).trial(3).q_grad(:,10:end);
 s1 = correct2pi_err(s1);
 
+%% resample to 240
+n_task = 24;
+%tsin = timeseries(s1);
+tsout = resample(s1',250,length(s1))';
+tsout = tsout(:,6:end-5);
+
+s1 = tsout;
 figure(1)
-plot(s1')
+plot(s1([4 7],:)') 
+%%
+
 for i = 1:24
 	for j = 1:6
 		figure(i +1)
 		if not(isempty(q_task(n_task).subject(i).trial(j).q_grad))
 			s2 = q_task(n_task).subject(i).trial(j).q_grad(:,10:end);
 			s2 = correct2pi_err(s2);
+% 			tsout = resample(s2',250,length(s2))';
+% 			tsout = tsout(:,6:end-5);
 			s2_new = TimeWarping(s1,s2);
-			subplot(6,2,j *2 - 1)
+			subplot(6,2,j*2 - 1)
 			%plot(s2_new([7],:))
 			plot(s2_new([4 7],:)')
 			
