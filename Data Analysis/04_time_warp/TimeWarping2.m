@@ -1,4 +1,6 @@
-function [s2_new] = TimeWarping(s1,s2)
+function s2_new = TimeWarping2(s1,s2)
+% This function bla bla
+
 %% Calcolo parametri di Time Shift e Stretch migliori
 %  the function take as input 2 joints angle struct, each struct is
 %  composed by 10 joint angle. We chosed the 7th angular joint as the
@@ -7,12 +9,12 @@ function [s2_new] = TimeWarping(s1,s2)
 % s1 movimento di riferimento
 % s2 movimento da modificare
 
-trial = s2;
+%trial = s2;
 %creazione parametri per modificare s2 DA GUARDARE PER OTTIMIZZARE
-rapp = length(s2(1,:))/length(s1(1,:));
+rapp = length(s1(1,:))/length(s2(1,:));
 tshtmp = round(length(s2(1,:))/8);
-TShift = round(linspace(-tshtmp,tshtmp,10));
-NShap  = linspace(0.4,1.5,30);
+TShift = round(linspace(-tshtmp,tshtmp,20));
+NShap  = linspace(0.8*rapp,1.2*rapp,30);
 
 %creazione variabile vuota
 ObjVal = zeros(length(TShift),length(NShap));
@@ -140,7 +142,7 @@ end
 
 %% Modifica del segnale s2
 
-if (max(ObjVal(:))) > 0.6
+if (max(ObjVal(:))) > 0.8
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%% Stretch %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		time = 1 : length(s2(1,:));
@@ -221,36 +223,33 @@ if (max(ObjVal(:))) > 0.6
 
 		Ls1 = length(s1(1,:));
 		Ls2 = length(s2(1,:));
-
-		%Uniforma le lunghezze di s1 e s2
-		if Ls1 > Ls2
-			%Allunga s2 copiando in coda Ls1-Ls2 volte l'ultimo valore del
+		
+		[skip_init, skip_end] = find_skip(s2);
+		
+		%
+		
+		if Ls1 < skip_end
+			s2_tmp = s2(:, skip_init:skip_end);
+			s2_tmp = resample(s2',250,length(s2_tmp))';
+			s2_tmp = s2_tmp(:,6:end-5);
+			s2 = s2_tmp;
+		elseif Ls1 >= skip_end
+			%Allunga s2 copiando in coda Ls1-skip_end volte l'ultimo valore del
 			%segnale
-			tmpv1 = [s2(1,:) ones(1,Ls1-Ls2)*s2(1,end)];
-			tmpv2 = [s2(2,:) ones(1,Ls1-Ls2)*s2(2,end)];
-			tmpv3 = [s2(3,:) ones(1,Ls1-Ls2)*s2(3,end)];
-			tmpv4 = [s2(4,:) ones(1,Ls1-Ls2)*s2(4,end)];
-			tmpv5 = [s2(5,:) ones(1,Ls1-Ls2)*s2(5,end)];
-			tmpv6 = [s2(6,:) ones(1,Ls1-Ls2)*s2(6,end)];
-			tmpv7 = [s2(7,:) ones(1,Ls1-Ls2)*s2(7,end)];
-			tmpv8 = [s2(8,:) ones(1,Ls1-Ls2)*s2(8,end)];
-			tmpv9 = [s2(9,:) ones(1,Ls1-Ls2)*s2(9,end)];
-			tmpv10 = [s2(10,:) ones(1,Ls1-Ls2)*s2(10,end)];
+			tmpv1 = [s2(1,1:skip_end) ones(1,Ls1-skip_end)*s2(1,skip_end)];
+			tmpv2 = [s2(2,1:skip_end) ones(1,Ls1-skip_end)*s2(2,skip_end)];
+			tmpv3 = [s2(3,1:skip_end) ones(1,Ls1-skip_end)*s2(3,skip_end)];
+			tmpv4 = [s2(4,1:skip_end) ones(1,Ls1-skip_end)*s2(4,skip_end)];
+			tmpv5 = [s2(5,1:skip_end) ones(1,Ls1-skip_end)*s2(5,skip_end)];
+			tmpv6 = [s2(6,1:skip_end) ones(1,Ls1-skip_end)*s2(6,skip_end)];
+			tmpv7 = [s2(7,1:skip_end) ones(1,Ls1-skip_end)*s2(7,skip_end)];
+			tmpv8 = [s2(8,1:skip_end) ones(1,Ls1-skip_end)*s2(8,skip_end)];
+			tmpv9 = [s2(9,1:skip_end) ones(1,Ls1-skip_end)*s2(9,skip_end)];
+			tmpv10 = [s2(10,1:skip_end) ones(1,Ls1-skip_end)*s2(10,skip_end)];
 
 			s2 = [tmpv1; tmpv2; tmpv3; tmpv4; tmpv5; tmpv6;...
 				tmpv7; tmpv8; tmpv9; tmpv10];
-		elseif Ls1 <Ls2
-			%Taglia gli ultimi valori di s2 per arrivare alla lunghezza di s1
-			s2 = [s2(1,1:Ls1);...
-				s2(2,1:Ls1);...
-				s2(3,1:Ls1);...
-				s2(4,1:Ls1);...
-				s2(5,1:Ls1);...
-				s2(6,1:Ls1);...
-				s2(7,1:Ls1);...
-				s2(8,1:Ls1);...
-				s2(9,1:Ls1);...
-				s2(10,1:Ls1)];
+			
 		end
 else
 	%Nuovo asse temporale "stretchato"
@@ -258,23 +257,45 @@ else
 		tsout = resample(s2',250,length(s2))';
 		tsout = tsout(:,6:end-5);
 		s2 = tsout;
-		disp('sbagliato')
-		
+		disp([ 'solo reshape, max corr = ' num2str(max(ObjVal(:)))])
 end
-%% plot s1,s2,s2new
-s2_new = s2;
-% 
-% figure(p)
-% plot(s1')
-% title('segnale di riferimento')
-% 
-% figure(p + 1)
-% plot(trial')
-% title('segnale da warpare')
-% 
-% figure(p + 2)
-% plot(trial')
-% plot(s2_new')
-% title('segnale warpato')
 
+s2_new = s2;
+end
+
+
+function [skip_init, skip_end] = find_skip(s)
+%% load signal
+% 	skip = 15;			% time samples skip to avoid errors at end and start of the trial
+% 	s = correct2pi_err(s(:,skip:end-skip));
+	s_dot = diff(s')';	% derivative of s (with unit frequency)
+	s_dot = [s_dot, s_dot(:,end)]; % added last time sample to have s2_dot same
+	% dimensions as s
+	l_s = size(s,2);	% number of time sample in the chosen trial
+	
+	%% parameters to cut signal
+	
+	n_check		= 70;		% number of time sample in which we check abs(s2_dot) < bound
+	flag_init	= 0;		% flag to end the search of initial time sample to cut
+	flag_end	= 0;		% flag to end the search of final time sample to cut
+	skip_init	= 1;		% store initial time sample from which start timewarping
+	skip_end	= l_s;		% store final time sample from which start timewarping
+	bound		= 0.05;		% bound of s_dot inside of which we consider the arm is not moving
+	
+	%% cut indexes
+	% from the init find the last input for the significant signal
+	for i = 1:n_check
+		if   (abs(s_dot(4,i)) < bound && abs(s_dot(7,i)) < bound) && flag_init == 0
+			skip_init = i;
+		else
+			flag_init = 1;
+		end
+		
+		if  ( abs((s_dot(4,end - i)) < bound && abs(s_dot(7,end - i)) < bound) ) && flag_end == 0
+			skip_end = l_s - i;
+		else
+			flag_end = 1;
+		end
+	end
+	
 end
