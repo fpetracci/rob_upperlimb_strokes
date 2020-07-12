@@ -14,7 +14,7 @@ function s2_new = TimeWarping2(s1,s2)
 rapp = length(s1(1,:))/length(s2(1,:));
 tshtmp = round(length(s2(1,:))/8);
 TShift = round(linspace(-tshtmp,tshtmp,20));
-NShap  = linspace(0.8*rapp,1.2*rapp,30);
+NShap  = linspace(0.4,1.5,30);
 
 %creazione variabile vuota
 ObjVal = zeros(length(TShift),length(NShap));
@@ -142,7 +142,7 @@ end
 
 %% Modifica del segnale s2
 
-if (max(ObjVal(:))) > 0.8
+if (max(ObjVal(:))) > 0.7
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%% Stretch %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		time = 1 : length(s2(1,:));
@@ -230,9 +230,10 @@ if (max(ObjVal(:))) > 0.8
 		
 		if Ls1 < skip_end
 			s2_tmp = s2(:, skip_init:skip_end);
-			s2_tmp = resample(s2',250,length(s2_tmp))';
+			s2_tmp = resample(s2_tmp',250,length(s2_tmp))';
 			s2_tmp = s2_tmp(:,6:end-5);
 			s2 = s2_tmp;
+			disp(length(s2))
 		elseif Ls1 >= skip_end
 			%Allunga s2 copiando in coda Ls1-skip_end volte l'ultimo valore del
 			%segnale
@@ -249,6 +250,7 @@ if (max(ObjVal(:))) > 0.8
 
 			s2 = [tmpv1; tmpv2; tmpv3; tmpv4; tmpv5; tmpv6;...
 				tmpv7; tmpv8; tmpv9; tmpv10];
+			
 			
 		end
 else
@@ -293,7 +295,7 @@ function [skip_init, skip_end] = find_skip(s)
 		
 		if  ( abs((s_dot(4,end - i)) < bound && abs(s_dot(7,end - i)) < bound) ) && flag_end == 0
 			skip_end = l_s - i;
-		else
+		els
 			flag_end = 1;
 		end
 	end
