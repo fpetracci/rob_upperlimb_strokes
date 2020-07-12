@@ -233,7 +233,6 @@ if (max(ObjVal(:))) > 0.7
 			s2_tmp = resample(s2_tmp',250,length(s2_tmp))';
 			s2_tmp = s2_tmp(:,6:end-5);
 			s2 = s2_tmp;
-			disp(length(s2))
 		elseif Ls1 >= skip_end
 			%Allunga s2 copiando in coda Ls1-skip_end volte l'ultimo valore del
 			%segnale
@@ -295,7 +294,7 @@ function [skip_init, skip_end] = find_skip(s)
 		
 		if  ( abs((s_dot(4,end - i)) < bound && abs(s_dot(7,end - i)) < bound) ) && flag_end == 0
 			skip_end = l_s - i;
-		els
+		else
 			flag_end = 1;
 		end
 	end
