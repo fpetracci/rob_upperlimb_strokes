@@ -21,7 +21,6 @@ function view_trial(task, subject, hORs, lORr, ntrial)
 %% TO DO LIST
 
 % animation of 10R robot
-
 % capire che fare dopo
 
 
