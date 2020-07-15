@@ -264,11 +264,11 @@ var_sum = [var_sum_h ;var_sum_h];
 %g1 = [ones(10,1); zeros(10*29+10*30,1)]; % healthy
 %g2 = [zeros(30*10,1); ones(10,1); zeros(10*29,1)]; % stroke
 
-% g1 = [ones(30*10,1); zeros(30*10,1)]; % healthy
-% g2 = [3*ones(30*10,1); 2*ones(30*10,1)]; % stroke
-% p = anovan(var_vect_pc1,{g1 g2})
+g1 = [ones(30*10,1); zeros(30*10,1)]; % healthy
+g2 = [3*ones(30*10,1); 2*ones(30*10,1)]; % stroke
+p = anovan(var_vect_pc1,{g1 g2})
 
-g1 = [ones(10,1); zeros(10,1)]; % healthy
-g2 = [zeros(10,1); ones(10,1)]; % stroke
-[a,b] = ttest((g1.*var_sum)',(g2.*var_sum)');
-p1 = anovan(var_sum,{g1 g2});
+% g1 = [ones(10,1); zeros(10,1)]; % healthy
+% g2 = [zeros(10,1); ones(10,1)]; % stroke
+% [a,b] = ttest((g1.*var_sum)',(g2.*var_sum)');
+% p1 = anovan(var_sum,{[g1;g1] [g2;g2]});
