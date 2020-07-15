@@ -51,25 +51,104 @@ end
 toc
 
 %% load qstacked
-tmp_struct = fpca_stacker(ntask);
-q_matrix_h = tmp_struct.q_matrix_h;
-q_matrix_s = tmp_struct.q_matrix_s;
+dummy_struct1	= fpca_stacker(1);
+q_stacked_task	= repmat(dummy_struct1, 1, task_num);
 
-clearvars -except q_fpca_task_s q_fpca_task_h fPCA_task q_matrix_h q_matrix_s
-
-%% plots
-
-task_chosen = 1;
-
-for j = 1:10
-	figure(j)
-	title(['Joint number ' num2str(j)]);
-	for i = 1:4
-		subplot(2,4,i)
-		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,1,i))
-		
-		subplot(2,4,i+4)
-		plot(q_fpca_task_h(task_chosen).joint(j).qmat_separated(:,1,i))
-	end
+for ntask = 1:task_num
+	%compute fpca for current task 
+	disp(['Stacking task num ' num2str(ntask)]);
+	stacked_task = fpca_stacker(ntask);
+	q_stacked_task(ntask) = stacked_task;
+	
 end
 
+clearvars -except q_fpca_task_s q_fpca_task_h fPCA_task q_stacked_task
+
+%% plots
+close all
+task_chosen = 1;
+obs = 1;
+
+% for j = 1:10
+% 	figure(j)
+% 	for i = 1:4
+% 		subplot(2,4,i)
+% 		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,i))
+% 		hold on
+% 		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+% 		plot(q_stacked_plot(:,obs))
+% 		title(['Joint number ' num2str(j)]);
+% 
+% 		subplot(2,4,i+4)
+% 		plot(q_fpca_task_h(task_chosen).joint(j).qmat_separated(:,obs,i))
+% 		hold on
+% 		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+% 		plot(q_stacked_plot(:,obs))
+% 		title(['Joint number ' num2str(j)]);
+% 
+% 	end
+% end
+
+for j = 1:10
+		figure(j)
+		%figure('Renderer', 'painters', 'Position', [10 10 1900 1000])
+		clf
+		
+		% plot of angular joint
+		subplot(1,2,1)
+		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,1),...
+			 'Linewidth',0.5,'DisplayName','Mean of Signal')
+		hold on
+		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,2),...
+			 'Linewidth',0.5,'DisplayName','Mean + fPC1')
+		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,3),...
+			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
+		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,4),...
+			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
+		 
+		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+		plot(q_stacked_plot(:,obs), ...
+			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')
+		legend('Location','best')
+		xlabel('Time samples')
+		ylabel(' Angular Value [grad]')
+		xlim([1 length(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,1))])
+		grid on
+		title(['Joint number ' num2str(j)]);
+		
+		fontsize = 12;
+		set(gca,'FontSize',fontsize)
+		set(findall(gcf,'type','text'),'FontSize',fontsize)
+		hold off	
+		
+		
+		
+		% pareto
+		subplot(1,2,2)
+		var_list = fPCA_task(task_chosen).h_joint(j).var;
+		pareto2(var_list);
+		%hold on, %errorbar(mean(var_list),std(var_list))
+		title('Variance Explanations')
+		lgd = legend({'Variance','Cumulative Variance'},'FontSize', fontsize,'TextColor','black', 'Location', 'east');
+		%lgd.Position = [0.5 0.5 0.1433 0.1560];
+
+		%legend('Variance', 'Cumulative Variance')
+		axis([0 (length(var_list)+1) 0 1])
+		xlabel('fPC')
+		ylabel('Explained Variance')
+		xticks([1:length(var_list)])
+		yticks([0:0.1:1])
+		xticklabels([{'1'},{'2'},{'3'},{'4'},{'5'}])
+		%yticklabels([{'0%'},{'10%'},{'20%'},{'30%'},{'40%'},{'50%'},{'60%'},{'70%'},{'80%'},{'90%'},{'100%'}])
+		grid on
+		
+
+% 		subplot(1,2,i+4)
+% 		plot(q_fpca_task_h(task_chosen).joint(j).qmat_separated(:,obs,i))
+% 		hold on
+% 		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+% 		plot(q_stacked_plot(:,obs))
+% 		title(['Joint number ' num2str(j)]);
+
+
+end
