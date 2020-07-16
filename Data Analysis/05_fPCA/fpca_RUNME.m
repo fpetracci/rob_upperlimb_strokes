@@ -32,6 +32,7 @@ q_fpca_task = repmat(dummy_struct2, 1, task_num);
 
 q_fpca_task_s = q_fpca_task;
 q_fpca_task_h = q_fpca_task;
+q_fpca_task_la = q_fpca_task;
 
 for i = 1:task_num
 	for j = 1:joint_num
@@ -44,6 +45,11 @@ for i = 1:task_num
 		[qmat, qmat_separated] = fpca2q(single_struct_s);
 		q_fpca_task_s(i).joint(j).qmat = qmat;
 		q_fpca_task_s(i).joint(j).qmat_separated = qmat_separated;
+		
+		single_struct_la = fPCA_task(i).la_joint(j);
+		[qmat, qmat_separated] = fpca2q(single_struct_la);
+		q_fpca_task_la(i).joint(j).qmat = qmat;
+		q_fpca_task_la(i).joint(j).qmat_separated = qmat_separated;
 		
 	end
 end
@@ -62,7 +68,7 @@ for ntask = 1:task_num
 	
 end
 
-clearvars -except q_fpca_task_s q_fpca_task_h fPCA_task q_stacked_task
+clearvars -except q_fpca_task_s q_fpca_task_h q_fpca_task_la fPCA_task q_stacked_task
 
 %% plots 1 obs h
 close all

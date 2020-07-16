@@ -5,6 +5,8 @@ function data = fpca_task(ntask)
 tmp_struct = fpca_stacker(ntask);
 q_matrix_h = tmp_struct.q_matrix_h;
 q_matrix_s = tmp_struct.q_matrix_s;
+q_matrix_la = tmp_struct.q_matrix_la;
+
 
 %% fpca
 nbase	= 15;	% number of elements in the base
@@ -17,16 +19,17 @@ njoints = 10;	% number of angular joints in the 10R
 fpca_tmp = q_fpca(q_matrix_h(:,:,1), nbase, norder, nfpc);
 h_joint = repmat(fpca_tmp, 1, njoints);	% healthy fpca-struct
 s_joint = repmat(fpca_tmp, 1, njoints);	% stroke fpca-struct
-
+la_joint = repmat(fpca_tmp, 1, njoints);	% stroke fpca-struct
 for dof = 1:njoints
 	h_joint(dof) = q_fpca(q_matrix_h(:,:,dof), nbase, norder, nfpc);
 	s_joint(dof) = q_fpca(q_matrix_s(:,:,dof), nbase, norder, nfpc);
+	la_joint(dof) = q_fpca(q_matrix_la(:,:,dof), nbase, norder, nfpc);
 end
 
 %% save section
 data = struct;
 data.h_joint = h_joint;
 data.s_joint = s_joint;
-
+data.la_joint = la_joint;
 end
 
