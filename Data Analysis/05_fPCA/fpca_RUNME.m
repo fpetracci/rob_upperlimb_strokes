@@ -242,33 +242,3 @@ for j = (10+1):(10+10)
 end
 %
 
-%% anovan
-
-var_vect_pc1 = zeros(30*10*2,1);
-var_sum_h = zeros(10,1);
-var_sum_s = zeros(10,1);
-for i = 1:30
-	ii = (i-1)*10;
-	for j = 1:10
-		var_tmp_h = fPCA_task(i).h_joint(j).var(1);
-		var_tmp_s = fPCA_task(i).s_joint(j).var(1);
-		var_vect_pc1(ii+j) = var_tmp_h;
-		var_vect_pc1(30*10+ii+j) = var_tmp_s;
-		var_sum_h(j) = var_sum_h(j) + fPCA_task(i).h_joint(j).var(1);
-		var_sum_s(j) = var_sum_s(j) + fPCA_task(i).s_joint(j).var(1);
-	end
-end
-var_sum_h = var_sum_h/30;
-var_sum_s = var_sum_s/30;
-var_sum = [var_sum_h ;var_sum_h];
-%g1 = [ones(10,1); zeros(10*29+10*30,1)]; % healthy
-%g2 = [zeros(30*10,1); ones(10,1); zeros(10*29,1)]; % stroke
-
-g1 = [ones(30*10,1); zeros(30*10,1)]; % healthy
-g2 = [3*ones(30*10,1); 2*ones(30*10,1)]; % stroke
-p = anovan(var_vect_pc1,{g1 g2})
-
-% g1 = [ones(10,1); zeros(10,1)]; % healthy
-% g2 = [zeros(10,1); ones(10,1)]; % stroke
-% [a,b] = ttest((g1.*var_sum)',(g2.*var_sum)');
-% p1 = anovan(var_sum,{[g1;g1] [g2;g2]});
