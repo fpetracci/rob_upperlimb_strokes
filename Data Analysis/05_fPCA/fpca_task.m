@@ -11,7 +11,7 @@ q_matrix_la = tmp_struct.q_matrix_la;
 %% fpca
 nbase	= 15;	% number of elements in the base
 norder	= 5;	% order of the functions
-nfpc	= 5;	% how many fPCs I want to save
+nfpc	= 10;	% how many fPCs I want to save
 
 njoints = 10;	% number of angular joints in the 10R
 

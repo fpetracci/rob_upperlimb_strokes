@@ -5,9 +5,10 @@ if check ~= 1 % return 1 if a variable is in the workspace
 	fpca_RUNME
 end
 
-var_vect_pc1 =	zeros(30*10*2,1);
-var_sum_h =		zeros(10,1);
+var_vect_pc1 =	zeros(30*10*2,1);	% stores all var of 30 task and 10 joint for both strokes and healthy subject 
+var_sum_h =		zeros(10,1);		%
 var_sum_s =		zeros(10,1);
+
 for i = 1:30
 	ii = (i-1)*10;
 	for j = 1:10
