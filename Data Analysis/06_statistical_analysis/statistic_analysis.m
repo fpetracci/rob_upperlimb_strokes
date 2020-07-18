@@ -4,6 +4,7 @@ check = exist("q_stacked_task");
 if check ~= 1 % return 1 if a variable is in the workspace
 	fpca_RUNME
 end
+
 %% creation of all necessary vectors
 
 %% var vectors
@@ -158,6 +159,33 @@ n_expl_tm_h		= zeros(10*10,1);	% number of first fPCs needed to explain at least
 n_expl_tm_la	= zeros(10*10,1);	% number of first fPCs needed to explain at least threshold (thr_var) % of the movement for less affected subjects
 n_expl_tm_s		= zeros(10*10,1);	% number of first fPCs needed to explain at least threshold (thr_var) % of the movement for strokes subjects
 
+%% n_expl_mean vectors (mean of n_expl for each joint)
+% no tasks distinctions
+n_expl_mean_h	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for healthy subjects
+n_expl_mean_la	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for less affected subjects
+n_expl_mean_s	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for strokes subjects
+
+% separate into 3 task groups
+% intransitive tasks
+n_expl_mean_int_h	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for healthy subjects
+n_expl_mean_int_la	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for less affected subjects
+n_expl_mean_int_s	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for strokes subjects
+
+% transitive tasks
+n_expl_mean_tr_h	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for healthy subjects
+n_expl_mean_tr_la	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for less affected subjects
+n_expl_mean_tr_s	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for strokes subjects
+
+% tool mediated tasks
+n_expl_mean_tm_h	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for healthy subjects
+n_expl_mean_tm_la	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for less affected subjects
+n_expl_mean_tm_s	= zeros(10,1);	% mean of the number of first fPCs needed to explain at least threshold (thr_var) % of the movement for strokes subjects
+
+% mean among all joints
+n_expl_mean_tj_h	= 0;
+n_expl_mean_tj_la	= 0;
+n_expl_mean_tj_s	= 0;
+
 %% slope vectors
 	% healthy
 	% less affected
@@ -183,6 +211,33 @@ slope_tr_s		= zeros(10*10,1);	% slope of the variance associated with first n fP
 slope_tm_h		= zeros(10*10,1);	% slope of the variance associated with first n fPCs needed to overcome the threshold (thr_var) % of the movement for healthy subjects
 slope_tm_la		= zeros(10*10,1);	% slope of the variance associated with first n fPCs needed to overcome the threshold (thr_var) % of the movement for less affected subjects
 slope_tm_s		= zeros(10*10,1);	% slope of the variance associated with first n fPCs needed to overcome the threshold (thr_var) % of the movement for strokes subjects
+
+%% slope_mean vectors (mean of n_expl for each joint)
+% no tasks distinctions
+slope_mean_h	= zeros(10,1);	
+slope_mean_la	= zeros(10,1);	
+slope_mean_s	= zeros(10,1);	
+
+% separate into 3 task groups
+% intransitive tasks
+slope_mean_int_h	= zeros(10,1);	
+slope_mean_int_la	= zeros(10,1);	
+slope_mean_int_s	= zeros(10,1);	
+
+% transitive tasks
+slope_mean_tr_h		= zeros(10,1);	
+slope_mean_tr_la	= zeros(10,1);	
+slope_mean_tr_s		= zeros(10,1);	
+
+% tool mediated tasks
+slope_mean_tm_h		= zeros(10,1);	
+slope_mean_tm_la	= zeros(10,1);	
+slope_mean_tm_s		= zeros(10,1);	
+
+% mean among all joints
+slope_mean_tj_h		= 0;
+slope_mean_tj_la	= 0;
+slope_mean_tj_s		= 0;
 
 %% fill var and var_mean vectors
 
@@ -304,7 +359,7 @@ var_tm_h3	= var_h3(indexes);
 var_tm_la3	= var_la3(indexes);	
 var_tm_s3	= var_s3(indexes); 
 
-%% n_expl
+%% evaluate n_expl
 
 thr_var = 0.9;
 nfpc_used = 11;
@@ -357,12 +412,136 @@ for i = 1:30 % number of tasks
 			n_expl_tm_la(jj)	= index_tmp_la;
 			n_expl_tm_s(jj)		= index_tmp_s;
 		end
-		
-		
-		
+
 	end
-	
 end
 
-%% slope TO DO
+% mean
+for j = 1:10
+	% no tasks distinctions
+	n_expl_mean_h(j)	= mean(n_expl_h(j:10:end));	
+	n_expl_mean_la(j)	= mean(n_expl_la(j:10:end));	
+	n_expl_mean_s(j)	= mean(n_expl_s(j:10:end));	
 
+	% separate into 3 task groups
+	% intransitive tasks
+	n_expl_mean_int_h(j)	= mean(n_expl_int_h(j:10:end));	 
+	n_expl_mean_int_la(j)	= mean(n_expl_int_la(j:10:end));	
+	n_expl_mean_int_s(j)	= mean(n_expl_int_s(j:10:end));		
+
+	% transitive tasks
+	n_expl_mean_tr_h(j)		= mean(n_expl_tr_h(j:10:end));	 
+	n_expl_mean_tr_la(j)	= mean(n_expl_tr_la(j:10:end));	 
+	n_expl_mean_tr_s(j)		= mean(n_expl_tr_s(j:10:end));	 
+
+	% tool mediated tasks
+	n_expl_mean_tm_h(j)		= mean(n_expl_tm_h(j:10:end));	 
+	n_expl_mean_tm_la(j)	= mean(n_expl_tm_la(j:10:end));	 
+	n_expl_mean_tm_s(j)		= mean(n_expl_tm_s(j:10:end));	 
+end
+
+% mean among all joints
+n_expl_mean_tj_h	= mean(n_expl_h);
+n_expl_mean_tj_la	= mean(n_expl_la);
+n_expl_mean_tj_s	= mean(n_expl_s);
+
+%% evaluate slope 
+
+for i = 1:30 % number of tasks
+	ii = (i-1)*10;
+	for j = 1:10 % number of joints
+		%healthy
+		var_h = fPCA_task(i).h_joint(j).var;
+		sums_tmp_h	= cumsum(var_h);
+		index_tmp_h = find(sums_tmp_h > thr_var, 1 ); 
+		%temporary index to store how many fPCs we have to sum to reach thr_var
+		if isempty(index_tmp_h)
+			index_tmp_h = nfpc_used;
+		elseif index_tmp_h == 1
+			index_tmp_h = 2;
+		end
+		
+		slope_tmp_h = polyfit(1:index_tmp_h, var_h(1:index_tmp_h),1);
+		slope_tmp_h = slope_tmp_h(1);
+		
+		%less affected
+		var_la = fPCA_task(i).la_joint(j).var;
+		sums_tmp_la	= cumsum(var_la);
+		index_tmp_la = find(sums_tmp_la > thr_var, 1 ); 
+		
+		if isempty(index_tmp_la)
+			index_tmp_la = nfpc_used;
+		elseif index_tmp_la == 1
+			index_tmp_la = 2;
+		end
+		
+		slope_tmp_la = polyfit(1:index_tmp_la, var_la(1:index_tmp_la),1);
+		slope_tmp_la = slope_tmp_la(1);
+		
+		%stroke
+		var_s = fPCA_task(i).s_joint(j).var;
+		sums_tmp_s	= cumsum(var_s);
+		index_tmp_s = find(sums_tmp_s > thr_var, 1 ); 
+		
+		if isempty(index_tmp_s)
+			index_tmp_s = nfpc_used;
+		elseif index_tmp_s == 1
+			index_tmp_s = 2;
+		end
+		
+		slope_tmp_s = polyfit(1:index_tmp_s, var_s(1:index_tmp_s),1);
+		slope_tmp_s = slope_tmp_s(1);
+		
+		% no task group distinctions
+		slope_h(ii+j)  = slope_tmp_h;
+		slope_la(ii+j) = slope_tmp_la;
+		slope_s(ii+j)  = slope_tmp_s;
+		
+		% with task group distinctions
+		task_group = floor((i-1)/10) + 1; % 1 for int, 2 for tr, 3 for tm
+		jj = j + (i - 10*(task_group - 1) - 1)* 10;
+		if task_group == 1
+			slope_int_h(jj)	= slope_tmp_h;
+			slope_int_la(jj)= slope_tmp_la;
+			slope_int_s(jj)	= slope_tmp_s;
+			
+		elseif task_group == 2
+			slope_tr_h(jj)	= slope_tmp_h;
+			slope_tr_la(jj)	= slope_tmp_la;
+			slope_tr_s(jj)	= slope_tmp_s;
+			
+		elseif task_group == 3
+			slope_tm_h(jj)	= slope_tmp_h;
+			slope_tm_la(jj)	= slope_tmp_la;
+			slope_tm_s(jj)	= slope_tmp_s;
+		end
+
+	end
+end
+for j = 1:10
+	% no tasks distinctions
+	slope_mean_h(j)	= mean(slope_h(j:10:end));	
+	slope_mean_la(j)= mean(slope_la(j:10:end));	
+	slope_mean_s(j)	= mean(slope_s(j:10:end));	
+	
+	% separate into 3 task groups
+	% intransitive tasks
+	slope_mean_int_h(j)	= mean(slope_int_h(j:10:end));	
+	slope_mean_int_la(j)= mean(slope_int_la(j:10:end));	
+	slope_mean_int_s(j)	= mean(slope_int_s(j:10:end));	
+
+	% transitive tasks
+	slope_mean_tr_h(j)	= mean(slope_tr_h(j:10:end));	
+	slope_mean_tr_la(j)	= mean(slope_tr_la(j:10:end));	
+	slope_mean_tr_s(j)	= mean(slope_tr_s(j:10:end));		
+
+	% tool mediated tasks
+	slope_mean_tm_h(j)	= mean(slope_tm_h(j:10:end));	
+	slope_mean_tm_la(j)	= mean(slope_tm_la(j:10:end));		
+	slope_mean_tm_s(j)	= mean(slope_tm_s(j:10:end));	
+
+end
+% mean among all joints
+	slope_mean_tj_h	= mean(slope_h);
+	slope_mean_tj_la= mean(slope_la);
+	slope_mean_tj_s	= mean(slope_s);
