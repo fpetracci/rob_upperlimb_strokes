@@ -20,6 +20,7 @@ for i = 1:30
 		var_sum_s(j) = var_sum_s(j) + fPCA_task(i).s_joint(j).var(1);
 	end
 end
+ [a,b] = ttest(var_vect_pc1(1:300),var_vect_pc1(301:600),0.0001);
 %% anovan with sum of variance
 % var_sum_h = var_sum_h/30;
 % var_sum_s = var_sum_s/30;
@@ -59,15 +60,37 @@ end
 % figure(4)
 %  multcompare(stats,'Dimension',[1 2]);
 %  
-%% 3 anovan one for each goup of task
+%% 3 anovan,one for each goup of task
+% preparation of group for anovan
+g1 = [zeros(10*10,1); ones(10*10,1)]; % healthy 1 stroke 0
 
-%first group
-var_vect_pc1_first =	[var_vect_pc1(1:100,1); var_vect_pc1(301:400,1)];
+g2_prova = repmat(linspace(1,10,10),20);% 10 joint
+g2 = g2_prova(1,:)'; %joint
+
+%first group of task
+var_vect_pc1_first =					[var_vect_pc1(1:100,1); var_vect_pc1(301:400,1)];
+[h_first,p_value_first] =				ttest(var_vect_pc1_first(1:100),var_vect_pc1_first(101:200),0.05);
+[p_value_an_first,tbl,stats1] =			anovan(var_vect_pc1_first,{g1,g2},'model','interaction');
+figure(2)
+multcompare(stats1,'Dimension',[1 2]);
+
 %second group
-var_vect_pc1_second =	[var_vect_pc1(101:200,1); var_vect_pc1(401:500,1)];
-%third group
-var_vect_pc1_third =	[var_vect_pc1(201:300,1); var_vect_pc1(501:600,1)];
+var_vect_pc1_second =					[var_vect_pc1(101:200,1); var_vect_pc1(401:500,1)];
+[h_second,p_value_second] =				ttest(var_vect_pc1_second(1:100),var_vect_pc1_second(101:200),0.05);
+[p_value_an_second,tb2,stats2] =		anovan(var_vect_pc1_second,{g1,g2});
+figure(4)
+multcompare(stats2,'Dimension',[1 2]);
 
+%third group
+var_vect_pc1_third =					[var_vect_pc1(201:300,1); var_vect_pc1(501:600,1)];
+[h_third,p_value_third] =				ttest(var_vect_pc1_third(1:100),var_vect_pc1_third(101:200),0.05);
+[p_value_an_third,tb3,stats3] =			anovan(var_vect_pc1_third,{g1,g2});
+figure(6)
+multcompare(stats3,'Dimension',[1 2]);
+
+clearvars -except q_fpca_task_s q_fpca_task_h q_fpca_task_la fPCA_task q_stacked_task ...
+				h_first p_value_first h_second p_value_second h_third p_value_third
+%% file spazzatura
 %check if anova is correct doing mean and std of each joint 
 % for i = 1:10
 % 	joint1(i) = var_vect_pc1_third((i-1)*10+1);
@@ -103,22 +126,3 @@ var_vect_pc1_third =	[var_vect_pc1(201:300,1); var_vect_pc1(501:600,1)];
 % media8 = [mean(joint8) mean(joint8_s) std(joint8) std(joint8_s)];
 % media9 = [mean(joint9) mean(joint9_s) std(joint9) std(joint9_s)];
 % media10 = [mean(joint10) mean(joint10_s) std(joint10) std(joint10_s)];
-
-g1 = [zeros(10*10,1); ones(10*10,1)]; % healthy 1 stroke 0
-
-g2_prova = repmat(linspace(1,10,10),20);% 10 joint
-g2 = g2_prova(1,:)'; %joint
-
-% [h,p] = ttest2(var_vect_pc1(1:300),var_vect_pc1(301:600))
-[p,tbl,stats1] = anovan(var_vect_pc1_first,{g1,g2});
-figure(2)
-multcompare(stats1,'Dimension',[1 2]);
-
-[p,tbl,stats2] = anovan(var_vect_pc1_second,{g1,g2});
-figure(4)
-multcompare(stats2,'Dimension',[1 2]);
-
-[p,tbl,stats3] = anovan(var_vect_pc1_third,{g1,g2});
-figure(6)
-multcompare(stats3,'Dimension',[1 2]);
-
