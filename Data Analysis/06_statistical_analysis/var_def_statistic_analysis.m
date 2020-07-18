@@ -359,8 +359,8 @@ var_tm_s3	= var_s3(indexes);
 
 %% evaluate n_expl
 
-thr_var = 0.9;
-nfpc_used = 11;
+thr_var = 0.8;
+nfpc_used = 10;
 
 for i = 1:30 % number of tasks
 	ii = (i-1)*10;

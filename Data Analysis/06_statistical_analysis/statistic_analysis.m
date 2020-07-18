@@ -26,31 +26,71 @@ subjectla = (repmat("la",300,1));
 subjects = (repmat("s",300,1));
 subject = [subjecth; subjectla; subjects]';
 
-%% analysis of pc1
+%% analysis of pcs
 y1 = var1;
 y2 = var2;
 y3 = var3;
 y  = var;
 ys =var_sum;
 
-G = {task, joint, subject};
-G_t = {repmat(task,1,3), repmat(joint,1,3), repmat(subject,1,3)};
+% G = {task, joint, subject};
+G = {subject, joint};
+% G_t = {repmat(task,1,3), repmat(joint,1,3), repmat(subject,1,3)};
 
-[p1,~,stats1] = anovan(y1,G);
+[p1,~,stats1] = anovan(y1,G, 'model', 'interaction');
+figure(2)
 multcompare(stats1,'Dimension',[1 2]);
 
-[p2,~,stats2] = anovan(y2,G);
+[p2,~,stats2] = anovan(y2,G, 'model', 'interaction');
+figure(4)
 multcompare(stats2,'Dimension',[1 2]);
 
-[p3,~,stats3] = anovan(y3,G);
+[p3,~,stats3] = anovan(y3,G, 'model', 'interaction');
+figure(6)
 multcompare(stats3,'Dimension',[1 2]);
 
-[p,~,stats] = anovan(y,G_t);
-multcompare(stats,'Dimension',[1 2]);
+% [p,~,stats] = anovan(y,G_t);
+% multcompare(stats,'Dimension',[1 2]);
 
-[ps,~,stats] = anovan(ys,G);
-multcompare(stats,'Dimension',[1 2]);
+% [ps,~,stats] = anovan(ys,G);
+% multcompare(stats,'Dimension',[1 2]);
 
+%% analysis of n_expl
+close all
+y_nexpl = [n_expl_h; n_expl_la; n_expl_s];
+[p_nexpl,~,stats_nexpl] = anovan(n_expl,G, 'model', 'interaction');
+figure(2)
+multcompare(stats_nexpl,'Dimension',[1 2]);
+
+%% inside of type of task
+subjecth	= (repmat("h",100,1));
+subjectla	= (repmat("la",100,1));
+subjects	= (repmat("s",100,1));
+subject 	= [subjecth; subjectla; subjects]';
+
+joint = repmat((1:10),1,10*3);
+
+G = {subject, joint};
+
+% intransitive
+[p_int_l,~,stats_int_l] = anovan([var_int_h1; var_int_la1; var_int_s1], G, 'model', 'interaction');
+figure(2)
+multcompare(stats_int_l,'Dimension',[1 2]);
+
+% transitive
+[p_tr_l,~,stats_tr_l] = anovan([var_tr_h1; var_tr_la1; var_tr_s1], G, 'model', 'interaction');
+figure(4)
+multcompare(stats_tr_l,'Dimension',[1 2]);
+
+% tool mediated
+[p_tm_l,~,stats_tm_l] = anovan([var_tm_h1; var_tm_la1; var_tm_s1], G, 'model', 'interaction');
+figure(6)
+multcompare(stats_tm_l,'Dimension',[1 2]);
+
+
+%% ttest
+
+[h_stats1,pvalue_stats1] = ttest(var_tm_h1, var_tm_la1, var_tm_s1)
 
 
 
