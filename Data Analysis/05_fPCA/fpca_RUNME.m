@@ -144,7 +144,7 @@ for j = 1:10
 		ylabel('Explained Variance')
 		xticks([1:length(var_list)])
 		yticks([0:0.1:1])
-		xticklabels([{'1'},{'2'},{'3'},{'4'},{'5'}])
+		%xticklabels([{'1'},{'2'},{'3'},{'4'},{'5'}])
 		%yticklabels([{'0%'},{'10%'},{'20%'},{'30%'},{'40%'},{'50%'},{'60%'},{'70%'},{'80%'},{'90%'},{'100%'}])
 		grid on
 		
@@ -232,7 +232,7 @@ for j = (10+1):(10+10)
 		ylabel('Explained Variance')
 		xticks([1:length(var_list)])
 		yticks([0:0.1:1])
-		xticklabels([{'1'},{'2'},{'3'},{'4'},{'5'}])
+		%xticklabels([{'1'},{'2'},{'3'},{'4'},{'5'}])
 		%yticklabels([{'0%'},{'10%'},{'20%'},{'30%'},{'40%'},{'50%'},{'60%'},{'70%'},{'80%'},{'90%'},{'100%'}])
 		grid on
 		
