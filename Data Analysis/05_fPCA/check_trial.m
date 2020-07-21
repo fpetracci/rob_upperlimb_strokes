@@ -1,4 +1,4 @@
-function flag = check_trial(trial)
+function flag = check_trial(q_trial)
 %CHECK_TRIAL checks if there are angles in the trial that are out of bounds
 	% and returns:
 	% . 0 for a trial that can't be used
@@ -8,7 +8,7 @@ function flag = check_trial(trial)
 	
 % joint 7, bound [-0.17, 2.53]
 % n_neg7: how many time samples have an out of bound angle
-n_neg7 = length( find(trial(7,:) <= rad2deg(-0.17)) );
+n_neg7 = length( find(q_trial(7,:) <= rad2deg(-0.17)) );
 
 if n_neg7 >= 10
 	flag = 0; % trial can't be used

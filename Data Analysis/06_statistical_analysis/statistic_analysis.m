@@ -92,7 +92,20 @@ multcompare(stats_tm_l,'Dimension',[1 2]);
 
 [h_stats1,pvalue_stats1] = ttest(var_tm_h1, var_tm_la1, var_tm_s1)
 
-
+%% our tests
+clc
+disp('first')
+[mean(var_h1) var(var_h1)]
+[mean(var_s1) var(var_s1)]
+[mean(var_la1) var(var_la1)]
+disp('second')
+[mean(var_h2) var(var_h2)]
+[mean(var_s2) var(var_s2)]
+[mean(var_la2) var(var_la2)]
+disp('third')
+[mean(var_h3) var(var_h3)]
+[mean(var_s3) var(var_s3)]
+[mean(var_la3) var(var_la3)]
 
 
 

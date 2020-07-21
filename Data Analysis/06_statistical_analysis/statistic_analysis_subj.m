@@ -42,7 +42,7 @@ end
 
 %% 
 
-var_subj1 = zeros(10,1)
+var_subj1 = zeros(10,1);
 
 
 %% our tests
