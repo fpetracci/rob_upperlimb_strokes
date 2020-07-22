@@ -1,4 +1,4 @@
-function flag = check_trial(q_trial)
+function flag = check_trial7j(q_trial)
 %CHECK_TRIAL checks if there are angles in the trial that are out of bounds
 	% and returns:
 	% . 0 for a trial that can't be used

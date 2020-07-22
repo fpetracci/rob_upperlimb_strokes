@@ -121,4 +121,6 @@ for ntask = 1:30
 end
 drawnow
 
+n_outlier_tot = n_outlier_h + n_outlier_la + n_outlier_s;
+
 toc

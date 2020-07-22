@@ -1,8 +1,8 @@
-function data = fpca_task(ntask)
+function data = fpca_ALLINONE
 % COMMENTAMI
 
 %% stacking trial
-tmp_struct = fpca_stacker(ntask);
+tmp_struct = fpca_stacker_ALLINONE;
 q_matrix_h = tmp_struct.q_matrix_h;
 q_matrix_s = tmp_struct.q_matrix_s;
 q_matrix_la = tmp_struct.q_matrix_la;

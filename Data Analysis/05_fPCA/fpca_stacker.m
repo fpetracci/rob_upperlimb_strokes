@@ -23,7 +23,9 @@ nobs_empty	= 0;	% number of observations that are empty
 for subj = 1:24
 	for ntrial = 1:6
 		if ~isempty(q_task_warp(ntask).subject(subj).trial(ntrial).q_grad)
-			if q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 1
+			if ~check_trial(q_task_warp(ntask).subject(subj).trial(ntrial).q_grad)
+				nobs_error = nobs_error + 1;
+			elseif q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 1
 				nobs_s = nobs_s + 1;
 			elseif q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 0 &...
 				   q_task_warp(ntask).subject(subj).trial(ntrial).stroke_side == -1
@@ -31,8 +33,6 @@ for subj = 1:24
 			elseif q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 0 & ...
 				   q_task_warp(ntask).subject(subj).trial(ntrial).stroke_side ~= -1
 				nobs_la = nobs_la + 1;
-			else
-				nobs_error = nobs_error + 1;
 			end
 		else
 			nobs_empty = nobs_empty + 1;
@@ -53,7 +53,9 @@ for subj = 1:24
 			% load q trial into a tmp variable
 			q_trial = q_task_warp(ntask).subject(subj).trial(ntrial).q_grad;
 			
-			if q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 0 & ...
+			if ~check_trial(q_task_warp(ntask).subject(subj).trial(ntrial).q_grad)
+				% do nothing = skiptrial
+			elseif q_task_warp(ntask).subject(subj).trial(ntrial).stroke_task == 0 & ...
 			   q_task_warp(ntask).subject(subj).trial(ntrial).stroke_side == -1
 				% healthy arm executed the trial
 				h_counter = h_counter + 1 ; %update current 

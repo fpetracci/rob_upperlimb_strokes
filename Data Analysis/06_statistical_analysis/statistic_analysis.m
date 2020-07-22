@@ -93,6 +93,7 @@ multcompare(stats_tm_l,'Dimension',[1 2]);
 [h_stats1,pvalue_stats1] = ttest(var_tm_h1, var_tm_la1, var_tm_s1)
 
 %% our tests
+clear var;
 clc
 disp('first')
 [mean(var_h1) var(var_h1)]
