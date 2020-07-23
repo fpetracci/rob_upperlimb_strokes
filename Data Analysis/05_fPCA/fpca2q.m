@@ -3,8 +3,8 @@ function [qmat, qmat_separated] = fpca2q(fpca_struct)
 %the structure cointaining fpca information.
 %	INPUT is:
 %	.fpca struct - low level structure		
-% 	 val_pc: [nsamples×3 double]
-%      comp: [nobs×3 double]
+% 	 val_pc: [nsamples×nfpc double]
+%      comp: [nobs×nfpc double]
 %       var: [nfpc×1 double]
 %      mean: [nsamples×1 double]
 %      info: [1×1 struct]
