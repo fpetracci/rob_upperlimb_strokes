@@ -6,7 +6,8 @@ function [ curvaMedia ] = calcolaMediaCurve( struttura_FD )
     dim_data=size(c_curve);
     if( numel(dim_data)<=2 )
         dataset=c_base*c_curve;
-        curvaMedia=mean(dataset,2);
+        %curvaMedia=mean(dataset,2);
+		curvaMedia=mean(mean(dataset,2))*ones(length(mean(dataset,2)),1);
     else
         n_basi=dim_data(1);
         n_esperimenti=dim_data(2);

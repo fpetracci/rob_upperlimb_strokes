@@ -196,7 +196,7 @@ q_sol = data.q_grad/180*pi;
 
 nsamples_calc = size(q_sol,2);
 
-yMeas_virt = zeros(33, nsamples);
+yMeas_virt = zeros(36, nsamples);
 for i=1:nsamples_calc
 	yMeas_virt(:,i) = fkine_kalman_marker(q_sol(:,i), arm);
 end
@@ -518,7 +518,7 @@ x = pos(1);
 y = pos(2);
 z = pos(3);
 
-d = 0.5;
+d = 0.15;
 
 qx = rot * [d; 0; 0];
 qy = rot * [0; d; 0];

@@ -4,8 +4,19 @@ function data = q_fpca(q_chosen_dataset, nbase, norder, nfpc)
 %	NOTE: angular joints are in degrees
 
 %% fpca
+
+% tolgo media
+[nobs, n] = size(q_chosen_dataset);
+
+for i = 1:nobs
+	%q_chosen_dataset(i,:) = q_chosen_dataset(i,:) - mean(q_chosen_dataset(i,:));
+	q_chosen_dataset(i,:) = q_chosen_dataset(i,:) - sum(q_chosen_dataset(i,:))/n;
+end
+	
 q_matrix = q_chosen_dataset; 
 
+
+% traspongo
 q_matrix = q_matrix';
 n = size(q_matrix,1);				% number of samples in the trial
 nobs = size(q_matrix,2);			% number of observations
