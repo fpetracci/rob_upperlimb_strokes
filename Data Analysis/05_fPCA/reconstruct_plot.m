@@ -1,11 +1,12 @@
-%reconstruct PLOTS
 function reconstruct_plot(nsub)
+%reconstruct_plot plots the reconstruction error associated with subject
+%number given as input.
 
 if nsub <= 0 || nsub >24
 	error('subject number must be in [1 24]')
 else
 	nsubj = nsub;
-	if nsub <= 6
+	if nsub < 6
 		disp('healthy subject')
 		subj_status = 1;
 	else
@@ -21,10 +22,10 @@ end
 % hold on
 % plot(E_s, 'r')
 
+figure(nsub)
 if subj_status == 0
-	figure(1)
-	%% Plot 10R
 	
+	%% Plot 10R
 	% load
 	load('E10.mat', 'E_subj10');
 	E10 = E_subj10;
@@ -89,6 +90,7 @@ if subj_status == 0
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': first 3 DOFs'])
+	
 elseif subj_status == 1
 	%% Plot 10R
 	% load
@@ -100,8 +102,7 @@ elseif subj_status == 1
 	E_h_10 = E10;
 	E_h = E_h_mean10;
 
-	figure(1)
-	clf
+	subplot(1,3,1)
 	plot(E_h_10(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
@@ -118,8 +119,7 @@ elseif subj_status == 1
 	E_h_7 = E7;
 	E_h = E_h_mean7;
 
-	figure(2)
-	clf
+	subplot(1,3,2)
 	plot(E_h_7(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
@@ -135,8 +135,7 @@ elseif subj_status == 1
 	E_h_3 = E3;
 	E_h = E_h_mean3;
 
-	figure(3)
-	clf
+	subplot(1,3,3)
 	plot(E_h_3(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
