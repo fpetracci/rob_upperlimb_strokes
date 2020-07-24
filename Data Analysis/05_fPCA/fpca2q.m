@@ -8,7 +8,7 @@ function [qmat, qmat_separated] = fpca2q(fpca_struct)
 %       var: [nfpc×1 double]
 %      mean: [nsamples×1 double]
 %      info: [1×1 struct]
-
+%
 %	OUTPUT is:
 %	.qmat - a matrix cointaing angular joints:
 %	first column is only first pc. Second column is first plus second pc 

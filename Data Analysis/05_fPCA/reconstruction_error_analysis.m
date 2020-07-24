@@ -54,5 +54,657 @@ end
 % F and so on)
 
 
+err = std_rec_error;
 
+b = 1; % width of the mean +- b*sigma plot
 
+%% Healthy
+% j10
+figure(50)
+clf
+subplot(1,3,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+grid on
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+legend
+title('J10: mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j7
+subplot(1,3,2)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+grid on
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+legend
+title('J7: mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+% j3
+subplot(1,3,3)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+grid on
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+legend
+title('J3: mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+% Stroke
+
+% 
+
+%% healhty-stroke compare
+
+% j10
+figure(51)
+clf
+subplot(1,3,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.S.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.S.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.s_mean + b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.s_mean - b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.la_mean + b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.la_mean - b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10: mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j7
+subplot(1,3,2)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.S.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.S.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j7.s_mean + b*err.S.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j7.s_mean - b*err.S.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j7.la_mean + b*err.S.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j7.la_mean - b*err.S.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7: mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+% j3
+subplot(1,3,3)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.S.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.S.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j3.s_mean + b*err.S.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j3.s_mean - b*err.S.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j3.la_mean + b*err.S.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j3.la_mean - b*err.S.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3: mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+
+%% healhty-D_stroke compare
+
+% j10
+figure(52)
+clf
+subplot(1,3,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.D.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.s_mean + b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.s_mean - b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.la_mean + b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.la_mean - b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10_D: mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j7
+subplot(1,3,2)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.D.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j7.s_mean + b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.s_mean - b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j7.la_mean + b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.la_mean - b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7_D: mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+% j3
+subplot(1,3,3)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.D.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j3.s_mean + b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.s_mean - b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j3.la_mean + b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.la_mean - b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3_D: mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+
+%% healhty-F_stroke compare
+
+% j10
+figure(53)
+clf
+subplot(1,3,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.F.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.F.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.s_mean + b*err.F.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.s_mean - b*err.F.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.la_mean + b*err.F.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.la_mean - b*err.F.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10_F: mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j7
+subplot(1,3,2)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.F.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.F.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j7.s_mean + b*err.F.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.s_mean - b*err.F.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j7.la_mean + b*err.F.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.la_mean - b*err.F.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7_F: mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+% j3
+subplot(1,3,3)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.F.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.F.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j3.s_mean + b*err.F.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.s_mean - b*err.F.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j3.la_mean + b*err.F.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.la_mean - b*err.F.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3_F: mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+
+%% Less Affected-Strokes compare
+% j10
+figure(54)
+clf
+subplot(1,3,1)
+
+plot(err.S.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.S.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.S.j10.s_mean + b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.s_mean - b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.la_mean + b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.la_mean - b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10: mean and std of reconstruct error')
+axis([1 length(err.S.j10.s_mean) 0 max(err.S.j10.s_mean+b*err.S.j10.s_std)])
+
+% j7
+subplot(1,3,2)
+
+plot(err.S.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.S.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.S.j7.s_mean + b*err.S.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j7.s_mean - b*err.S.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j7.la_mean + b*err.S.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j7.la_mean - b*err.S.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7: mean and std of reconstruct error')
+axis([1 length(err.S.j7.s_mean) 0 max(err.S.j7.s_mean+b*err.S.j7.s_std)])
+
+% j3
+subplot(1,3,3)
+
+plot(err.S.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.S.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.S.j3.s_mean + b*err.S.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j3.s_mean - b*err.S.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j3.la_mean + b*err.S.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j3.la_mean - b*err.S.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3: mean and std of reconstruct error')
+axis([1 length(err.S.j3.s_mean) 0 max(err.S.j3.s_mean+b*err.S.j3.s_std)])
+
+%% Less Affected-Strokes compare D
+
+% j10
+figure(55)
+clf
+subplot(1,3,1)
+
+plot(err.D.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.D.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.D.j10.s_mean + b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.s_mean - b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.la_mean + b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.la_mean - b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10_D: mean and std of reconstruct error')
+axis([1 length(err.D.j10.s_mean) 0 max(err.D.j10.s_mean+b*err.D.j10.s_std)])
+
+% j7
+subplot(1,3,2)
+
+plot(err.D.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.D.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.D.j7.s_mean + b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.s_mean - b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j7.la_mean + b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.la_mean - b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7_D: mean and std of reconstruct error')
+axis([1 length(err.D.j7.s_mean) 0 max(err.D.j7.s_mean+b*err.D.j7.s_std)])
+
+% j3
+subplot(1,3,3)
+
+plot(err.D.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.D.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.D.j3.s_mean + b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.s_mean - b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j3.la_mean + b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.la_mean - b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3_D: mean and std of reconstruct error')
+axis([1 length(err.D.j3.s_mean) 0 max(err.D.j3.s_mean+b*err.D.j3.s_std)])
+
+%% Less Affected-Strokes compare F
+% j10
+figure(56)
+clf
+subplot(1,3,1)
+
+plot(err.F.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.F.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.F.j10.s_mean + b*err.F.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.s_mean - b*err.F.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.la_mean + b*err.F.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.la_mean - b*err.F.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10_F: mean and std of reconstruct error')
+axis([1 length(err.F.j10.s_mean) 0 max(err.F.j10.s_mean+b*err.F.j10.s_std)])
+
+% j7
+subplot(1,3,2)
+
+plot(err.F.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.F.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.F.j7.s_mean + b*err.F.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.s_mean - b*err.F.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j7.la_mean + b*err.F.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.la_mean - b*err.F.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J7_F: mean and std of reconstruct error')
+axis([1 length(err.F.j7.s_mean) 0 max(err.F.j7.s_mean+b*err.F.j7.s_std)])
+
+% j3
+subplot(1,3,3)
+
+plot(err.F.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+hold on
+plot(err.F.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.F.j3.s_mean + b*err.F.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.s_mean - b*err.F.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j3.la_mean + b*err.F.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.la_mean - b*err.F.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J3_F: mean and std of reconstruct error')
+axis([1 length(err.F.j3.s_mean) 0 max(err.F.j3.s_mean+b*err.F.j3.s_std)])
+
+%% D-F
+
+% j10
+figure(60)
+clf
+subplot(1,2,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'D Stroke')
+plot(err.F.j10.s_mean, 'm', 'Linewidth', 1.2, 'Displayname', 'F Stroke')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.s_mean + b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.s_mean - b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.s_mean + b*err.F.j10.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.s_mean - b*err.F.j10.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10 D vs F: Stroke mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+subplot(1,2,2)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'D Less Affected')
+plot(err.F.j10.la_mean, 'c', 'Linewidth', 1.2, 'Displayname', 'F Less Affected')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.la_mean + b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.la_mean - b*err.D.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.la_mean + b*err.F.j10.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.la_mean - b*err.F.j10.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10 D vs F: Less Affected mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j7
+figure(61)
+clf
+subplot(1,2,1)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j7.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'D Stroke')
+plot(err.F.j7.s_mean, 'm', 'Linewidth', 1.2, 'Displayname', 'F Stroke')
+
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j7.s_mean + b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.s_mean - b*err.D.j7.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j7.s_mean + b*err.F.j7.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.s_mean - b*err.F.j7.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('j7 D vs F: Stroke mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+subplot(1,2,2)
+plot(err.H.j7.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j7.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'D Less Affected')
+plot(err.F.j7.la_mean, 'c', 'Linewidth', 1.2, 'Displayname', 'F Less Affected')
+
+a = plot(err.H.j7.mean + b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j7.mean - b*err.H.j7.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j7.la_mean + b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.la_mean - b*err.D.j7.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j7.la_mean + b*err.F.j7.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.la_mean - b*err.F.j7.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('j7 D vs F: Less Affected mean and std of reconstruct error')
+axis([1 length(err.H.j7.mean) 0 max(err.H.j7.mean+b*err.H.j7.std)])
+
+% j3
+figure(62)
+clf
+subplot(1,2,1)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j3.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'D Stroke')
+plot(err.F.j3.s_mean, 'm', 'Linewidth', 1.2, 'Displayname', 'F Stroke')
+
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j3.s_mean + b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.s_mean - b*err.D.j3.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j3.s_mean + b*err.F.j3.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.s_mean - b*err.F.j3.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('j3 D vs F: Stroke mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+
+subplot(1,2,2)
+plot(err.H.j3.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j3.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'D Less Affected')
+plot(err.F.j3.la_mean, 'c', 'Linewidth', 1.2, 'Displayname', 'F Less Affected')
+
+a = plot(err.H.j3.mean + b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j3.mean - b*err.H.j3.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j3.la_mean + b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.la_mean - b*err.D.j3.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j3.la_mean + b*err.F.j3.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.la_mean - b*err.F.j3.la_std, 'c--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('j3 D vs F: Less Affected mean and std of reconstruct error')
+axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
