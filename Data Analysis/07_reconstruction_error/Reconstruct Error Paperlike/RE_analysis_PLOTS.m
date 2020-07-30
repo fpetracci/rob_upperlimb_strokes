@@ -549,6 +549,35 @@ title('J3_F: mean and std of reconstruct error')
 axis([1 length(err.F.j3.s_mean) 0 max(err.F.j3.s_mean+b*err.F.j3.s_std)])
 
 %% D-F
+% j10
+figure(51)
+clf
+subplot(1,3,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.S.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Stroke')
+plot(err.S.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.s_mean + b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.s_mean - b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.la_mean + b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.la_mean - b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+legend
+title('J10: mean and std of reconstruct error')
+axis([1 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+%%------------------------------------------------------------------------
 
 % j10
 figure(60)
@@ -708,3 +737,118 @@ a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 legend
 title('j3 D vs F: Less Affected mean and std of reconstruct error')
 axis([1 length(err.H.j3.mean) 0 max(err.H.j3.mean+b*err.H.j3.std)])
+%% ------------------------------------------------------------------------
+%% HEALTHY vs strokeside D & F FIGURA EXTENDED ABSTRACT
+
+% j10
+figure(61)
+clf
+subplot(1,2,1)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.S.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'Affected side')
+plot(err.S.j10.la_mean, 'g', 'Linewidth', 1.2, 'Displayname', 'Less Affected side')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.s_mean + b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.s_mean - b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.S.j10.la_mean + b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.la_mean - b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+xlabel('Number of fPCs used',...
+      'Interpreter','Latex')
+ylabel('Reconstruction Error [deg]',...
+      'Interpreter','Latex')
+legend
+%title('Mean and std of reconstruction error', 'Interpreter','Latex')
+axis([0 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+% j10
+subplot(1,2,2)
+plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+plot(err.D.j10.s_mean, 'r', 'Linewidth', 1.2, 'Displayname', 'D Affected side')
+plot(err.F.j10.s_mean, 'm', 'Linewidth', 1.2, 'Displayname', 'F Affected side')
+
+a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.D.j10.s_mean + b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.s_mean - b*err.D.j10.s_std, 'r--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+a = plot(err.F.j10.s_mean + b*err.F.j10.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.s_mean - b*err.F.j10.s_std, 'm--', 'Linewidth', 0.8);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+xlabel('Number of fPCs used',...
+      'Interpreter','Latex')
+ylabel('Reconstruction Error [deg]',...
+      'Interpreter','Latex')
+
+legend
+%title('Stroke side mean and std of reconstruction error', 'Interpreter','Latex')
+axis([0 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
+
+%% figureshaded
+
+b = 1;
+figure(61)
+clf
+% plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+hold on
+
+
+% a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j10.mean - b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+% a = plot(err.S.j10.s_mean + b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.S.j10.s_mean - b*err.S.j10.s_std, 'r--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% a = plot(err.S.j10.la_mean + b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.S.j10.la_mean - b*err.S.j10.la_std, 'g--', 'Linewidth', 0.8);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+
+x2 = [1:10, fliplr(1:10)];
+inBetween1 = [err.S.j10.s_mean + b*err.S.j10.s_std, fliplr(err.S.j10.s_mean - b*err.S.j10.s_std)];
+a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
+inBetween2 = [err.S.j10.la_mean + b*err.S.j10.la_std, fliplr(err.S.j10.la_mean - b*err.S.j10.la_std)];
+a = fill(x2, inBetween2, 'g','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a.FaceColor = [0, 0.3, 0.08];
+
+hold on
+plot(err.S.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
+plot(err.S.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
+%plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+
+
+xlabel('Number of fPCs used')
+ylabel('Reconstruction Error [deg]')
+legend
+%title('Mean and std of reconstruction error', 'Interpreter','Latex')
+%axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+set(gca,'FontSize',12)
+set(findall(gcf,'type','text'),'FontSize',12)
+
+%%

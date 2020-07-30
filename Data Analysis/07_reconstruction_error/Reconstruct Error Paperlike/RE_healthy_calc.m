@@ -43,7 +43,8 @@ E_subj = zeros(subj_num, nfpc);
 			q_recon_h = q_recon_h + mean(q_h, 1);
 
 			%rms
-			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+% 			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+			err_k(i) = norm(rms(q_h - q_recon_h,1) );
 
 		end
 		E_h(k) = mean(err_k);
@@ -94,7 +95,8 @@ E_subj = zeros(subj_num, nfpc);
 			q_recon_h = q_recon_h + mean(q_h, 1);
 
 			%rms
-			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+% 			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+			err_k(i) = norm(rms(q_h - q_recon_h,1) );
 
 		end
 		E_h(k) = mean(err_k);
@@ -144,7 +146,8 @@ E_subj = zeros(subj_num, nfpc);
 			q_recon_h = q_recon_h + mean(q_h, 1);
 
 			%rms
-			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+% 			err_k(i) = min(rms(q_h - q_recon_h, 2) );
+			err_k(i) = norm(rms(q_h - q_recon_h,1) );
 
 		end
 		E_h(k) = mean(err_k);
