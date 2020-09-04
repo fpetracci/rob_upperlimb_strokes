@@ -1,13 +1,8 @@
-%% intro
-clear all; close all; clc;
+function data = rpca(ntask)
+%RPCA Summary of this function goes here
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% IDEA:  stackare tutti i task nei tre gruppi!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%% Costruction of matrix 
+%% Intro and stacking
+% brief description of PCA
 % Xi (nobs x ndof) one for each time sample i
 % [coeff,score,latent,tsquared,explained,mu] = pca(___)
 %	coeff		= svd values
@@ -21,18 +16,15 @@ clear all; close all; clc;
 %	[coeffi, scorei, ~, ~, explainedi, ~] = pca(Xi)
 
 
-
-% given task
-ntask = 5;
-tmp_struct = rpca_stacker_task(ntask);
+stacked_struct = rpca_stacker_task(ntask);
 
 %get dimensions for given task
-[~, ntot, njoints] = size(tmp_struct.q_matrix_h);
+[~, ntot, njoints] = size(stacked_struct.q_matrix_h);
 %	ntot		= total number of time frames
 %	njoints		= number of DOF of the robot-arm
-ntrial_h	= size(tmp_struct.q_matrix_h,	1); % number of valid healthy trial
-ntrial_s	= size(tmp_struct.q_matrix_s,	1); % number of valid stroke trial
-ntrial_la	= size(tmp_struct.q_matrix_la,	1); % number of valid lessaffected trial
+ntrial_h	= size(stacked_struct.q_matrix_h,	1); % number of valid healthy trial
+ntrial_s	= size(stacked_struct.q_matrix_s,	1); % number of valid stroke trial
+ntrial_la	= size(stacked_struct.q_matrix_la,	1); % number of valid lessaffected trial
 
 
 %% time iteration
@@ -58,11 +50,11 @@ scores_la	= zeros(ntrial_la,	npc, ntot);
 for i = 1:ntot
 
 	% temporary matrix given time frame
-	mat_qh = reshape(	tmp_struct.q_matrix_h(:, i, :),...
+	mat_qh = reshape(	stacked_struct.q_matrix_h(:, i, :),...
 						ntrial_h, njoints, 1);
-	mat_qs = reshape(	tmp_struct.q_matrix_s(:, i, :),...
+	mat_qs = reshape(	stacked_struct.q_matrix_s(:, i, :),...
 						ntrial_s, njoints, 1);				
-	mat_qla = reshape(	tmp_struct.q_matrix_la(:, i, :),...
+	mat_qla = reshape(	stacked_struct.q_matrix_la(:, i, :),...
 						ntrial_la, njoints, 1);
 					
 	%% PCA at specified time frame
@@ -98,18 +90,32 @@ for i = 1:ntot
 	var_expl_la(:,i)	= explainedi;
 	coeff_la(:,:,i)		= coeffi;
 	scores_la(:,:,i)	= scorei;
-	
 end
 
-%% Analysis
 
-figure(1)
-hold on
-plot(var_expl_h','b')
-plot(var_expl_s', 'r')
-plot(var_expl_la', 'g')
-grid on
-axis([1, 240, 0, 100])
+%% output
+datah = struct;
+datah.var_expl = var_expl_h;
+datah.coeff = coeff_h;
+datah.scores = scores_h;
+
+datas = struct;
+datas.var_expl = var_expl_s;
+datas.coeff = coeff_s;
+datas.scores = scores_s;
+
+datala = struct;
+datala.var_expl = var_expl_la;
+datala.coeff = coeff_la;
+datala.scores = scores_la;
+
+% final output
+data = struct;
+data.h = datah;
+data.s = datas;
+data.la = datala;
 
 
+
+end
 

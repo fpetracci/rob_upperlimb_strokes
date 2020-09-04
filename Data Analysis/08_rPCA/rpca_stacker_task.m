@@ -1,5 +1,5 @@
 function data = rpca_stacker_task(ntask)
-% COMMENTAMI
+%RPCA_STACKER_TASK stacks all time warped trials of chosen task
 
 %% intro
 % load

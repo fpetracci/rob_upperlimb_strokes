@@ -1,5 +1,5 @@
 function data = rpca_stacker_subj(nsubj)
-% COMMENTAMI
+%RPCA_STACKER_SUBJ stacks all time warped trials of chosen subject
 
 %% intro
 % load
