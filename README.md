@@ -40,6 +40,9 @@ ALLORA??
 
 24 Giugno
 
+24 Settembre
+MIAO
+
 
 _____________________________________________________
 venerdi meeting
