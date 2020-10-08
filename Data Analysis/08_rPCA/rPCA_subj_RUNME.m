@@ -2,24 +2,33 @@
 clear all; close all; clc;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% IDEA:  stackare tutti i task nei tre gruppi!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 %% rpca
 
-% given task
-ntask = 7;
-data = rpca(ntask);
+% given group of task
+ntask = 1;
+nsubj = 5;
+data = rpca_subj(nsubj, ntask);
+
+%% flags for healthy or stroke subj
+
+if nsubj <= 5
+	healthy_subj = 1;
+else
+	healthy_subj = 0;
+end
 
 %% Analysis
 
 figure(1)
 hold on
-plot(data.h.var_expl','b')
-plot(data.s.var_expl', 'r')
-plot(data.la.var_expl', 'g')
+
+if healthy_subj
+	plot(data.h.var_expl','b')
+else
+	plot(data.s.var_expl', 'r')
+	plot(data.la.var_expl', 'g')
+end
+
 grid on
 axis([1, 240, 0, 100])
 xlabel('Time [samples] ')

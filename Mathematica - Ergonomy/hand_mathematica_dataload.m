@@ -25,6 +25,7 @@ hand_quat_L = rotm2quat(hand_rotm_L);
 
 hand_R = [hand_pos_R,hand_quat_R];
 hand_L = [hand_pos_L,hand_quat_L];
+
 %% par
 par_R = [par.L5_pos', par.L5_shoulder.right, par.depth_shoulder.right, par.theta_shoulder.right, par.upperarm.right, par.forearm.right];
 par_L = [par.L5_pos', par.L5_shoulder.left, par.depth_shoulder.left, par.theta_shoulder.left, par.upperarm.left, par.forearm.left];
