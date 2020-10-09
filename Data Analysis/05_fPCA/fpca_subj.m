@@ -56,10 +56,10 @@ data = struct;
 
 if healthy_subj
 		data.h_joint = h_joint;
-	end
-	if stroke_subj
-		data.s_joint = s_joint;
-		data.la_joint = la_joint;
-	end
+end
+if stroke_subj
+	data.s_joint = s_joint;
+	data.la_joint = la_joint;
+end
 
 end

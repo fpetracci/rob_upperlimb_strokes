@@ -1,24 +1,51 @@
-function data = rpca_stacker_subj(nsubj, ngroup)
-%RPCA_STACKER_SUBJ stacks all time warped trials of chosen subject and
-%chosen group of task.
+function data = rpca_stacker_all_subj(ngroup)
+%RPCA_STACKER_SUBJ stacks all time warped trials of chosen group of task in 
+% three different group Healthy, Stroke and LessAffected.
 % input:
 %		- nsubj: number between 1 and 24,1 to 5 healthy, 6 to 24 stroke
 %		patients.
 %		- ngroup: number between 1, 2 and 3. it selects which group of task
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm)
 
+
+
+
+%% iteration 
+
+q_matrix_h = [];
+q_matrix_s = [];
+q_matrix_la = [];
+for nsubj = 1:24
+	%nsubj = [1:20, 22:24]
+	[q_h, q_s, q_la] = stack1subj(nsubj, ngroup);
+	q_matrix_h = cat(1, q_matrix_h, q_h);
+	q_matrix_s = cat(1, q_matrix_s, q_s);
+	q_matrix_la = cat(1, q_matrix_la, q_la);
+end
+
+
+%% save for output
+data = struct;
+data.q_matrix_h = q_matrix_h;
+data.q_matrix_s = q_matrix_s;
+data.q_matrix_la = q_matrix_la;
+
+
+
+end
+
+%% ------------------------------------------------------------------------
+function [q_matrix_h, q_matrix_s, q_matrix_la] = stack1subj(nsubj, ngroup)
 %% intro
 % load
 oldfolder = cd;
+cd ../
 cd ../
 cd 99_folder_mat
 load('q_task_warped.mat');
 cd(oldfolder);
 clear oldfolder;
 [njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);
-
-
-%% task choice
 
 if ngroup == 1
 	% tasks int
@@ -35,7 +62,6 @@ elseif ngroup == 3
 else
 	error('ngroup must be an integer between 1,2 and 3');
 end
-
 
 %% nobs counter
 
@@ -110,15 +136,11 @@ for ntask = task_first:task_last
 					q_1dof	= q_trial(dof,:);			
 					q_matrix_la(la_counter, :, dof) = q_1dof;
 					% load q_trial in a single row
+				end
 			end
 		end
 	end
 end
 
-
-%% save section
-data = struct;
-data.q_matrix_h = q_matrix_h;
-data.q_matrix_s = q_matrix_s;
-data.q_matrix_la = q_matrix_la;
+%end function
 end
