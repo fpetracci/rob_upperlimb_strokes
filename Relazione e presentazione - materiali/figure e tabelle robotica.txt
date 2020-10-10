@@ -1,0 +1,22 @@
+Video:
+1v 	- traiettoria H01 T07 L1 (con 6 dof animation)
+2v 	- video in cui si vede l'errore dei quaternioni
+3v 	- video angoli di giunto speculari
+4v 	- video tubi finale
+
+Figure:
+1f 	- tutina mvnx xsens
+2f	- sistemi di riferimento tutina
+- sistema di riferimento nostra (photoshop)
+- immagine slerp (?)
+- Plot errore di posizione L/R
+- Plot errore di orientazione (sparisce l'ultimo pezzetto) L/R
+- figura statica in cui ci sono i tubi con tutti q = 0
+- (mettere figure dei quaternioni che saltano)
+
+Tabelle:
+- angoli di giunto possibili (max e min) range tot
+	angoli iesimo | min | max | range | nome movimento
+
+- tabella di denavit hartenberg L/R
+	guarda photoshop theta | d | alpha | a
