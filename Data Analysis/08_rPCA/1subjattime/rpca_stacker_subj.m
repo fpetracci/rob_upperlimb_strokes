@@ -33,8 +33,12 @@ elseif ngroup == 3
 	% tasks tm
 	task_first = 21;
 	task_last = 30;
+elseif sum( ngroup == 'all') == 3
+	% all
+	task_first = 1;
+	task_last = 30;
 else
-	error('ngroup must be an integer between 1,2 and 3');
+	error('ngroup must be an integer between 1,2 and 3 or string all');
 end
 
 
