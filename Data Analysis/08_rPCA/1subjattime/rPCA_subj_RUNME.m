@@ -6,7 +6,7 @@ clear all; close all; clc;
 
 % given group of task
 ngroup = 1;
-nsubj = 5;
+nsubj = 7;
 data = rpca_subj(nsubj, ngroup);
 
 %% flags for healthy or stroke subj
