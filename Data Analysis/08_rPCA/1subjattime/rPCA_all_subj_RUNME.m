@@ -8,8 +8,15 @@ clear all; close all; clc;
 ngroup = 1;
 data_all = rpca_all_subj(ngroup);
 
+% flag for avoid plotting results.
+%			1 for have the plots
+%			0 for skipping the plots
+plot_mode = 0;
 
-%% subject info
+
+%% plots
+if plot_mode
+%%subject info
 
 %{
 	subj_Ad			=	[7  8  9  11 14 15 19 20 22 23 24];
@@ -30,7 +37,7 @@ subj_FMMA =[	-1	-1	-1	-1	-1 ...% healthy
 
 		
 		
-%% iteration
+%%figure iteration
 for nsubj = [1:20, 22:24]
 	% SKIPPED SUBJ = 21 (for ngroup 1) because not enough trials 
 	% (ntrial < npc)
@@ -112,3 +119,4 @@ end
 	ylabel('Angle joint [deg]')
 
 %}
+end
