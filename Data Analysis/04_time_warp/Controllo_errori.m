@@ -1,8 +1,17 @@
 %% controlloErrori
 close all;
 
+
+oldfolder = cd;
+cd ../
+cd 99_folder_mat
+load('q_task_warped.mat');
+cd(oldfolder);
+clear oldfolder;
+s1 = q_task_warp(1).subject(1).trial(1).q_grad;
+
 %% resample to 240
-s1 = correct2pi_err(q_task(26).subject(3).trial(1).q_grad(:,10:end));
+s1 = correct2pi_err(q_task_warp(26).subject(3).trial(1).q_grad(:,10:end));
 n_task = 26;
 %tsin = timeseries(s1);
 tsout = resample(s1',250,length(s1))';
@@ -13,11 +22,11 @@ figure(1)
 plot(s1([4 7],:)') 
 %%
 
-for i = 1:24
+for i = 1
 	for j = 1:6
 		figure(i + 1)
-		if not(isempty(q_task(n_task).subject(i).trial(j).q_grad))
-			s2 = q_task(n_task).subject(i).trial(j).q_grad(:,10:end);
+		if not(isempty(q_task_warp(n_task).subject(i).trial(j).q_grad))
+			s2 = q_task_warp(n_task).subject(i).trial(j).q_grad(:,10:end);
 			s2 = correct2pi_err(s2);
 			
 			s2_new = q_task_warp(n_task).subject(i).trial(j).q_grad(:,10:end);
