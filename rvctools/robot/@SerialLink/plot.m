@@ -87,7 +87,7 @@
 % - If the robot already exists then that graphical model will be found
 %   and moved.
 %
-% Multiple views of the same robot::
+% Multiple views of the same robot:
 %
 % If one or more plots of this robot already exist then these will all
 % be moved according to the argument Q.  All robots in all windows with

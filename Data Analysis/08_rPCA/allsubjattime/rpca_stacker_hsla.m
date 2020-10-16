@@ -1,4 +1,4 @@
-function data = rpca_stacker_all_subj(ngroup)
+function data = rpca_stacker_hsla(ngroup)
 %RPCA_STACKER_SUBJ stacks all time warped trials of chosen group of task in 
 % three different group Healthy, Stroke and LessAffected.
 % input:

@@ -6,7 +6,7 @@ clear all; close all; clc;
 % given task
 ngroup = 1;
 %ngroup = 'all';
-data = rpca_all_subj(ngroup);
+data = rpca_hsla(ngroup);
 
 %% Analysis sum
 

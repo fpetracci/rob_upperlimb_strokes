@@ -1,4 +1,4 @@
-function data = rpca_all_subj(ngroup)
+function data = rpca_hsla(ngroup)
 %RPCA Summary of this function goes here
 
 %% Intro and stacking
@@ -16,7 +16,7 @@ function data = rpca_all_subj(ngroup)
 %	[coeffi, scorei, ~, ~, explainedi, ~] = pca(Xi)
 
 
-stacked_struct = rpca_stacker_all_subj(ngroup);
+stacked_struct = rpca_stacker_hsla(ngroup);
 
 
 [ntrial_h, ntot, njoints] = size(stacked_struct.q_matrix_h);
