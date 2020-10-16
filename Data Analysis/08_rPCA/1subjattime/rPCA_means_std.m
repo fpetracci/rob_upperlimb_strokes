@@ -19,21 +19,23 @@ and_rPC = [];
 land_rPC = [];
 
 %stacking
+%insert into sel_rPCs which principal component you want to sum up and
+%evaluate. i.e. [1] or [1 2]
 sel_rPCs = [1];
 for i = 1:length(data_all)
 	if isfield(data_all(i).h, 'var_expl')
-		h_rPC = cat(1, h_rPC, data_all(i).h.var_expl(sel_rPCs,:));
+		h_rPC = cat(1, h_rPC, sum(data_all(i).h.var_expl(sel_rPCs,:), 1));
 		
 	elseif isfield(data_all(i).s, 'var_expl') && isfield(data_all(i).la, 'var_expl')
-		s_rPC = cat(1, s_rPC, data_all(i).s.var_expl(sel_rPCs,:));
-		la_rPC = cat(1, la_rPC, data_all(i).la.var_expl(sel_rPCs,:));
+		s_rPC = cat(1, s_rPC, sum(data_all(i).s.var_expl(sel_rPCs,:),1));
+		la_rPC = cat(1, la_rPC, sum(data_all(i).la.var_expl(sel_rPCs,:),1));
 		
 		if subj_Ad(i) 
-			ad_rPC = cat(1, ad_rPC, data_all(i).s.var_expl(sel_rPCs,:));
-			lad_rPC = cat(1, lad_rPC, data_all(i).la.var_expl(sel_rPCs,:));
+			ad_rPC = cat(1, ad_rPC, sum(data_all(i).s.var_expl(sel_rPCs,:),1));
+			lad_rPC = cat(1, lad_rPC, sum(data_all(i).la.var_expl(sel_rPCs,:),1));
 		elseif ~subj_Ad(i)
-			and_rPC = cat(1, and_rPC, data_all(i).s.var_expl(sel_rPCs,:));
-			land_rPC = cat(1, land_rPC, data_all(i).la.var_expl(sel_rPCs,:));
+			and_rPC = cat(1, and_rPC, sum(data_all(i).s.var_expl(sel_rPCs,:),1));
+			land_rPC = cat(1, land_rPC, sum(data_all(i).la.var_expl(sel_rPCs,:),1));
 		end
 	end
 end
