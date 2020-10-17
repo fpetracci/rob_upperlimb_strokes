@@ -1,13 +1,13 @@
 %% Description of SCRIPT:
-%fisso un istante di tempo vedendo come va a quell'istante
-
-%		- ngroup: number between 1, 2 and 3. it selects which group of task
-%		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
+% this script aims to visualize the movement associated to a signle rPC. 
+% To execute this file, folder "1subjattime" must be in path
 
 %% intro
 clear all; clc;
 
-ngroup = 1;		% selected tasks group
+ngroup = 1;		
+%		- ngroup: number between 1, 2 and 3. it selects which group of task
+%		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 data_rPCA_all = rpca_all_subj(ngroup);
 
