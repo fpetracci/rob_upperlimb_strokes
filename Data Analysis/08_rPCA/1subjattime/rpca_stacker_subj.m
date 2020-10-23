@@ -9,13 +9,14 @@ function data = rpca_stacker_subj(nsubj, ngroup)
 
 %% intro
 % load
-oldfolder = cd;
-cd ../
-cd ../
-cd 99_folder_mat
+% oldfolder = cd;
+% cd ../
+% cd ../
+% cd 99_folder_mat
+% load('q_task_warped.mat');
+% cd(oldfolder);
+% clear oldfolder;
 load('q_task_warped.mat');
-cd(oldfolder);
-clear oldfolder;
 [njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);
 
 

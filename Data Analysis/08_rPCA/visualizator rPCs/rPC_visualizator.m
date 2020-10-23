@@ -18,7 +18,7 @@ t0 = 1;			% initial time of recorded trial
 tf = 240;		% final time of recorded trial
 tinit = 60;		% initial time of time range we want to extrapulate rPCS
 tstop = 100;	% final time of time range we want to extrapulate rPCS
-t = 0;			% instant at which we evaluate rPCs, if t = 0 we compute for all t in [tinit : tstop]
+t = 35;			% instant at which we evaluate rPCs, if t = 0 we compute for all t in [tinit : tstop]
 njoint = 10;	% number of joints
 nrpc = 10;		% total number of used rPCs
 sel_rPC = 1;	% selected rPCs to be shown
@@ -63,11 +63,14 @@ if floor(nsubj)-nsubj ~= 0
 elseif nsubj <= 0 || nsubj > 24
 	error('this subject does not exist inside the dataset, number must be in [1 24]')
 end
+
 %% single subject loading
 
 if t == 0
 	
-	if nsubj > 5 % strokes subject
+	if nsubj > 5 
+		% strokes subject
+		
 		rPCs_vis_coeff_tmp_s	= [];
 		rPCs_vis_var_tmp_s		= [];
 		rPCs_vis_scores_tmp_s	= [];
@@ -82,12 +85,12 @@ if t == 0
 		for i = tinit : tstop
 			[coeff_rPCs, var_rPCs, scoresMm_rPCs, dom] = rPC_t_subj(i, data_rPCA_all, nsubj, sel_rPC);
 
-			rPCs_vis_coeff_tmp_s	= cat(2, rPCs_vis_coeff_tmp_s, coeff_rPCs(:, 1));
-			rPCs_vis_var_tmp_s		= cat(2, rPCs_vis_var_tmp_s, var_rPCs(1));
+			rPCs_vis_coeff_tmp_s	= cat(2, rPCs_vis_coeff_tmp_s, coeff_rPCs(:, :, 1));
+			rPCs_vis_var_tmp_s		= cat(2, rPCs_vis_var_tmp_s, var_rPCs(:, :, 1));
 			rPCs_vis_scores_tmp_s	= cat(2, rPCs_vis_scores_tmp_s, scoresMm_rPCs(:, 1));
 
-			rPCs_vis_coeff_tmp_la	= cat(2, rPCs_vis_coeff_tmp_la, coeff_rPCs(:,2));
-			rPCs_vis_var_tmp_la		= cat(2, rPCs_vis_var_tmp_la, var_rPCs(2));
+			rPCs_vis_coeff_tmp_la	= cat(2, rPCs_vis_coeff_tmp_la, coeff_rPCs(:, :, 2));
+			rPCs_vis_var_tmp_la		= cat(2, rPCs_vis_var_tmp_la, var_rPCs(:, :, 2));
 			rPCs_vis_scores_tmp_la	= cat(2, rPCs_vis_scores_tmp_la, scoresMm_rPCs(:, 2));
 		end
 
@@ -99,7 +102,8 @@ if t == 0
 		rPCs_vis_var(:, :, 2)		= rPCs_vis_var_tmp_la;
 		rPCs_vis_scores(:, :, 2)	= rPCs_vis_scores_tmp_la;
 		
-	else % healthy subject
+	else
+		% healthy subject
 		rPCs_vis_coeff			= [];
 		rPCs_vis_var			= [];
 		rPCs_vis_scores			= []; % 2 righe, min e max score
@@ -115,20 +119,22 @@ if t == 0
 elseif t > t0-1 && t <= tf
 	
 	if nsubj > 5
+		% stroke subject
 		rPCs_vis_coeff			= zeros(njoint, 1, 2);
 		rPCs_vis_var			= zeros(1, 1, 2);
 		rPCs_vis_scores			= zeros(2, 1, 2); % 2 righe, min e max score
 		
 		[coeff_rPCs, var_rPCs, scoresMm_rPCs, dom] = rPC_t_subj(t, data_rPCA_all, nsubj, sel_rPC);
 		
-		rPCs_vis_coeff(:, :, 1)		= coeff_rPCs(:,1);
-		rPCs_vis_var(:, :, 1)		= var_rPCs(1);
+		rPCs_vis_coeff(:, :, 1)		= coeff_rPCs(:, :, 1);
+		rPCs_vis_var(:, :, 1)		= var_rPCs(:, :, 1);
 		rPCs_vis_scores(:, :, 1)	= scoresMm_rPCs(:, 1);
 
-		rPCs_vis_coeff(:, :, 2)		= coeff_rPCs(:,2);
-		rPCs_vis_var(:, :, 2)		= var_rPCs(2);
+		rPCs_vis_coeff(:, :, 2)		= coeff_rPCs(:, :, 2);
+		rPCs_vis_var(:, :, 2)		= var_rPCs(:, :, 2);
 		rPCs_vis_scores(:, :, 2)	= scoresMm_rPCs(:, 2);
 	else
+		%healthy
 		[rPCs_vis_coeff, rPCs_vis_var, rPCs_vis_scores, dom] = rPC_t_subj(t, data_rPCA_all, nsubj, sel_rPC);
 	end
 else

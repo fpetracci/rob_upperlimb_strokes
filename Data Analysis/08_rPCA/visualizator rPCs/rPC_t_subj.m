@@ -22,9 +22,14 @@ subj_Ad = [	-1	-1	-1	-1	-1 ...% healthy
 		%	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24
 dom = subj_Ad(nsubj);
 %% extrapulation
+
+nrPC = length(sel_rPC);		% number of rPC we want to extract
+
 data_subj = data_all(nsubj);
 
 	if isfield(data_subj.h, 'var_expl')
+		% healthy subject
+		
 		vr_rPCs			= data_subj.h.var_expl(sel_rPC,t);
 		cff_rPCs		= data_subj.h.coeff(:,sel_rPC,t);
 		scr_rPCs		= data_subj.h.scores(:,sel_rPC,t);
@@ -34,6 +39,8 @@ data_subj = data_all(nsubj);
 		scoresMm_rPCs	= [max(scr_rPCs), min(scr_rPCs)]';
 		
 	elseif isfield(data_subj.s, 'var_expl') && isfield(data_subj.la, 'var_expl')
+		% stroke subject
+		
 		vr_rPCs_s		= data_subj.s.var_expl(sel_rPC,t);
 		vr_rPCs_la		= data_subj.la.var_expl(sel_rPC,t);
 		
@@ -46,8 +53,20 @@ data_subj = data_all(nsubj);
 		scoresMm_rPCs_s	= [max(scr_rPCs_s), min(scr_rPCs_s)]';
 		scoresMm_rPCs_la= [max(scr_rPCs_la), min(scr_rPCs_la)]';
 		
-		var_rPCs		= [vr_rPCs_s, vr_rPCs_la];
-		coeff_rPCs		= [cff_rPCs_s, cff_rPCs_la];
+		%prealloc for third dimension in which we store the information
+		%about the affected arm:
+		%		1 - stroke
+		%		2 - less affected
+		var_rPCs	= zeros(nrPC, 1, 2);		% var explained is a column 
+												% vector: nrPC by 1
+		coeff_rPCs	= zeros(size(cff_rPCs_s,1), nrPC, 2);
+										% cff_rPCs is a matrix: njoints by
+										% nrPC
+		var_rPCs(:,:,1)		= vr_rPCs_s;
+		var_rPCs(:,:,2)		= vr_rPCs_la;
+		coeff_rPCs(:,:,1)	= cff_rPCs_s;
+		coeff_rPCs(:,:,2)	= cff_rPCs_la;
+		
 		scoresMm_rPCs	= [scoresMm_rPCs_s, scoresMm_rPCs_la];
 	end
 	

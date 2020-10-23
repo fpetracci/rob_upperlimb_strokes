@@ -62,7 +62,7 @@ function [sp, wm, wc] = sigmapoint_gen(x, P)
 	dist	= zeros(n,n);
 	sp		= zeros(n, nsp);
 	
-	% calculation of dist = sqrt((n+lambda)*P)
+	% computation of dist = sqrt((n+lambda)*P)
 	[U, SIGMA, ~] = svd((n+lambda)* P);
 	dist = U * sqrt(SIGMA);
 
