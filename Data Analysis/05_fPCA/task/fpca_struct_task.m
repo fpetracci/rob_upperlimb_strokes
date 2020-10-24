@@ -2,6 +2,10 @@
 % all joint-angles values of a 10R arm robot reproducing the human motion
 % described in the UZH dataset.
 
+% NOTE: due to later improvement, the mean (in time) was removed from
+% signals during fpca calculations. This is why in reconstruction plots the 
+% mean signal is recalculated and added manually.
+
 %% fpca calculation
 clear all; close all; clc;
 tic
@@ -57,13 +61,13 @@ end
 toc
 
 %% load qstacked
-dummy_struct1	= fpca_stacker(1);
+dummy_struct1	= fpca_stacker_task(1);
 q_stacked_task	= repmat(dummy_struct1, 1, task_num);
 
 for ntask = 1:task_num
 	%compute fpca for current task 
 	disp(['Stacking task num ' num2str(ntask)]);
-	stacked_task = fpca_stacker(ntask);
+	stacked_task = fpca_stacker_task(ntask);
 	q_stacked_task(ntask) = stacked_task;
 	
 end
@@ -99,20 +103,31 @@ for j = 1:10
 		figure(j)
 		%figure('Renderer', 'painters', 'Position', [10 10 1900 1000])
 		clf
+		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+		
+		% "new" mean calculation		
+		mean_mat	= mean(q_stacked_task(task_chosen).q_matrix_h,2); 
+		mean_tmp	= mean_mat(obs,1,j);
 		
 		% plot of angular joint
 		subplot(1,2,1)
-		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,1),...
+		
+		% mean is removed from signal, we'll add it manually after fpca
+		%plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,1),...
+		%	 'Linewidth',0.5,'DisplayName','Mean of Signal')
+		
+		plot(mean_tmp* ones(1,size(q_stacked_task(task_chosen).q_matrix_h,2)),...
 			 'Linewidth',0.5,'DisplayName','Mean of Signal')
+		
 		hold on
-		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,2),...
+		plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,2)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1')
-		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,3),...
+		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,3)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
-		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,4),...
+		 plot(q_fpca_task_h(task_chosen).joint(j).qmat(:,obs,4)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
 		 
-		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+		
 		plot(q_stacked_plot(:,obs), ...
 			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')
 		legend('Location','best')
@@ -188,19 +203,24 @@ for j = (10+1):(10+10)
 		%figure('Renderer', 'painters', 'Position', [10 10 1900 1000])
 		clf
 		
+		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+		% "new" mean calculation
+		mean_mat	= mean(q_stacked_task(task_chosen).q_matrix_h,2);
+		mean_tmp	= mean_mat(obs,1,j);
+		
 		% plot of angular joint
 		subplot(1,2,1)
-		plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,1),...
+		plot(mean_tmp* ones(1,size(q_stacked_task(task_chosen).q_matrix_h,2)),...
 			 'Linewidth',0.5,'DisplayName','Mean of Signal')
 		hold on
-		plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,2),...
+		plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,2)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1')
-		 plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,3),...
+		 plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,3)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
-		 plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,4),...
+		 plot(q_fpca_task_s(task_chosen).joint(j).qmat(:,obs,4)+mean_tmp,...
 			 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
 		 
-		q_stacked_plot = q_stacked_task(task_chosen).q_matrix_h(:,:,j)';
+		
 		plot(q_stacked_plot(:,obs), ...
 			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')
 		legend('Location','best')

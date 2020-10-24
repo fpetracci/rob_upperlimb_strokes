@@ -1,5 +1,5 @@
 function data = fpca_subj(nsubj)
-% COMMENTAMI
+% This functions outputs the fpca results given a single subject.
 
 %% check subj
 
@@ -11,7 +11,7 @@ else
 	stroke_subj = 1;
 end
 
-%% stacking trial
+%% stacking trials
 tmp_struct = fpca_stacker_subj(nsubj);
 
 if healthy_subj

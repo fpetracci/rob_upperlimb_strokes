@@ -56,7 +56,6 @@ info.n			= n;
 info.nobs		= nobs;
 
 % save to data struct
-
 data = struct;
 data.val_pc	= pc;
 data.comp	= comp;

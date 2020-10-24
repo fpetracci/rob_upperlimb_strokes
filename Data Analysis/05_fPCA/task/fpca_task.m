@@ -2,7 +2,7 @@ function data = fpca_task(ntask)
 % COMMENTAMI
 
 %% stacking trial
-tmp_struct = fpca_stacker(ntask);
+tmp_struct = fpca_stacker_task(ntask);
 q_matrix_h = tmp_struct.q_matrix_h;
 q_matrix_s = tmp_struct.q_matrix_s;
 q_matrix_la = tmp_struct.q_matrix_la;

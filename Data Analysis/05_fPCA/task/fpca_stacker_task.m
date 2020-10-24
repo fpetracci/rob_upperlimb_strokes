@@ -1,14 +1,15 @@
-function data = fpca_stacker(ntask)
-% COMMENTAMI
+function data = fpca_stacker_task(ntask)
+% This function stacks in three matrices the different selected trials, in
+% this case the ones belonging to specified task (ntask).
 
 %% intro
 % load
-oldfolder = cd;
-cd ../
-cd 99_folder_mat
+% oldfolder = cd;
+% cd ../
+% cd 99_folder_mat
 load('q_task_warped.mat');
-cd(oldfolder);
-clear oldfolder;
+% cd(oldfolder);
+% clear oldfolder;
 [njoints, nsamples] = size(q_task_warp(ntask).subject(1).trial(1).q_grad);
 
 %% nobs counter

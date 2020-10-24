@@ -48,15 +48,15 @@ var_subj1 = zeros(10,1);
 %% our tests
 clc
 disp('first')
-[mean(var_h1) var(var_h1)]
-[mean(var_s1) var(var_s1)]
-[mean(var_la1) var(var_la1)]
+[mean(var_h1) std(var_h1)]
+[mean(var_s1) std(var_s1)]
+[mean(var_la1) std(var_la1)]
 disp('second')
-[mean(var_h2) var(var_h2)]
-[mean(var_s2) var(var_s2)]
-[mean(var_la2) var(var_la2)]
+[mean(var_h2) std(var_h2)]
+[mean(var_s2) std(var_s2)]
+[mean(var_la2) std(var_la2)]
 disp('third')
-[mean(var_h3) var(var_h3)]
-[mean(var_s3) var(var_s3)]
-[mean(var_la3) var(var_la3)]
+[mean(var_h3) std(var_h3)]
+[mean(var_s3) std(var_s3)]
+[mean(var_la3) std(var_la3)]
 

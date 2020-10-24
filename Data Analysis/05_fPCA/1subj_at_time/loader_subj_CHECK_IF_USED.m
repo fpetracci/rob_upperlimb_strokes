@@ -1,25 +1,18 @@
  clear all; 
 
 %% load fPCA_subj
-oldfolder = cd;
-cd ../
-cd 99_folder_mat
 load('q_task_warped.mat');
-
-cd(oldfolder);
-clear oldfolder;
-
 % const
 task_num = 30;
 subj_num = 24;
 joint_num = 10;
 obs_num = 240;
 % load dummy struct;
-dummy_struct1	= fpca_task(1);
+dummy_struct1	= fpca_subj(1);
 fPCA_subj		= repmat(dummy_struct1,1, subj_num);
 
 for nsubj = 1:subj_num
-	%compute fpca for current task 
+	%compute fpca for current subject 
 	disp(['Elaborating subj num ' num2str(nsubj)]);
 	struct_tmp = fpca_subj(nsubj);
 	if nsubj <6

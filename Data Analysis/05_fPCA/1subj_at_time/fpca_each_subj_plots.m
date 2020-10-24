@@ -1,68 +1,66 @@
-%% fpca calculation
+%% fpca calculation for all subj, one at time
+
+%% intro
 clear all; close all; clc;
 tic
-% const
+
+% which of joints we want to analyze
+r = [4:7];
+
+
+%% constant
 task_num = 30;
 subj_num = 24;
 joint_num = 10;
 obs_num = 240;
+
+%% creating the struct array
 % load dummy struct;
-dummy_struct1	= fpca_task(1);
+dummy_struct1	= fpca_subj(1);
 fPCA_subj		= repmat(dummy_struct1,1, subj_num);
 
 for nsubj = 1:subj_num
 	%compute fpca for current task 
 	disp(['Elaborating subj num ' num2str(nsubj)]);
-	struct_task = fpca_subj(nsubj);
+	struct_fpc = fpca_subj(nsubj);
 	if nsubj <6
-		fPCA_subj(nsubj).h_joint = struct_task.h_joint;
+		fPCA_subj(nsubj).h_joint = struct_fpc.h_joint;
 		fPCA_subj(nsubj).s_joint = [];
 		fPCA_subj(nsubj).la_joint = [];
 	else
 		fPCA_subj(nsubj).h_joint = [];
-		fPCA_subj(nsubj).s_joint = struct_task.s_joint;
-		fPCA_subj(nsubj).la_joint = struct_task.la_joint;
+		fPCA_subj(nsubj).s_joint = struct_fpc.s_joint;
+		fPCA_subj(nsubj).la_joint = struct_fpc.la_joint;
 	end
 end
 toc
 
+%% plot each stroke subject vs healthy mean
 
-%% plot median
+% healthy mean calculation
 for j = 1:10
 	for i = 1:5
 		var_h(j,:) =  mean(fPCA_subj(i).h_joint(j).var,2);
-	% 	var_s1(j,:) =  fPCA_subj(1).s_joint(j).var;
-	% 	var_la1(j,:) =  fPCA_subj(1).la_joint(j).var;
 	end
 end
 
-% 
-% % 	var_h1(j,:) =  fPCA_subj(1).h_joint(j).var;
-% 	var_s(j,:) =  fPCA_subj(8).s_joint(j).var;
-% 	var_la(j,:) =  fPCA_subj(8).la_joint(j).var;
-% end
-
-r = [4:7];
 figure(1)
 clf
 hold on
-
 for i = 6:24
 	for j = 1:10
 		var_s(j,:) =  fPCA_subj(i).s_joint(j).var;
 		var_la(j,:) =  fPCA_subj(i).la_joint(j).var;
 	end
-% plot(cumsum(mean(var_la(r,:),1),2)','g','Displayname', 'less affected')
-% plot(cumsum(mean(var_s(r,:),1),2)', 'r','Displayname', 'stroke')
-%plot(cumsum(median(var_la(r,:),1),2)','g','Displayname', 'less affected')
-plot(cumsum(median(var_s(r,:),1),2)', 'r', 'Displayname', 'stroke')
+	%plot(cumsum(mean(var_la(r,:),1),2)','g','Displayname', 'less affected')
+	plot(cumsum(mean(var_s(r,:),1),2)', 'r','Displayname', 'stroke')
 end
-
 grid on
-% plot(cumsum(mean(var_h(r,:),1),2)','b--' , 'Linewidth', 5)
-plot(cumsum(median(var_h(r,:),1),2)','b--' , 'Linewidth', 5, 'Displayname', 'healthy')
+plot(cumsum(mean(var_h(r,:),1),2)','b--' , 'Linewidth', 5)
+%plot(cumsum(median(var_h(r,:),1),2)','b--' , 'Linewidth', 5, 'Displayname', 'healthy')
 legend
 hold off
+
 
 %% diff la vs stroke median
 figure(2)
@@ -80,7 +78,7 @@ grid on
 %% plot a subject at a time
 close all;
 for i = 6:24
-	figure(i-5)
+	figure(i)
 
 		for j = 1:10
 			var_s(j,:)	= fPCA_subj(i).s_joint(j).var';
