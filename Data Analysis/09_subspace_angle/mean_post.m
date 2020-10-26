@@ -1,8 +1,18 @@
-function [mean_posture] = mean_post(ngroup)
+function [mean_posture] = mean_post(ngroup, flag_mean)
 %MEAN_POST Summary of this function goes here
 %   Detailed explanation goes here
 %% Load
 struct_rPCA = rpca_all_subj(ngroup);
+
+% if flag_mean = 0 mean posture is computed as PCA of mean postures of each
+% subject
+% if flag_mean = 1 mean posture is computed as MEAN of mean postures of each
+% subject
+
+if nargin < 2
+	flag_mean = 0;
+end
+
 %% compute PCA of mean postures, used to comparison
 
 % creating empty matrices to fill up later
@@ -27,7 +37,14 @@ end
 % finale
 mean_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
 
-[mean_posture,	~, ~, ~, ~, ~] = pca(mean_mat');
-
+if ~flag_mean		% PC of means
+	[mean_posture,	~, ~, ~, ~, ~] = pca(mean_mat');
+elseif flag_mean	% mean of means
+	mean_tmp = mean(mean_mat, 2);
+	mean_posture = [];
+	for i = 1:10
+		mean_posture = cat(2, mean_posture, mean_tmp);
+	end
+end	
 end
 

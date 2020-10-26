@@ -24,9 +24,14 @@ ngroup = 1;
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 
+flag_mean = 1;
+% if flag_mean = 0 mean posture is computed as PCA of mean postures of each
+% subject
+% if flag_mean = 1 mean posture is computed as MEAN of mean postures of each
+% subject
 
 data_rPCA_all = rpca_all_subj(ngroup);
-mean_posture = mean_post(ngroup);
+mean_posture = mean_post(ngroup, flag_mean);
 
 %% selected subject e rPCs
 nsubj = 8;		% selected subject

@@ -60,3 +60,4 @@ ylabel('% explained variance')
 	ylabel('Angle joint [deg]')
 
 %}
+%% spider plot
