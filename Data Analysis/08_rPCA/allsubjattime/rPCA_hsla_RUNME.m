@@ -44,7 +44,7 @@ ylabel('% explained variance')
 figure(3)
 clf;
 D = zeros(10, 3);
-%first two of healthy subjects
+%first three of healthy subjects
 for i=1:240
 	D(:, 1) = data.h.coeff(:, 1, i);
 	D(:, 2) = data.h.coeff(:, 2, i);
@@ -52,3 +52,79 @@ for i=1:240
 	spider_plot_rPCs(D, 'hsl')
 	drawnow
 end
+
+figure(4)
+clf;
+D = zeros(10, 3);
+%first three of less affected subjects
+for i=1:240
+	D(:, 1) = data.la.coeff(:, 1, i);
+	D(:, 2) = data.la.coeff(:, 2, i);
+	D(:, 3) = data.la.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'hsl')
+	drawnow
+end
+
+figure(5)
+clf;
+D = zeros(10, 3);
+%first three of stroke subjects
+for i=1:240
+	D(:, 1) = data.s.coeff(:, 1, i);
+	D(:, 2) = data.s.coeff(:, 2, i);
+	D(:, 3) = data.s.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'hsl')
+	drawnow
+end
+
+%% video
+movie_mode = 1;
+movie_fps = 24;
+
+figh = figure(6);
+clf;
+D = zeros(10, 3);
+k = 1;
+%first rPC of healthy, less affected and strokes subjects
+for i=1:240
+	D(:, 1) = data.h.coeff(:, 1, i);
+	D(:, 2) = data.s.coeff(:, 1, i);
+	D(:, 3) = data.la.coeff(:, 1, i);
+	spider_plot_rPCs(D, 'hsl')
+	title(['first rPC of healthy, stroke and less affected. Frame: ' num2str(i)])
+	drawnow
+	if movie_mode
+		movieVector(k) = getframe(figh);
+		%open to fullscreen figure(1) before using the next line
+		%movieVector(k) = getframe(figh, [10,10,1910,960]);
+		k = k+1;
+	end
+end
+
+if movie_mode
+  movie = VideoWriter('first rPC of healthy, stroke and less affected', 'MPEG-4');
+  movie.FrameRate = movie_fps;
+
+  open(movie);
+  writeVideo(movie, movieVector);
+  close(movie);
+end
+
+%% template video
+% % write video
+%   if movie_mode
+%     movieVector(k) = getframe(figh);
+%     %open to fullscreen figure(1) before using the next line
+%     %movieVector(k) = getframe(figh, [10,10,1910,960]);
+%     k = k+1;
+%   end
+% 
+% 
+% if movie_mode
+%   movie = VideoWriter('movie_heliocentric', 'MPEG-4');
+%   movie.FrameRate = movie_fps;
+% 
+%   open(movie);
+%   writeVideo(movie, movieVector);
+%   close(movie);
+% end

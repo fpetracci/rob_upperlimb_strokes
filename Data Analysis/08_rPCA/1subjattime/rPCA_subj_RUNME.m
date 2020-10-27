@@ -6,7 +6,7 @@ clear all; close all; clc;
 
 % given group of task
 ngroup = 1;
-nsubj = 7;
+nsubj = 2;
 data = rpca_subj(nsubj, ngroup);
 
 %% flags for healthy or stroke subj
@@ -61,3 +61,46 @@ ylabel('% explained variance')
 
 %}
 %% spider plot
+if healthy_subj
+	figure(6)
+	clf;
+	D = zeros(10, 3);
+	
+	%first rPC of healthy subjects
+	for i=1:240
+		D(:, 1) = data.h.coeff(:, 1, i);
+		D(:, 2) = data.h.coeff(:, 2, i);
+		D(:, 3) = data.h.coeff(:, 3, i);
+		spider_plot_rPCs(D, 'hsl')
+		title('Healthy sub: first rPC')
+		drawnow
+		
+	end
+		
+else
+	figure(6)
+	clf;
+	D = zeros(10, 3);
+	D_b = zeros(10, 3);
+	%first rPC of strokes subjects
+	
+	for i=1:240
+		D(:, 1) = data.s.coeff(:, 1, i);
+		D(:, 2) = data.s.coeff(:, 2, i);
+		D(:, 3) = data.s.coeff(:, 3, i);
+		
+		subplot(1, 2, 1)
+		spider_plot_rPCs(D, 'hsl')
+		title('strokes sub: first rPC of stroke side')
+		
+		D_b(:, 1) = data.la.coeff(:, 1, i);
+		D_b(:, 2) = data.la.coeff(:, 2, i);
+		D_b(:, 3) = data.la.coeff(:, 3, i);
+	
+		subplot(1, 2, 2)
+		spider_plot_rPCs(D_b, 'hsl')
+		title('strokes sub: first rPC of less affected side')
+		drawnow
+	end
+end
+

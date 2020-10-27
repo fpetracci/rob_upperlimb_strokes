@@ -7,6 +7,7 @@
 %% load
 clear; clc;
 ngroup		= 1;
+% ngroup		= ['all'];
 fPCA_struct = fpca_hdnd(ngroup);
 var_test	= fPCA_struct.h_joint(1).var;
 nfpc		= length(var_test);
