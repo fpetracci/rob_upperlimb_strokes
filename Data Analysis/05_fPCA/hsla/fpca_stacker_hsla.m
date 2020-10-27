@@ -1,4 +1,4 @@
-function data = fpca_stacker_hsla
+function data = fpca_stacker_hsla(ngroup)
 % This function stacks all trial dividing between healthy, stroke and less
 % affected subjects groups.
 
@@ -21,7 +21,34 @@ nobs_la		= 0;	% number of observations of trial executed with healthy arm of a s
 nobs_error	= 0;	% number of observations that are errors
 nobs_empty	= 0;	% number of observations that are empty
 
-for ntask = 1:30
+% tasks group selection
+if nargin < 1
+	ngroup = 'all';
+end
+
+if ngroup == 1
+	% tasks int
+	task_first = 1;
+	task_last = 10;
+elseif ngroup == 2
+	% tasks tr
+	task_first = 11;
+	task_last = 20;
+elseif ngroup == 3
+	% tasks tm
+	task_first = 21;
+	task_last = 30;
+	
+elseif sum( ngroup == 'all') == 3
+	% all
+	task_first = 1;
+	task_last = 30;
+else
+	error('ngroup must be an integer between 1,2 and 3 or string all');
+end
+
+%% loop
+for ntask = task_first : task_last
 	for subj = 1:24
 		for ntrial = 1:6
 			if ~isempty(q_task_warp(ntask).subject(subj).trial(ntrial).q_grad)
@@ -50,7 +77,7 @@ q_matrix_h =	zeros(nobs_h, nsamples, njoints); % 3 dimension matrix
 q_matrix_s =	zeros(nobs_s, nsamples, njoints); % 3 dimension matrix
 q_matrix_la =	zeros(nobs_la, nsamples, njoints); % 3 dimension matrix
 
-for ntask = 1:30
+for ntask = task_first : task_last
 	for subj = 1:24
 		for ntrial = 1:6
 			if ~isempty(q_task_warp(ntask).subject(subj).trial(ntrial).q_grad)

@@ -1,7 +1,7 @@
-function data = fpca_subj(nsubj)
+function data = fpca_subj(nsubj, ngroup)
 % This functions outputs the fpca results given a single subject.
 
-%% check subj
+%% check subj and group
 
 if nsubj < 6
 	healthy_subj = 1;
@@ -11,8 +11,13 @@ else
 	stroke_subj = 1;
 end
 
+% tasks group selection
+if nargin < 1
+	ngroup = 'all';
+end
+
 %% stacking trials
-tmp_struct = fpca_stacker_subj(nsubj);
+tmp_struct = fpca_stacker_subj(nsubj, ngroup);
 
 if healthy_subj
 	q_matrix_h = tmp_struct.q_matrix_h;

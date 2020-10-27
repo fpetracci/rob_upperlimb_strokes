@@ -6,9 +6,10 @@
 
 %% intro and variance extraction
 clear; clc;
+ngroup = 'all';
 
 % load fpca struct
-fPCA_struct = fpca_hsla;
+fPCA_struct = fpca_hsla(ngroup);
 
 % allocating variances
 var_test = fPCA_struct.h_joint(1).var;

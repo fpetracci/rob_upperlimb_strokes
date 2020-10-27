@@ -8,8 +8,6 @@ function data = rpca_stacker_hsla(ngroup)
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm)
 
 
-
-
 %% iteration 
 
 q_matrix_h = [];

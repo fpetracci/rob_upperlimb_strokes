@@ -1,9 +1,14 @@
-function data = fpca_hsla
+function data = fpca_hsla(ngroup)
 % this function returns the fpca structure with the fields specified in
 % q_fpca.
+%% ngroup
+
+if nargin < 1
+	ngroup = 'all';
+end
 
 %% stacking trial
-tmp_struct = fpca_stacker_hsla;
+tmp_struct = fpca_stacker_hsla(ngroup);
 q_matrix_h = tmp_struct.q_matrix_h;
 q_matrix_s = tmp_struct.q_matrix_s;
 q_matrix_la = tmp_struct.q_matrix_la;

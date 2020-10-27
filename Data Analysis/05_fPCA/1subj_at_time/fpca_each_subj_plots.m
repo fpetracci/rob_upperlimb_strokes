@@ -4,12 +4,14 @@
 clear all; close all; clc;
 tic
 
+%% parameters
 % which of joints we want to analyze
 r = [4:7];
 
+% which task groups we want to analyze
+ngroup = 'all';
 
-%% constant
-task_num = 30;
+% other parameters
 subj_num = 24;
 joint_num = 10;
 obs_num = 240;
@@ -22,7 +24,7 @@ fPCA_subj		= repmat(dummy_struct1,1, subj_num);
 for nsubj = 1:subj_num
 	%compute fpca for current task 
 	disp(['Elaborating subj num ' num2str(nsubj)]);
-	struct_fpc = fpca_subj(nsubj);
+	struct_fpc = fpca_subj(nsubj, ngroup);
 	if nsubj <6
 		fPCA_subj(nsubj).h_joint = struct_fpc.h_joint;
 		fPCA_subj(nsubj).s_joint = [];
