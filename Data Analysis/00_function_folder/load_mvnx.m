@@ -1,6 +1,7 @@
 function mvnx = load_mvnx(filename)
-% mvnx = load_mvnx(filename)    %example:load_mvnx('ULF_in_ADL\Healthies\H01_SoftProTasks\H01_T30_R3')
-% loads a mvnx file
+%load_mvnx loads a .mnvx file into the matlab workspace.
+% 
+% example:load_mvnx('ULF_in_ADL\Healthies\H01_SoftProTasks\H01_T30_R3')
 % filename is name of file (including path)
 % mvnx is result struct containing all data of the mvnx file
 % Xsens Technologies BV 28-05-2015

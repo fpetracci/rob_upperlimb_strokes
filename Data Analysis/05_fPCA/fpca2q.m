@@ -1,5 +1,5 @@
 function [qmat, qmat_separated] = fpca2q(fpca_struct)
-%FPCA2Q reconstruct the first principal components angular joints given
+%FPCA2Q reconstructs the first principal components angular joints given
 %the structure cointaining fpca information.
 %	INPUT is:
 %	.fpca struct - low level structure		

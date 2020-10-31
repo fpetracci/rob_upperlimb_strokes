@@ -5,7 +5,7 @@ function data = q_fpca(q_chosen_dataset, nbase, norder, nfpc)
 
 %% fpca
 
-% tolgo media
+% removing the mean
 [nobs, n] = size(q_chosen_dataset);
 
 for i = 1:nobs
@@ -16,7 +16,7 @@ end
 q_matrix = q_chosen_dataset; 
 
 
-% traspongo
+% trasposing
 q_matrix = q_matrix';
 n = size(q_matrix,1);				% number of samples in the trial
 nobs = size(q_matrix,2);			% number of observations

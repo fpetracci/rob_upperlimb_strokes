@@ -1,5 +1,6 @@
 function [x_new, P_new]= ukf_correct(x_old, P_old, e, S, C)
-	% filter correction, using Kalman
+%ukf_correct computes Unscented Kalman filter correction step, using
+%classic Kalman theory.
 	
 	K = C*(inv(S)); 
     P_delta = - K*S*K';

@@ -1,10 +1,15 @@
 function flag = check_trial(q_trial)
+%CHECK_TRIAL checks if there are angles in the trial that are out of bounds
+	% and returns:
+	% . 0 for a trial that can't be used
+	% . 1 for a trial that can be used
+	
 	flag = check_trial7j(q_trial);
 end
 
 %%
 function flag = check_trial_complete(q_trial)
-%CHECK_TRIAL checks if there are angles in the trial that are out of bounds
+%CHECK_TRIAL_complete checks if there are angles in the trial that are out of bounds
 	% and returns:
 	% . 0 for a trial that can't be used
 	% . 1 for a trial that can be used

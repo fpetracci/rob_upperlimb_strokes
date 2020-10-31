@@ -1,15 +1,6 @@
 function view_marker_with_virt(trial)
-clf
-% %% DA ELIMINARE, SOLO PER TEST
-% % folder
-% oldfolder = cd;
-% cd ../
-% cd 99_folder_mat
-% load('healthy_task.mat');
-% load('strokes_task.mat');
-% cd(oldfolder);
-% clear oldfolder;
-% trial = healthy_task(7).subject(1).left_side_trial(1);
+%view_marker_with_virt function that animates markers and reconstructed 
+% "virtual" marker evolution in time once selected a trial.
 
 %% build marker
 arms = create_arms(trial);
@@ -201,18 +192,17 @@ for i=1:nsamples_calc
 	yMeas_virt(:,i) = fkine_kalman_marker(q_sol(:,i), arm);
 end
 
-
 %% fig par
 
 rate_anim = 1;
-
 figure(1);
+clf
 hold on; grid on;
 View = [30 20];
 Xlabel = 'x Axis [m]';
 Ylabel = 'y Axis [m]';
 Zlabel = 'z Axis [m]';
-Title = 'PaSqualo Animazione';
+Title = 'Marker Animation';
 
 set(gca, 'drawmode', 'fast');
 lighting phong;
@@ -343,7 +333,9 @@ for t = 1:rate_anim:nsamples_calc
 	rot_wrist_now		= rot_wrist_meas(:,:,t);
 	pos_wrist_x_now		= pos_wrist_meas_x(:,1,t);
 	pos_wrist_y_now		= pos_wrist_meas_y(:,1,t);
-	% yMeas = [	pos_L5_meas;		... 1-3
+
+	
+%	yMeas = [	pos_L5_meas;		... 1-3
 %				pos_L5_meas_x;		... 4-6
 %				pos_L5_meas_y;		... 7-9
 %				pos_shoulder_meas;	... 10-12
@@ -509,7 +501,7 @@ end
 
 
 
-
+% end function
 end
 
 function draw_frame(pos, rot)

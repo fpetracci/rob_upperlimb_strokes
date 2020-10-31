@@ -1,5 +1,7 @@
 function yk = fkine_kalman_marker(qk, Arm)
-% This function generates the measurement vector (33x1) for kalman filter.
+%This function generates the measurement vector (33x1) for kalman filter.
+% From angular data it computes virtual marker positions to be used with 
+% joint measured positions inside the filter correction step.
 %
 % The measurement is the forward kinematics of the angular joints.
 % The output vector is ordered as follow:
@@ -46,7 +48,7 @@ Tg6	= arm_fkine(Arm, qk, 6);
 Tg6_trasl_x =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [d_trasl 0 0]'; 0 0 0 1]; % ho riportato Tg6 nella forma correttta orientazione di Tg6, posizione di Tg3
 Tg6_trasl_y =  [Tg6(:,1:3) Tg3(:,4)] * [eye(3) [0 d_trasl 0]'; 0 0 0 1];
 	
-% plot_arrows(Tg6); %% non è proprio esatto perche la posizione è quella di Tg3
+% plot_arrows(Tg6);
 
 tr_shoulder = Tg3(1:3, 4);
 tr_shoulder_x = Tg6_trasl_x(1:3, 4);

@@ -1,7 +1,6 @@
 function par = par_10R(trial)
-%par_10R
-%   this function calculates all parameters needed to build the
-%   Denavit-Hartenberg table of the 10R arm. 
+%par_10R this function calculates all parameters needed to build the
+%Denavit-Hartenberg table of the 10R arm. 
 % example: par =
 % par_10R( healthy_task(1).subject(1).right_side_trial(1) )
 

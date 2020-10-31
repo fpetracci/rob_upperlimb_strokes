@@ -1,10 +1,9 @@
 % Script to create 'dataset' structure. It groups data about every subjects
 % involved and tasks executed. 
 % It has to be executed only once in order to prepare the skeleton of this 
-% structure, that will be fullfilled later using struct_population.m.
+% structure, that will be filled later using struct_population.m.
 
 %filename = 'L:\UZH_data\ULF_in_ADL\Healthies\H01_SoftProTasks\H01_T01_L1.mvnx';
-
 % load a single file to generate the low level of the struct. Dirty trick
 % but it's auto_updating if we want to change the low level struct inside
 % the function struct_dataload

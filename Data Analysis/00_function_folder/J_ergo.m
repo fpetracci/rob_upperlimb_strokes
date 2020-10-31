@@ -1,7 +1,16 @@
 function J = J_ergo(q_trial, W, ts)
-%J_ERGO Summary of this function goes here
-%   Detailed explanation goes here
+%J_ERGO computes the ergonomic functional.
+% Based on the kinematic definition of ergonomy (minimum velocities at 
+% joints level) and given a weighting matrix W, it is defined as the
+% quadratic form for each frame t:
+%		J(t) = q_dot(t)' W q_dot(t)
+% INPUT:
+%  q_trial		angular joint values of the chosen trial
+%  W			weighting matrix inside functional J (optional)
+%  ts			sampling time [s] (optional)
 
+% OUTPUT:
+%  J			column vector containing functional values for each time frame
 
 %% input checks
 
@@ -40,7 +49,6 @@ elseif size(q_trial, 2) == n_joints
 	q_trial = q_trial';	
 end
 q_trial = deg2rad(q_trial);
-
 
 %% ergonomyfunctional definition
 

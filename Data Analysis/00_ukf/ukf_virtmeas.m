@@ -1,6 +1,8 @@
 function [y_virt, S_virt, C] = ukf_virtmeas(x, P, Arm)
- % ukf_virtmeas generates 2n+1 sigma points, it propagates them using
- % state2meas and outputs the mean and the covariance of the new sigma 
+ %ukf_virtmeas computes the virtual measurement y_virt, its covariance and 
+ %state-y_virt crosscorelation, all used by Unscented Kalman filter.
+ % It generates 2n+1 sigma points, it propagates them using
+ % 'state2meas' function and outputs the mean and the covariance of the new sigma 
  % points distribution and the crosscorelation between state and virtual 
  % measurements. 
  %
@@ -17,7 +19,7 @@ function [y_virt, S_virt, C] = ukf_virtmeas(x, P, Arm)
 % generation of sigmapoints and their weights
 [sp, wm, wc] = sigmapoint_gen(x, P);
 
-% propagation of state vector using state2meas
+% propagation of state vector using 'state2meas'
 [~, y_virt, esse, C] = spstate2meas(sp, x, wm, wc, Arm);
 
 % forced simmetry							

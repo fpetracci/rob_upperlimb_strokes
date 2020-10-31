@@ -1,7 +1,7 @@
-% Script to create joint angles structure. It groups data about every 
+% Script to initializes the structures of q_task. It groups data about every 
 % subjects involved and tasks executed. 
 % It has to be executed only once in order to prepare the skeleton of this 
-% structure, that will be fullfilled later using q_population.m.
+% structure, that will be filled later using q_population.m.
 
 % use an empty trial to generate the low level of the struct.
 empty_q = struct('q_grad', [], 'err', []);

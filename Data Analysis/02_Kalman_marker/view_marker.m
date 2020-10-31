@@ -1,16 +1,8 @@
 function view_marker(trial)
-clf
-% %% DA ELIMINARE, SOLO PER TEST
-% % folder
-% oldfolder = cd;
-% cd ../
-% cd 99_folder_mat
-% load('healthy_task.mat');
-% load('strokes_task.mat');
-% cd(oldfolder);
-% clear oldfolder;
-% trial = healthy_task(7).subject(1).left_side_trial(1);
+%view_marker function that animates markers evolution in time once selected
+%a trial.
 
+clf
 %% build marker
 arms = create_arms(trial);
 par = par_10R(trial);
@@ -218,6 +210,7 @@ col_segm	= 'k-';		% colour segment
 dim_mk		= 4;		% marker dimension
 col_mk		= 'bo';		% marker colour
 col_mk_in	= 'b';		% marker colour inside
+
 %% lim axis
 lim_gap = 0.3;
 xmin = min([ ...
@@ -361,9 +354,6 @@ for t = 1:rate_anim:nsamples
 	
 	
 end
-
-
-
 
 end
 

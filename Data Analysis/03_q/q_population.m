@@ -1,6 +1,6 @@
 % Script to populate q_task structure. 
 % Here, for every non empty trial we recall q_trial2q() function and obtain
-% so EKF joint angles estimates. We then insert those values and other informations
+% so UKF joint angles estimates. We then insert those values and other informations
 % inside the struct.
 
 for i = 1:nTasks

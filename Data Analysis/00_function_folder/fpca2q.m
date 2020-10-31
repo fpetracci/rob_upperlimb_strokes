@@ -1,6 +1,6 @@
 function [qmat, qmat_separated] = fpca2q(fpca_struct)
-%FPCA2Q reconstruct the first principal components angular joints given
-%the structure cointaining fpca information.
+%FPCA2Q reconstructs the angular joints signal with the first fPCs 
+%given the structure cointaining fpca information.
 %	INPUT is:
 %	.fpca struct - low level structure		
 % 	 val_pc: [nsamples×nfpc double]
@@ -48,15 +48,6 @@ for i = 1:(nfpc+1)
 		
 	end
 end
-% 
-% %
-% qmat_separated = zeros(n, nobs, nfpc + 1);
-% for i = 1:(nfpc+1)
-% 	for j = 1:n
-% 		q_mat(j,:,i) = (val_pcpc(j,[1:i]) .* comp(:,[1:i]))';
-% 	end
-% end
-% 
 
 
 end

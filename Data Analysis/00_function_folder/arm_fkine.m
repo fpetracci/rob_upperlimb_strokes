@@ -1,5 +1,9 @@
-function T = arm_fkine(Arm, q, n) 
-% n number of joint to calculate the desidered EE rotation matrix and traslation 
+function T = arm_fkine(Arm, q, n)
+%arm_fkine computes the forward kinematic of given Arm and angle joints.
+% The output is the homogenous matrix T given at the n-th joint.
+
+%%
+% n number of joints to calculate the desidered EE rotation matrix and traslation 
 % for example: 10 for the hand, 
 % 			    7 for the forearm(elbow), 
 % 				6 for the upperarm(shoulder)

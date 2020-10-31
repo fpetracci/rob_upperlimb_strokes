@@ -1,5 +1,5 @@
 function eul = correct2pi_err(eul)
-%Forse è più comodo fare un for che aggiusto un vettore in ingresso
+%correct2pi_err Removes the pi discontinuity of input angles
 
 angle_rad = pi;
 angle_grad = 180;

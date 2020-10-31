@@ -1,8 +1,9 @@
+%script_filter_double script that executes EKF and used in order to obtain
+%reasonable filter parameters by a 'trial & error' procedure.
+
 %% init
 clear; clc;
 
-%trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
-%trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 trial = struct_dataload('H01_T07_L1');
 arms = create_arms(trial);
 par = par_10R(trial);
@@ -193,7 +194,7 @@ PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
 % oriz filter state and cov init
 xCorrected_oriz = zeros(arm.n, 1, t_tot);
 PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
-%% PROVE PARAMETRI
+%% parameters trials
 
 a_cov_m = 5*pi/180;		% covariance of measured angles
 p_cov_m = 0.005;		% covariance of measured positions

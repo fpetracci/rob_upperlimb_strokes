@@ -1,6 +1,6 @@
 function data = q_trial2q(trial)
-%q_trial2q given a specific trial, computes and allocates 10R joint
-%angles.
+%q_trial2q given a specific trial, computes (estimates) and allocates 
+%10R joint angles.
 %   This function uses an UKF in order to get joint angles' estimate of a
 %   10R serial robot representing a human torso-arm. This function relies
 %   on functions create_arms() and par_10R().

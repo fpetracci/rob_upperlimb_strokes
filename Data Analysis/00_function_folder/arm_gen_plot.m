@@ -1,6 +1,6 @@
 function arm_gen_plot(q, rep, nfig)
 %ARM_GEN_PLOT animates a general right arm given q. The parameters of the 
-%	arm animated are of a chosen at priori trial and not editable.
+%animated arm come from a chosen trial and are not editable.
 %	INPUT:
 %			q		- angle joint. can be either njoint x ntime or ntime x
 %						njoint.

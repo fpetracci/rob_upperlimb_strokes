@@ -1,5 +1,5 @@
 function data = struct_dataload(filename)
-% This function loads the relevant data inside the file .mvnx specified into "data".
+%struct_dataload loads the relevant data from the file .mvnx specified.
 % filename should be a char with the file path of the chosen .mvnx file.
 % Example: data = struct_DataLoad('folder\P19_T07_L3.mvnx')
 

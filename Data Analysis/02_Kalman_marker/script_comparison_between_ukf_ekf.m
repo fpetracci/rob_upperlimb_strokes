@@ -1,3 +1,6 @@
+%script_comparison_between_ukf_ekf executes EKF and UKF for a selected
+%trial and compares their efficiency.
+
 %% init
 clear; clc;
 load('healthy_task.mat');
@@ -8,7 +11,6 @@ clear healthy_task strokes_task
 % % %trial = struct_dataload('P09_T23_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 % % trial = struct_dataload('H03_T11_L1'); % barbatrucco finché non abbiamo la struttura per bene... PEPOO LAVORA
 % % %trial = struct_dataload('H01_T07_L1');
-
 
 arms = create_arms(trial);
 par = par_10R(trial);
@@ -198,10 +200,10 @@ PCorrected_vert = zeros(arm.n, arm.n, t_tot, k_max);
 % oriz filter state and cov init
 xCorrected_oriz = zeros(arm.n, 1, t_tot);
 PCorrected_oriz = zeros(arm.n, arm.n, t_tot);
-%% PROVE PARAMETRI
+%% parameters trials
 
 p_cov_m			= 0.001;	% covariance of measured positions [m]
-p_cov_marker	= 0.001;		% covariance of marker positions [m]
+p_cov_marker	= 0.001;	% covariance of marker positions [m]
 % covariance measures' matrix calculation
 
 cov_vector_meas = [	p_cov_m			p_cov_m			p_cov_m ...			% L5
@@ -390,7 +392,7 @@ y_real = reshape(yMeas,size(yMeas,1),size(yMeas,3),size(yMeas,2));
 error_UKF = y_real(:,1:size(yMeas_virt_UKF,2)) - yMeas_virt_UKF;
 %plot(error')
 
-%% Analisi
+%% Analysis
 
 max_norm_er_EKF = zeros(size(error_EKF,1),1);
 max_norm_er_UKF = zeros(size(error_UKF,1),1);
@@ -421,7 +423,6 @@ end
 % relative errors 
 er_rel_EKF = max_norm_er_EKF./exc;
 er_rel_UKF = max_norm_er_UKF./exc;
-
 %% SYNC PLOT
 figure(1)
 	subplot(1,2,1)
@@ -438,7 +439,6 @@ for i=1:5:floor(t_tot)
 	arm.plot(q_rad_UKF(:,i)','floorlevel', 0)
 
 end
-
 %% PLOTS
 arm.plot(q_rad_EKF', 'floorlevel', 0)
 arm.plot(q_rad_UKF', 'floorlevel', 0)

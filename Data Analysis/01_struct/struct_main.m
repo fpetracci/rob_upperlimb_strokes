@@ -5,14 +5,14 @@
 %% struct_population.m	- searches and read all mvnx files with the proper name and populates the structures of strokes_data and healthy_data with the relevant data
 
 %% comment %%
-% Given the files.mvnx provided by UZH (link), we rearranged all trials in
+% Given the files.mvnx provided by UZH, we rearranged all trials in
 % two structures: one for healthy subjects and one for post-stroke
 % subjects. 
 % Note that some of those files are corrupted, so we decided to exclude
 % them entirely and creating their empty spaces inside the structures, in
 % order to fill them once valid data are obtained. In other words, to run
-% this script you have to delete _____, so in the corresponding space in
-% the structures there will be no data.
+% this script you have to delete P28_SoftProTasks, so in the corresponding 
+% space in the structures there will be no data.
 
 % Structures' tree:
 %	healthy/strokes_task(1->30).

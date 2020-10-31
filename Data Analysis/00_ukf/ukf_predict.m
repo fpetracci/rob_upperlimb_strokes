@@ -1,7 +1,8 @@
 function [x_new, P_new] = ukf_predict(x_old, P_old)
- % ukf_predict generates 2n+1 sigma points, it propagates them using
- % state_update and outputs the mean and the covariance of the new sigma 
- % points distribution. 
+ %ukf_predict computes Unscented Kalman filter prediction step.
+ % It generates 2n+1 sigma points, it propagates them using
+ % 'state_update' function and outputs the mean and the covariance of the  
+ % new sigma points distribution. 
  %
  % Input		
  % x_old		old state vector nx1
@@ -14,7 +15,7 @@ function [x_new, P_new] = ukf_predict(x_old, P_old)
  %generation of sigma points and weights
 [sp, wm, wc] = sigmapoint_gen(x_old, P_old);
 
-%propagation using state update function
+%propagation using 'state_update' function
 [x_new, P] = sigmapoint_propagate(sp, wm, wc);
 
 % forced simmetry

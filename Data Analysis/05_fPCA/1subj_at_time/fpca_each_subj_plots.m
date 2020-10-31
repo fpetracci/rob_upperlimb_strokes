@@ -1,5 +1,6 @@
 %% fpca calculation for all subj, one at time
 
+
 %% intro
 clear all; close all; clc;
 tic
