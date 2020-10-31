@@ -1,5 +1,5 @@
-function data = rpca_stacker_all_subj_d_nd(ngroup)
-%RPCA_STACKER_HDND stacks all time warped trials of chosen group of task in 
+function data = rpca_stacker_all_subj_d_nd_7r(ngroup)
+%RPCA_STACKER_HDND_7R stacks all time warped trials of chosen group of task in 
 % three different group Healthy, Stroke and LessAffected.
 % input:
 %		- nsubj: number between 1 and 24,1 to 5 healthy, 6 to 24 stroke
@@ -21,7 +21,7 @@ q_matrix_la_nd = [];
 for nsubj = 1:24
 	
 	%nsubj = [1:20, 22:24]
-	[q_h, q_a_d, q_a_nd, q_la_d, q_la_nd] = stack1subj(nsubj, ngroup);
+	[q_h, q_a_d, q_a_nd, q_la_d, q_la_nd] = stack1subj_7r(nsubj, ngroup);
 	q_matrix_h		= cat(1,	q_matrix_h,		q_h);
 	q_matrix_a_d	= cat(1,	q_matrix_a_d,	q_a_d);
 	q_matrix_a_nd	= cat(1,	q_matrix_a_nd,	q_a_nd);
@@ -42,17 +42,13 @@ data.q_matrix_la_nd		= q_matrix_la_nd;
 end
 
 %% ------------------------------------------------------------------------
-function [q_h, q_a_d, q_a_nd, q_la_d, q_la_nd] = stack1subj(nsubj, ngroup)
+function [q_h, q_a_d, q_a_nd, q_la_d, q_la_nd] = stack1subj_7r(nsubj, ngroup)
 %% intro
 % load
-% oldfolder = cd;
-% cd ../
-% cd ../
-% cd 99_folder_mat
+
 load('q_task_warped.mat');
-% cd(oldfolder);
-% clear oldfolder;
-[njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);
+
+[njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad(4:10, :));
 
 if ngroup == 1
 	% tasks int
@@ -152,7 +148,7 @@ for ntask = task_first:task_last
 	for ntrial = 1:6
 		if ~isempty(q_task_warp(ntask).subject(nsubj).trial(ntrial).q_grad)
 			% load q trial into a tmp variable
-			q_trial = q_task_warp(ntask).subject(nsubj).trial(ntrial).q_grad;
+			q_trial = q_task_warp(ntask).subject(nsubj).trial(ntrial).q_grad(4:10,:);
 			
 			if ~check_trial(q_task_warp(ntask).subject(nsubj).trial(ntrial).q_grad)
 				% do nothing = skiptrial
@@ -161,7 +157,7 @@ for ntask = task_first:task_last
 				
 				% healthy arm executed the trial
 				h_counter = h_counter + 1 ; %update current 
-				for dof = 1:10 % load each joint
+				for dof = 1:7 % load each joint from 4 to 10 (1:7)
 					q_1dof	= q_trial(dof,:);			
 					q_h(h_counter, :, dof) = q_1dof; 
 					% load q_trial in a single row
@@ -173,7 +169,7 @@ for ntask = task_first:task_last
 				if subj_Ad(nsubj) 
 					% A d
 					a_d_counter = a_d_counter + 1 ; %update current 
-					for dof = 1:10 % load each joint
+					for dof = 1:7 % load each joint from 4 to 10 (1:7)
 						q_1dof	= q_trial(dof,:);			
 						q_a_d(a_d_counter, :, dof) = q_1dof;
 						% load q_trial in a single row
@@ -182,7 +178,7 @@ for ntask = task_first:task_last
 				elseif ~subj_Ad(nsubj)
 					% A nd
 					a_nd_counter = a_nd_counter + 1 ; %update current 
-					for dof = 1:10 % load each joint
+					for dof = 1:7 % load each joint from 4 to 10 (1:7)
 						q_1dof	= q_trial(dof,:);			
 						q_a_nd(a_nd_counter, :, dof) = q_1dof;
 						% load q_trial in a single row
@@ -196,7 +192,7 @@ for ntask = task_first:task_last
 				if subj_Ad(nsubj)
 					% la d
 					la_d_counter = la_d_counter + 1 ; %update current 
-					for dof = 1:10 % load each joint
+					for dof = 1:7 % load each joint from 4 to 10 (1:7)
 						q_1dof	= q_trial(dof,:);			
 						q_la_d(la_d_counter, :, dof) = q_1dof;
 						% load q_trial in a single row
@@ -204,7 +200,7 @@ for ntask = task_first:task_last
 				elseif ~subj_Ad(nsubj)
 					% la nd
 					la_nd_counter = la_nd_counter + 1 ; %update current 
-					for dof = 1:10 % load each joint
+					for dof = 1:7 % load each joint from 4 to 10 (1:7)
 						q_1dof	= q_trial(dof,:);			
 						q_la_nd(la_nd_counter, :, dof) = q_1dof;
 						% load q_trial in a single row

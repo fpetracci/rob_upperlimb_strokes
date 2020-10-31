@@ -1,6 +1,6 @@
-function data = rpca_hsla(ngroup)
-%RPCA computes rPCs on dataset divided into healthy, stroke and less
-%affected groups
+function data = rpca_hsla_7r(ngroup)
+%RPCA_HSLA_7R computes rPCs on dataset divided into healthy, stroke and less
+%affected groups in 7R arm model
 
 %% Intro and stacking
 % brief description of PCA
@@ -17,7 +17,7 @@ function data = rpca_hsla(ngroup)
 %	[coeffi, scorei, ~, ~, explainedi, ~] = pca(Xi)
 
 
-stacked_struct = rpca_stacker_hsla(ngroup);
+stacked_struct = rpca_stacker_hsla_7r(ngroup);
 
 
 [ntrial_h, ntot, njoints] = size(stacked_struct.q_matrix_h);
@@ -27,8 +27,8 @@ stacked_struct = rpca_stacker_hsla(ngroup);
 ntrial_s	= size(stacked_struct.q_matrix_s,	1); % number of valid stroke trial
 ntrial_la	= size(stacked_struct.q_matrix_la,	1); % number of valid lessaffected trial
 
-%preallocation
-npc = 10;
+%preallocation (prova con tante fpc quante sono le variabili
+npc = 7;
 
 %healthy
 var_expl_h	= zeros(npc, ntot);

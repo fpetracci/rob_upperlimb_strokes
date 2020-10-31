@@ -1,7 +1,6 @@
-function data = rpca_all_subj_d_nd(ngroup)
-%RPCA_HDND computes rPCs on dataset divided into healthy, stroke dominant and non dominant affected and less
-%affected groups
-
+function data = rpca_all_subj_d_nd_7r(ngroup)
+%RPCA_HDND7R computes rPCs on dataset divided into healthy, stroke dominant and non dominant affected and less
+%affected groups in 7R arm model
 %% Intro and stacking
 % brief description of PCA
 % Xi (nobs x ndof) one for each time sample i
@@ -17,7 +16,7 @@ function data = rpca_all_subj_d_nd(ngroup)
 %	[coeffi, scorei, ~, ~, explainedi, ~] = pca(Xi)
 
 
-stacked_struct = rpca_stacker_all_subj_d_nd(ngroup);
+stacked_struct = rpca_stacker_all_subj_d_nd_7r(ngroup);
 
 
 [ntrial_h, ntot, njoints] = size(stacked_struct.q_matrix_h);
@@ -32,7 +31,7 @@ ntrial_la_nd	= size(stacked_struct.q_matrix_la_nd,	1); % number of valid la nd t
 
 
 %preallocation
-npc = 10;
+npc = 7;
 
 %healthy
 var_expl_h	= zeros(npc, ntot);
