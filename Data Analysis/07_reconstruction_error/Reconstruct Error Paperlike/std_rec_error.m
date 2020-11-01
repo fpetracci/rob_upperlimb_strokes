@@ -1,5 +1,6 @@
 function data = std_rec_error
-% mean variance for H, LA and S, if no input
+%std_rec_error computes the mean and standard deviation for subjects groups
+% It outputs a data structure with mean variance for H, LA and S
 
 % here we want to summarize results of the entire data set into a sigle
 % data information. We do that by computing mean and variance (std) of the

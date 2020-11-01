@@ -1,4 +1,6 @@
- clear all
+%computes reconstruction error of firsts fPCs of healthy subjects
+%(3R, 7R, 10R)
+clear all
 if exist('q_stacked_subj') ~= 1
 	if exist('loader_subj_mat.mat') == 2
 		load('loader_subj_mat.mat');

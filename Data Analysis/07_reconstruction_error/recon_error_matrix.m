@@ -1,5 +1,5 @@
-% this script calculates the needed recon error matrix and saves it in a
-% .mat file
+% this script calculates the needed reconstruction error matrix and saves 
+% it in a .mat file
 clear all; clc; close;
 load('loader_subj_mat.mat');
 

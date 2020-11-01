@@ -1,4 +1,6 @@
- %CALCULATE DISSIMILARITY INDEX 
+ %computes reconstruction error of firsts fPCs of stroke subjects about 
+ %affected and less affected side (3R, 7R, 10R).
+ 
  clear all
 if exist('q_stacked_subj') ~= 1
 	if exist('loader_subj_mat.mat') == 2

@@ -43,4 +43,4 @@ for nsubj = 1:subj_num
 		q_stacked_subj(nsubj).q_matrix_la = struct_tmp.q_matrix_la;
 	end	
 end
-
+%save('loader_subj_mat.mat')

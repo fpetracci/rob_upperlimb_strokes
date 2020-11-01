@@ -1,8 +1,10 @@
 %% analysis of fpca_subj struct
+%runs a simple statisticanalysis between the explained variances among 
+%healthy, stroke and less affected
 
 check = exist("fPCA_subj");
 if check ~= 1 % return 1 if a variable is in the workspace
-	fpca_subj_RUNME
+	loader_subj
 end
 %% all healthy, all stroke, all less affected
 % healthy

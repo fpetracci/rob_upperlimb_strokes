@@ -43,22 +43,115 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	view_marker_with_virt 				- function that animates markers and reconstructed "virtual" marker evolution in time once selected a trial.
 
 03_q
-	q_main 		- runs the needed scripts to generate q_task.mat, specifically: q_creation and q_population.
-	q_trial2q 	- implements UKF executions and joint angles estimations on a single trial dataset given as input.
-    q_creation 	- script to initializes the structures of q_task. It groups data about every subjects involved and tasks executed. 
-	q_population- populates q_task struct with estimated joint angles values from q_trial2q.m and other informations.
+	q_main 			- runs the needed scripts to generate q_task.mat, specifically: q_creation and q_population.
+	q_trial2q 		- implements UKF executions and joint angles estimations on a single trial dataset given as input.
+    q_creation 		- script to initializes the structures of q_task. It groups data about every subjects involved and tasks executed. 
+	q_population	- populates q_task struct with estimated joint angles values from q_trial2q.m and other informations.
 
 04_time_warp
-
+	(Andre pensaci tuuuuuuu)
+	
 05_fPCA
+	1subj_at_time - folder in which we analyze the dataset one subject at a time
+		fpca_each_subj_plots 			- analysis and plot each subject individually
+		fpca_stacker_subj				- trial stacker 1 subj
+		fpca_subj						- fpca computation
+		loader_subj						- load all subjects' fpca results inside a struct
+	
+	hdnd - folder in which we analyze the dataset divided into: healthy, stroke dominant (A, LA), stroke non dominant (A, LA)
+		fpca_cumsum_hdnd_analysis		- analysis and plots each group, also with cumulative sum explained variance
+		fpca_hdnd						- fpca computation
+		fpca_stacker_hdnd				- trial stacker
+		fpca_var_expl_pareto_like_hdnd	- plots "like pareto" for each group
+	
+	hsla - folder in which we analyze the dataset divided into: healthy, stroke, less affected
+		fpca_cumsum_hsla_analysis 		- analysis and plots each group, also with cumulative sum explained variance
+		fpca_hsla						- fpca computation
+		fpca_stacker_hsla				- trial stacker
+		fpca_var_expl_pareto_like_hsla	- plots "like pareto" for each group
+	
+	task - folder in which we analyze the dataset one task at a time
+		fpca_stacker_task				- trial stacker
+		fpca_struct_task				- load all tasks' fpca results inside a struct
+		fpca_task						- fpca computation
+		
+	fpca2q			- reconstructs the first principal components angular joints given the structure cointaining fpca information.
+	q_fpca			- computes the first nfpc functional principal components of the given angular joint for the chosen observations. [q] = degree
 
 06_statistical_analysis
-
+	statistic_analysis_subj 	- runs a simple statisticanalysis between the explained variances among healthy, stroke and less affected
+	var_def_statistic_analysis	- defines some interesting tools to analyze explained variance patterns
+	statistic_analysis			- statistic analysis of all variables defined in var_def_statistic_analysis
+	
 07_reconstruction_error
+	recon_error_matrix			- computation of reconstruction error using only firsts fPCs
+	analysis_mean_subjects		- statistical analysis of the reconstruction error for each subjects' groups (h, la, s) by applying Wilcoxon ranksum test.
+
+	Reconstruct Error Paperlike - folder containing alk the relevant scripts used for data analysis and groups comparisons.
+		RE_affected_nonaffected_calc	- computes reconstruction error of firsts fPCs of stroke subjects about affected and less affected side (3R, 7R, 10R).
+		RE_analysis_PLOTS				- reconstruct error plots, using 3R, 7R, 10R model, for each subject(3R, 7R, 10R) and among all the groups taken into account(dominant/nondominant & stroke/less affected)
+		RE_healthy_calc					- computes reconstruction error of firsts fPCs of healthy subjects (3R, 7R, 10R).
+		reconstruct_plot				- plots the reconstruction error associated with subject number given as input
+		RE_SELECTED_STROKE_POP			- statistical analysis (p-values) of the reconstruction error (on 3DoFs, 7DoFs and 10DoFs) for a selected subset of subjects' groups (h, la, s) by applying Wilcoxon ranksum test
+		RE_stat_analysis				- computes all relevant p-values between subjects groups for the 3DoFs, 7DoFs and 10DoFs models. These results are also reported in an excel file 'recon_error_stat.xlsx'.
+		std_rec_error					- computes the mean and standard deviation for subjects groups. 
 
 08_rPCA
+
 
 09_subspace_angle
 
 90_ergonomy
-	runme_ErgonomyFunctionalStudy -script to check ergonomy functional values over time and mean once specified trial and subjects (an healthy and a stroke).
+	runme_ErgonomyFunctionalStudy - script to check ergonomy functional values over time and mean once specified trial and subjects (an healthy and a stroke).
+
+99_folder
+		healthy_task		- Generated in 'struct_population'
+		strokes_task		- Generated in 'struct_population'
+		these structures are arranged in this way:
+					%		Structures' tree:
+					%	healthy/strokes_task(1->30).
+					%			subject(1->n_subjects).
+					%					left/right_trial(1->n_trials).
+					% 							L5.
+					% 								quat
+					% 								pos
+					% 							Shoulder_L/R.
+					% 								quat
+					% 								pos
+					% 							Upperarm_L/R.
+					% 								...
+					% 							Forearm_L/R.
+					% 								...
+					% 							Hand_L/R.
+					% 								...
+					% 							stroke_side		% the side damaged by stroke: -1 = healthy, 0 = left, 1 = right.
+					% 							stroke_task		% boolean, true if the task is executed using the damaged side, false otherwise.
+					% 							task_side		% stores the side which executes the task: 0 = left, 1 = right.
+
+		q_task				-	Generated in 'q_main'. Joint angle signal. 
+		q_task_warped 		-	Generated in 'warpa_task'. Time warped joint angle signal.
+		q_task_warped_dot 	-	Generated in ' ... '. Joints velocities. % ANDREA INSERISCI
+		q_task structures are arranged in this way:
+					% Structures' tree:
+					%	q_task(1->30).
+					%			subject(1->nSubjects_healthy,nSubjects_healthy+1->n_subjects_healthy+n_subjects_strokes).
+					%					trial(1->n_trials, n_trials+1->2*n_trials).
+					% 							q_grad			% results of UKF estimate of joint angles for every timestep (grad)
+					% 							err				% error between measured positions and reconstructed ones using estimated joint angles
+					% 							stroke_task		% boolean, true if the task is executed using the damaged side, false otherwise.
+					% 							stroke_side		% the side damaged by stroke: -1 = healthy, 0 = left, 1 = right.
+					% 			
+
+		
+		E3			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 3DoFs model for each stroke subjects.
+		E7			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 7DoFs model for each stroke subjects.
+		E10			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 10DoFs model for each stroke subjects.
+		E_h_3		- Generated in 'RE_healthy_calc'. Contains reconstruction error about firsts fPCs and 3DoFs model for each healthy subjects.
+		E_h_mean3	- Generated in 'RE_healthy_calc'. Contains means of E_h_3 among subjects.
+		E_h_7		- Generated in 'RE_healthy_calc'. Contains reconstruction error about firsts fPCs and 7DoFs model for each healthy subjects.
+		E_h_mean7	- Generated in 'RE_healthy_calc'. Contains means of E_h_7 among subjects.
+		E_h_10		- Generated in 'RE_healthy_calc'. Contains reconstruction error about firsts fPCs and 10DoFs model for each healthy subjects.
+		E_h_mean10 	- Generated in 'RE_healthy_calc'. Contains means of E_h_10 among subjects.
+		mat3_h		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each healthy subj
+		mat3_la		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each less affected side of a stroke subj 
+		mat3_s		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each affected side of a stroke subj 

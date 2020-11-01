@@ -1,3 +1,6 @@
+%Statistical analysis of the reconstruction error for each subjects' groups
+%(h, la, s) by applying Wilcoxon ranksum test.
+
 %% Load data
 clear;
 % desired matrix cointaing the relevant info for:

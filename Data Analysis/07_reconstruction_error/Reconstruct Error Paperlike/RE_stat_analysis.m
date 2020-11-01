@@ -1,3 +1,7 @@
+%computes all relevant p-values between subjects groups for the 3DoFs, 
+%7DoFs and 10DoFs models. These results are also reported in an excel file 
+%'recon_error_stat.xlsx'.
+
 %% load
 
 load('E3.mat', 'E_subj3')

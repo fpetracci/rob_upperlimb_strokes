@@ -1,3 +1,6 @@
+% this script runs the statistic analysis of all variables defined in 
+% var_def_statistic_analysis
+
 %% generate all necessary vectors and init of anovan
 var_def_statistic_analysis;
 

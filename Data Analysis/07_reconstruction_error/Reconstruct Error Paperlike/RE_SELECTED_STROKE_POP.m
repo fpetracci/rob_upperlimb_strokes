@@ -1,3 +1,7 @@
+%statistical analysis (p-values) of the reconstruction error (on 3DoFs, 
+%7DoFs and 10DoFs) for a selected subset of subjects' groups (h, la, s) by 
+%applying Wilcoxon ranksum test
+
 %% load
 
 clear; clc;

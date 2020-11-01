@@ -2,7 +2,7 @@
 % check if it's necessasary import data
 check = exist("q_stacked_task");
 if check ~= 1 % return 1 if a variable is in the workspace
-	fpca_RUNME
+	loader_subj
 end
 
 %% var vectors

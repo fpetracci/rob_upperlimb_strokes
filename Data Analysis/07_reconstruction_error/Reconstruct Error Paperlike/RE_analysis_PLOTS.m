@@ -1,5 +1,9 @@
-%% reconstruct error plots for each subject
-close all
+% reconstruct error plots, using 3R, 7R, 10R model, for each subject(3R, 7R, 10R)
+% and among all the groups taken into account(dominant/nondominant &
+% stroke/less affected)
+
+%% each subj
+close all 
 for i = 1:24
 	reconstruct_plot(i)
 end
