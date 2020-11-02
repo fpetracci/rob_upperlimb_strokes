@@ -1,6 +1,8 @@
 function [mean_posture] = mean_post(ngroup, flag_mean)
-%MEAN_POST Summary of this function goes here
-%   Detailed explanation goes here
+%MEAN_POST computes the mean posture of rPCs.
+% Input:
+%		ngroup		tasks' group number (1,2,3,'all')
+%		flag_mean	1 for doing the mean, 0 for PCA of the means
 %% Load
 struct_rPCA = rpca_all_subj(ngroup);
 

@@ -1,5 +1,5 @@
 function data = rpca_subj(nsubj, ngroup)
-%RPCA Summary of this function goes here
+%RPCA_subj computes the rPCA of a given subject and a given group of tasks
 
 %% Intro and stacking
 % brief description of PCA

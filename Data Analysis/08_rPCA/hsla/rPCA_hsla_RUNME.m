@@ -1,3 +1,6 @@
+%This scripts plots all explained variances of the group taken into account
+%(healthy, stroke, less affected)
+
 %% intro
 clear all; close all; clc;
 

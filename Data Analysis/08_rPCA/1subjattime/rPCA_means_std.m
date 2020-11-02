@@ -1,6 +1,13 @@
-%% intro
+%This script computes and plots means and standard deviations among h-s-la
+%and h-d-nd of explained variances.
+
+%% intro, sel_rPCs array in which we can specify which rPCs to look at
 
 rPCA_all_subj_RUNME;
+
+%insert into sel_rPCs which principal component you want to sum up and
+%evaluate. i.e. [1] or [1 2]
+sel_rPCs = [1];
 
 %% dominant-non dominant
 %subj_Ad: -1 for healthy, 1 for Ad, 0 for And
@@ -19,9 +26,7 @@ and_rPC = [];
 land_rPC = [];
 
 %stacking
-%insert into sel_rPCs which principal component you want to sum up and
-%evaluate. i.e. [1] or [1 2]
-sel_rPCs = [1];
+
 for i = 1:length(data_all)
 	if isfield(data_all(i).h, 'var_expl')
 		h_rPC = cat(1, h_rPC, sum(data_all(i).h.var_expl(sel_rPCs,:), 1));

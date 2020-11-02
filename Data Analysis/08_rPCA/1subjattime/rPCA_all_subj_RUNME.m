@@ -1,3 +1,5 @@
+%This script plots all explained variances of single subject rPCs
+
 %% intro
 clear all; close all; clc;
 

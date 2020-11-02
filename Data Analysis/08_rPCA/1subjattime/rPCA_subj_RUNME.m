@@ -1,3 +1,6 @@
+% This script plots explained variance and spider-plot rPCA for a given 
+% subject
+
 %% intro
 clear all; close all; clc;
 

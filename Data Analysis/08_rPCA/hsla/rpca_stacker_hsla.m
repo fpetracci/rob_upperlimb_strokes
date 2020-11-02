@@ -2,8 +2,6 @@ function data = rpca_stacker_hsla(ngroup)
 %RPCA_STACKER_HSLA stacks all time warped trials of chosen group of task in 
 % three different groups: Healthy, Stroke and LessAffected.
 % input:
-%		- nsubj: number between 1 and 24,1 to 5 healthy, 6 to 24 stroke
-%		patients.
 %		- ngroup: number between 1, 2 and 3. it selects which group of task
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm)
 
