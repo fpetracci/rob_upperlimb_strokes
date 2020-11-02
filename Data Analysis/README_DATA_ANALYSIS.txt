@@ -1,11 +1,6 @@
-FARE FUNZIONE CHE METTE NEL PATH DI MATLAB LE COSE CHE CI INTERESSANO:
-	00_function_folder
-	00_ukf
-	03_q
-	08_rPCA
-
-
 Folders, Function and Scripts descriptions.
+Before running any scripts or function, be sure to run 'startup_data_analysis'
+
 Folders named 'old' contain old function and or scripts that are no longer useful or are not updated.
 
 00_function_folder
