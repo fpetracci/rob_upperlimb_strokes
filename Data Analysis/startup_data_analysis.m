@@ -10,14 +10,14 @@ end
 
 script_path = fileparts( mfilename('fullpath') );
 
-addpath(fullfile(script_path, '00_function_folder'));
-addpath(fullfile(script_path, '00_ukf'));
-addpath(fullfile(script_path, '02_Kalman_marker'));
-addpath(fullfile(script_path, '03_q'));
-addpath(fullfile(script_path, '05_fPCA'));
-addpath(fullfile(script_path, '08_rPCA'));
-addpath(fullfile(script_path, '09_subspace_angle'));
-addpath(fullfile(script_path, '99_folder_mat'));
+addpath(genpath(fullfile(script_path, '00_function_folder')));
+addpath(genpath(fullfile(script_path, '00_ukf')));
+addpath(genpath(fullfile(script_path, '02_Kalman_marker')));
+addpath(genpath(fullfile(script_path, '03_q')));
+addpath(genpath(fullfile(script_path, '05_fPCA')));
+addpath(genpath(fullfile(script_path, '08_rPCA')));
+addpath(genpath(fullfile(script_path, '09_subspace_angle')));
+addpath(genpath(fullfile(script_path, '99_folder_mat')));
 
 
 clear script_path
