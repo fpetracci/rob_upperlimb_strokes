@@ -2,8 +2,9 @@
 % it in a .mat file
 clear all; clc; close;
 %choose if you want to load angle or angle velocity
-%% Angles
-load('loader_subj_mat.mat');
+%% Angles velocity
+load('loader_subj_dot_mat.mat');
+q_task_warp = q_task_warp_dot;
 %% intro
 [njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);% number of joints andtime length of each signal
 nfpc		= 10;	% number of fpcs used
@@ -55,7 +56,7 @@ tic
 	
  end
  toc
- save('mat3_h', 'mat3_h');
+ save('mat3_h_dot', 'mat3_h');
  %% recon calculation LESSAFFECTED
  tic
 
@@ -87,7 +88,7 @@ tic
 	end
  end
  toc
-  save('mat3_la', 'mat3_la');
+  save('mat3_la_dot', 'mat3_la');
 %% recon calculation AFFECTED
  tic
 
@@ -119,4 +120,4 @@ tic
 	end
  end
  toc
- save('mat3_s', 'mat3_s');
+ save('mat3_s_dot', 'mat3_s');

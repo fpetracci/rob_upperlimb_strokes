@@ -1,0 +1,1082 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.2)  9 MAY 2020 21:52
+entering extended mode
+**./main.tex
+(main.tex
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-04-06> (structure.tex
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\arti
+cle.cls"
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size
+12.clo"
+File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\b
+abel.sty"
+Package: babel 2020/03/22 3.42 The Babel package
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\s
+witch.def"
+File: switch.def 2020/03/22 3.42 Babel switching mechanism
+)
+*************************************
+* Local config file bblopts.cfg used
+*
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/arabi\bbl
+opts.cfg"
+File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
+ babel
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/babel-ita
+lian\italian.ldf"
+Language: italian 2019/11/16 v.1.4.03 Italian support for the babel system
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\b
+abel.def"
+File: babel.def 2020/03/22 3.42 Babel common definitions
+\babel@savecnt=\count175
+\U@D=\dimen135
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\t
+xtbabel.def")
+\bbl@readstream=\read2
+\bbl@dirlevel=\count176
+)
+\it@lettering=\count177
+\it@doublequoteactive=\count178
+\it@ISOcompliance=\count179
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/etoolbox\
+etoolbox.sty"
+Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count180
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\
+csquotes.sty"
+Package: csquotes 2019-12-06 v5.2j context-sensitive quotations (JAW)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\
+keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+\csq@reset=\count181
+\csq@gtype=\count182
+\csq@glevel=\count183
+\csq@qlevel=\count184
+\csq@maxlvl=\count185
+\csq@tshold=\count186
+\csq@ltx@everypar=\toks16
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\
+csquotes.def"
+File: csquotes.def 2019-12-06 v5.2j csquotes generic definitions (JAW)
+)
+Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
+Package csquotes Info: ... configuration file loaded successfully.
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\
+csquotes.cfg"
+File: csquotes.cfg 
+)
+Package csquotes Info: Enabling multilingual quotes.
+Package csquotes Info: Redefining alias 'english' -> 'english/american'.
+)
+Package csquotes Info: Allocating character ".
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyphenat\
+hyphenat.sty"
+Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
+\langwohyphens=\language78
+LaTeX Info: Redefining \_ on input line 43.
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/placeins\
+placeins.sty"
+Package: placeins 2005/04/18  v 2.2
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\
+graphicx.sty"
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\
+graphics.sty"
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\
+trig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-
+cfg\graphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-
+def\pdftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen136
+\Gin@req@width=\dimen137
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/subfig\su
+bfig.sty"
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\c
+aption.sty"
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\c
+aption3.sty"
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
+\captionmargin=\dimen138
+\captionmargin@=\dimen139
+\captionwidth=\dimen140
+\caption@tempdima=\dimen141
+\caption@indent=\dimen142
+\caption@parindent=\dimen143
+\caption@hangindent=\dimen144
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count187
+\c@continuedfloat=\count188
+)
+\c@KVtest=\count189
+\sf@farskip=\skip49
+\sf@captopadj=\dimen145
+\sf@capskip=\skip50
+\sf@nearskip=\skip51
+\c@subfigure=\count190
+\c@subfigure@save=\count191
+\c@lofdepth=\count192
+\c@subtable=\count193
+\c@subtable@save=\count194
+\c@lotdepth=\count195
+\sf@top=\skip52
+\sf@bottom=\skip53
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xc
+olor.sty"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-
+cfg\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\
+hyperref.sty"
+Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ltxcmds
+\ltxcmds.sty"
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\i
+ftex.sty"
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdftexcmd
+s\pdftexcmds.sty"
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/infware
+rr\infwarerr.sty"
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/kvsetke
+ys\kvsetkeys.sty"
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/kvdefin
+ekeys\kvdefinekeys.sty"
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pdfesca
+pe\pdfescape.sty"
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hycolor\h
+ycolor.sty"
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/letltxmac
+ro\letltxmacro.sty"
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/auxhook\a
+uxhook.sty"
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/kvoptions
+\kvoptions.sty"
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
+)
+\@linkdim=\dimen146
+\Hy@linkcounter=\count196
+\Hy@pagecounter=\count197
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\
+pd1enc.def"
+File: pd1enc.def 2020/01/14 v7.00d Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/intcalc
+\intcalc.sty"
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/etexcmd
+s\etexcmds.sty"
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count198
+Package hyperref Info: Option `colorlinks' set `true' on input line 4421.
+Package hyperref Info: Hyper figures OFF on input line 4547.
+Package hyperref Info: Link nesting OFF on input line 4552.
+Package hyperref Info: Hyper index ON on input line 4555.
+Package hyperref Info: Plain pages OFF on input line 4562.
+Package hyperref Info: Backreferencing OFF on input line 4567.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4800.
+\c@Hy@tempcnt=\count199
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/url\url.s
+ty"
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5159.
+\XeTeXLinkMargin=\dimen147
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/bitset\
+bitset.sty"
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/bigintc
+alc\bigintcalc.sty"
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count266
+\Field@Width=\dimen148
+\Fld@charsize=\dimen149
+Package hyperref Info: Hyper figures OFF on input line 6430.
+Package hyperref Info: Link nesting OFF on input line 6435.
+Package hyperref Info: Hyper index ON on input line 6438.
+Package hyperref Info: backreferencing OFF on input line 6445.
+Package hyperref Info: Link coloring ON on input line 6448.
+Package hyperref Info: Link coloring with OCG OFF on input line 6455.
+Package hyperref Info: PDF/A mode OFF on input line 6460.
+LaTeX Info: Redefining \ref on input line 6500.
+LaTeX Info: Redefining \pageref on input line 6504.
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/atbegsh
+i\atbegshi.sty"
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+)
+\Hy@abspage=\count267
+\c@Item=\count268
+\c@Hfootnote=\count269
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\
+hpdftex.def"
+File: hpdftex.def 2020/01/14 v7.00d Hyperref driver for pdfTeX
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/atveryend
+\atveryend.sty"
+Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+)
+\Fld@listcount=\count270
+\c@bookmark@seq@number=\count271
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/rerunfile
+check\rerunfilecheck.sty"
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/uniquec
+ounter\uniquecounter.sty"
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip54
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+msmath.sty"
+Package: amsmath 2020/01/20 v2.17e AMS math features
+\@mathmargin=\skip55
+
+For additional information on amsmath, use the `?' option.
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+mstext.sty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+msgen.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks17
+\ex@=\dimen150
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+msbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen151
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+msopn.sty"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count272
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count273
+\leftroot@=\count274
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count275
+\DOTSCASE@=\count276
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box45
+\strutbox@=\box46
+\big@size=\dimen152
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count277
+\c@MaxMatrixCols=\count278
+\dotsspace@=\muskip17
+\c@parentequation=\count279
+\dspbrk@lvl=\count280
+\tag@help=\toks18
+\row@=\count281
+\column@=\count282
+\maxfields@=\count283
+\andhelp@=\toks19
+\eqnshift@=\dimen153
+\alignsep@=\dimen154
+\tagshift@=\dimen155
+\tagwidth@=\dimen156
+\totwidth@=\dimen157
+\lineht@=\dimen158
+\@envbody=\toks20
+\multlinegap=\skip56
+\multlinetaggap=\skip57
+\mathdisplay@stack=\toks21
+LaTeX Info: Redefining \[ on input line 2859.
+LaTeX Info: Redefining \] on input line 2860.
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\
+amssymb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\
+amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\a
+mscd.sty"
+Package: amscd 2017/04/14 v2.1 AMS Commutative Diagrams
+\athelp@=\toks22
+\minaw@=\dimen159
+\bigaw@=\dimen160
+\minCDarrowwidth=\dimen161
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amscls\am
+sthm.sty"
+Package: amsthm 2017/10/31 v2.20.4
+\thm@style=\toks23
+\thm@bodyfont=\toks24
+\thm@headfont=\toks25
+\thm@notefont=\toks26
+\thm@headpunct=\toks27
+\thm@preskip=\skip58
+\thm@postskip=\skip59
+\thm@headsep=\skip60
+\dth@everypar=\toks28
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\a
+msrefs.sty"
+Package: amsrefs 2013/03/07 v2.14
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\p
+catcode.sty"
+Package: pcatcode 2002/04/16 v1.04
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\i
+foption.sty"
+Package: ifoption 2002/03/04 v1.02
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\r
+keyval.sty"
+Package: rkeyval 2004/05/05 v1.08
+\@temptokenb=\toks29
+\rsk@toks=\toks30
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\t
+extcmds.sty"
+Package: textcmds 2012/08/02 v2.00
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsrefs\m
+athscinet.sty"
+Package: mathscinet 2002/04/17 v1.05
+)
+\c@bib=\count284
+\@maxlabelwidth=\dimen162
+\c@bib@env=\count285
+\bib@dbfile=\read3
+\alpha@suffix=\count286
+\series@index=\count287
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mathtools
+\mathtools.sty"
+Package: mathtools 2020/03/24 v1.24 mathematical typesetting tools
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\cal
+c.sty"
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count288
+\calc@Bcount=\count289
+\calc@Adimen=\dimen163
+\calc@Bdimen=\dimen164
+\calc@Askip=\skip61
+\calc@Bskip=\skip62
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count290
+\calc@Cskip=\skip63
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mathtools
+\mhsetup.sty"
+Package: mhsetup 2017/03/31 v1.3 programming setup (MH)
+)
+LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 130.
+LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 130.
+LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 130.
+LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 130.
+\g_MT_multlinerow_int=\count291
+\l_MT_multwidth_dim=\dimen165
+\origjot=\skip64
+\l_MT_shortvdotswithinadjustabove_dim=\dimen166
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen167
+\l_MT_above_intertext_sep=\dimen168
+\l_MT_below_intertext_sep=\dimen169
+\l_MT_above_shortintertext_sep=\dimen170
+\l_MT_below_shortintertext_sep=\dimen171
+\xmathstrut@box=\box47
+\xmathstrut@dim=\dimen172
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/physics\p
+hysics.sty"
+Package: physics 
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3package
+s/xparse\xparse.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3kernel\
+expl3.sty"
+Package: expl3 2020-04-06 L3 programming layer (loader) 
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3backend
+\l3backend-pdfmode.def"
+File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count292
+\l__pdf_internal_box=\box48
+))
+Package: xparse 2020-03-06 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count293
+\g__xparse_grabber_int=\count294
+\l__xparse_m_args_int=\count295
+\l__xparse_v_nesting_int=\count296
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/siunitx\s
+iunitx.sty"
+Package: siunitx 2020/02/25 v2.8b A comprehensive (SI) units package
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\arr
+ay.sty"
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen173
+\ar@mcellbox=\box49
+\extrarowheight=\dimen174
+\NC@list=\toks31
+\extratabsurround=\skip65
+\backup@length=\skip66
+\ar@cellbox=\box50
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3package
+s/l3keys2e\l3keys2e.sty"
+Package: l3keys2e 2020-03-06 LaTeX2e option processing using LaTeX3 keys
+)
+\l__siunitx_tmp_box=\box51
+\l__siunitx_tmp_dim=\dimen175
+\l__siunitx_tmp_int=\count297
+\l__siunitx_number_mantissa_length_int=\count298
+\l__siunitx_number_uncert_length_int=\count299
+\l__siunitx_round_int=\count300
+\l__siunitx_process_decimal_int=\count301
+\l__siunitx_process_uncertainty_int=\count302
+\l__siunitx_process_fixed_int=\count303
+\l__siunitx_process_integer_min_int=\count304
+\l__siunitx_process_precision_int=\count305
+\l__siunitx_group_min_int=\count306
+\l__siunitx_angle_marker_box=\box52
+\l__siunitx_angle_unit_box=\box53
+\l__siunitx_angle_marker_dim=\dimen176
+\l__siunitx_angle_unit_dim=\dimen177
+\l__siunitx_unit_int=\count307
+\l__siunitx_unit_denominator_int=\count308
+\l__siunitx_unit_numerator_int=\count309
+\l__siunitx_unit_prefix_int=\count310
+\l__siunitx_unit_prefix_base_int=\count311
+\l__siunitx_unit_prefix_gram_int=\count312
+\l__siunitx_number_product_int=\count313
+\c__siunitx_one_fill_skip=\skip67
+\l__siunitx_table_unit_align_skip=\skip68
+\l__siunitx_table_exponent_dim=\dimen178
+\l__siunitx_table_integer_dim=\dimen179
+\l__siunitx_table_mantissa_dim=\dimen180
+\l__siunitx_table_marker_dim=\dimen181
+\l__siunitx_table_result_dim=\dimen182
+\l__siunitx_table_uncert_dim=\dimen183
+\l__siunitx_table_fill_pre_dim=\dimen184
+\l__siunitx_table_fill_post_dim=\dimen185
+\l__siunitx_table_fill_mid_dim=\dimen186
+\l__siunitx_table_pre_box=\box54
+\l__siunitx_table_post_box=\box55
+\l__siunitx_table_mantissa_box=\box56
+\l__siunitx_table_result_box=\box57
+\l__siunitx_table_number_align_skip=\skip69
+\l__siunitx_table_text_align_skip=\skip70
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/translato
+r\translator.sty"
+Package: translator 2019-05-31 v1.12a Easy translation of strings in LaTeX
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/was\gensy
+mb.sty"
+Package: gensymb 2003/07/02 v1.0 (WaS)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/front
+endlayer\tikz.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basic
+layer\pgf.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utili
+ties\pgfrcs.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfutil-common.tex"
+\pgfutil@everybye=\toks32
+\pgfutil@tempdima=\dimen187
+\pgfutil@tempdimb=\dimen188
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfutil-common-lists.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfutil-latex.def"
+\pgfutil@abb=\box58
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ms\everys
+hi.sty"
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfrcs.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf\pgf
+.revision.tex")
+Package: pgfrcs 2020/01/08 v3.1.5b (3.1.5b)
+))
+Package: pgf 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basic
+layer\pgfcore.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/syste
+mlayer\pgfsys.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgfsys.code.tex"
+Package: pgfsys 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfkeys.code.tex"
+\pgfkeys@pathtoks=\toks33
+\pgfkeys@temptoks=\toks34
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfkeysfiltered.code.tex"
+\pgfkeys@tmptoks=\toks35
+))
+\pgf@x=\dimen189
+\pgf@y=\dimen190
+\pgf@xa=\dimen191
+\pgf@ya=\dimen192
+\pgf@xb=\dimen193
+\pgf@yb=\dimen194
+\pgf@xc=\dimen195
+\pgf@yc=\dimen196
+\pgf@xd=\dimen197
+\pgf@yd=\dimen198
+\w@pgf@writea=\write3
+\r@pgf@reada=\read4
+\c@pgf@counta=\count314
+\c@pgf@countb=\count315
+\c@pgf@countc=\count316
+\c@pgf@countd=\count317
+\t@pgf@toka=\toks36
+\t@pgf@tokb=\toks37
+\t@pgf@tokc=\toks38
+\pgf@sys@id@count=\count318
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgf.cfg"
+File: pgf.cfg 2020/01/08 v3.1.5b (3.1.5b)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgfsys-pdftex.def"
+File: pgfsys-pdftex.def 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgfsys-common-pdf.def"
+File: pgfsys-common-pdf.def 2020/01/08 v3.1.5b (3.1.5b)
+)))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgfsyssoftpath.code.tex"
+File: pgfsyssoftpath.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfsyssoftpath@smallbuffer@items=\count319
+\pgfsyssoftpath@bigbuffer@items=\count320
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/sys
+temlayer\pgfsysprotocol.code.tex"
+File: pgfsysprotocol.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcore.code.tex"
+Package: pgfcore 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmath.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathcalc.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathutil.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathparser.code.tex"
+\pgfmath@dimen=\dimen199
+\pgfmath@count=\count321
+\pgfmath@box=\box59
+\pgfmath@toks=\toks39
+\pgfmath@stack@operand=\toks40
+\pgfmath@stack@operation=\toks41
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.basic.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.trigonometric.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.random.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.comparison.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.base.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.round.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.misc.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfunctions.integerarithmetics.code.tex")))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmathfloat.code.tex"
+\c@pgfmathroundto@lastzeros=\count322
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfint.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorepoints.code.tex"
+File: pgfcorepoints.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@picminx=\dimen256
+\pgf@picmaxx=\dimen257
+\pgf@picminy=\dimen258
+\pgf@picmaxy=\dimen259
+\pgf@pathminx=\dimen260
+\pgf@pathmaxx=\dimen261
+\pgf@pathminy=\dimen262
+\pgf@pathmaxy=\dimen263
+\pgf@xx=\dimen264
+\pgf@xy=\dimen265
+\pgf@yx=\dimen266
+\pgf@yy=\dimen267
+\pgf@zx=\dimen268
+\pgf@zy=\dimen269
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorepathconstruct.code.tex"
+File: pgfcorepathconstruct.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@path@lastx=\dimen270
+\pgf@path@lasty=\dimen271
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorepathusage.code.tex"
+File: pgfcorepathusage.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@shorten@end@additional=\dimen272
+\pgf@shorten@start@additional=\dimen273
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorescopes.code.tex"
+File: pgfcorescopes.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfpic=\box60
+\pgf@hbox=\box61
+\pgf@layerbox@main=\box62
+\pgf@picture@serial@count=\count323
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoregraphicstate.code.tex"
+File: pgfcoregraphicstate.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgflinewidth=\dimen274
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoretransformations.code.tex"
+File: pgfcoretransformations.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@pt@x=\dimen275
+\pgf@pt@y=\dimen276
+\pgf@pt@temp=\dimen277
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorequick.code.tex"
+File: pgfcorequick.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoreobjects.code.tex"
+File: pgfcoreobjects.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorepathprocessing.code.tex"
+File: pgfcorepathprocessing.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorearrows.code.tex"
+File: pgfcorearrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfarrowsep=\dimen278
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoreshade.code.tex"
+File: pgfcoreshade.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@max=\dimen279
+\pgf@sys@shading@range@num=\count324
+\pgf@shadingcount=\count325
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoreimage.code.tex"
+File: pgfcoreimage.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoreexternal.code.tex"
+File: pgfcoreexternal.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfexternal@startupbox=\box63
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorelayers.code.tex"
+File: pgfcorelayers.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcoretransparency.code.tex"
+File: pgfcoretransparency.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorepatterns.code.tex"
+File: pgfcorepatterns.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/bas
+iclayer\pgfcorerdf.code.tex"
+File: pgfcorerdf.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mod
+ules\pgfmoduleshapes.code.tex"
+File: pgfmoduleshapes.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfnodeparttextbox=\box64
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mod
+ules\pgfmoduleplot.code.tex"
+File: pgfmoduleplot.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compa
+tibility\pgfcomp-version-0-65.sty"
+Package: pgfcomp-version-0-65 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@nodesepstart=\dimen280
+\pgf@nodesepend=\dimen281
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compa
+tibility\pgfcomp-version-1-18.sty"
+Package: pgfcomp-version-1-18 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utili
+ties\pgffor.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utili
+ties\pgfkeys.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgfkeys.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/math\
+pgfmath.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmath.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/uti
+lities\pgffor.code.tex"
+Package: pgffor 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mat
+h\pgfmath.code.tex")
+\pgffor@iter=\dimen282
+\pgffor@skip=\dimen283
+\pgffor@stack=\toks42
+\pgffor@toks=\toks43
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz\tikz.code.tex"
+Package: tikz 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries\pgflibraryplothandlers.code.tex"
+File: pgflibraryplothandlers.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgf@plot@mark@count=\count326
+\pgfplotmarksize=\dimen284
+)
+\tikz@lastx=\dimen285
+\tikz@lasty=\dimen286
+\tikz@lastxsaved=\dimen287
+\tikz@lastysaved=\dimen288
+\tikz@lastmovetox=\dimen289
+\tikz@lastmovetoy=\dimen290
+\tikzleveldistance=\dimen291
+\tikzsiblingdistance=\dimen292
+\tikz@figbox=\box65
+\tikz@figbox@bg=\box66
+\tikz@tempbox=\box67
+\tikz@tempbox@bg=\box68
+\tikztreelevel=\count327
+\tikznumberofchildren=\count328
+\tikznumberofcurrentchild=\count329
+\tikz@fig@count=\count330
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/mod
+ules\pgfmodulematrix.code.tex"
+File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfmatrixcurrentrow=\count331
+\pgfmatrixcurrentcolumn=\count332
+\pgf@matrix@numberofcolumns=\count333
+)
+\tikz@expandcount=\count334
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibrarytopaths.code.tex"
+File: tikzlibrarytopaths.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.code.tex"
+File: tikzlibraryshapes.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.geometric.code.tex"
+File: tikzlibraryshapes.geometric.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.geometric.code.tex"
+File: pgflibraryshapes.geometric.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.misc.code.tex"
+File: tikzlibraryshapes.misc.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.misc.code.tex"
+File: pgflibraryshapes.misc.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.symbols.code.tex"
+File: tikzlibraryshapes.symbols.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.symbols.code.tex"
+File: pgflibraryshapes.symbols.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.arrows.code.tex"
+File: tikzlibraryshapes.arrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.arrows.code.tex"
+File: pgflibraryshapes.arrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.callouts.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.callouts.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryshapes.multipart.code.tex"
+File: tikzlibraryshapes.multipart.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries/shapes\pgflibraryshapes.multipart.code.tex"
+File: pgflibraryshapes.multipart.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfnodepartlowerbox=\box69
+\pgfnodeparttwobox=\box70
+\pgfnodepartthreebox=\box71
+\pgfnodepartfourbox=\box72
+\pgfnodeparttwentybox=\box73
+\pgfnodepartnineteenbox=\box74
+\pgfnodeparteighteenbox=\box75
+\pgfnodepartseventeenbox=\box76
+\pgfnodepartsixteenbox=\box77
+\pgfnodepartfifteenbox=\box78
+\pgfnodepartfourteenbox=\box79
+\pgfnodepartthirteenbox=\box80
+\pgfnodeparttwelvebox=\box81
+\pgfnodepartelevenbox=\box82
+\pgfnodeparttenbox=\box83
+\pgfnodepartninebox=\box84
+\pgfnodeparteightbox=\box85
+\pgfnodepartsevenbox=\box86
+\pgfnodepartsixbox=\box87
+\pgfnodepartfivebox=\box88
+)))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fro
+ntendlayer/tikz/libraries\tikzlibraryarrows.code.tex"
+File: tikzlibraryarrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries\pgflibraryarrows.code.tex"
+File: pgflibraryarrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\arrowsize=\dimen293
+))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tikzscale
+\tikzscale.sty"
+Package: tikzscale 2013/05/22 v0.2.6 tikzscale LaTeX package
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xstring\x
+string.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xstring
+\xstring.tex"
+\integerpart=\count335
+\decimalpart=\count336
+)
+Package: xstring 2019/02/06 v1.83 String manipulations (CT)
+)
+\tikzscale@measuredSize=\box89
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgfplots\
+pgfplots.sty"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplots.revision.tex")
+Package: pgfplots 2020/02/29 v1.17 Data Visualization (1.17)
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplots.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotscore.code.tex"
+\t@pgfplots@toka=\toks44
+\t@pgfplots@tokb=\toks45
+\t@pgfplots@tokc=\toks46
+\pgfplots@tmpa=\dimen294
+\c@pgfplots@coordindex=\count337
+\c@pgfplots@scanlineindex=\count338
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/sys\pgfplotssysgeneric.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/libs\pgfplotslibrary.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/oldpgfcompatib\pgfplotsoldpgfsupp_loader.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/lib
+raries\pgflibraryfpu.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotsutil.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/liststructure\pgfplotsliststructure.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/liststructure\pgfplotsliststructureext.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/liststructure\pgfplotsarray.code.tex"
+\c@pgfplotsarray@tmp=\count339
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/liststructure\pgfplotsmatrix.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/numtable\pgfplotstableshared.code.tex"
+\c@pgfplotstable@counta=\count340
+\t@pgfplotstable@a=\toks47
+)
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/liststructure\pgfplotsdeque.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotsbinary.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotsbinary.data.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotsutil.verb.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/libs\pgflibrarypgfplots.surfshading.code.tex"
+\c@pgfplotslibrarysurf@no=\count341
+
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/sys\pgflibrarypgfplots.surfshading.pgfsys-pdftex.def")))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotscolormap.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s/util\pgfplotscolor.code.tex"))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotsstackedplots.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotsplothandlers.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotsmeshplothandler.code.tex"
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotsmeshplotimage.code.tex")))
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplots.scaling.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotscoordprocessing.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplots.errorbars.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplots.markers.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplot
+s\pgfplotsticks.code.tex")
+("C:\Users\Andrea Ferroni\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfp
