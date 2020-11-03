@@ -1,7 +1,9 @@
-s1 = correct2pi_err(q_task(1).subject(1).trial(6).q_grad(:,10:end)); % 240
-s1 = correct2pi_err(q_task(2).subject(1).trial(4).q_grad(:,10:end));%240
+File in which are saved the cleanest trial fo each time warping
+
+s1 = correct2pi_err(q_task(1).subject(1).trial(6).q_grad(:,10:end));
+s1 = correct2pi_err(q_task(2).subject(1).trial(4).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(3).subject(1).trial(6).q_grad(:,10:end))
-s1 = correct2pi_err(q_task(4).subject(1).trial(1).q_grad(:,10:end)); % 240 alcuni task vanno scartati, non colpa del TW
+s1 = correct2pi_err(q_task(4).subject(1).trial(1).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(5).subject(1).trial(6).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(6).subject(1).trial(6).q_grad(:,9:end));
 s1 = correct2pi_err(q_task(7).subject(10).trial(3).q_grad(:,4:end));
@@ -11,9 +13,9 @@ s1 = correct2pi_err(q_task(10).subject(10).trial(2).q_grad(:,4:end));
 
 s1 = correct2pi_err(q_task(11).subject(2).trial(1).q_grad(:,32:end));
 s1 = correct2pi_err(q_task(12).subject(4).trial(2).q_grad(:,6:end));
-s1 = correct2pi_err(q_task(13).subject(3).trial(3).q_grad(:,20:end)); % da qui in poi la magia del resample
-% 14 scazzato completamente, non si capisce cosa faccia FARE SOLO RESAMPLE
-s1 = correct2pi_err(q_task(14).subject(2).trial(2).q_grad(:,10:end));% molto resemplato task problematico
+s1 = correct2pi_err(q_task(13).subject(3).trial(3).q_grad(:,20:end));
+% 14 non si capisce cosa faccia FARE SOLO RESAMPLE
+s1 = correct2pi_err(q_task(14).subject(2).trial(2).q_grad(:,10:end));% molto resemple task problematico
 s1 = correct2pi_err(q_task(15).subject(3).trial(3).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(16).subject(5).trial(4).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(17).subject(5).trial(4).q_grad(:,10:end));
@@ -29,7 +31,7 @@ s1 = correct2pi_err(q_task(25).subject(3).trial(1).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(26).subject(3).trial(1).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(27).subject(5).trial(5).q_grad(:,10:end));
 s1 = correct2pi_err(q_task(28).subject(1).trial(1).q_grad(:,10:end));
-s1 = correct2pi_err(q_task(29).subject(18).trial(5).q_grad(:,10:end)); % angoli negativi
+s1 = correct2pi_err(q_task(29).subject(18).trial(5).q_grad(:,10:end)); 
 s1 = correct2pi_err(q_task(30).subject(2).trial(6).q_grad(:,10:end));
 
 

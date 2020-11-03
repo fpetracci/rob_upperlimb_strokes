@@ -1,16 +1,15 @@
 function s2_new = TimeWarping2(s1,s2)
-% This function bla bla
+%  the function take as input 2 joints angle struct, each struct is
+%  composed by 10 joint angle. We chosed the 4 th and 7th angular joint as the
+%  referement for choose the optimale strech and shift parameters
 
 %% Calcolo parametri di Time Shift e Stretch migliori
-%  the function take as input 2 joints angle struct, each struct is
-%  composed by 10 joint angle. We chosed the 7th angular joint as the
-%  referement forchoose the optimale strech and shift parameters
 
 % s1 movimento di riferimento
 % s2 movimento da modificare
 
 %trial = s2;
-%creazione parametri per modificare s2 DA GUARDARE PER OTTIMIZZARE
+%creazione parametri per modificare s2 
 rapp = length(s1(1,:))/length(s2(1,:));
 tshtmp = round(length(s2(1,:))/8);
 TShift = round(linspace(-tshtmp,tshtmp,20));

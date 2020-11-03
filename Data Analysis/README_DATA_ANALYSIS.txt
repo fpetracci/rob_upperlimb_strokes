@@ -41,12 +41,16 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 03_q
 	q_main 			- runs the needed scripts to generate q_task.mat, specifically: q_creation and q_population.
 	q_trial2q 		- implements UKF executions and joint angles estimations on a single trial dataset given as input.
-    q_creation 		- script to initializes the structures of q_task. It groups data about every subjects involved and tasks executed. 
-	q_population	- populates q_task struct with estimated joint angles values from q_trial2q.m and other informations.
+	q_creation 		- script to initializes the structures of q_task. It groups data about every subjects involved and tasks executed. 
+	q_population		- populates q_task struct with estimated joint angles values from q_trial2q.m and other informations.
 
 04_time_warp
-	(Andre pensaci tuuuuuuu)
-	
+	TimeWarping		- the function take as input 2 joints angle struct, each struct is composed by 10 joint angle. We chosed the 4 th and 7th angular joint as the referement for choose the optimale strech and shift parameters
+	task_warp_compare	- This script aims to compare joint angle
+	warpa_task		- This script is like the main of the folder. Time warping is performed on the entire data_set: q_task
+	new_TW_dot		- Creation of the Data-set:q_task_warped_dot and performed another TimeWarping where only the movement phases are taken into account
+	find_skip		- function that analyzes the derivative of the angles to identify the phase of the movement, only angles 4 and 7 are used as references
+	TW_checking		- plot of the angles deriving from the execution of task number n_task(taken as input) in 2 figures, to show the difference after the application of TW.
 05_fPCA
 	1subj_at_time - folder in which we analyze the dataset one subject at a time
 		fpca_each_subj_plots 			- analysis and plot each subject individually
@@ -161,7 +165,7 @@ In order to make it easier for an external user to compile the code. Two new fol
 
 		q_task				-	Generated in 'q_main'. Joint angle signal. 
 		q_task_warped 		-	Generated in 'warpa_task'. Time warped joint angle signal.
-		q_task_warped_dot 	-	Generated in ' ... '. Joints velocities. % ANDREA INSERISCI
+		q_task_warped_dot 	-	Generated in new_TW_dot. Joints velocities. 
 		q_task structures are arranged in this way:
 					% Structures' tree:
 					%	q_task(1->30).
@@ -186,7 +190,7 @@ In order to make it easier for an external user to compile the code. Two new fol
 			mat3_h		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each healthy subj
 			mat3_la		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each less affected side of a stroke subj 
 			mat3_s		- Generated in 'recon_errror_matrix'. Contains reconstruction error about firsts fPCs only 10 DDoFs for each affected side of a stroke subj
-		Genereted in 07_reconstruction_error
+		Genereted in 11_reconstruction_error
 			E3_dot			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 3DoFs model for each stroke subjects.
 			E7_dot			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 7DoFs model for each stroke subjects.
 			E10_dot			- Generated in 'RE_affected_nonaffected_calc'. Contains reconstruction error about firsts fPCs and 10DoFs model for each stroke subjects.

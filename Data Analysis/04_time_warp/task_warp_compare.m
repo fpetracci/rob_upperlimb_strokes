@@ -2,18 +2,13 @@
 
 clear all; clc; close all;
 tic
-oldfolder = cd;
-cd ../
-cd 99_folder_mat
 load('q_task_warped.mat');
-cd(oldfolder);
-clear oldfolder;
+
 [njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);
 
 n_outlier_h		= 0;
 n_outlier_s		= 0;
 n_outlier_la	= 0;
-
 
 %% healthy fig
 figure(1)

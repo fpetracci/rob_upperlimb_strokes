@@ -1,7 +1,9 @@
 function [skip_init, skip_end] = find_skip(s)
+%function that analyzes the derivative of the angles to identify the phase of the movement
+%only angles 4 and 7 are used as references
+
 %% load signal
-% 	skip = 15;			% time samples skip to avoid errors at end and start of the trial
-% 	s = correct2pi_err(s(:,skip:end-skip));
+ 	s = correct2pi_err(s(:,skip:end-skip));
 	s_dot = diff(s')';	% derivative of s (with unit frequency)
 	s_dot = [s_dot, s_dot(:,end)]; % added last time sample to have s2_dot same
 	% dimensions as s
@@ -19,13 +21,13 @@ function [skip_init, skip_end] = find_skip(s)
 	%% cut indexes
 	% from the init find the last input for the significant signal
 	for i = 5:n_check
-		if   (abs(s_dot(4,i)) < bound ) && flag_init == 0
+		if   (abs(s_dot(4,i)) < bound && abs(s_dot(7,i)) < bound) && flag_init == 0
 			skip_init = i;
 		else
 			flag_init = 1;
 		end
 		
-		if   (abs(s_dot(4,end - i)) < bound )  && flag_end == 0
+		if   (abs(s_dot(4,end - i)) < bound && abs(s_dot(7,i)) < bound)  && flag_end == 0
 			skip_end = l_s - i;
 		else
 			flag_end = 1;
