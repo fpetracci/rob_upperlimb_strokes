@@ -26,7 +26,7 @@ ad_col = [1 0 0];	% D
 and_col = [1 0 1];	% d
 lad_col = [0 1 0];	% F
 land_col = [0 1 1];	% f
-
+mean_col = [0.2 0.2 0.2];%m
 col = zeros(num_col, 3);
 
 if no_col == 0
@@ -91,6 +91,14 @@ if no_col == 0
 		for i = 1:length(n)
 			j = n(i); %- num_col*(i-1);
 			col(j, :) = land_col;
+		end
+	end
+	if find(flag_col == 'm')
+		% grey for mean posture
+		n = find(flag_col == 'm');
+		for i = 1:length(n)
+			j = n(i); %- num_col*(i-1);
+			col(j, :) = mean_col;
 		end
 	end 
 end
