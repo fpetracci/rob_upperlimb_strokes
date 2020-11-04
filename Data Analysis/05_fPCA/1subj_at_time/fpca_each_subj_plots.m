@@ -10,7 +10,7 @@ tic
 r = [4:7];
 
 % which task groups we want to analyze
-ngroup = 'all';
+ngroup = 1;
 
 % other parameters
 subj_num = 24;

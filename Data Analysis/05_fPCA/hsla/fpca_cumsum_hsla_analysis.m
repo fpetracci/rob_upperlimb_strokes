@@ -6,8 +6,8 @@
 
 %% intro and variance extraction
 clear; clc;
-ngroup = 'all';
-
+ngroup = 1;
+%ngroup = 'all';
 % load fpca struct
 fPCA_struct = fpca_hsla(ngroup);
 
