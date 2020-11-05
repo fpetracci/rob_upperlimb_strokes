@@ -7,6 +7,7 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	FPCA_Armando		- Folder containing all general fpca functions.
 	arm_fkine 		 	- computes the forward kinematic of given Arm and angle joints. The output is the homogenous matrix T given at the n-th joint.
 	arm_gen_plot 		- animates a general right arm given q. The parameters of the animated arm come from a chosen trial and are not editable.
+	arm_gen_movie		- generates a movie in which a general right arm does the movement with given q as input. It also puts in the scene a hand and a head.
 	check_trial			- checks if there are angles in the trial that are out of bounds.
 	correct2pi_err 		- removes the pi discontinuity of input angles.
 	create_arms 		- given a specific trial, constructs the 10R serial robot representing a human torso-arm.
@@ -18,6 +19,7 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	par_10R				- par_10R this function calculates all parameters needed to build the Denavit-Hartenberg table of the 10R arm.
 	reshape_data 		- performs a reshape of input by rearranging its dimension as 1:3:2.
 	spider_plot (family)- Create a spider or radar plot with individual axes. By Moses Yoo.
+	stlread				- load in a matlab figure a .stl file.
 	struct_dataload 	- loads the relevant data from the file .mvnx specified.
 	subspacea			- computes angles between subspaces. By Andrew Knyazev, Rico Argentati
 	unplot 				- delete the most recently created graphics object(s).
@@ -45,11 +47,11 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	q_population		- populates q_task struct with estimated joint angles values from q_trial2q.m and other informations.
 
 04_time_warp
-	TimeWarping		- the function take as input 2 joints angle struct, each struct is composed by 10 joint angle. We chosed the 4 th and 7th angular joint as the referement for choose the optimale strech and shift parameters
-	task_warp_compare	- This script aims to compare joint angle
-	warpa_task		- This script is like the main of the folder. Time warping is performed on the entire data_set: q_task
-	new_TW_dot		- Creation of the Data-set:q_task_warped_dot and performed another TimeWarping where only the movement phases are taken into account
-	find_skip		- function that analyzes the derivative of the angles to identify the phase of the movement, only angles 4 and 7 are used as references
+	TimeWarping		- the function take as input 2 joints angle struct, each struct is composed by 10 joint angle. We chosed the 4 th and 7th angular joint as the referement for choose the optimale strech and shift parameters.
+	task_warp_compare	- This script aims to compare joint angle.
+	warpa_task		- This script is like the main of the folder. Time warping is performed on the entire data_set: q_task.
+	new_TW_dot		- Creation of the Data-set:q_task_warped_dot and performed another TimeWarping where only the movement phases are taken into account.
+	find_skip		- function that analyzes the derivative of the angles to identify the phase of the movement, only angles 4 and 7 are used as references.
 	TW_checking		- plot of the angles deriving from the execution of task number n_task(taken as input) in 2 figures, to show the difference after the application of TW.
 05_fPCA
 	1subj_at_time - folder in which we analyze the dataset one subject at a time
