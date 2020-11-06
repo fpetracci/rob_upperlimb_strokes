@@ -486,6 +486,7 @@ function h = create_robot(robot, opt)
     
     % deal with some display options
     if opt.shading
+		%lighting phong
         lighting gouraud
         light('position', opt.lightpos)
     end

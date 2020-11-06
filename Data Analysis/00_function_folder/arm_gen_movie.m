@@ -103,27 +103,40 @@ movie_fps = 20;		% movie frame per second
 % stl handling
 alpha_edge		= 0.1;
 %hand
-col_hand_edge	= [100,100,100]./255;	% hand edge colour RGB
-col_hand_face	= [0,0,0]./255;			% hand face colour RGB
+col_hand_edge	= [255, 170, 0]./255;	% hand edge colour RGB
+col_hand_face	= [255, 230, 179]./255;			% hand face colour RGB
 scale_hand		= 1/1000;				% hand stl is in mm.
-stl_hand_offset = [+0.03; 0; 0];		% recenter  the stl in [0;0;0].
+stl_hand_offset = [+0.03; 0; -0.05];		% recenter  the stl in [0;0;0].
 stl_hand_rotate = rotz(25/180*pi);		% rotate the stl so the thumb is in
 										% the positive x direction, index 
 										% in the positive z direction.
+%head DAVID
+% col_head_edge = [255,255,255]./255;
+% col_head_face = [50,50,50]./255;
+% scale_head	= 0.7*1/1000;					% hand stl is in mm
+% head_offset = [-0.26 - shoulder_pos(1); -0.2 - L5_pos(2); shoulder_pos(3)];
+% head_rotate = rotz(pi/2);
+
+
 %head
-col_head_edge = [255,255,255]./255;
-col_head_face = [50,50,50]./255;
-scale_head	= 0.7*1/1000;					% hand stl is in mm
-shoulder_pos = hom2vett(arm_fkine(arm, zeros(10,1), 6)); % armfkine to get shoulder height
+col_head_edge = [255, 170, 0]./255;
+col_head_face = [255, 230, 179]./255;
+scale_head	= 0.3/80;
+shoulder_pos = hom2vett(arm_fkine(arm, zeros(10,1), 5)); % armfkine to get shoulder height
 L5_pos = hom2vett(arm_fkine(arm, zeros(10,1), 1)); % armfkine to get shoulder height
-
-
-head_offset = [-0.26 - shoulder_pos(1); -0.2 - L5_pos(2); shoulder_pos(3)];
-head_rotate = rotz(pi/2);
+head_offset = [-1.7850;-0.10;-2.3300] + [+shoulder_pos(1);+L5_pos(2);+shoulder_pos(3)];
+head_rotate = rotz(pi/2) * rotx(0.8*pi/4);
 
 % trajectory
-col_traj	= [0,0,0]./255;
+col_traj	= [230, 153, 0]./255;
 width_traj	= 2;
+
+% robot
+joint_col	= [255, 0, 0]./255;
+link_col	= [102, 102, 153]./255;
+joint_diam	= 0.5;
+tile1_col	= [208, 208, 225]./255; 
+tile2_col	= [1 1 1];
 
 %% animation&movie
 
@@ -149,7 +162,7 @@ grid on
 
 
 % init head model
-p_head = patch(stlread('head_david.stl'));
+p_head = patch(stlread('HEAD_low_poly.stl'));
 T_head = hgmat(head_rotate*scale_head, [0;0;0]+head_offset);
 t_head = hgtransform('Parent',gca);
 set(t_head,'Matrix',T_head);
@@ -166,7 +179,7 @@ set(t_hand,'Matrix',T_hand_offset);
 set(p_hand,'Parent',t_hand);
 set(p_hand, 'FaceColor', col_hand_face);	% Set the face colour
 set(p_hand, 'EdgeColor', col_hand_edge);	% Set the edge colour
-set(p_hand, 'EdgeAlpha', alpha_edge);		% Set the edge transparency (0 transparent)
+set(p_hand, 'EdgeAlpha', alpha_edge/2);		% Set the edge transparency (0 transparent)
 
 % 
 
@@ -186,10 +199,18 @@ for i = 1:fr_skip:t_tot
 	% robot update
 	arm.plot(q_plot_now,...
 		'noname',...
-		'scale', 1,...
-		'jointdiam',1,...
+		'nobase',...
+		'scale', 0.8,...
+		'jointdiam',joint_diam,...
 		'ortho',...
 		'raise',...
+		'shading',...
+		'noshadow',...%'jaxes',...
+		'jointcolor', joint_col,...
+		'noarrow',...
+		'tile1color', tile1_col,...
+		'tile2color', tile2_col,...
+		'linkcolor', link_col,...
 		'floorlevel', 0);
 	
 	if i == 1 && movie_mode == 2
@@ -208,6 +229,8 @@ for i = 1:fr_skip:t_tot
 		'ortho',...
 		'raise',...
 		'floorlevel', 0);
+	elseif movie_mode ~= 2
+		%set(gcf, 'Position',  [0, 50, 1900, 950])
 	end
 		
 	
@@ -219,7 +242,7 @@ for i = 1:fr_skip:t_tot
 	
 	% trajectory "so far" of spacecraft
 	traj =	plot3(  hand_traj(:,1), hand_traj(:,2),hand_traj(:,3),...
-            'color', col_traj, 'LineWidth', width_traj);
+            '--','color', col_traj, 'LineWidth', width_traj);
 	
 	
 	

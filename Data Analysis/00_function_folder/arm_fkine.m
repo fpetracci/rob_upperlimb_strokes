@@ -7,7 +7,7 @@ function T = arm_fkine(Arm, q, n)
 % for example: 10 for the hand, 
 % 			    7 for the forearm(elbow), 
 % 				6 for the upperarm(shoulder)
-%				3 for T8
+%				3 for L5
 a = Arm.base * Arm.links(1).A(q(1));
 b = eye(4);
 
