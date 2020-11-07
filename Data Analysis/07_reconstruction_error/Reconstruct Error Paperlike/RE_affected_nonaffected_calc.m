@@ -1,15 +1,17 @@
- %computes reconstruction error of firsts fPCs of stroke subjects about 
+function RE_affected_nonaffected_calc(ngroup) 
+%computes reconstruction error of firsts fPCs of stroke subjects about 
  %affected and less affected side (3R, 7R, 10R).
  
- clear all
-if exist('q_stacked_subj') ~= 1
-	if exist('loader_subj_mat.mat') == 2
-		load('loader_subj_mat.mat');
-	else
-		loader_subj
-	end
+if exist('loader_subj_mat_1group.mat') == 2 && sum(ngroup == 1) == 1 
+	load('loader_subj_mat_1group.mat');
+elseif exist('loader_subj_mat_2group.mat') == 2 && sum(ngroup == 2) == 1
+	load('loader_subj_mat_2group.mat');
+elseif exist('loader_subj_mat_3group.mat') == 2 && sum(ngroup == 3) == 1
+	load('loader_subj_mat_3group.mat');
+elseif exist('loader_subj_mat_allgroup.mat') == 2 && sum(ngroup == 'all') == 3 
+	load('loader_subj_mat_allgroup.mat');
 end
-
+load('q_task_warped.mat');
 %% index calculation
 
 tic
@@ -269,3 +271,4 @@ save('E3', 'E_subj3');
 
 	
 toc
+end

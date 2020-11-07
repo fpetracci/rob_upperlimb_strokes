@@ -76,7 +76,7 @@ clearvars -except q_fpca_task_s q_fpca_task_h q_fpca_task_la fPCA_task q_stacked
 
 %% plots 1 obs h
 close all
-task_chosen = 1;
+task_chosen = 7;
 obs = 1;
 
 % for j = 1:10

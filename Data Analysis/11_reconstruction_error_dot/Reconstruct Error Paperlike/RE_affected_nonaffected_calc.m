@@ -1,15 +1,20 @@
- %computes reconstruction error of firsts fPCs of stroke subjects about 
+function RE_affected_nonaffected_calc(ngroup)
+%computes reconstruction error of firsts fPCs of stroke subjects about 
  %affected and less affected side (3R, 7R, 10R).
  
- clear all
-if exist('q_stacked_subj') ~= 1
-	if exist('loader_subj_dot_mat.mat') == 2
-		load('loader_subj_dot_mat.mat');
-	else
-		loader_subj
-	end
+if exist('loader_subj_mat_1group_dot.mat') == 2 && sum(ngroup == 1) == 1 
+	load('loader_subj_mat_1group_dot.mat');
+elseif exist('loader_subj_mat_2group_dot.mat') == 2 && sum(ngroup == 2) == 1
+	load('loader_subj_mat_2group_dot.mat');
+elseif exist('loader_subj_mat_3group_dot.mat') == 2 && sum(ngroup == 3) == 1
+	load('loader_subj_mat_3group_dot.mat');
+elseif exist('loader_subj_mat_allgroup_dot.mat') == 2 && sum(ngroup == 'all') == 3 
+	load('loader_subj_mat_allgroup_dot.mat');
 end
+load('q_task_warped_dot.mat');
 q_task_warp = q_task_warp_dot;
+fPCA_subj = fPCA_subj_dot;
+q_stacked_subj = q_stacked_subj_dot;
 %% index calculation
 
 tic
@@ -91,13 +96,13 @@ end
 toc
 
 E_subj10 = E_subj;
-save('E10', 'E_subj10_dot');
+save('E10_dot', 'E_subj10');
 
 %% index calculation ONLY 7R
 
 tic
 
-nsamples = size(q_task_warp(1).subject(1).trial(1).q_grad,1);% number of joints and time length of each signal
+nsamples = size(q_task_warp(1).subject(1).trial(1).q_grad,2);% number of joints and time length of each signal
 njoints		= 7;	% number of joints
 nfpc		= 10;	% number of fpcs used
 subj_num	= 19;	% number of stroke subjects
@@ -179,13 +184,13 @@ end
 	
 toc
 E_subj7 = E_subj;
-save('E7', 'E_subj7_dot');
+save('E7_dot', 'E_subj7');
 
 %% index calculation ONLY 3R
 
 tic
 
-nsamples = size(q_task_warp(1).subject(1).trial(1).q_grad,1);% number of joints and time length of each signal
+nsamples = size(q_task_warp(1).subject(1).trial(1).q_grad,2);% number of joints and time length of each signal
 njoints		= 3;	% number of joints
 nfpc		= 10;	% number of fpcs used
 subj_num	= 19;	% number of stroke subjects
@@ -264,6 +269,7 @@ for nsubj = 6:24 %[9 15 16 18]%6:24
 end
 
 E_subj3 = E_subj;
-save('E3', 'E_subj3_dot');
+save('E3_dot', 'E_subj3');
 	
 toc
+end

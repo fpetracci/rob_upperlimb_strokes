@@ -23,6 +23,7 @@ end
 %% a plot for each joint
 for j = 1:10
 	figure(j)
+	set(gcf, 'Position',  [200, 0, 650, 650])
 	clf
 	y = [var_h(j,:); var_a_d(j,:); var_la_d(j,:); var_a_nd(j,:); var_la_nd(j,:)] * 100;
 	b = bar(1:10, y );%,'FaceColor','flat');
@@ -31,12 +32,15 @@ for j = 1:10
 	b(3).FaceColor = [0 255 0]/255;
 	b(4).FaceColor = [255 0 255]/255; % magent
 	b(5).FaceColor = [0 255 255]/255; % cian
-	ylim([0, max(max(var_h))*100+5])
+% 	ylim([0, max(max(var_h))*100+5])
+	ylim([0,100])
+	grid on
 	xlabel('Principal Function')
 	ylabel(' Explained Variance % ')
 end
 %% plot mean
 figure(j+1)
+set(gcf, 'Position',  [200, 0, 650, 650])
 clf
 y = [mean(var_h,1); mean(var_la_d,1); mean(var_la_nd,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -44,10 +48,12 @@ b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [0 255 0]/255;
 b(3).FaceColor = [0 255 255]/255; % cian
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
 figure(j+2)
+set(gcf, 'Position',  [200, 0, 650, 650])
 clf
 y = [mean(var_h,1); mean(var_a_d,1); mean(var_a_nd,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -55,10 +61,12 @@ b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [255 0 0]/255;
 b(3).FaceColor = [255 0 255]/255; % magent
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
 figure(j+3)
+set(gcf, 'Position',  [200, 0, 650, 650])
 clf
 y = [mean(var_h,1); mean(var_a_d,1); mean(var_la_d,1); mean(var_a_nd,1); mean(var_la_nd,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -68,10 +76,12 @@ b(3).FaceColor = [0 255 0]/255;
 b(4).FaceColor = [255 0 255]/255; % magent
 b(5).FaceColor = [0 255 255]/255; % cian
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
 figure(j+4)
+set(gcf, 'Position',  [200, 0, 650, 650])
 clf
 y = [mean(var_h,1); mean(var_a_d,1); mean(var_la_d,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -79,10 +89,12 @@ b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [255 0 0]/255;
 b(3).FaceColor = [0 255 0]/255;
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
 figure(j+5)
+set(gcf, 'Position',  [200, 0, 650, 650])
 clf
 y = [mean(var_h,1); mean(var_a_nd,1); mean(var_la_nd,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -90,6 +102,7 @@ b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [255 0 255]/255; % magent
 b(3).FaceColor = [0 255 255]/255; % cian
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
@@ -98,10 +111,16 @@ if 0
 	if ~exist('i')
 		i = 1;
 	end
-	set(gca,'FontSize',20)
-	set(findall(gcf,'type','text'),'FontSize',20)
+	set(gca,'FontSize',10)
+	set(findall(gcf,'type','text'),'FontSize',10)
 
 	f = gcf;
-	exportgraphics(f,['joint' num2str(i) '_fpca_var_expl.pdf'], 'ContentType','vector')
+	%RISCRIVERE
+%	exportgraphics(f,['joint' num2str(i) '_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
+% 	exportgraphics(f,['jointmean_HLA_DND_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
+% 	exportgraphics(f,['jointmean_HA_DND_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
+% 	exportgraphics(f,['jointmean_HALA_DND_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
+% 	exportgraphics(f,['jointmean_HALA_D_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
+ 	exportgraphics(f,['jointmean_HALA_ND_fpca_var_expl_hdnd_dot_1group.pdf'], 'ContentType','vector') %num2str(i) 
 	i = i + 1;
 end

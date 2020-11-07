@@ -811,9 +811,8 @@ axis([0 length(err.H.j10.mean) 0 max(err.H.j10.mean+b*err.H.j10.std)])
 b = 1;
 figure(61)
 clf
-% plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+%  plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
 hold on
-
 
 % a = plot(err.H.j10.mean + b*err.H.j10.std, 'b--', 'Linewidth', 0.8);
 % a.Annotation.LegendInformation.IconDisplayStyle = 'off';
@@ -832,6 +831,10 @@ hold on
 
 
 x2 = [1:10, fliplr(1:10)];
+inBetween3 = [err.H.j10.mean + b*err.H.j10.std, fliplr(err.H.j10.mean - b*err.H.j10.std)];
+a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+
 inBetween1 = [err.S.j10.s_mean + b*err.S.j10.s_std, fliplr(err.S.j10.s_mean - b*err.S.j10.s_std)];
 a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
 a.Annotation.LegendInformation.IconDisplayStyle = 'off';
@@ -844,7 +847,7 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.S.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.S.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
-%plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 
 
 xlabel('Number of fPCs used')
@@ -856,3 +859,14 @@ set(gca,'FontSize',12)
 set(findall(gcf,'type','text'),'FontSize',12)
 
 %%
+if 0
+	if ~exist('i')
+		i = 1;
+	end
+	set(gca,'FontSize',10)
+	set(findall(gcf,'type','text'),'FontSize',10)
+
+	f = gcf;
+	exportgraphics(f,['shadow_dot.pdf'], 'ContentType','vector')
+	i = i + 1;
+end

@@ -6,7 +6,7 @@
 
 %% load
 clear; clc;
-ngroup = 'all';
+ngroup = 1;
 
 fPCA_struct = fpca_hsla(ngroup);
 var_test = fPCA_struct.h_joint(1).var;
@@ -20,6 +20,8 @@ end
 
 %% plot mean
 figure(1)
+set(gcf, 'Position',  [200, 0, 650, 650])
+
 clf
 y = [mean(var_h,1); mean(var_la,1); mean(var_s,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
@@ -27,21 +29,25 @@ b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [0 255 0]/255;
 b(3).FaceColor = [255 0 0]/255;
 ylim([0, 100])
+grid on
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
 
 %% a plot for each joint
 for j = 1:10
-	figure(j)
+	figure(j+1)
+	set(gcf, 'Position',  [200, 0, 650, 650])
 	clf
 	y = [var_h(j,:); var_la(j,:); var_s(j,:)] * 100;
 	b = bar(1:10, y );%,'FaceColor','flat');
 	b(1).FaceColor = [0 0 255]/255;
 	b(2).FaceColor = [0 255 0]/255;
 	b(3).FaceColor = [255 0 0]/255;
-	ylim([0, max(max(var_h))*100+5])
+	ylim([0,100])
+% 	ylim([0, max(max(var_h))*100+5])
 	xlabel('Principal Function')
 	ylabel(' Explained Variance % ')
+	grid on
 end
 
 
@@ -50,10 +56,10 @@ if 0
 	if ~exist('i')
 		i = 1;
 	end
-	set(gca,'FontSize',20)
-	set(findall(gcf,'type','text'),'FontSize',20)
+	set(gca,'FontSize',10)
+	set(findall(gcf,'type','text'),'FontSize',10)
 
 	f = gcf;
-	exportgraphics(f,['joint' num2str(i) '_fpca_var_expl.pdf'], 'ContentType','vector')
+	exportgraphics(f,['joint' num2str(i) '_fpca_var_expl_hsla_dot_1group.pdf'], 'ContentType','vector')
 	i = i + 1;
 end

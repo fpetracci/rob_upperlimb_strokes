@@ -17,6 +17,7 @@ addpath(genpath(fullfile(script_path, '03_q')));
 addpath(genpath(fullfile(script_path, '05_fPCA')));
 addpath(genpath(fullfile(script_path, '08_rPCA')));
 addpath(genpath(fullfile(script_path, '09_subspace_angle')));
+addpath(genpath(fullfile(script_path, '10_fPCA_dot')));
 addpath(genpath(fullfile(script_path, '99_folder_mat')));
 
 
