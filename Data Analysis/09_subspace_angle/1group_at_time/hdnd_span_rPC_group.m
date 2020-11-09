@@ -24,7 +24,7 @@ ngroup = 1;
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 
-flag_mean = 1;
+flag_mean = 0;
 % if flag_mean = 0 mean posture is computed as PCA of mean postures of each
 % subject
 % if flag_mean = 1 mean posture is computed as MEAN of mean postures of each

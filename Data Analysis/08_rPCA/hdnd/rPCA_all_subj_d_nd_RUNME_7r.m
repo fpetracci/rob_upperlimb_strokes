@@ -58,7 +58,8 @@ plot(sum(data.la_nd.var_expl(sel,:),1)','c',	'Displayname', 'LA_{nd}', 'LineWidt
 % plot(sum(data.la_nd.var_expl(sel,:),1)',	'c',	'Displayname', 'LA_{nd}')
 grid on
 axis([1, 240, 0, 100])
-legend
+legend('Healthy', 'A_d', 'LA_d', 'A_{nd}','LA_{nd}')
+%legend
 xlabel('Time [samples] ')
 ylabel('% explained variance')
 
