@@ -20,8 +20,9 @@ for j = 1:10
 end
 
 %% plot mean
-figure(1)
-set(gcf, 'Position',  [200, 0, 650, 650])
+f=figure(1);
+f.WindowState = 'maximized';
+figure('WindowState', 'maximized')
 clf
 y = [mean(var_h,1); mean(var_la,1); mean(var_s,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');

@@ -44,6 +44,10 @@ if subj_status == 0
 	hold on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	xlim([1,10])
+	xlabel('Number of fPCs used')
+	ylabel('Reconstruction Error [deg]')
+	grid on
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': all 10 DOFs'])
 	
@@ -66,6 +70,11 @@ if subj_status == 0
 	hold on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	xlim([1,10])
+
+	xlabel('Number of fPCs used')
+	ylabel('Reconstruction Error [deg]')
+	grid on
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': last 7 DOFs'])
 	
@@ -88,6 +97,9 @@ if subj_status == 0
 	hold on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	grid on
+	xlabel('Number of fPCs used')
+	ylabel('Reconstruction Error [deg]')
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': first 3 DOFs'])
 	
@@ -106,6 +118,8 @@ elseif subj_status == 1
 	plot(E_h_10(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	xlabel('Number of fPCs used')
+	ylabel('Reconstruction Error [deg]')
 	legend
 	title(['Healthy subj ' num2str(nsubj) ': all 10 DOFs'])
 	
@@ -121,6 +135,7 @@ elseif subj_status == 1
 
 	subplot(1,3,2)
 	plot(E_h_7(nsubj,:), 'g', 'DisplayName', 'Healthy' )
+	xlim([1,10])
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
 	legend
@@ -139,6 +154,9 @@ elseif subj_status == 1
 	plot(E_h_3(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	xlabel('Number of fPCs used')
+	ylabel('Reconstruction Error [deg]')
+	xlim([1,10])
 	legend
 	title(['Healthy subj ' num2str(nsubj) ': first 3 DOFs'])
 else 
