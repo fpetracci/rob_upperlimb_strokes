@@ -35,11 +35,20 @@ sel= [1 2];
 figure(2)
 clf
 hold on
-plot(data.h.var_expl(sel,:)','b')
-plot(data.s.var_expl(sel,:)', 'r')
-plot(data.la.var_expl(sel,:)', 'g')
+% plot(data.h.var_expl(1,:)','b--')
+% plot(data.s.var_expl(1,:)', 'r--')
+% plot(data.la.var_expl(1,:)', 'g--')
+% 
+% plot(data.h.var_expl(2,:)','b:', 'LineWidth', 1.2)
+% plot(data.s.var_expl(2,:)', 'r:', 'LineWidth', 1.2)
+% plot(data.la.var_expl(2,:)', 'g:', 'LineWidth', 1.2)
+
+plot(sum(data.h.var_expl(sel,:),1)','b', 'LineWidth', 1.2)
+plot(sum(data.s.var_expl(sel,:),1)', 'r', 'LineWidth', 1.2)
+plot(sum(data.la.var_expl(sel,:),1)', 'g', 'LineWidth', 1.2)
 grid on
 axis([1, 240, 0, 100])
+legend('Healthy','Affected','Less Affected')
 xlabel('Time [samples] ')
 ylabel('% explained variance')
 
@@ -49,11 +58,11 @@ clf;
 D = zeros(10, 3);
 %first three of healthy subjects
 for i=1:240
-	D(:, 1) = data.h.coeff(:, 1, i);
-	D(:, 2) = data.h.coeff(:, 2, i);
-	D(:, 3) = data.h.coeff(:, 3, i);
-	D(:, 4) = mean_posture(:,1);
-	spider_plot_rPCs(D, 'hsl')
+	D(:, 1) = mean_posture(:,1);
+	D(:, 2) = data.h.coeff(:, 1, i);
+	D(:, 3) = data.h.coeff(:, 2, i);
+	D(:, 4) = data.h.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'khsl')
 	drawnow
 end
 
@@ -62,11 +71,11 @@ clf;
 D = zeros(10, 4);
 %first three of less affected subjects
 for i=1:240
-	D(:, 1) = data.la.coeff(:, 1, i);
-	D(:, 2) = data.la.coeff(:, 2, i);
-	D(:, 3) = data.la.coeff(:, 3, i);
-	D(:, 4) = mean_posture(:,1);
-	spider_plot_rPCs(D, 'hsl')
+	D(:, 1) = mean_posture(:,1);
+	D(:, 2) = data.la.coeff(:, 1, i);
+	D(:, 3) = data.la.coeff(:, 2, i);
+	D(:, 4) = data.la.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'khsl')
 	drawnow
 end
 
@@ -75,11 +84,11 @@ clf;
 D = zeros(10, 4);
 %first three of stroke subjects
 for i=1:240
-	D(:, 1) = data.s.coeff(:, 1, i);
-	D(:, 2) = data.s.coeff(:, 2, i);
-	D(:, 3) = data.s.coeff(:, 3, i);
-	D(:, 4) = mean_posture(:,1);
-	spider_plot_rPCs(D, 'hsl')
+	D(:, 1) = mean_posture(:,1);
+	D(:, 2) = data.s.coeff(:, 1, i);
+	D(:, 3) = data.s.coeff(:, 2, i);
+	D(:, 4) = data.s.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'khsl')
 	drawnow
 end
 

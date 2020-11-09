@@ -38,9 +38,9 @@ subj_FMMA =[	-1	-1	-1	-1	-1 ...% healthy
 		%		6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24
 
 		
-		
+sel_rpcs = [1 2];		
 %%figure iteration
-for nsubj = [1:20, 22:24]
+for nsubj = [1:10, 12:20, 22:24]
 	% SKIPPED SUBJ = 21 (for ngroup 1) because not enough trials 
 	% (ntrial < npc)
 	clear data;
@@ -48,8 +48,9 @@ for nsubj = [1:20, 22:24]
 	
 	if nsubj <= 5
 		figure(nsubj)
+		clf
 		hold on
-		plot(data.h.var_expl','b')
+		plot(data.h.var_expl(sel_rpcs,:)','b')
 		%plot(data.s.var_expl', 'r')
 		%plot(data.la.var_expl', 'g')
 		grid on
@@ -59,10 +60,11 @@ for nsubj = [1:20, 22:24]
 		title(['Healthy subject number ' num2str(nsubj)])
 	else
 		figure(nsubj)
+		clf
 		hold on
 		%plot(data.h.var_expl','b')
-		plot(data.s.var_expl', 'r')
-		plot(data.la.var_expl', 'g')
+		plot(data.s.var_expl(sel_rpcs,:)', 'r')
+		plot(data.la.var_expl(sel_rpcs,:)', 'g')
 		grid on
 		axis([1, 240, 0, 100])
 		xlabel('Time [samples] ')

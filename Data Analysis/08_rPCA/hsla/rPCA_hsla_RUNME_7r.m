@@ -11,14 +11,24 @@ data = rpca_hsla_7r(ngroup);
 %% Analysis sum
 
 %selection of pc
-sel= [1 ];
+sel= [1 2];
 
 figure(1)
 clf
 hold on
-plot(sum(data.h.var_expl(sel,:),1)','b')
-plot(sum(data.s.var_expl(sel,:),1)', 'r')
-plot(sum(data.la.var_expl(sel,:),1)', 'g')
+% plot(data.h.var_expl(1,:)','b--')
+% plot(data.s.var_expl(1,:)', 'r--')
+% plot(data.la.var_expl(1,:)', 'g--')
+% 
+% plot(data.h.var_expl(2,:)','b:', 'LineWidth', 1.2)
+% plot(data.s.var_expl(2,:)', 'r:', 'LineWidth', 1.2)
+% plot(data.la.var_expl(2,:)', 'g:', 'LineWidth', 1.2)
+
+plot(sum(data.h.var_expl(sel,:),1)','b', 'LineWidth', 1.2)
+plot(sum(data.s.var_expl(sel,:),1)', 'r', 'LineWidth', 1.2)
+plot(sum(data.la.var_expl(sel,:),1)', 'g', 'LineWidth', 1.2)
+
+legend('Healthy','Affected','Less Affected')
 grid on
 axis([1, 240, 0, 100])
 xlabel('Time [samples] ')
