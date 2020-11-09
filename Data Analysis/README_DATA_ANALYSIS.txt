@@ -16,6 +16,7 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	J_ergo 				- computes the ergonomic functional.
 	load_mvnx 			- loads a .mnvx file into the matlab workspace.
 	mean_post			- computes the mean posture of rPCs.
+	mean_post			- computes the mean posture of rPCs between healthy, strokes and less affected subjects' groups separately.
 	par_10R				- par_10R this function calculates all parameters needed to build the Denavit-Hartenberg table of the 10R arm.
 	reshape_data 		- performs a reshape of input by rearranging its dimension as 1:3:2.
 	spider_plot (family)- Create a spider or radar plot with individual axes. By Moses Yoo.
@@ -121,7 +122,8 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 		rpca_hsla_7r					- same as above only for the last 7 joints
 		rPCA_hsla_RUNME_7r				- same as above only for the last 7 joints
 		rpca_stacker_hsla_7r			- same as above only for the last 7 joints
-	visualizator_rPCs	
+	visualizator_rPCs
+		rPC_movie_HSLA						- this script aims to visualize the movement associated to a signle rPC by generating 3 movie files: H S LA		
 		rPC_t_subj						- extrapulates rPCs about a subject and a specific group of tasks at time t
 		rPC_visualizator				- this script aims to visualize the movement associated to a signle rPC. 
 
