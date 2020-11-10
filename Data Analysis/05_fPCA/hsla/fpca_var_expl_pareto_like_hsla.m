@@ -26,9 +26,22 @@ figure('WindowState', 'maximized')
 clf
 y = [mean(var_h,1); mean(var_la,1); mean(var_s,1)] * 100;
 b = bar(1:10, y );%,'FaceColor','flat');
+err = [std(var_h,1); std(var_la,1); std(var_s,1)] * 100;
 b(1).FaceColor = [0 0 255]/255;
 b(2).FaceColor = [0 255 0]/255;
 b(3).FaceColor = [255 0 0]/255;
+hold on
+%% error bar
+% Calculate the number of bars in each group
+nbars = 3;
+% Get the x coordinate of the bars
+x = [];
+for i = 1:nbars
+    x = [x ; b(i).XEndPoints];
+end
+% Plot the errorbars
+errorbar(x,y,err,'k','linestyle','none')'
+hold off
 ylim([0, 100])
 grid on
 xlabel('Principal Function')
@@ -45,6 +58,18 @@ for j = 1:10
 	b(2).FaceColor = [0 255 0]/255;
 	b(3).FaceColor = [255 0 0]/255;
 	%ylim([0, max(max(var_h))*100+5])
+	hold on
+	%% error bar
+	% Calculate the number of bars in each group
+	nbars = 3;
+	% Get the x coordinate of the bars
+		x = [];
+	for i = 1:nbars
+		x = [x ; b(i).XEndPoints];
+	end
+	% Plot the errorbars
+	errorbar(x,y,err,'k','linestyle','none')'
+	hold off
 	ylim([0, 100])
 	grid on
 	xlabel('Principal Function')
@@ -64,3 +89,18 @@ if 1
 	exportgraphics(f,['joint' num2str(i) '_fpca_var_expl_hsla_1group.pdf'], 'ContentType','vector')
 	i = i + 1;
 end
+
+% x = 1:13;
+% data = [37.6 24.5 14.6 18.1 19.5 8.1 28.5 7.9 3.3 4.1 7.9 1.9 4.3]';
+% errhigh = [1 4.4 0.4 3.3 2.5 0.4 1.6 0.8 0.6 0.8 2.2 0.9 1.5];
+% errlow  = [1 2.4 2.3 0.5 1.6 1.5 4.5 1.5 0.4 1.2 1.3 0.8 1.9];
+% 
+% bar(x,data)                
+% 
+% hold on
+% 
+% er = errorbar(x,data,errlow,errhigh);    
+% er.Color = [0 0 0];                            
+% er.LineStyle = 'none';  
+% 
+% hold off

@@ -65,14 +65,14 @@ for j = 1:10 % joint
 		% save
 		if save_mode == 1
 			drawnow
-			
-			set(gcf, 'Position',  [200, 0, 650, 650],'color','none') 
-			
-			set(gca,'FontSize',10,'color', 'none')     
-			set(findall(gcf,'type','text'),'FontSize',10)
+			%set(gcf, 'Color', 'w');
+			set(gcf, 'Position',  [200, 0, 650, 650], 'Color', 'none') 
+			set(gca,'FontSize',10)
+			set(legend,'FontSize',11);
+			%set(findall(gcf,'type','text'),'FontSize',15)
 			f = gcf;
-			%exportgraphics(f,['recon_fPCA_joint_' num2str(j) '.png'], 'ContentType','vector')     
-			export_fig('filename', '-dpng', '-transparent', '-r300')
+			exportgraphics(f,['recon_fPCA_joint_' num2str(j) '.png'], 'ContentType','vector')     
+			%export_fig(['recon_fPCA_joint_' num2str(j)], '-dpng', '-r300')
 		end
 	
 end
