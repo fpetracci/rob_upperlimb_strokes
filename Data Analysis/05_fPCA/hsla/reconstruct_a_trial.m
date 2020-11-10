@@ -42,13 +42,14 @@ for j = 1:10 % joint
 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
 	 plot(qmat(:,nobs,4)+mean_tmp,...
 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
-	 
+	 plot(qmat(:,nobs,5)+mean_tmp,...
+		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3+fPC4')
 	 
 	 plot(q_stacked.q_matrix_h(nobs,:,j), ...
 			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')
 		legend('Location','best')
 		xlabel('Time samples')
-		ylabel(' Angular Value [grad]')
+		ylabel(' Angular Value [deg]')
 		xlim([1 size(q_stacked.q_matrix_h,2)])
 		grid on
 		title(['Joint number ' num2str(j)]);
@@ -65,13 +66,13 @@ for j = 1:10 % joint
 		if save_mode == 1
 			drawnow
 			
-			set(gcf, 'Position',  [200, 0, 650, 650]) 
+			set(gcf, 'Position',  [200, 0, 650, 650],'color','none') 
 			
-			set(gca,'FontSize',10)     
+			set(gca,'FontSize',10,'color', 'none')     
 			set(findall(gcf,'type','text'),'FontSize',10)
 			f = gcf;
-			exportgraphics(f,['recon_fPCA_joint_' num2str(j) '.pdf'], 'ContentType','vector')     
-
+			%exportgraphics(f,['recon_fPCA_joint_' num2str(j) '.png'], 'ContentType','vector')     
+			export_fig('filename', '-dpng', '-transparent', '-r300')
 		end
 	
 end
