@@ -799,7 +799,7 @@ a = plot(err.F.j10.s_mean - b*err.F.j10.s_std, 'm--', 'Linewidth', 0.8);
 a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 xlabel('Number of fPCs used',...
       'Interpreter','Latex')
-ylabel('Reconstruction Error [deg/s]]',...
+ylabel('Reconstruction Error [deg/s]',...
       'Interpreter','Latex')
 
 legend
@@ -884,7 +884,7 @@ plot(err.D.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.D.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
 plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
 legend
 title('Mean and std RE Dominant 10R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -918,7 +918,7 @@ plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 
 
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
 legend
 title('Mean and std RE Dominant last 7R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -953,7 +953,7 @@ plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 
 
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
 legend
 title('Mean and std RE Dominant first 3R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -985,7 +985,7 @@ plot(err.F.j10.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.F.j10.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
 plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
 legend
 title('Mean and std RE Non-Dominant 10R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -1019,7 +1019,7 @@ plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 
 
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
 legend
 title('Mean and std RE Non-Dominant last 7R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -1054,7 +1054,8 @@ plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
 
 
 xlabel('Number of fPCs used')
-ylabel('Reconstruction Error [deg/s]]')
+ylabel('Reconstruction Error [deg/s]')
+
 legend
 title('Mean and std RE Non-Dominant first 3R')
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
@@ -1068,7 +1069,7 @@ if 1
 	grid on
 	f = gcf;
 %	f.WindowState = 'maximize';
-%	exportgraphics(f,['subj18_RE.pdf'], 'ContentType','vector') %num2str(i) 
+%	exportgraphics(f,['subj24_RE.pdf'], 'ContentType','vector') %num2str(i) 
 %	exportgraphics(f,['subj24_RE.pdf'], 'ContentType','vector') %num2str(i) 
 
 %	exportgraphics(f,['shadow_D_10_dot.pdf'], 'ContentType','vector') %num2str(i) 
@@ -1076,6 +1077,6 @@ if 1
 % 	exportgraphics(f,['shadow_D_3_dot.pdf'], 'ContentType','vector') %num2str(i) 
 % 	exportgraphics(f,['shadow_ND_10_dot.pdf'], 'ContentType','vector') %num2str(i) 
 % 	exportgraphics(f,['shadow_ND_7_dot.pdf'], 'ContentType','vector') %num2str(i)
-%	exportgraphics(f,['shadow_ND_3_dot.pdf'], 'ContentType','vector') %num2str(i)
+	exportgraphics(f,['shadow_ND_3_dot.pdf'], 'ContentType','vector') %num2str(i)
 end
  	 

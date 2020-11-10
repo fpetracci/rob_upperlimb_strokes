@@ -78,3 +78,16 @@ xlim([1 size(rPCsangles_la,2)])
 ylim([0 93])
 xlabel('Time samples')
 ylabel('Angle [grad]')
+%% Saving Plot
+if 1
+	set(gca,'FontSize',10)
+    set(findall(gcf,'type','text'),'FontSize',10)
+    %set(gcf, 'Position',  [200, 0, 650, 650])
+    grid on
+    f = gcf;
+    f.WindowState = 'maximize';%se si vuole a schermo intero
+    %exportgraphics(f,['Subspace_angle_H_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_S_between _each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	exportgraphics(f,['Subspace_angle_LA_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+
+end

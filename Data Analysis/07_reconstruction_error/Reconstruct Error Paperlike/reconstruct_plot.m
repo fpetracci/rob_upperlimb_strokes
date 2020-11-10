@@ -100,6 +100,7 @@ if subj_status == 0
 	grid on
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
+	xlim([1,10])
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': first 3 DOFs'])
 	

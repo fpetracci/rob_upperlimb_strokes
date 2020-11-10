@@ -112,3 +112,17 @@ xlim([1 nsamples])
 ylim([0 max(vecnorm(angles.la_nd, 2, 1))+3])
 xlabel('Time samples')
 ylabel('Angle [deg]')
+%% Plot
+if 1
+	set(gca,'FontSize',10)
+    set(findall(gcf,'type','text'),'FontSize',10)
+    %set(gcf, 'Position',  [200, 0, 650, 650])
+    grid on
+    f = gcf;
+    f.WindowState = 'maximize';%se si vuole a schermo intero
+    %exportgraphics(f,['Subspace_angle_H_between_span_rPCs_and_span_mean_PC_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_DS_between _span_rPCs_and_span_mean_PC_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_DLA_between_span_rPCs_and_span_mean_PC_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_NDS_between_span_rPCs_and_span_mean_PC_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_NDLA_between_span_rPCs_and_span_mean_PC_1group.pdf'], 'ContentType','vector') %num2str(i)
+end

@@ -60,7 +60,7 @@ legend(legend_msg)
 xlim([1 size(rPCsangles_h,2)])
 ylim([0 93])
 xlabel('Time samples')
-ylabel('Angle [grad]')
+ylabel('Angle [deg]')
 
 figure(2)
 clf
@@ -70,6 +70,8 @@ title(['Subspace angle of Dominant Stroke group between each rPCs and mean PC'])
 legend(legend_msg)	
 xlim([1 size(rPCsangles_a_d,2)])
 ylim([0 93])
+xlabel('Time samples')
+ylabel('Angle [deg]')
 
 figure(3)
 clf
@@ -80,7 +82,7 @@ legend(legend_msg)
 xlim([1 size(rPCsangles_la_d,2)])
 ylim([0 93])
 xlabel('Time samples')
-ylabel('Angle [grad]')
+ylabel('Angle [deg]')
 
 figure(4)
 clf
@@ -90,6 +92,9 @@ title(['Subspace angle of Non Dominant Stroke group between each rPCs and mean P
 legend(legend_msg)	
 xlim([1 size(rPCsangles_a_nd,2)])
 ylim([0 93])
+xlabel('Time samples')
+ylabel('Angle [deg]')
+
 
 figure(5)
 clf
@@ -100,4 +105,18 @@ legend(legend_msg)
 xlim([1 size(rPCsangles_la_nd,2)])
 ylim([0 93])
 xlabel('Time samples')
-ylabel('Angle [grad]')
+ylabel('Angle [deg]')
+%% Saving Plot
+if 0
+	set(gca,'FontSize',10)
+    set(findall(gcf,'type','text'),'FontSize',10)
+    %set(gcf, 'Position',  [200, 0, 650, 650])
+    grid on
+    f = gcf;
+    f.WindowState = 'maximize';%se si vuole a schermo intero
+    %exportgraphics(f,['Subspace_angle_H_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_DS_between _each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_DLA_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	%exportgraphics(f,['Subspace_angle_NDS_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+	exportgraphics(f,['Subspace_angle_NDLA_between_each_rPCs_and_mean_PC_single_1group.pdf'], 'ContentType','vector') %num2str(i)
+end
