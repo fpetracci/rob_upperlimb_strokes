@@ -35,7 +35,7 @@ function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)
     crop_amounts(end+1:4) = NaN;  % fill missing values with NaN
 
     [h, w, c, n] = size(A);
-    if isempty(bcol)  % case of transparent bgcolor
+    if exist('bcol')== 0  % case of transparent bgcolor
         bcol = A(ceil(end/2),1,:,1);
     end
     if isscalar(bcol)

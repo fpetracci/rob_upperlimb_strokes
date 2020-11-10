@@ -66,13 +66,14 @@ for j = 1:10 % joint
 		if save_mode == 1
 			drawnow
 			%set(gcf, 'Color', 'w');
-			set(gcf, 'Position',  [200, 0, 650, 650], 'Color', 'none') 
-			set(gca,'FontSize',10)
+			set(gcf, 'Position',  [200, 0, 650, 650]) 
+			set(gca,'FontSize',11)
 			set(legend,'FontSize',11);
 			%set(findall(gcf,'type','text'),'FontSize',15)
 			f = gcf;
-			exportgraphics(f,['recon_fPCA_joint_' num2str(j) '.png'], 'ContentType','vector')     
-			%export_fig(['recon_fPCA_joint_' num2str(j)], '-dpng', '-r300')
+			exportgraphics(B,['recon_fPCA_joint_' num2str(j) '.pdf'], 'BackgroundColor','none')     
+			export_fig test.png 
+			export_fig(['recon_fPCA_joint_' num2str(j)], '-dpng', '-r300')
 		end
 	
 end
@@ -90,3 +91,4 @@ arm_gen_movie(q_anima, 1, 20, 2, 'real_trial_H07')
 q_plot = q_reconstructed(:,:,4);
 arm_gen_movie(q_plot, 1, 21, 2, 'recon_trial_H07_mean&123fpc')
 
+ 
