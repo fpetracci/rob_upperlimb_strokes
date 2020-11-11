@@ -61,94 +61,171 @@ movie_fps = 24;
 figure(3)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first three of healthy subjects
 for i=1:240
 	D(:, 1) = data.h.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.h.coeff(:, 1, i);
 	D(:, 2) = data.h.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.h.coeff(:, 2, i);
 	D(:, 3) = data.h.coeff(:, 3, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.h.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hDF')
 	title('first three rPCs of healthy group')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hDF')
+title('mean of first three rPCs of healthy group')
+%%
 figure(4)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first three of less affected dominant subjects
 for i=1:240
 	D(:, 1) = data.la_d.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.la_d.coeff(:, 1, i);
 	D(:, 2) = data.la_d.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.la_d.coeff(:, 2, i);
 	D(:, 3) = data.la_d.coeff(:, 3, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.la_d.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hDF')
 	title('first three rPCs of less affected dominant group')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hDF')
+title('mean of first three rPCs of less affected dominant group')
+%%
 figure(5)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first three of affected dominant subjects
 for i=1:240
 	D(:, 1) = data.a_d.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.a_d.coeff(:, 1, i);
 	D(:, 2) = data.a_d.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.a_d.coeff(:, 2, i);
 	D(:, 3) = data.a_d.coeff(:, 3, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.a_d.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hDF')
 	title('first three rPCs of affected dominant group')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hDF')
+title('mean of first three rPCs of affected dominant group')
+%%
 figure(6)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first rPC of healthy, less affected and affected dominant subjects
 for i=1:240
 	D(:, 1) = data.h.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.h.coeff(:, 1, i);
 	D(:, 2) = data.a_d.coeff(:, 1, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.a_d.coeff(:, 1, i);
 	D(:, 3) = data.la_d.coeff(:, 1, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.la_d.coeff(:, 1, i);
 	spider_plot_rPCs(D, 'hDF')
 	title('first rPC of healthy and dom: affected and less affected')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hDF')
+title('mean of first rPC of healthy and dom: affected and less affected')
+%%
 figure(7)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first three of less affected non dominant subjects
 for i=1:240
 	D(:, 1) = data.la_nd.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.la_nd.coeff(:, 1, i);
 	D(:, 2) = data.la_nd.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.la_nd.coeff(:, 2, i);
 	D(:, 3) = data.la_nd.coeff(:, 3, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.la_nd.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hdf')
 	title('first three rPCs of less affected non dominant group')
 	drawnow
 end
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hdf')
+title('mean of first three rPCs of less affected non dominant group')
 
+%%
 figure(8)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first three of affected non dominant subjects
 for i=1:240
 	D(:, 1) = data.a_nd.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.a_nd.coeff(:, 1, i);
 	D(:, 2) = data.a_nd.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.a_nd.coeff(:, 2, i);
 	D(:, 3) = data.a_nd.coeff(:, 3, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.a_nd.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hdf')
 	title('first three rPCs of affected non dominant group')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hdf')
+title('mean of first 3 rPCs of affected non dominant group')
+%%
 figure(9)
 clf;
 D = zeros(10, 3);
+D_mean = zeros (10, 3);
 %first rPC of healthy, less affected and affected non dominant subjects
 for i=1:240
 	D(:, 1) = data.h.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.h.coeff(:, 1, i);
 	D(:, 2) = data.a_nd.coeff(:, 1, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.a_nd.coeff(:, 1, i);
 	D(:, 3) = data.la_nd.coeff(:, 1, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.la_nd.coeff(:, 1, i);
 	spider_plot_rPCs(D, 'hdf')
 	title('first rPC of healthy and non dom: affected and less affected')
 	drawnow
 end
-
+figure(11)
+clf;
+D_mean(:, 1) = D_mean(:, 1)./240;
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+spider_plot_rPCs(D_mean, 'hdf')
+title('mean of first rPC of healthy and non dom: affected and less affected')
 %% with video
 figh = figure(10);
 clf;
