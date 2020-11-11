@@ -41,6 +41,15 @@ else
 			mean_mat_la	= cat(2 , mean_mat_la, mean(struct_rPCA(i).la.mean, 2));
 		end
 	end
+	% FAI CON MEDIANA! PROVAAA
+% 	for i = [1:10,12:20,22:24]
+% 		if i < 6
+% 			mean_mat_h	= cat(2 , mean_mat_h, mean(struct_rPCA(i).h.mean, 2));
+% 		else
+% 			mean_mat_s	= cat(2 , mean_mat_s, mean(struct_rPCA(i).s.mean, 2));
+% 			mean_mat_la	= cat(2 , mean_mat_la, mean(struct_rPCA(i).la.mean, 2));
+% 		end
+% 	end
 
 	% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
 	% finale

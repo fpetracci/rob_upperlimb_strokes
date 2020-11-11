@@ -19,6 +19,7 @@ q_stacked =  fpca_stacker_hsla(ngroup);
 % stacked matrix
 
 nobs = 200;
+%nobs = 150;
 nfpc_max = 4;
 q_reconstructed = zeros(240,10,nfpc_max);
 
@@ -43,7 +44,7 @@ for j = 1:10 % joint
 	 plot(qmat(:,nobs,4)+mean_tmp,...
 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
 	 plot(qmat(:,nobs,5)+mean_tmp,...
-		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3+fPC4')
+		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3 + fPC4')
 	 
 	 plot(q_stacked.q_matrix_h(nobs,:,j), ...
 			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')

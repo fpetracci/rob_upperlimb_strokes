@@ -93,8 +93,8 @@ for i=1:240
 end
 
 %% video
-movie_mode = 0;
-movie_fps = 24;
+movie_mode = 1;
+movie_fps = 20;
 
 figh = figure(6);
 clf;
@@ -110,6 +110,7 @@ for i=1:240
 	title(['first rPC of healthy, stroke and less affected. Frame: ' num2str(i)])
 	drawnow
 	if movie_mode
+		figh.WindowState = 'maximize';
 		movieVector(k) = getframe(figh);
 		%open to fullscreen figure(1) before using the next line
 		%movieVector(k) = getframe(figh, [10,10,1910,960]);
