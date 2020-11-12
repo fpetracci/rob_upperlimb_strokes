@@ -51,7 +51,30 @@ axis([1, 240, 0, 100])
 legend('Healthy','Affected','Less Affected')
 xlabel('Time [samples] ')
 ylabel('% explained variance')
+%%
+selr= [1 2 3 4];
 
+figure(50)
+clf
+
+hold on
+for i=1:max(selr)
+	plot3(1:240, i*ones(240, 1), 0* ones(240, 1), 'k')
+	plot3(0*ones(100, 1), i*ones(1, 100), linspace(0,100,100), 'k')
+	%plot3(linspace(0,100,240), i*ones(1, 100), linspace(0,100,240), 'k')
+	plot3(1:240, i*ones(240, 1), data.h.var_expl(i,:)', 'b')
+	plot3(1:240, i*ones(240, 1), data.s.var_expl(i,:)', 'r')
+	plot3(1:240, i*ones(240, 1), data.la.var_expl(i,:)', 'g')
+end
+view(50,5);
+grid on
+%axis([1, 240, 0, 100])
+legend('Healthy','Affected','Less Affected')
+yticks(selr);
+
+xlabel('Time [samples]')
+zlabel('% explained variance')
+ylabel('number of used rPCs')
 %% spider plot animation
 figure(3)
 clf;
