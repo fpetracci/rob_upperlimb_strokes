@@ -146,9 +146,6 @@ hand_traj = [];				% hand trajectory
 figh = figure(nfig);
 clf
 
-xlabel('X [m]')
-ylabel('Y [m]')
-zlabel('Z [m]')
 
 % figure settings
 %set(gca, 'drawmode', 'fast');
@@ -214,25 +211,9 @@ for i = 1:fr_skip:t_tot
 		'floorlevel', 0);
 	
 	if i == 1 && movie_mode == 2
-% 		% prompt figure HD
-% 		t1 = text(0.35,0.5,'Maximize this window, then return to matlab and press any key.', 'FontSize',14);
-% 		t2 = text(0.4,0.45,'Note that a 1080p resolution is needed.', 'FontSize',14);
-% 		pause
-% 		delete(t1)
-% 		delete(t2)
-% 		
-% 		% replot the robot
-% 		arm.plot(q_plot_now,...
-% 		'noname',...
-% 		'scale', 1,...
-% 		'jointdiam',1,...
-% 		'ortho',...
-% 		'raise',...
-% 		'floorlevel', 0);
 		figh.WindowState = 'maximize';
-		
-	elseif movie_mode ~= 2
-		%set(gcf, 'Position',  [0, 50, 1900, 950])
+	elseif movie_mode ~= 2  
+		% do nothing
 	end
 		
 	
@@ -253,7 +234,10 @@ for i = 1:fr_skip:t_tot
 	xlim([-1 1])
 	ylim([-1 1])
 	zlim([0 2])
-		
+	xlabel('X [m]')
+	ylabel('Y [m]')
+	zlabel('Z [m]')
+
 	%----------------------------------------------------------------------
 	% end stuff
 
@@ -295,7 +279,7 @@ if movie_mode
 	open(movie);
 	writeVideo(movie, movieVector);
 	close(movie);
-	disp('Movie saved!')
+	disp([movie_title ' saved!'])
 
 end
 

@@ -1,23 +1,19 @@
-clear
-close all
-plot(cos(linspace(0, 7, 1000)));
+%% parameters
+
+f_width		= 650;
+f_heigth	= 650;
+dim_font	= 13;
+
+filename = 'test.pdf';
 
 %% set current figure
 
-set(gcf, 'Position',  [200, 0, 650, 650])
-%set(gcf, 'Position',  [200, 0, 650, 650], 'color', 'none') 
-set(findall(gcf,'type','text'),'FontSize',10)           
-set(gca,'FontSize',10) 
+set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+set(findall(gcf,'type','text'),'FontSize', dim_font)           
+set(gca,'FontSize', dim_font) 
 
 f = gcf;
 
 %% export
-%exportgraphics(f,'test.pdf', 'ContentType','vector')     
-%export_fig('filename', '-dpng', '-transparent', '-r300')
-%export_fig('filename', '-dpng', '-r300')
+exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
 
-%exportgraphics(gca,'myplot.png','Resolution',300) 
-
-exportgraphics(f,'test.eps','BackgroundColor','none', 'ContentType','vector')
-% exportgraphics(f,'test.pdf','BackgroundColor','none', 'ContentType','vector')
-%exportgraphics(f,'test.png','BackgroundColor','none')

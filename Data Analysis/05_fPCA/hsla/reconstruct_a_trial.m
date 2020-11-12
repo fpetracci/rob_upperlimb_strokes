@@ -12,16 +12,14 @@ fPCA_struct = fpca_hsla(ngroup);
 
 q_stacked =  fpca_stacker_hsla(ngroup);
 
-
-
-%%
+%% plots
 % we decided to reconstruct an healthy subject trial and the 'nobs' in the
 % stacked matrix
 
-%nobs = 200;
-nobs = 150;
+nobs = 200;
+
 nfpc_max = 4;
-q_reconstructed = zeros(240,10,nfpc_max);
+q_reconstructed = zeros(240,10,nfpc_max+1); %+1 for the mean
 
 for j = 1:10 % joint
 	figure(j)
@@ -62,6 +60,7 @@ for j = 1:10 % joint
 		q_reconstructed(:,j,2) = qmat(:,nobs,2)+mean_tmp;
 		q_reconstructed(:,j,3) = qmat(:,nobs,3)+mean_tmp;
 		q_reconstructed(:,j,4) = qmat(:,nobs,4)+mean_tmp;
+		q_reconstructed(:,j,5) = qmat(:,nobs,5)+mean_tmp;
 		
 		% save
 		if save_mode == 1
@@ -85,9 +84,11 @@ q_anima = reshape(q_anima, 240,10,1);
 arm_gen_movie(q_anima, 1, 20, 2, 'real_trial_H07')
 
 %% video of reconstructed trial
-
-
-q_plot = q_reconstructed(:,:,4);
-arm_gen_movie(q_plot, 1, 21, 2, 'recon_trial_H07_mean&123fpc')
+msg = [];
+for i = 1:nfpc_max
+	msg = cat(2,msg, num2str(i));
+	q_plot = q_reconstructed(:,:,i+1); %+1 to avoid plotting mean
+	arm_gen_movie(q_plot, 1, 21, 2, ['recon_trial_H07_mean&' msg 'fpc'])
+end
 
  
