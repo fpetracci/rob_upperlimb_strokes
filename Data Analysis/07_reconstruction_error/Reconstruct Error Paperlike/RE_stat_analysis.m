@@ -234,5 +234,18 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % ranksum(E_h_3(:,1),E_subj3(:,1,1)) 
 % 0.1551
 
+%% analysis S vs LA
+% 10DoF first fPC
+% ranksum(E_subj10(:,1,2),E_subj10(:,1,1)) 
+% 0.2269
+
+% 7DoF first fPC
+% ranksum(E_subj7(:,1,2),E_subj7(:,1,1))  
+%  0.2554
+
+% 3DoF first fPC
+% ranksum(E_subj3(:,1,2),E_subj3(:,1,1)) 
+% 0.1551
+
 
 
