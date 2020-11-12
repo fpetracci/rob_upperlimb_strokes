@@ -52,7 +52,8 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % STROKE SIDE
 % 10 DOF
 % 1 fPC between D and F
-% ranksum(E_D_s_10(:,1), E_F_s_10(:,1) )
+ ranksum(E_D_s_10(:,1), E_F_s_10(:,1) )
+% 0.2060
 % 0.0506
 
 % 2 fPC between D and F
@@ -145,20 +146,53 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % 3DoF first fPC
 % ranksum(E_h_3(:,1),E_D_la_3(:,1))
 % 0.3196
-
-%% analysis F vs H
+%% analysis D vs H S side
 % 10DoF first fPC
-% ranksum(E_h_10(:,1),E_F_la_10(:,1)) 
+% ranksum(E_h_10(:,1),E_D_s_10(:,1)) 
+
+
+% 7DoF first fPC
+% ranksum(E_h_7(:,1),E_D_s_7(:,1))
+
+
+% 3DoF first fPC
+% ranksum(E_h_3(:,1),E_D_s_3(:,1))
+
+%% analysis F vs H S
+% 10DoF first fPC
+% ranksum(E_h_10(:,1),E_F_s_10(:,1)) 
 % 0.5237
 
 % 7DoF first fPC
-% ranksum(E_h_7(:,1),E_F_la_7(:,1))
+% ranksum(E_h_7(:,1),E_F_s_7(:,1))
 %  0.6216
 
 
 % 3DoF first fPC
-% ranksum(E_h_3(:,1),E_F_la_3(:,1))
+% ranksum(E_h_3(:,1),E_F_s_3(:,1))
 % 0.1274
+%% analysis LA vs A D
+% 10DoF first fPC
+% ranksum(E_D_la_10(:,1,1),E_D_s_10(:,1)) 
+
+
+% 7DoF first fPC
+%  ranksum(E_D_la_7(:,1,1),E_D_s_7(:,1)) 
+
+
+% 3DoF first fPC
+%  ranksum(E_D_la_3(:,1,1),E_D_s_3(:,1))
+%% analysis LA vs A F
+% 10DoF first fPC
+% ranksum(E_F_la_10(:,1,1),E_F_s_10(:,1)) 
+
+
+% 7DoF first fPC
+%  ranksum(E_F_la_7(:,1,1),E_F_s_7(:,1)) 
+
+
+% 3DoF first fPC
+%  ranksum(E_F_la_3(:,1,1),E_F_s_3(:,1))
 %% analysis LA vs A
 % 10DoF first fPC
 % ranksum(E_subj10(:,1,1),E_subj10(:,1,2)) 
