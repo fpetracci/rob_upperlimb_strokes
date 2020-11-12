@@ -68,12 +68,11 @@ for j = 1:10 % joint
 		% save
 		if save_mode == 1
 			drawnow
-			%set(gcf, 'Color', 'w');
 			set(gcf, 'Position',  [200, 0, 650, 650]) 
 			set(gca,'FontSize',13)
-			set(legend,'FontSize',10);
-			f = gcf
-			exportgraphics(f,['recon_fPCA_joint' num2str(j) '_subj150.pdf'],'BackgroundColor','none', 'ContentType','vector')
+			set(legend,'FontSize',13);
+			f = gcf;
+			exportgraphics(f,['recon_fPCA_joint' num2str(j) '_nobs' num2str(nobs) '.pdf'],'BackgroundColor','none', 'ContentType','vector')
 
 		end
 	
@@ -81,14 +80,17 @@ end
 	
 %% video of real trial
 
-arm_gen_movie(q_real, 1, 20, 2, 'real_trial_H07')
+q_anima = q_stacked.q_matrix_h(nobs,:,:);
+q_anima = reshape(q_anima, 240,10,1);
+
+arm_gen_movie(q_anima, 1, 20, 2, ['real_trial_H07_nobs' num2str(nobs)])
 
 %% video of reconstructed trial
 msg = [];
 for i = 1:nfpc_max
 	msg = cat(2,msg, num2str(i));
 	q_plot = q_reconstructed(:,:,i+1); %+1 to avoid plotting mean
-	arm_gen_movie(q_plot, 1, 21, 2, ['recon_trial_H07_mean&' msg 'fpc'])
+	arm_gen_movie(q_plot, 1, 21, 2, ['recon_trial_H07_mean&' msg 'fpc_nobs' num2str(nobs)])
 end
 
 %% error in trial reconstruction using n fPCs

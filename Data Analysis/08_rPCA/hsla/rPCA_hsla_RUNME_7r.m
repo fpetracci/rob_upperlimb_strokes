@@ -23,11 +23,12 @@ hold on
 % plot(data.h.var_expl(2,:)','b:', 'LineWidth', 1.2)
 % plot(data.s.var_expl(2,:)', 'r:', 'LineWidth', 1.2)
 % plot(data.la.var_expl(2,:)', 'g:', 'LineWidth', 1.2)
-
+% 
 plot(sum(data.h.var_expl(sel,:),1)','b', 'LineWidth', 1.2)
 plot(sum(data.s.var_expl(sel,:),1)', 'r', 'LineWidth', 1.2)
 plot(sum(data.la.var_expl(sel,:),1)', 'g', 'LineWidth', 1.2)
 
+% legend('Healthy','Affected','Less Affected', 'first rPC', 'second rPC')
 legend('Healthy','Affected','Less Affected')
 grid on
 axis([1, 240, 0, 100])

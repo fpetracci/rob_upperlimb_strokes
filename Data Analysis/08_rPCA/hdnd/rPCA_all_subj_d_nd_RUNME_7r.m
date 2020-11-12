@@ -26,25 +26,25 @@ sel = 1:2;
 figure(1)
 clf
 hold on
-% plot(data.h.var_expl(1,:)',	'b--',	'Displayname', 'Healthy' )
-% plot(data.a_d.var_expl(1,:)','r--',	'Displayname', 'A_d' )
-% plot(data.la_d.var_expl(1,:)','g--',	'Displayname', 'LA_d')
-% plot(data.a_nd.var_expl(1,:)','m--',	'Displayname', 'A_{nd}')
-% plot(data.la_nd.var_expl(1,:)','c--',	'Displayname', 'LA_{nd}')
+plot(data.h.var_expl(1,:)',	'b--',	'Displayname', 'Healthy' )
+plot(data.a_d.var_expl(1,:)','r--',	'Displayname', 'A_d' )
+plot(data.la_d.var_expl(1,:)','g--',	'Displayname', 'LA_d')
+plot(data.a_nd.var_expl(1,:)','m--',	'Displayname', 'A_{nd}')
+plot(data.la_nd.var_expl(1,:)','c--',	'Displayname', 'LA_{nd}')
+
+plot(data.h.var_expl(2,:)',	'b:',	 'LineWidth', 1.2)
+plot(data.a_d.var_expl(2,:)','r:',	 'LineWidth', 1.2)
+plot(data.la_d.var_expl(2,:)','g:',	 'LineWidth', 1.2)
+plot(data.a_nd.var_expl(2,:)','m:',	 'LineWidth', 1.2)
+plot(data.la_nd.var_expl(2,:)','c:', 'LineWidth', 1.2)
+
+
 % 
-% plot(data.h.var_expl(2,:)',	'b:',	 'LineWidth', 1.2)
-% plot(data.a_d.var_expl(2,:)','r:',	 'LineWidth', 1.2)
-% plot(data.la_d.var_expl(2,:)','g:',	 'LineWidth', 1.2)
-% plot(data.a_nd.var_expl(2,:)','m:',	 'LineWidth', 1.2)
-% plot(data.la_nd.var_expl(2,:)','c:', 'LineWidth', 1.2)
-
-
-
-plot(sum(data.h.var_expl(sel,:),1)',	'b',	'Displayname', 'Healthy', 'LineWidth', 1.2)
-plot(sum(data.a_d.var_expl(sel,:),1)',	'r',	'Displayname', 'A_d', 'LineWidth', 1.2)
-plot(sum(data.la_d.var_expl(sel,:),1)',	'g',	'Displayname', 'LA_d', 'LineWidth', 1.2)
-plot(sum(data.a_nd.var_expl(sel,:),1)',	'm',	'Displayname', 'A_{nd}', 'LineWidth', 1.2)
-plot(sum(data.la_nd.var_expl(sel,:),1)','c',	'Displayname', 'LA_{nd}', 'LineWidth', 1.2)
+% plot(sum(data.h.var_expl(sel,:),1)',	'b',	'Displayname', 'Healthy', 'LineWidth', 1.2)
+% plot(sum(data.a_d.var_expl(sel,:),1)',	'r',	'Displayname', 'A_d', 'LineWidth', 1.2)
+% plot(sum(data.la_d.var_expl(sel,:),1)',	'g',	'Displayname', 'LA_d', 'LineWidth', 1.2)
+% plot(sum(data.a_nd.var_expl(sel,:),1)',	'm',	'Displayname', 'A_{nd}', 'LineWidth', 1.2)
+% plot(sum(data.la_nd.var_expl(sel,:),1)','c',	'Displayname', 'LA_{nd}', 'LineWidth', 1.2)
 
 
 
@@ -58,7 +58,8 @@ plot(sum(data.la_nd.var_expl(sel,:),1)','c',	'Displayname', 'LA_{nd}', 'LineWidt
 % plot(sum(data.la_nd.var_expl(sel,:),1)',	'c',	'Displayname', 'LA_{nd}')
 grid on
 axis([1, 240, 0, 100])
-legend('Healthy', 'A_d', 'LA_d', 'A_{nd}','LA_{nd}')
+% legend('Healthy', 'A_d', 'LA_d', 'A_{nd}','LA_{nd}')
+legend('Healthy', 'A_d', 'LA_d', 'A_{nd}','LA_{nd}', 'first rPC', 'second rPC')
 %legend
 xlabel('Time [samples] ')
 ylabel('% explained variance')

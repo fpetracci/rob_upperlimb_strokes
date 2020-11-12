@@ -35,20 +35,22 @@ sel= [1 2];
 figure(2)
 clf
 hold on
-% plot(data.h.var_expl(1,:)','b--')
-% plot(data.s.var_expl(1,:)', 'r--')
-% plot(data.la.var_expl(1,:)', 'g--')
-% 
-% plot(data.h.var_expl(2,:)','b:', 'LineWidth', 1.2)
-% plot(data.s.var_expl(2,:)', 'r:', 'LineWidth', 1.2)
-% plot(data.la.var_expl(2,:)', 'g:', 'LineWidth', 1.2)
+plot(data.h.var_expl(1,:)','b--')
+plot(data.s.var_expl(1,:)', 'r--')
+plot(data.la.var_expl(1,:)', 'g--')
 
-plot(sum(data.h.var_expl(sel,:),1)','b', 'LineWidth', 1.2)
-plot(sum(data.s.var_expl(sel,:),1)', 'r', 'LineWidth', 1.2)
-plot(sum(data.la.var_expl(sel,:),1)', 'g', 'LineWidth', 1.2)
+plot(data.h.var_expl(2,:)','b:', 'LineWidth', 1.2)
+plot(data.s.var_expl(2,:)', 'r:', 'LineWidth', 1.2)
+plot(data.la.var_expl(2,:)', 'g:', 'LineWidth', 1.2)
+% 
+% plot(sum(data.h.var_expl(sel,:),1)','b', 'LineWidth', 1.2)
+% plot(sum(data.s.var_expl(sel,:),1)', 'r', 'LineWidth', 1.2)
+% plot(sum(data.la.var_expl(sel,:),1)', 'g', 'LineWidth', 1.2)
 grid on
 axis([1, 240, 0, 100])
-legend('Healthy','Affected','Less Affected')
+legend('Healthy','Affected','Less Affected', 'first rPC', 'second rPC')
+% legend('Healthy','Affected','Less Affected')
+
 xlabel('Time [samples] ')
 ylabel('% explained variance')
 %%
@@ -193,6 +195,9 @@ for i=1:240
 	spider_plot_rPCs(D, 'hslm')
 	title(['first rPC of healthy, stroke and less affected. Frame: ' num2str(i)])
 	drawnow
+	
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
 	if movie_mode
 		figh.WindowState = 'maximize';
 		movieVector(k) = getframe(figh);

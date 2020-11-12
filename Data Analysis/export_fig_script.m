@@ -4,7 +4,7 @@ f_width		= 650;
 f_heigth	= 650;
 dim_font	= 13;
 
-filename = 'test.pdf';
+filename = 'rPCA_expl_var_7R_HDND_12.pdf';
 
 %% set current figure
 

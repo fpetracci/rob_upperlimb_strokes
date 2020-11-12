@@ -89,7 +89,7 @@ for i = 1:nbars
 end
 % Plot the errorbars
 err = [std(var_h,1); std(var_a_d,1);  std(var_la_d,1); std(var_a_nd,1);std(var_la_nd,1)] *100;
-errorbar(x,y,err,'k','linestyle','none')'
+errorbar(x,y,err,'k','linestyle','none')';
 ylim([0, 100])
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
@@ -125,7 +125,7 @@ grid on
 
 
 %% save graphics
-if 1
+if 0
 	if ~exist('i')
 		i = 1;
 	end
