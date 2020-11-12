@@ -6,7 +6,7 @@
 clear; clc;
 ngroup = 1;
 
-save_mode = 0;  %save option
+save_mode = 1;  %save option
 
 fPCA_struct = fpca_hsla(ngroup);
 
@@ -18,8 +18,8 @@ q_stacked =  fpca_stacker_hsla(ngroup);
 % we decided to reconstruct an healthy subject trial and the 'nobs' in the
 % stacked matrix
 
-nobs = 200;
-%nobs = 150;
+%nobs = 200;
+nobs = 150;
 nfpc_max = 4;
 q_reconstructed = zeros(240,10,nfpc_max);
 
@@ -68,13 +68,11 @@ for j = 1:10 % joint
 			drawnow
 			%set(gcf, 'Color', 'w');
 			set(gcf, 'Position',  [200, 0, 650, 650]) 
-			set(gca,'FontSize',11)
-			set(legend,'FontSize',11);
-			%set(findall(gcf,'type','text'),'FontSize',15)
-			f = gcf;
-			exportgraphics(B,['recon_fPCA_joint_' num2str(j) '.pdf'], 'BackgroundColor','none')     
-			export_fig test.png 
-			export_fig(['recon_fPCA_joint_' num2str(j)], '-dpng', '-r300')
+			set(gca,'FontSize',13)
+			set(legend,'FontSize',10);
+			f = gcf
+			exportgraphics(f,['recon_fPCA_joint' num2str(j) '_subj150.pdf'],'BackgroundColor','none', 'ContentType','vector')
+
 		end
 	
 end

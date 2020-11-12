@@ -78,6 +78,18 @@ b(2).FaceColor = [255 0 0]/255;
 b(3).FaceColor = [0 255 0]/255;
 b(4).FaceColor = [255 0 255]/255; % magent
 b(5).FaceColor = [0 255 255]/255; % cian
+hold on
+%% error bar
+% Calculate the number of bars in each group
+nbars = 5;
+% Get the x coordinate of the bars
+x = [];
+for i = 1:nbars
+    x = [x ; b(i).XEndPoints];
+end
+% Plot the errorbars
+err = [std(var_h,1); std(var_a_d,1);  std(var_la_d,1); std(var_a_nd,1);std(var_la_nd,1)] *100;
+errorbar(x,y,err,'k','linestyle','none')'
 ylim([0, 100])
 xlabel('Principal Function')
 ylabel(' Explained Variance % ')
@@ -117,16 +129,16 @@ if 1
 	if ~exist('i')
 		i = 1;
 	end
-	set(gca,'FontSize',10)
-	set(findall(gcf,'type','text'),'FontSize',10)
+	set(gca,'FontSize',13)
+	set(findall(gcf,'type','text'),'FontSize',13)
 
 	f = gcf;
 	%exportgraphics(f,['joint' num2str(i) '_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
 	%exportgraphics(f,['jointmean_HLA_D_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
 % 	exportgraphics(f,['jointmean_HA_D_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
-% 	exportgraphics(f,['jointmean_HALA_DND_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
+ 	exportgraphics(f,['jointmean_HALA_DND_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
 % 	exportgraphics(f,['jointmean_HALA_D_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
- 	exportgraphics(f,['jointmean_HALA_ND_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
+% 	exportgraphics(f,['jointmean_HALA_ND_fpca_var_expl_hdnd_1group.pdf'], 'ContentType','vector') %num2str(i) 
 
 	i = i + 1;
 end

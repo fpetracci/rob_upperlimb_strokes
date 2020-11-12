@@ -849,7 +849,12 @@ hold on
 plot(err.S.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.S.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
 plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
-
+a = plot(err.S.j10.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.S.j10.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.H.j10.mean, 'db' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
@@ -930,6 +935,245 @@ legend
 %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
 set(gca,'FontSize',12)
 set(findall(gcf,'type','text'),'FontSize',12) 
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIGURE CON HEALTHY
+% %% 10 Dominant stroke vs la mean
+% b = 1;
+% figure(64)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j10.mean + b*err.H.j10.std, fliplr(err.H.j10.mean - b*err.H.j10.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.D.j10.s_mean + b*err.D.j10.s_std, fliplr(err.D.j10.s_mean - b*err.D.j10.s_std)];
+% a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.D.j10.la_mean + b*err.D.j10.la_std, fliplr(err.D.j10.la_mean - b*err.D.j10.la_std)];
+% a = fill(x2, inBetween2, 'g','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.D.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.D.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% %asterisks
+% a = plot(err.D.j10.s_mean, 'dr' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.D.j10.la_mean, 'dg' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j10.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Dominant 10R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+% %% 7 Dominant stroke vs la mean 
+% b = 1;
+% figure(65)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j7.mean + b*err.H.j7.std, fliplr(err.H.j7.mean - b*err.H.j7.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.D.j7.s_mean + b*err.D.j7.s_std, fliplr(err.D.j7.s_mean - b*err.D.j7.s_std)];
+% a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.D.j7.la_mean + b*err.D.j7.la_std, fliplr(err.D.j7.la_mean - b*err.D.j7.la_std)];
+% a = fill(x2, inBetween2, 'g','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.D.j7.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.D.j7.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% a = plot(err.D.j7.s_mean, 'dr' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.D.j7.la_mean, 'dg' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j7.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Dominant last 7R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+% %% 3 Dominant stroke vs la mean 
+% 
+% b = 1;
+% figure(66)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j3.mean + b*err.H.j3.std, fliplr(err.H.j3.mean - b*err.H.j3.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.D.j3.s_mean + b*err.D.j3.s_std, fliplr(err.D.j3.s_mean - b*err.D.j3.s_std)];
+% a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.D.j3.la_mean + b*err.D.j3.la_std, fliplr(err.D.j3.la_mean - b*err.D.j3.la_std)];
+% a = fill(x2, inBetween2, 'g','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.D.j3.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.D.j3.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% a = plot(err.D.j3.s_mean, 'dr' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.D.j3.la_mean, 'dg' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j3.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Dominant first 3R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+% %% 10 Non-Dominant stroke vs la mean
+% b = 1;
+% figure(67)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j10.mean + b*err.H.j10.std, fliplr(err.H.j10.mean - b*err.H.j10.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.F.j10.s_mean + b*err.F.j10.s_std, fliplr(err.F.j10.s_mean - b*err.F.j10.s_std)];
+% a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.F.j10.la_mean + b*err.F.j10.la_std, fliplr(err.F.j10.la_mean - b*err.F.j10.la_std)];
+% a = fill(x2, inBetween2, 'c','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.F.j10.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.F.j10.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% a = plot(err.F.j10.s_mean, 'dm' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.F.j10.la_mean, 'dc' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j10.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Non-Dominant 10R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+% %% 7 Non-Dominant stroke vs la mean 
+% b = 1;
+% figure(68)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j7.mean + b*err.H.j7.std, fliplr(err.H.j7.mean - b*err.H.j7.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.F.j7.s_mean + b*err.F.j7.s_std, fliplr(err.F.j7.s_mean - b*err.F.j7.s_std)];
+% a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.F.j7.la_mean + b*err.F.j7.la_std, fliplr(err.F.j7.la_mean - b*err.F.j7.la_std)];
+% a = fill(x2, inBetween2, 'c','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.F.j7.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.F.j7.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% a = plot(err.F.j7.s_mean, 'dr' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.F.j7.la_mean, 'dg' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j7.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Non-Dominant last 7R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+% %% 3 Non-Dominant stroke vs la mean 
+% 
+% b = 1;
+% figure(69)
+% clf
+% % plot(err.H.j10.mean, 'b', 'Linewidth', 1.2, 'Displayname', 'Healthy')
+% hold on
+% 
+% x2 = [1:10, fliplr(1:10)];
+% inBetween3 = [err.H.j3.mean + b*err.H.j3.std, fliplr(err.H.j3.mean - b*err.H.j3.std)];
+% a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween1 = [err.F.j3.s_mean + b*err.F.j3.s_std, fliplr(err.F.j3.s_mean - b*err.F.j3.s_std)];
+% a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% inBetween2 = [err.F.j3.la_mean + b*err.F.j3.la_std, fliplr(err.F.j3.la_mean - b*err.F.j3.la_std)];
+% a = fill(x2, inBetween2, 'c','EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a.FaceColor = [0, 0.3, 0.08];
+% 
+% hold on
+% plot(err.F.j3.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
+% plot(err.F.j3.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
+% plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+% a = plot(err.F.j3.s_mean, 'dr' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.F.j3.la_mean, 'dg' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% a = plot(err.H.j3.mean, 'db' );
+% a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+% 
+% 
+% xlabel('Number of fPCs used')
+% ylabel('Reconstruction Error [deg]')
+% legend
+% title('Mean and std RE Non-Dominant first 3R')
+% %axis([0 length(err.S.j10.s_mean) 0 max(err.S.j10.la_mean+b*err.S.j10.la_std)])
+% set(gca,'FontSize',12)
+% set(findall(gcf,'type','text'),'FontSize',12)
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%FIGURE WITHOUT HEALTHY
 %% 10 Dominant stroke vs la mean
 b = 1;
 figure(64)
@@ -938,9 +1182,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j10.mean + b*err.H.j10.std, fliplr(err.H.j10.mean - b*err.H.j10.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 inBetween1 = [err.D.j10.s_mean + b*err.D.j10.s_std, fliplr(err.D.j10.s_mean - b*err.D.j10.s_std)];
 a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
@@ -954,7 +1195,11 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.D.j10.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.D.j10.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+%asterisks
+a = plot(err.D.j10.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j10.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
 legend
@@ -970,9 +1215,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j7.mean + b*err.H.j7.std, fliplr(err.H.j7.mean - b*err.H.j7.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 inBetween1 = [err.D.j7.s_mean + b*err.D.j7.s_std, fliplr(err.D.j7.s_mean - b*err.D.j7.s_std)];
 a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
@@ -986,8 +1228,10 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.D.j7.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.D.j7.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
-
+a = plot(err.D.j7.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j7.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
@@ -1005,9 +1249,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j3.mean + b*err.H.j3.std, fliplr(err.H.j3.mean - b*err.H.j3.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 inBetween1 = [err.D.j3.s_mean + b*err.D.j3.s_std, fliplr(err.D.j3.s_mean - b*err.D.j3.s_std)];
 a = fill(x2, inBetween1, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
@@ -1021,8 +1262,10 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.D.j3.s_mean, 'r', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.D.j3.la_mean, 'Color', [0 220 30]/255, 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
-
+a = plot(err.D.j3.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.D.j3.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
@@ -1039,9 +1282,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j10.mean + b*err.H.j10.std, fliplr(err.H.j10.mean - b*err.H.j10.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 inBetween1 = [err.F.j10.s_mean + b*err.F.j10.s_std, fliplr(err.F.j10.s_mean - b*err.F.j10.s_std)];
 a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
@@ -1055,7 +1295,10 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.F.j10.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.F.j10.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j10.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+a = plot(err.F.j10.s_mean, 'dm' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j10.la_mean, 'dc' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
 legend
@@ -1071,10 +1314,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j7.mean + b*err.H.j7.std, fliplr(err.H.j7.mean - b*err.H.j7.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
-
 inBetween1 = [err.F.j7.s_mean + b*err.F.j7.s_std, fliplr(err.F.j7.s_mean - b*err.F.j7.s_std)];
 a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
 a.Annotation.LegendInformation.IconDisplayStyle = 'off';
@@ -1087,8 +1326,10 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.F.j7.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.F.j7.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j7.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
-
+a = plot(err.F.j7.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j7.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 xlabel('Number of fPCs used')
 ylabel('Reconstruction Error [deg]')
@@ -1106,9 +1347,6 @@ clf
 hold on
 
 x2 = [1:10, fliplr(1:10)];
-inBetween3 = [err.H.j3.mean + b*err.H.j3.std, fliplr(err.H.j3.mean - b*err.H.j3.std)];
-a = fill(x2, inBetween3, 'b' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 inBetween1 = [err.F.j3.s_mean + b*err.F.j3.s_std, fliplr(err.F.j3.s_mean - b*err.F.j3.s_std)];
 a = fill(x2, inBetween1, 'm' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
@@ -1122,7 +1360,10 @@ a.FaceColor = [0, 0.3, 0.08];
 hold on
 plot(err.F.j3.s_mean, 'm', 'Linewidth', 1, 'Displayname', 'Affected side')
 plot(err.F.j3.la_mean, 'c', 'Linewidth', 1, 'Displayname', 'Less Affected side')
-plot(err.H.j3.mean, 'b', 'Linewidth', 1, 'Displayname', 'Healthy')
+a = plot(err.F.j3.s_mean, 'dr' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+a = plot(err.F.j3.la_mean, 'dg' );
+a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 
 xlabel('Number of fPCs used')
@@ -1134,20 +1375,35 @@ set(gca,'FontSize',12)
 set(findall(gcf,'type','text'),'FontSize',12)
 %%
 if 1
-	set(gca,'FontSize',10)
-	set(findall(gcf,'type','text'),'FontSize',10)
-	%set(gcf, 'Position',  [200, 0, 650, 650])
+	set(gca,'FontSize',13)
+	set(findall(gcf,'type','text'),'FontSize',13)
+	set(gcf, 'Position',  [200, 0, 650, 650])
 	grid on
 	f = gcf;
-	f.WindowState = 'maximize';
-%	exportgraphics(f,['subj18_RE.pdf'], 'ContentType','vector') %num2str(i) 
-	exportgraphics(f,['subj24_RE.pdf'], 'ContentType','vector') %num2str(i) 
-
-%	exportgraphics(f,['shadow_D_10.pdf'], 'ContentType','vector') %num2str(i) 
-% 	exportgraphics(f,['shadow_D_7.pdf'], 'ContentType','vector') %num2str(i) 
-% 	exportgraphics(f,['shadow_D_3.pdf'], 'ContentType','vector') %num2str(i) 
-% 	exportgraphics(f,['shadow_ND_10.pdf'], 'ContentType','vector') %num2str(i) 
-% 	exportgraphics(f,['shadow_ND_7.pdf'], 'ContentType','vector') %num2str(i)
-%exportgraphics(f,['shadow_ND_3.pdf'], 'ContentType','vector') %num2str(i) 
+	%f.WindowState = 'maximize';
+	%% with healty
+%	exportgraphics(f,['subj18_RE.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+%	exportgraphics(f,['subj24_RE.pdf'],'BackgroundColor','none', 'ContentType','vector') 
+%	exportgraphics(f,['shadow_HSLA.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+%	exportgraphics(f,['shadow_D_10.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_D_7.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_D_3.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_ND_10.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_ND_7.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i)
+%	exportgraphics(f,['shadow_ND_3.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+%% without healty
+	set(gca,'FontSize',13)
+	set(findall(gcf,'type','text'),'FontSize',13)
+	set(gcf, 'Position',  [200, 0, 650, 650])
+	grid on
+	f = gcf;
+	%f.WindowState = 'maximize';
+%	exportgraphics(f,['shadow_SLA.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+%	exportgraphics(f,['shadow_D_10_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_D_7_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_D_3_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_ND_10_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
+% 	exportgraphics(f,['shadow_ND_7_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i)
+	exportgraphics(f,['shadow_ND_3_NOH.pdf'], 'ContentType','vector','BackgroundColor','none') %num2str(i) 
 end
  	

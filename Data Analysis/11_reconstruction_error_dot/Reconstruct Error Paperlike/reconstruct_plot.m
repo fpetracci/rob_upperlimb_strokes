@@ -44,6 +44,13 @@ if subj_status == 0
 	hold on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	%asterisks
+	a = plot(E_la(i_subj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_s(i_subj,:), 'dr' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
 	xlim([1,10])
@@ -71,6 +78,13 @@ if subj_status == 0
 	grid on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	%asterisks
+	a = plot(E_la(i_subj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_s(i_subj,:), 'dr' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
 	xlim([1,10])
@@ -96,6 +110,13 @@ if subj_status == 0
 	hold on
 	plot(E_s(i_subj,:), 'r', 'DisplayName', 'Stroke')
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	%asterisks
+	a = plot(E_la(i_subj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_s(i_subj,:), 'dr' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
 	xlim([1,10])
@@ -118,6 +139,11 @@ elseif subj_status == 1
 	plot(E_h_10(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	%asterisks
+	a = plot(E_h_10(nsubj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	legend
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
@@ -139,6 +165,10 @@ elseif subj_status == 1
 	plot(E_h_7(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	a = plot(E_h_7(nsubj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
 	xlim([1,10])
@@ -159,6 +189,10 @@ elseif subj_status == 1
 	plot(E_h_3(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
+	a = plot(E_h_3(nsubj,:), 'dg' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
+	a = plot(E_h, 'db' );
+	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg/s]')
 	xlim([1,10])
