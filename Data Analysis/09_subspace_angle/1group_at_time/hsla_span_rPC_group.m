@@ -24,15 +24,17 @@ ngroup = 1;
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 
-flag_mean = 0;
-% if flag_mean = 0 mean posture is computed as PCA of mean postures of each
-% subject
-% if flag_mean = 1 mean posture is computed as MEAN of mean postures of each
-% subject
 
 data_rPCA_hsla = rpca_hsla(ngroup);
-mean_posture = mean_post(ngroup, flag_mean);
+
 nsamples = size(data_rPCA_hsla.h.var_expl,2);
+%% mean posture
+flag_mp = 1;
+mean_posture = mean_post(ngroup, flag_mp);
+
+% flag_mean = 0;
+% [mean_post_h, mean_post_s, mean_post_la] = mean_postHSLA(ngroup, flag_mean);
+% mean_posture = mean_post_la;
 
 %% extrapulate angles one at a time
 
@@ -87,7 +89,7 @@ ylim([0 max(vecnorm(angles.la, 2, 1))+3])
 xlabel('Time samples')
 ylabel('Angle [deg]')
 %% Plot
-if 1
+if 0
 	set(gca,'FontSize',10)
     set(findall(gcf,'type','text'),'FontSize',10)
     %set(gcf, 'Position',  [200, 0, 650, 650])

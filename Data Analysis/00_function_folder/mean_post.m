@@ -8,26 +8,20 @@ function [mean_posture] = mean_post(ngroup, flag_mp)
 %					4	PCA of PCA of rPCs???
 %					0	PCA of the rPCs in the first time instant
 
-	% if flag_mean = 0 mean posture is computed as the first posture of each
-	% subject
-	% if flag_mean = 1 mean posture is computed as PCA of mean postures of each
-	% subject
-	% if flag_mean = 2 mean posture is computed as PCA of median postures of each
-	% subject
-	
 	if nargin < 2
 		flag_mp = 0;
 	end
 	
 	%% Load
-if exist('mean_postPCA_1group.mat') == 2 && sum(ngroup == 1) == 1 && flag_mean == 0
-	load('mean_postPCA_1group.mat');
-elseif exist('mean_postPCA_2group.mat') == 2 && sum(ngroup == 2) == 1 && flag_mean == 0
-	load('mean_postPCA_2group.mat');
-elseif exist('mean_postPCA_3group.mat') == 2 && sum(ngroup == 3) == 1 && flag_mean == 0
-	load('mean_postPCA_3group.mat');
-elseif exist('mean_postPCA_all_group.mat') == 2 && sum(ngroup == 'all') == 3 && flag_mean == 0
-	load('mean_postPCA_all_group.mat');
+if 0
+	% if exist('mean_postPCA_1group.mat') == 2 && sum(ngroup == 1) == 1 && flag_mean == 0
+% 	load('mean_postPCA_1group.mat');
+% elseif exist('mean_postPCA_2group.mat') == 2 && sum(ngroup == 2) == 1 && flag_mean == 0
+% 	load('mean_postPCA_2group.mat');
+% elseif exist('mean_postPCA_3group.mat') == 2 && sum(ngroup == 3) == 1 && flag_mean == 0
+% 	load('mean_postPCA_3group.mat');
+% elseif exist('mean_postPCA_all_group.mat') == 2 && sum(ngroup == 'all') == 3 && flag_mean == 0
+% 	load('mean_postPCA_all_group.mat');
 else
 	%% compute PCA of mean or first postures, to be used to comparison
 	struct_rPCA = rpca_all_subj(ngroup);

@@ -24,14 +24,11 @@ ngroup = 1;
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 
-flag_mean = 0;
-% if flag_mean = 0 mean posture is computed as PCA of mean postures of each
-% subject
-% if flag_mean = 1 mean posture is computed as MEAN of mean postures of each
-% subject
+flag_mp = 1;
+
 
 data_rPCA_hdnd = rpca_all_subj_d_nd(ngroup);
-mean_posture = mean_post(ngroup, flag_mean);
+mean_posture = mean_post(ngroup, flag_mp);
 nsamples = size(data_rPCA_hdnd.h.var_expl,2);
 
 %% extrapulate angles one at a time
