@@ -53,42 +53,16 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % 10 DOF
 % 1 fPC between D and F
 % ranksum(E_D_s_10(:,1), E_F_s_10(:,1) )
-% 0.0506
-
-% 2 fPC between D and F
-% ranksum(E_D_s_10(:,2), E_F_s_10(:,2) )
-% 0.0328
-
-% 3 fPC between D and F
-% ranksum(E_D_s_10(:,3), E_F_s_10(:,3) )
-% 0.0121
 %-----------
 % 3 DOF
 % 1 fPC between D and F
 % ranksum(E_D_s_3(:,1), E_F_s_3(:,1) )
 % 0.3100
-
-% 2 fPC between D and F
-% ranksum(E_D_s_3(:,2), E_F_s_3(:,2) )
-% 0.4421
-
-% 3 fPC between D and F
-% ranksum(E_D_s_3(:,3), E_F_s_3(:,3) )
-% 0.5999
-
 %-----------
 % 7 DOF
 % 1 fPC between D and F
 % ranksum(E_D_s_7(:,1), E_F_s_7(:,1) )
 % 0.0203
-
-% 2 fPC between D and F
-% ranksum(E_D_s_7(:,2), E_F_s_7(:,2) )
-% 0.0157
-
-% 3 fPC between D and F
-% ranksum(E_D_s_7(:,3), E_F_s_7(:,3) )
-% 0.0050
 
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
@@ -98,40 +72,17 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % ranksum(E_D_la_10(:,1), E_F_la_10(:,1) )
 % 0.3950
 
-% 2 fPC between D and F
-% ranksum(E_D_la_10(:,2), E_F_la_10(:,2) )
-% 0.3511
-
-% 3 fPC between D and F
-% ranksum(E_D_la_10(:,3), E_F_la_10(:,3) )
-% 0.4920
 %-----------
 % 3 DOF
 % 1 fPC between D and F
 % ranksum(E_D_la_3(:,1), E_F_la_3(:,1) )
 % 0.8404
 
-% 2 fPC between D and F
-% ranksum(E_D_la_3(:,2), E_F_la_3(:,2) )
-% 0.7168
-
-
-% 3 fPC between D and F
-% ranksum(E_D_la_3(:,3), E_F_la_3(:,3) )
-% 0.7780
-%-----------
 % 7 DOF
 % 1 fPC between D and F
 % ranksum(E_D_la_7(:,1), E_F_la_7(:,1) )
 %  0.3100
 
-% 2 fPC between D and F
-% ranksum(E_D_la_7(:,2), E_F_la_7(:,2) )
-% 0.2723
-
-% 3 fPC between D and F
-% ranksum(E_D_la_7(:,3), E_F_la_7(:,3) )
-% 0.3511
 
 %% analysis D vs H LA side
 % 10DoF first fPC
@@ -145,20 +96,53 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % 3DoF first fPC
 % ranksum(E_h_3(:,1),E_D_la_3(:,1))
 % 0.3196
-
-%% analysis F vs H
+%% analysis D vs H S side
 % 10DoF first fPC
-% ranksum(E_h_10(:,1),E_F_la_10(:,1)) 
+% ranksum(E_h_10(:,1),E_D_s_10(:,1)) 
+
+
+% 7DoF first fPC
+% ranksum(E_h_7(:,1),E_D_s_7(:,1))
+
+
+% 3DoF first fPC
+% ranksum(E_h_3(:,1),E_D_s_3(:,1))
+
+%% analysis F vs H S
+% 10DoF first fPC
+% ranksum(E_h_10(:,1),E_F_s_10(:,1)) 
 % 0.5237
 
 % 7DoF first fPC
-% ranksum(E_h_7(:,1),E_F_la_7(:,1))
+% ranksum(E_h_7(:,1),E_F_s_7(:,1))
 %  0.6216
 
 
 % 3DoF first fPC
-% ranksum(E_h_3(:,1),E_F_la_3(:,1))
+% ranksum(E_h_3(:,1),E_F_s_3(:,1))
 % 0.1274
+%% analysis LA vs A D
+% 10DoF first fPC
+% ranksum(E_D_la_10(:,1,1),E_D_s_10(:,1)) 
+
+
+% 7DoF first fPC
+%  ranksum(E_D_la_7(:,1,1),E_D_s_7(:,1)) 
+
+
+% 3DoF first fPC
+%  ranksum(E_D_la_3(:,1,1),E_D_s_3(:,1))
+%% analysis LA vs A F
+% 10DoF first fPC
+% ranksum(E_F_la_10(:,1,1),E_F_s_10(:,1)) 
+
+
+% 7DoF first fPC
+%  ranksum(E_F_la_7(:,1,1),E_F_s_7(:,1)) 
+
+
+% 3DoF first fPC
+%  ranksum(E_F_la_3(:,1,1),E_F_s_3(:,1))
 %% analysis LA vs A
 % 10DoF first fPC
 % ranksum(E_subj10(:,1,1),E_subj10(:,1,2)) 
@@ -199,6 +183,20 @@ E_F_la_10 = E_subj10(subj_F - 5,:,1);
 % 3DoF first fPC
 % ranksum(E_h_3(:,1),E_subj3(:,1,1)) 
 % 0.1551
+
+%% analysis S vs LA
+% 10DoF first fPC
+% ranksum(E_subj10(:,1,2),E_subj10(:,1,1)) 
+% 0.2269
+
+% 7DoF first fPC
+% ranksum(E_subj7(:,1,2),E_subj7(:,1,1))  
+%  0.2554
+
+% 3DoF first fPC
+% ranksum(E_subj3(:,1,2),E_subj3(:,1,1)) 
+% 0.1551
+
 
 
 
