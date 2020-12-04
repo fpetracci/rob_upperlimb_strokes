@@ -53,9 +53,11 @@ dq_des = gradient(q_des)*1000;
 ddq_des = gradient(dq_des)*1000;
 for i=1:length(t)
 	franka.plot(q_des(:,i)','floorlevel',0,'linkcolor',white,'jointcolor',black)
-	hold on
+	
 	plot3(x,y,z,'k','Linewidth',1.5)
 end
+hold
+plot3(x,y,z,'k','Linewidth',1.5)
 %% modello dinamico
 %% scelta della traiettoria, per il momento sarà u
 M = get_MassMatrix([0 0 0 0 0 0 0]);
