@@ -1,5 +1,6 @@
 clear all ; clc ;close all
 %modello cinematico e generazione traiettoria
+
 mdl_franka 
 
 white = [1, 1, 1];
