@@ -30,7 +30,7 @@ P = eye(7)*J0_wr*J0;
 % def matrice H(q) per gestione della ridondanza a centro corsa
 H = (1/franka.n) * 
 
-q0_dot = 
+q0_dot = zeros(1,7);
 q_dot = Ja_wr*vel_ee + P*q0_dot;
 
 
