@@ -1,4 +1,4 @@
-function [q_des, q_dot] = ikine_franka(xi_ee, q_0, franka)
+function [q_des, dq_des, ddq_des] = ikine_franka(xi_ee, q_0, franka, dt)
 % Inversione della cinematica con Jacobiano pseudoinverso pesato per la
 % definizione di una traiettoria desiderata in termini di angoli di giunto
 
@@ -17,7 +17,6 @@ function [q_des, q_dot] = ikine_franka(xi_ee, q_0, franka)
 
 	% istanti temporali
 	ntime = length(xi_ee);
-	dt = 1/60;
 	xi_dot= gradient(xi_ee)/dt;
 
 	%% Jacobiano geometrico a partire da Denavit
@@ -48,6 +47,9 @@ function [q_des, q_dot] = ikine_franka(xi_ee, q_0, franka)
 		q_des(:, i) = q_prev' + q_dot(:,i)*dt;
 		q_prev = q_des(:, i)';
 	end
+	
+	dq_des = q_dot;
+    ddq_des = gradient(dq_des)/dt;
 end
 
 %% gradH

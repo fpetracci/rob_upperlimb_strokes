@@ -86,9 +86,9 @@ phi =  zeros(size(p(1,:)));
 psi =  zeros(size(p(1,:)));
 xi = [p(1,:);p(2,:);p(3,:); theta; phi; psi]; % pose ee nel tempo
 %q_des = generate_trajectory(xi,qv1,franka);
-q_des = ikine_franka(xi,qv1,franka);
-dq_des = gradient(q_des)*1000;
-ddq_des = gradient(dq_des)*1000;
+[q_des, dq_des, ddq_des] = ikine_franka(xi,qv1,franka, delta_t);
+% dq_des = gradient(q_des)*1000;
+% ddq_des = gradient(dq_des)*1000;
 figure(1) 
 hold on
 plot3(p(1,:),p(2,:),p(3,:))
