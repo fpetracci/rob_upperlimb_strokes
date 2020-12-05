@@ -1,4 +1,4 @@
-function [q_des, q_dot] = ikine_franka(franka, q_0, xi_ee)
+function [q_des, q_dot] = ikine_franka(xi_ee, q_0, franka)
 % Inversione della cinematica con Jacobiano pseudoinverso pesato per la
 % definizione di una traiettoria desiderata in termini di angoli di giunto
 
@@ -31,11 +31,14 @@ function [q_des, q_dot] = ikine_franka(franka, q_0, xi_ee)
 	% P = eye(7)*J0_wr*J0;
 
 	% calcolo della traiettoria desiderata in termini di velocità ai giunti
-	q_dot = zeros(franka.n, length(xi_ee)+1);
-	q_des = zeros(franka.n, length(xi_ee)+1);
+	q_dot = zeros(franka.n, ntime);
+	q_des = zeros(franka.n, ntime);
 
-	q_prev = q_0';
-
+	if size(q_0, 1) == franka.n
+		q_0 = q_0';
+	end
+	q_prev = q_0; % vettore riga (jacob0 vuole riga in ingresso)
+	
 	for i = 1:(length(xi_dot))
 		J = franka.jacob0(q_prev);
 		Jwr = ((W)^(-1)*J'*(J*(W)^(-1)*J')^(-1));
