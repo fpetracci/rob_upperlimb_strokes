@@ -91,6 +91,8 @@ else
 	end
 	xlim([1 size(rPCsangles_s,2)])
 	ylim([0 max(angle_norm_s)+3])
+	xlabel('Time samples')
+	ylabel('Angle [deg]')
 	
 	figure(2)
 	clf

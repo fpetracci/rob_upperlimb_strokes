@@ -1,4 +1,4 @@
-function [arm_right, traj_real, traj_fpc] = gen_path(plot_mode)
+function [arm_right, traj_real, traj_fpc] = gen_path(nfpc, plot_mode )
 % Questo funzione carica nel workspace:
 % 	- traj_real		posa EE braccio umano
 % 	- traj_fpc		posa EE braccio umano semplificata
@@ -6,6 +6,9 @@ function [arm_right, traj_real, traj_fpc] = gen_path(plot_mode)
 % Possibile avere alcuni Plot inserendo plot_mode = 1
 
 if nargin < 1
+	plot_mode = 0;
+	nfpc = 4;
+elseif nargin < 2
 	plot_mode = 0;
 end
 %% Costruzione generico braccio destro
@@ -64,8 +67,8 @@ for i = 1:n
 end
 
 %% Trial semplificato con un numero limitato di fPCs
-nfpc = 4;	% numero di fPC che vogliamo usare nel ricostruire, 
-			% +1 per la media
+% nfpc = 4;	% numero di fPC che vogliamo usare nel ricostruire, 
+% 			% +1 per la media
 q_fpc = zeros(n,njoints,1);
 
 for j = 1:10 % joint
