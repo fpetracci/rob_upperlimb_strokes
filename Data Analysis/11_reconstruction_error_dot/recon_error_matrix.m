@@ -3,8 +3,12 @@
 clear all; clc; close;
 %choose if you want to load angle or angle velocity
 %% Angles velocity
-load('loader_subj_dot_mat.mat');
+load('loader_subj_mat_1group_dot.mat');
+load('q_task_warped_dot');
+
 q_task_warp = q_task_warp_dot;
+q_stacked_subj = q_stacked_subj_dot;
+fPCA_subj = fPCA_subj_dot;
 %% intro
 [njoints, nsamples] = size(q_task_warp(1).subject(1).trial(1).q_grad);% number of joints andtime length of each signal
 nfpc		= 10;	% number of fpcs used

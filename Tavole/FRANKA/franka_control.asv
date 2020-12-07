@@ -134,7 +134,10 @@ psi		= zeros(size(p(1,:)));
 
 xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
 
-[q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
+q_des = generate_trajectory(xi,qv1,franka);
+dq_des = gradient(q_des)/delta_t;
+ddq_des = gradient(dq_des)/delta_t;
+
 % figure
 fig1 = figure(1);
 clf
