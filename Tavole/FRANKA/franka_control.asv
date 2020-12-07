@@ -26,14 +26,15 @@ qv1(6) = pi/2;
 
 t_in	= 0;	% [s]
 t_fin	= 10;	% [s]
-delta_t = 0.01;	% [s]
-timeSpan= 10;
+delta_t = 0.001;% [s]
+timeSpan= t_fin - t_in;
 
 % vettore tempo
 t = t_in:delta_t:t_fin;
 
 njoints = 7;
-n_steps = 1000;
+n_steps = timeSpan/delta_t;
+n_steps_appr = n_steps/100;
 
 % posizioni iniziali
 pos1 = franka.fkine(qv1);
@@ -75,6 +76,27 @@ r = 0.1; % raggio del cerchio
 % plot3(p(1,:),p(2,:),p(3,:))
 % franka.plot(q_des','floorlevel',0,'trail','-b','linkcolor',light_grey,'jointcolor',black)
 %% a seguito del raggiungimento punto pos1 eseguo una spirale figa di raggio r
+
+% center = pos1(1:3,4) - [0;0;r];% partendo dal punto pos1 calcolo il cerchio nel pianonel piano XZ
+% p = zeros(3,size(t,2));
+% for i=1:size(t,2)
+% 	p(:,i) = center + rotx(t(i)/t(end)*2*pi)*[0;0;r] +[2*r;r;0]*t(i)/t(end)  ;
+% end
+% 
+% theta = zeros(size(p(1,:)));
+% phi =  zeros(size(p(1,:)));
+% psi =  zeros(size(p(1,:)));
+% xi = [p(1,:);p(2,:);p(3,:); theta; phi; psi]; % pose ee nel tempo
+% %q_des = generate_trajectory(xi,qv1,franka);
+% [q_des, dq_des, ddq_des] = ikine_franka(xi,qv1,franka, delta_t);
+% % dq_des = gradient(q_des)*1000;
+% % ddq_des = gradient(dq_des)*1000;
+% 
+% figure(1) 
+% hold on
+% plot3(p(1,:),p(2,:),p(3,:), ':c')
+% franka.plot(q_des')
+
 %% clotoide
 
 punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
@@ -116,12 +138,19 @@ for i = 1 :size(points_clot,1)
 end
 
 % gen points on clothoid and path
+dx = 0.3;
 zy_clot = gen_clot(points_clot);
 clot_sizes = size(zy_clot,1);
-p_clot = [0.3* ones(clot_sizes,1)';zy_clot(:,2)';zy_clot(:,1)'];
+
+x_clot = 0.3 * ones(1, clot_sizes);
+for i = 2:clot_sizes
+	x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
+end
+
+p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
 
 posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
-T_appr = ctraj(pos1, posclot_ini, n_steps);	% matrix hom approach al punto 
+T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
 											% iniziale clotoide
 p_appr = hgmat2pos(T_appr);
 eul_appr = hgmat2eul(T_appr);
@@ -134,40 +163,37 @@ psi		= zeros(size(p(1,:)));
 
 xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
 
-q_des = generate_trajectory(xi,qv1,franka);
-dq_des = gradient(q_des)/delta_t;
-ddq_des = gradient(dq_des)/delta_t;
-
+[q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
 % figure
 fig1 = figure(1);
 clf
 plot3(p(1,:),p(2,:),p(3,:), ':c')
 hold on
 axis equal
+franka.plot(q_des', 'trail', ':b')
 
-franka.plot(q_des')
-
+% ho ottenuto la traiettoria desiderata da far seguire al Franka, ora devo
+% controllarlo in modo tale che la segua davvero
 %% modello dinamico
 %% Trajectory tracking: Backstepping control
 
-
 % Good Circumference parameters
-Kp = 1* diag([1 1 1 1 3 1 1]);
-
+% Kp = 1* diag([1 1 1 1 3 1 1]);
+Kp = 1* diag([1 1 1 1 1 1 1]);
 % Good Helix parameters
 % Kp = diag([1 1 1 1 3 1 1]);
 
-
 results_backstepping = qv1;
 index = 1;
-q = qv1;
-dq = [0 0 0 0 0 0 0];
-ddq = [0 0 0 0 0 0 0];
-for i=1:size(q_des,2)
+q = qv1';
+dq = [0 0 0 0 0 0 0]';
+ddq = [0 0 0 0 0 0 0]';
 
+for i=1:size(q_des,2)
+	% prima fase: controllo velocità ai giunti dqr
    % Error and derivate of the error   
-    err = q_des(:,i)' - q;
-    derr = dq_des(:,i)' - dq;
+    err = q_des(:,i) - q;
+    derr = dq_des(:,i) - dq;
     
     dqr = dq_des(:,i)' + err*(Kp);
     ddqr = ddq_des(:,i)' + derr*(Kp);
@@ -197,4 +223,79 @@ for i=1:size(q_des,2)
     results_backstepping(index,  :) = q;
     index = index + 1;
 
+end
+
+%% again
+Kp = 1* diag([1 1 1 1 5 1 1]);
+Mat = 1;
+% Good Helix parameters
+% Kp = diag([1 1 1 1 3 1 1]);
+
+results_backstepping = qv1';
+index = 1;
+q = qv1';
+dq = [0 0 0 0 0 0 0]';
+ddq = [0 0 0 0 0 0 0]';
+
+for i=1:size(q_des,2)
+	% prima fase: controllo velocità ai giunti dqr
+   % Error and derivate of the error 
+   
+   q_ref = q;
+   dq_ref = dq;
+   ddq_ref = ddq;
+   
+   err = q_des(:,i) - q_ref;
+   derr = dq_des(:,i) - dq_ref;
+    
+   dq_ref = dq_des(:,i) + Mat*err;
+   ddq_ref = ddq_des(:,i) + Mat*derr;
+   s = derr + Mat*err;
+   % s = dq_ref - dq;
+     
+    %Get dynamic matrices
+    F = get_FrictionTorque(dq);
+    G = get_GravityVector(q);
+    C = get_CoriolisMatrix(q,dq);
+    M = get_MassMatrix(q);
+
+
+    % Backstepping Controller
+    tau = M*(ddq_ref) + C*(dq_ref) ...
+        + G + Kp*(s) + err;      
+    
+    % Robot joint accelerations
+    ddq_old = ddq;
+    ddq = pinv(M)*(tau - (C*(dq))- G);
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+    results_backstepping(:, index) = q;
+    index = index + 1;
+end
+
+fig1 = figure(1);
+clf
+plot3(p(1,:),p(2,:),p(3,:), ':c')
+hold on
+axis equal
+franka.plot(results_backstepping', 'trail', '--r');
+
+%% Plot computed torque results for backstepping control
+
+figure(3)
+clf
+for j=1:njoints
+    subplot(4,2,j);
+    plot(results_backstepping(j,:))
+    hold on
+    plot (q_des(j,:))
+%     hold on
+%     plot(t,results_computed_torque(:,j))
+    grid;
+    legend ('Backstepping Results','Desired angle')
 end
