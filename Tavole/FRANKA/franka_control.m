@@ -25,12 +25,12 @@ qv1(6) = pi/2;
 %% Setup e parametri
 
 t_in	= 0;	% [s]
-t_fin	= 10;	% [s]
+t_end	= 10;	% [s]
 delta_t = 0.001;% [s]
-timeSpan= t_fin - t_in;
+timeSpan= t_end - t_in;
 
 % vettore tempo
-t = t_in:delta_t:t_fin;
+%t = t_in:delta_t:t_fin;
 
 njoints = 7;
 n_steps = timeSpan/delta_t;
@@ -162,6 +162,8 @@ phi		= zeros(size(p(1,:)));
 psi		= zeros(size(p(1,:)));
 
 xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
+t_end = size(xi,2)*delta_t;
+t = (t_in+delta_t):delta_t:t_end;
 
 [q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
 % figure
@@ -286,16 +288,30 @@ axis equal
 franka.plot(results_backstepping', 'trail', '--r');
 
 %% Plot computed torque results for backstepping control
-
 figure(3)
 clf
+
 for j=1:njoints
     subplot(4,2,j);
+	grid on
     plot(results_backstepping(j,:))
     hold on
     plot (q_des(j,:))
 %     hold on
 %     plot(t,results_computed_torque(:,j))
-    grid;
+    
     legend ('Backstepping Results','Desired angle')
 end
+
+figure(4)
+clf
+for j=1:njoints
+    subplot(4,2,j);
+    plot(t,(q_des(j,:)-results_backstepping(j,:))*180/pi, 'DisplayName', [num2str(j) '-th joint angle error'])
+	grid on
+	xlim([0, t(end)])
+	xlabel('time[s]')
+	ylabel('angle error[deg]')
+	title([num2str(j) '-th joint angle error'])
+end
+
