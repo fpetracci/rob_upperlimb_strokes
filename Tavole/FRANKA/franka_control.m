@@ -96,6 +96,20 @@ r = 0.1; % raggio del cerchio
 % hold on
 % plot3(p(1,:),p(2,:),p(3,:), ':c')
 % franka.plot(q_des')
+%% traiettoria fpc
+[arm_right, traj_real, traj_fpc] = gen_path(3);
+pos_EE = hgmat2pos(traj_real);
+pos_EE(1,:)= pos_EE(1,:) +0.5;
+pos_EE(3,:)= pos_EE(3,:) - 0.25;
+pos1 = franka.ikine(traj_real(:,:,1));
+eul_EE = hgmat2eul(traj_real);
+xi_EE =[pos_EE;eul_EE];
+
+franka.plot(pos1)
+hold on
+plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
+figure(3)
+plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
 
 %% clotoide
 

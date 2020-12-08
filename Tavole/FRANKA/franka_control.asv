@@ -96,6 +96,20 @@ r = 0.1; % raggio del cerchio
 % hold on
 % plot3(p(1,:),p(2,:),p(3,:), ':c')
 % franka.plot(q_des')
+%% traiettoria fpc
+[arm_right, traj_real, traj_fpc] = gen_path(3);
+pos_EE = hgmat2pos(traj_real);
+pos_EE(1,:)= pos_EE(1,:) +0.5;
+pos_EE(3,:)= pos_EE(3,:) - 0.25;
+pos1 = franka.ikine(traj_real(:,:,1));
+eul_EE = hgmat2eul(traj_real);
+xi_EE =[pos_EE;eul_EE];
+
+franka.plot(q)
+hold on
+plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
+figure(3)
+plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
 
 %% clotoide
 
@@ -163,7 +177,7 @@ psi		= zeros(size(p(1,:)));
 
 xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
 t_end = size(xi,2)*delta_t;
-t = t_in:delta_t:t_end;
+t = (t_in+delta_t):delta_t:t_end;
 
 [q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
 % figure
@@ -309,7 +323,7 @@ for j=1:njoints
     subplot(4,2,j);
     plot(t,(q_des(j,:)-results_backstepping(j,:))*180/pi, 'DisplayName', [num2str(j) '-th joint angle error'])
 	grid on
-	xlim([0, size(q_des,2)])
+	xlim([0, t(end)])
 	xlabel('time[s]')
 	ylabel('angle error[deg]')
 	title([num2str(j) '-th joint angle error'])
