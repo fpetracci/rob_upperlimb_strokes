@@ -424,21 +424,21 @@ end
 er_rel_EKF = max_norm_er_EKF./exc;
 er_rel_UKF = max_norm_er_UKF./exc;
 %% SYNC PLOT
-figure(1)
-	subplot(1,2,1)
-	title('q_{ekf} results ')
-	subplot(1,2,2)
-	title('q_ukf results ')
-	
-for i=1:5:floor(t_tot)
-	% plot of robotic arm with PC.plot
-	subplot(1,2,1)
-	arm.plot(q_rad_EKF(:,i)','floorlevel', 0)
-	% plot of joint angle
-	subplot(1,2,2)
-	arm.plot(q_rad_UKF(:,i)','floorlevel', 0)
-
-end
+% figure(1)
+% 	subplot(1,2,1)
+% 	title('q_{ekf} results ')
+% 	subplot(1,2,2)
+% 	title('q_ukf results ')
+% 	
+% for i=1:5:floor(t_tot)
+% 	% plot of robotic arm with PC.plot
+% 	subplot(1,2,1)
+% 	arm.plot(q_rad_EKF(:,i)','floorlevel', 0)
+% 	% plot of joint angle
+% 	subplot(1,2,2)
+% 	arm.plot(q_rad_UKF(:,i)','floorlevel', 0)
+% 
+% end
 %% PLOTS
 arm.plot(q_rad_EKF', 'floorlevel', 0)
 arm.plot(q_rad_UKF', 'floorlevel', 0)
