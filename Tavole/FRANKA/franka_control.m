@@ -97,152 +97,166 @@ r = 0.1; % raggio del cerchio
 % plot3(p(1,:),p(2,:),p(3,:), ':c')
 % franka.plot(q_des')
 %% traiettoria fpc
-[arm_right, traj_real, traj_fpc] = gen_path(3);
-pos_EE = hgmat2pos(traj_real);
-pos_EE(1,:)= pos_EE(1,:) +0.5;
-pos_EE(3,:)= pos_EE(3,:) - 0.25;
-pos1 = franka.ikine(traj_real(:,:,1));
-eul_EE = hgmat2eul(traj_real);
-xi_EE =[pos_EE;eul_EE];
-
-franka.plot(pos1)
-hold on
-plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
-figure(3)
-plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), ':c')
+if exist('traj_fpc_3') == 0
+	[arm_right, traj_real, traj_fpc_1] = gen_path(1);
+	[~, ~, traj_fpc_2] = gen_path(2);
+	[~, ~, traj_fpc_3] = gen_path(3);
+	[~, ~, traj_fpc_4] = gen_path(4);
+else
+	load trajectory.mat
+end
+traj_real(1:3,4,:) = traj_real(1:3,4,:) + [0.3; 0.1; -0.4];% traslazione della traiettoria 
+traj_real = traj_real(:,:,60:220); % selezione dei punti di interesse al movimento
+pos_EE = hgmat2pos(traj_real); %estrapolazione posizione EE dalla matrice di rotoTrasl traj_real
+eul_EE = hgmat2eul(traj_real); %estrapolazione angoli eulero EE dalla matrice di rotoTrasl traj_real,Da rivedere
+%prova
+theta = zeros(1,size(traj_real,3));
+phi =  zeros(1,size(traj_real,3));
+psi = zeros(1,size(traj_real,3));
+%prova2
+% theta = eul_EE(3,:);
+% phi = eul_EE(2,:);
+% psi = eul_EE(1,:);
+p = [pos_EE(1,:);pos_EE(2,:);pos_EE(3,:)];
+xi_EE =[pos_EE;theta;phi;psi];
+qv1 = franka.ikunc(traj_real(:,:,1));
+franka.plot(qv1)
+ [q_des, dq_des, ddq_des] = ikine_franka(xi_EE, qv1, franka,delta_t);
+% plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), '-k')
+% hold on
+% franka.plot(q_des')
 
 %% clotoide
 
-punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
-
-fig2 = figure(2);
-clf
-hold on
-x_shaded = [-0.5 0.5 0.5 -0.5];
-y_shaded = [0.5 0.5 1 1];
-fill(x_shaded, y_shaded, 'g' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-
-x_shaded = [-0.5 0.5 0.5 -0.5];
-y_shaded = [0 0 0.5 0.5];
-fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-
-x_shaded = [-0.5 0.5 0.5 -0.5];
-y_shaded = [1 1 1.2 1.2];
-fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-
-x_shaded = [-0.6 -0.5 -0.5 -0.6];
-y_shaded = [0 0 1.2 1.2];
-fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-
-x_shaded = [0.6 0.5 0.5 0.6];
-y_shaded = [0 0 1.2 1.2];
-fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-
-xlim([-0.6 0.6]);
-ylim([0 1.2]);
-xlabel('-Y [m]')
-ylabel('Z [m]')
-grid on
-
-points_clot = ginput;
-
-% handling ginput_frame to franka globalframe
-for i = 1 :size(points_clot,1)
-	points_clot(i,:) = [cos(-pi/2) -sin(-pi/2); sin(-pi/2) cos(-pi/2)] * points_clot(i,:)';
-end
-
-% gen points on clothoid and path
-dx = 0.3;
-zy_clot = gen_clot(points_clot);
-clot_sizes = size(zy_clot,1);
-
-x_clot = 0.3 * ones(1, clot_sizes);
-for i = 2:clot_sizes
-	x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
-end
-
-p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
-
-posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
-T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
-											% iniziale clotoide
-p_appr = hgmat2pos(T_appr);
-eul_appr = hgmat2eul(T_appr);
-p = [p_appr, p_clot];
-
-% generating xi
-theta	= zeros(size(p(1,:)));
-phi		= zeros(size(p(1,:)));
-psi		= zeros(size(p(1,:)));
-
-xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
-t_end = size(xi,2)*delta_t;
-t = (t_in+delta_t):delta_t:t_end;
-
-[q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
-% figure
-fig1 = figure(1);
-clf
-plot3(p(1,:),p(2,:),p(3,:), ':c')
-hold on
-axis equal
-franka.plot(q_des', 'trail', ':b')
+% punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
+% 
+% fig2 = figure(2);
+% clf
+% hold on
+% x_shaded = [-0.5 0.5 0.5 -0.5];
+% y_shaded = [0.5 0.5 1 1];
+% fill(x_shaded, y_shaded, 'g' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% x_shaded = [-0.5 0.5 0.5 -0.5];
+% y_shaded = [0 0 0.5 0.5];
+% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% x_shaded = [-0.5 0.5 0.5 -0.5];
+% y_shaded = [1 1 1.2 1.2];
+% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% x_shaded = [-0.6 -0.5 -0.5 -0.6];
+% y_shaded = [0 0 1.2 1.2];
+% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% x_shaded = [0.6 0.5 0.5 0.6];
+% y_shaded = [0 0 1.2 1.2];
+% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% xlim([-0.6 0.6]);
+% ylim([0 1.2]);
+% xlabel('-Y [m]')
+% ylabel('Z [m]')
+% grid on
+% 
+% points_clot = ginput;
+% 
+% % handling ginput_frame to franka globalframe
+% for i = 1 :size(points_clot,1)
+% 	points_clot(i,:) = [cos(-pi/2) -sin(-pi/2); sin(-pi/2) cos(-pi/2)] * points_clot(i,:)';
+% end
+% 
+% % gen points on clothoid and path
+% dx = 0.3;
+% zy_clot = gen_clot(points_clot);
+% clot_sizes = size(zy_clot,1);
+% 
+% x_clot = 0.3 * ones(1, clot_sizes);
+% for i = 2:clot_sizes
+% 	x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
+% end
+% 
+% p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
+% 
+% posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
+% T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
+% 											% iniziale clotoide
+% p_appr = hgmat2pos(T_appr);
+% eul_appr = hgmat2eul(T_appr);
+% p = [p_appr, p_clot];
+% 
+% % generating xi
+% theta	= zeros(size(p(1,:)));
+% phi		= zeros(size(p(1,:)));
+% psi		= zeros(size(p(1,:)));
+% 
+% xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
+% t_end = size(xi,2)*delta_t;
+% t = (t_in+delta_t):delta_t:t_end;
+% 
+% [q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
+% % figure
+% fig1 = figure(1);
+% clf
+% plot3(p(1,:),p(2,:),p(3,:), ':c')
+% hold on
+% axis equal
+% franka.plot(q_des', 'trail', ':b')
 
 % ho ottenuto la traiettoria desiderata da far seguire al Franka, ora devo
 % controllarlo in modo tale che la segua davvero
 %% modello dinamico
 %% Trajectory tracking: Backstepping control
-
-% Good Circumference parameters
-% Kp = 1* diag([1 1 1 1 3 1 1]);
-Kp = 1* diag([1 1 1 1 1 1 1]);
-% Good Helix parameters
-% Kp = diag([1 1 1 1 3 1 1]);
-
-results_backstepping = qv1;
-index = 1;
-q = qv1';
-dq = [0 0 0 0 0 0 0]';
-ddq = [0 0 0 0 0 0 0]';
-
-for i=1:size(q_des,2)
-	% prima fase: controllo velocità ai giunti dqr
-   % Error and derivate of the error   
-    err = q_des(:,i) - q;
-    derr = dq_des(:,i) - dq;
-    
-    dqr = dq_des(:,i)' + err*(Kp);
-    ddqr = ddq_des(:,i)' + derr*(Kp);
-    s = derr + err*(Kp');
-     
-    %Get dynamic matrices
-    F = get_FrictionTorque(dq);
-    G = get_GravityVector(q);
-    C = get_CoriolisMatrix(q,dq);
-    M = get_MassMatrix(q);
-
-
-    % Backstepping Controller
-    tau = (M*(ddqr') + C*(dqr') ...
-        + G + Kp*(s') + err')';      
-    
-    % Robot joint accelerations
-    ddq_old = ddq;
-    ddq = (pinv(M)*(tau - (C*(dq'))'- G')')';
-        
-    % Tustin integration
-    dq_old = dq;
-    dq = dq + (ddq_old + ddq) * delta_t / 2;
-    q = q + (dq + dq_old) * delta_t /2;
-    
-    % Store result for the final plot
-    results_backstepping(index,  :) = q;
-    index = index + 1;
-
-end
-
+% 
+% % Good Circumference parameters
+% % Kp = 1* diag([1 1 1 1 3 1 1]);
+% Kp = 1* diag([1 1 1 1 1 1 1]);
+% % Good Helix parameters
+% % Kp = diag([1 1 1 1 3 1 1]);
+% 
+% results_backstepping = qv1;
+% index = 1;
+% q = qv1';
+% dq = [0 0 0 0 0 0 0]';
+% ddq = [0 0 0 0 0 0 0]';
+% 
+% for i=1:size(q_des,2)
+% 	% prima fase: controllo velocità ai giunti dqr
+%    % Error and derivate of the error   
+%     err = q_des(:,i) - q;
+%     derr = dq_des(:,i) - dq;
+%     
+%     dqr = dq_des(:,i)' + err*(Kp);
+%     ddqr = ddq_des(:,i)' + derr*(Kp);
+%     s = derr + err*(Kp');
+%      
+%     %Get dynamic matrices
+%     F = get_FrictionTorque(dq);
+%     G = get_GravityVector(q);
+%     C = get_CoriolisMatrix(q,dq);
+%     M = get_MassMatrix(q);
+% 
+% 
+%     % Backstepping Controller
+%     tau = (M*(ddqr') + C*(dqr') ...
+%         + G + Kp*(s') + err')';      
+%     
+%     % Robot joint accelerations
+%     ddq_old = ddq;
+%     ddq = (pinv(M)*(tau - (C*(dq'))'- G')')';
+%         
+%     % Tustin integration
+%     dq_old = dq;
+%     dq = dq + (ddq_old + ddq) * delta_t / 2;
+%     q = q + (dq + dq_old) * delta_t /2;
+%     
+%     % Store result for the final plot
+%     results_backstepping(index,  :) = q;
+%     index = index + 1;
+% 
+% end
 %% again
-Kp = 1* diag([1 1 1 1 3 1 1]);
+Kp = 1* diag([1 1 1 1 1 1 1 ]);
 Mat = 1;
 % Good Helix parameters
 % Kp = diag([1 1 1 1 3 1 1]);
