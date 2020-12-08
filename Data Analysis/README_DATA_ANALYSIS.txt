@@ -36,6 +36,7 @@ Folders named 'old' contain old function and or scripts that are no longer usefu
 	struct_population.m	- searches and read all mvnx files with the proper name and populates the structures of strokes_data and healthy_data with the relevant data.
 
 02_Kalman_marker
+	Comparisons with simple signals     - executes EKF, UKF and our UKF to estimate simple signal in order to judge their efficiency.
 	script_comparison_between_ukf_ekf 	- executes EKF and UKF for a selected trial and compares their efficiency.
 	script_filter_double 				- that executes EKF and used in order to obtain reasonable filter parameters by a 'trial & error' procedure.
 	view_marker 						- function that animates markers evolution in time once selected a trial.
