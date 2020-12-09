@@ -24,7 +24,7 @@ ngroup = 1;
 %		we want to analyze. (1 = int, 2 = tr, 3 = tm, 'all' = all tasks)
 % load data
 
-flag_mp = 1;
+flag_mp = 0;
 
 
 data_rPCA_hdnd = rpca_all_subj_d_nd(ngroup);

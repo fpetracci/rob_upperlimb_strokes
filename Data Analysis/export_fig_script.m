@@ -8,7 +8,7 @@ set(findall(gcf,'type','text'),'FontSize', dim_font)
 set(gca,'FontSize', dim_font) 
 
 %% export
-filename = 'comparison2.pdf';
+filename = 'single_s.pdf';
 f = gcf;
 exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
 

@@ -67,6 +67,9 @@ title(['Subspace angle of Stroke group between each rPCs and mean PC'])
 legend(legend_msg)	
 xlim([1 size(rPCsangles_s,2)])
 ylim([0 93])
+xlabel('Time samples')
+ylabel('Angle [grad]')
+
 
 figure(3)
 clf
@@ -79,7 +82,7 @@ ylim([0 93])
 xlabel('Time samples')
 ylabel('Angle [grad]')
 %% Saving Plot
-if 1
+if 0
 	set(gca,'FontSize',10)
     set(findall(gcf,'type','text'),'FontSize',10)
     %set(gcf, 'Position',  [200, 0, 650, 650])

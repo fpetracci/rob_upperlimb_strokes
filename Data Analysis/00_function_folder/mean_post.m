@@ -5,7 +5,7 @@ function [mean_posture] = mean_post(ngroup, flag_mp)
 %		flag_mp		1	PCA of the time means of dataset mean
 %					2	PCA of the time means of each rPCs
 %					3	PCA of the time median of each rPCs
-%					4	PCA of PCA of rPCs???
+%					4	mean of the rPCs in the first time instant
 %					0	PCA of the rPCs in the first time instant
 
 	if nargin < 2
@@ -32,12 +32,9 @@ else
 	mean_posture = zeros(10,1);
 	
 	if flag_mp == 1
-		% fai mean prima nel tempo per singolo soggetto, poi impili in gruppi di
-		% soggetti e poi fai la PCA tra i mean postures dei gruppi, svincoli dal
-		% tempo
-
+		%PCA of the time means of dataset mean
 		
-	
+		% not all subjects have enough trials, we remove some of them
 		for i = [1:10,12:20,22:24]
 			if i < 6
 				mean_mat_h	= cat(2 , mean_mat_h, mean(struct_rPCA(i).h.mean, 2)); 
@@ -46,117 +43,131 @@ else
 				mean_mat_la	= cat(2 , mean_mat_la, mean(struct_rPCA(i).la.mean, 2));
 			end
 		end
-		% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-		% finale
+		
+		% stacking the means together
 		data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
 		
-		% PC of means/median/first istant values
+		% PC of means
 		[mean_posture,	~, ~, ~, ~, ~] = pca(data_mat');
 		
 	elseif flag_mp == 2
+		
+		%2	PCA of the time means of each rPCs
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
-				if i < 6 %subj
+				if i < 6 
+					% healthy subj
 					tmp = struct_rPCA(i).h.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_h	= cat(2 , mean_mat_h, mean(tmp, 2)); 
+					tmp = reshape(tmp, 10, 240, 1);
+					rPC_mean_mat_h	= cat(2 , rPC_mean_mat_h, mean(tmp, 2)); 
+					
 				else
+					% stroke subj
 					tmp = struct_rPCA(i).s.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_s	= cat(2 , mean_mat_s, mean(tmp, 2));
+					tmp = reshape(tmp, 10, 240, 1); 
+					rPC_mean_mat_s	= cat(2 , rPC_mean_mat_s, mean(tmp, 2));
+					
 					tmp = struct_rPCA(i).la.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_la	= cat(2 , mean_mat_la, mean(tmp, 2));
+					tmp = reshape(tmp, 10, 240, 1);
+					rPC_mean_mat_la	= cat(2 , rPC_mean_mat_la, mean(tmp, 2));
 				end
 			end
 			
-			% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-			% finale
-			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
+			% stacking the mean of rPCs together
+			data_mat = [rPC_mean_mat_h, rPC_mean_mat_s, rPC_mean_mat_la];
 
-			% PC of means/median/first istant values
+			% PC
 			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
 			mean_posture(:, j) = mean_post(:, 1);
 		end
 
 	elseif flag_mp == 3
+		%PCA of the time median of each rPCs
+		
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
 				if i < 6 %subj
 					tmp = struct_rPCA(i).h.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_h	= cat(2 , mean_mat_h, median(tmp, 2)); 
+					tmp = reshape(tmp, 10, 240, 1); 
+					rPC_med_mat_h	= cat(2 , rPC_med_mat_h, median(tmp, 2)); 
 				else
 					tmp = struct_rPCA(i).s.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_s	= cat(2 , mean_mat_s, median(tmp, 2));
+					tmp = reshape(tmp, 10, 240, 1);
+					rPC_med_mat_s	= cat(2 , rPC_med_mat_s, median(tmp, 2));
+					
 					tmp = struct_rPCA(i).la.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					mean_mat_la	= cat(2 , mean_mat_la, median(tmp, 2));
+					tmp = reshape(tmp, 10, 240, 1);
+					rPC_med_mat_la	= cat(2 , rPC_med_mat_la, median(tmp, 2));
 				end
 			end
 			
-			% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-			% finale
-			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
+			% stacking the median of rPCs together
+			data_mat = [rPC_med_mat_h, rPC_med_mat_s, rPC_med_mat_la];
 
-			% PC of means/median/first istant values
+			% PC
 			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
 			mean_posture(:, j) = mean_post(:, 1);
+			
 		end
+		
 	elseif flag_mp == 0
+		
+		% PCA of the rPCs in the first time instant
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
 				if i < 6 %subj
-					tmp = struct_rPCA(i).h.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
+					tmp = struct_rPCA(i).h.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
 					mean_mat_h	= cat(2 , mean_mat_h, tmp); 
+
+					
+					%+ struct_rPCA(i).h.mean
 				else
-					tmp = struct_rPCA(i).s.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
+					tmp = struct_rPCA(i).s.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
 					mean_mat_s	= cat(2 , mean_mat_s, tmp);
-					tmp = struct_rPCA(i).la.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
+					
+					tmp = struct_rPCA(i).la.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
 					mean_mat_la	= cat(2 , mean_mat_la, tmp);
 				end
 			end
 			
-			% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-			% finale
 			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
-
-			% PC of means/median/first istant values
+ 
+			% PC
 			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
 			mean_posture(:, j) = mean_post(:, 1);
 		end
+		
+		
+		
 	elseif flag_mp == 4
+		
+		% mean of the rPCs in the first time instant
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
 				if i < 6 %subj
-					tmp = struct_rPCA(i).h.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					[tmp_cff_h, ~, ~, ~, ~, ~] = pca(tmp');
-					mean_mat_h	= cat(2 , mean_mat_h, tmp_cff_h); 
+					tmp = struct_rPCA(i).h.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_h	= cat(2 , mean_mat_h, tmp); 
+					
 				else
-					tmp = struct_rPCA(i).s.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					[tmp_cff_s, ~, ~, ~, ~, ~] = pca(tmp');
-					mean_mat_s	= cat(2 , mean_mat_s, tmp_cff_s);
-					tmp = struct_rPCA(i).la.coeff(:, j, :);
-					tmp = reshape(tmp, 10, 240, 1); % non ricordo come si faccia
-					[tmp_cff_la, ~, ~, ~, ~, ~] = pca(tmp');
-					mean_mat_la	= cat(2 , mean_mat_la, tmp_cff_la);
+					tmp = struct_rPCA(i).s.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_s	= cat(2 , mean_mat_s, tmp);
+					
+					tmp = struct_rPCA(i).la.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_la	= cat(2 , mean_mat_la, tmp);
 				end
 			end
 			
-			% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-			% finale
 			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
-
-			% PC of means/median/first istant values
-			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
-			mean_posture(:, j) = mean_post(:, 1);
+			% mean
+			mean_posture(:, j) = mean(data_mat,2);
 		end
+		
 	else
 		error('no valid flag input value');
 	end

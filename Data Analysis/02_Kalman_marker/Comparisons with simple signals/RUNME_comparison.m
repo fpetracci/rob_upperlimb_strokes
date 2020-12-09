@@ -120,7 +120,6 @@ for t = 1:nsample
 end
 iter_time_OurUkf = toc;
 disp([ 'OurUkf took ' num2str(iter_time_OurUkf) ' s'])
-qCorr_ekf_old = qCorr_ekf;
 
 %% analysis
 %errors

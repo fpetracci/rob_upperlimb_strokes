@@ -1,5 +1,5 @@
 function out = vett_norm2(a, direction)
-%ROW_NORM calculates the n-norm each row or column at time
+%ROW_NORM calculates the 2-norm of each row or column at time
 
 
 %% computation

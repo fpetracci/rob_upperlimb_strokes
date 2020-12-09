@@ -29,7 +29,7 @@ data_rPCA_hsla = rpca_hsla(ngroup);
 
 nsamples = size(data_rPCA_hsla.h.var_expl,2);
 %% mean posture
-flag_mp = 1;
+flag_mp = 0;
 mean_posture = mean_post(ngroup, flag_mp);
 
 % flag_mean = 0;

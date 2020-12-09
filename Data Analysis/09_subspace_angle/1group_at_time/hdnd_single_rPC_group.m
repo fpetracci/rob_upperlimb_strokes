@@ -12,10 +12,8 @@ ngroup = 1;
 % load data
 
 flag_mean = 0;
-% if flag_mean = 0 mean posture is computed as PCA of mean postures of each
-% subject
-% if flag_mean = 1 mean posture is computed as MEAN of mean postures of each
-% subject
+% if flag_mean = 0 mean posture is computed as PCA of first posture of 
+% each subject
 
 data_rPCA_hdnd = rpca_all_subj_d_nd(ngroup);
 mean_posture = mean_post(ngroup, flag_mean);
