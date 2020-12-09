@@ -31,8 +31,36 @@ else
 	mean_mat_la = [];
 	mean_posture = zeros(10,1);
 	
-	if flag_mp == 1
-		%PCA of the time means of dataset mean
+	%% 0 PCA of the rPCs  in the first time instant 
+	if flag_mp == 0
+		
+		for j = 1:10 % num rPCs
+			for i = [1:10,12:20,22:24]
+				if i < 6 %subj
+					tmp = struct_rPCA(i).h.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_h	= cat(2 , mean_mat_h, tmp); 
+
+				else
+					tmp = struct_rPCA(i).s.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_s	= cat(2 , mean_mat_s, tmp);
+
+					tmp = struct_rPCA(i).la.coeff(:, j, 1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_la	= cat(2 , mean_mat_la, tmp);
+				end
+			end
+
+			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
+
+			% PC
+			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
+			mean_posture(:, j) = mean_post(:, 1);
+		end
+	%% 1 PCA of the time means of dataset mean
+	elseif flag_mp == 1
+		
 		
 		% not all subjects have enough trials, we remove some of them
 		for i = [1:10,12:20,22:24]
@@ -49,10 +77,10 @@ else
 		
 		% PC of means
 		[mean_posture,	~, ~, ~, ~, ~] = pca(data_mat');
-		
+	
+	%% 2 PCA of the time means of each rPCs
 	elseif flag_mp == 2
-		
-		%2	PCA of the time means of each rPCs
+
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
 				if i < 6 
@@ -81,8 +109,9 @@ else
 			mean_posture(:, j) = mean_post(:, 1);
 		end
 
+%% 3 PCA of the time median of each rPCs
 	elseif flag_mp == 3
-		%PCA of the time median of each rPCs
+		
 		
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
@@ -110,41 +139,9 @@ else
 			
 		end
 		
-	elseif flag_mp == 0
-		
-		% PCA of the rPCs in the first time instant
-		for j = 1:10 % num rPCs
-			for i = [1:10,12:20,22:24]
-				if i < 6 %subj
-					tmp = struct_rPCA(i).h.coeff(:, j, 1);
-					%tmp = reshape(tmp, 10, 1, 1);
-					mean_mat_h	= cat(2 , mean_mat_h, tmp); 
-
-					
-					%+ struct_rPCA(i).h.mean
-				else
-					tmp = struct_rPCA(i).s.coeff(:, j, 1);
-					%tmp = reshape(tmp, 10, 1, 1);
-					mean_mat_s	= cat(2 , mean_mat_s, tmp);
-					
-					tmp = struct_rPCA(i).la.coeff(:, j, 1);
-					%tmp = reshape(tmp, 10, 1, 1);
-					mean_mat_la	= cat(2 , mean_mat_la, tmp);
-				end
-			end
-			
-			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
- 
-			% PC
-			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
-			mean_posture(:, j) = mean_post(:, 1);
-		end
-		
-		
-		
+%% 4 mean of the rPCs in the first time instant
 	elseif flag_mp == 4
 		
-		% mean of the rPCs in the first time instant
 		for j = 1:10 % num rPCs
 			for i = [1:10,12:20,22:24]
 				if i < 6 %subj
@@ -167,7 +164,60 @@ else
 			% mean
 			mean_posture(:, j) = mean(data_mat,2);
 		end
+
+%% 5 PCA of the rPCs + mean in the first time instant
+	elseif flag_mp == 5
+
+		for j = 1:10 % num rPCs
+			for i = [1:10,12:20,22:24]
+				if i < 6 %subj
+					tmp = struct_rPCA(i).h.coeff(:, j, 1) + struct_rPCA(i).h.mean(:,1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_h	= cat(2 , mean_mat_h, tmp); 
+
+				else
+					tmp = struct_rPCA(i).s.coeff(:, j, 1) + struct_rPCA(i).s.mean(:,1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_s	= cat(2 , mean_mat_s, tmp);
+
+					tmp = struct_rPCA(i).la.coeff(:, j, 1) + struct_rPCA(i).la.mean(:,1);
+					%tmp = reshape(tmp, 10, 1, 1);
+					mean_mat_la	= cat(2 , mean_mat_la, tmp);
+				end
+			end
+
+			data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
+
+			% PC
+			[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
+			mean_posture(:, j) = mean_post(:, 1);
+		end
+%% 6 PCA of the mean in the first time instant 
+	elseif flag_mp == 6
 		
+		% PCA of the mean in the first time instant 
+		for i = [1:10,12:20,22:24]
+			if i < 6 %subj
+				tmp = struct_rPCA(i).h.mean(:,1);
+				%tmp = reshape(tmp, 10, 1, 1);
+				mean_mat_h	= cat(2 , mean_mat_h, tmp); 
+
+			else
+				tmp = struct_rPCA(i).s.mean(:,1);
+				%tmp = reshape(tmp, 10, 1, 1);
+				mean_mat_s	= cat(2 , mean_mat_s, tmp);
+
+				tmp = struct_rPCA(i).la.mean(:,1);
+				%tmp = reshape(tmp, 10, 1, 1);
+				mean_mat_la	= cat(2 , mean_mat_la, tmp);
+			end
+		end
+		data_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
+		% PC
+		[mean_post,	~, ~, ~, ~, ~] = pca(data_mat');
+		mean_posture = mean_post;
+
+%% else error
 	else
 		error('no valid flag input value');
 	end

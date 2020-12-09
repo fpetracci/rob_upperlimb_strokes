@@ -77,23 +77,55 @@ yticks(selr);
 xlabel('Time [samples]')
 zlabel('% explained variance')
 ylabel('number of used rPCs')
-%% spider plot animation
-figure(3)
+%% first three of healthy subjects
+figh = figure(3);
 clf;
 D = zeros(10, 3);
-%first three of healthy subjects
+
+
+% video stuff
+k = 1;
+clear movieVector movie;
+
 for i=1:240
-	D(:, 1) = mean_posture(:,1);
-	D(:, 2) = data.h.coeff(:, 1, i);
+% 	D(:, 1) = mean_posture(:,1);
+	D(:, 1) = data.h.coeff(:, 1, i);
 	D_mean(:, 2) = D_mean(:, 2) + data.h.coeff(:, 1, i);
-	D(:, 3) = data.h.coeff(:, 3, i);
+	D(:, 2) = data.h.coeff(:, 2, i);
 	D_mean(:, 3) = D_mean(:, 3) + data.h.coeff(:, 2, i);
-	D(:, 4) = data.h.coeff(:, 3, i);
+	D(:, 3) = data.h.coeff(:, 3, i);
 	D_mean(:, 4) = D_mean(:, 4) + data.h.coeff(:, 3, i);
-	spider_plot_rPCs(D, 'khsl')
+	spider_plot_rPCs(D, 'hsl')
 	title(['first 3 rPC of healthy. Frame: ' num2str(i)])
 	drawnow
+	
+	% set width
+	f_width		= 650;
+	f_heigth	= 650;
+	dim_font	= 13;
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
+	
+	if movie_mode
+% 		figh.WindowState = 'maximize';
+		movieVector(k) = getframe(figh);
+		%open to fullscreen figure(1) before using the next line
+% 		movieVector(k) = getframe(figh, [10,10,1910,960]);
+		k = k+1;
+	end
+	
 end
+
+if movie_mode
+		movie = VideoWriter('first three rPCs healthy', 'MPEG-4');
+		movie.FrameRate = movie_fps;
+
+		open(movie);
+		writeVideo(movie, movieVector);
+		close(movie);
+end
+
 figure(11)
 clf;
 D_mean(:, 1) = mean_posture(:,1);
@@ -102,24 +134,57 @@ D_mean(:, 3) = D_mean(:, 3)./240;
 D_mean(:, 4) = D_mean(:, 4)./240;
 spider_plot_rPCs(D_mean, 'khsl')
 title('mean of first 3 rPC of healthy')
-%%
-figure(4)
+
+%% first three of less affected subjects
+figh = figure(4);
 clf;
-D = zeros(10, 4);
+D = zeros(10, 3);
 D_mean = zeros(10, 4);
-%first three of less affected subjects
+
+% video stuff
+k = 1;
+clear movieVector movie;
+
 for i=1:240
-	D(:, 1) = mean_posture(:,1);
-	D(:, 2) = data.la.coeff(:, 1, i);
+% 	D(:, 1) = mean_posture(:,1);
+	D(:, 1) = data.la.coeff(:, 1, i);
 	D_mean(:, 2) = D_mean(:, 2) + data.la.coeff(:, 1, i);
-	D(:, 3) = data.la.coeff(:, 3, i);
+	D(:, 2) = data.la.coeff(:, 2, i);
 	D_mean(:, 3) = D_mean(:, 3) + data.la.coeff(:, 2, i);
-	D(:, 4) = data.la.coeff(:, 3, i);
+	D(:, 3) = data.la.coeff(:, 3, i);
 	D_mean(:, 4) = D_mean(:, 4) + data.la.coeff(:, 3, i);
-	spider_plot_rPCs(D, 'khsl')
+	
+	spider_plot_rPCs(D, 'hsl')
+	
 	title(['first 3 rPC of less affected. Frame: ' num2str(i)])
 	drawnow
+	
+	% set width
+	f_width		= 650;
+	f_heigth	= 650;
+	dim_font	= 13;
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
+	
+	if movie_mode
+% 		figh.WindowState = 'maximize';
+		movieVector(k) = getframe(figh);
+		%open to fullscreen figure(1) before using the next line
+% 		movieVector(k) = getframe(figh, [10,10,1910,960]);
+		k = k+1;
+	end
+	
 end
+if movie_mode
+		movie = VideoWriter('first three rPCs less affected', 'MPEG-4');
+		movie.FrameRate = movie_fps;
+
+		open(movie);
+		writeVideo(movie, movieVector);
+		close(movie);
+end
+	
 figure(11)
 clf;
 D_mean(:, 1) = mean_posture(:,1);
@@ -128,32 +193,64 @@ D_mean(:, 3) = D_mean(:, 3)./240;
 D_mean(:, 4) = D_mean(:, 4)./240;
 spider_plot_rPCs(D_mean, 'khsl')
 title('mean of first 3 rPC of less affected')
-%%
-figure(5)
+
+%% first three of stroke subjects
+figh = figure(5);
 clf;
-D = zeros(10, 4);
+D = zeros(10, 3);
 D_mean = zeros(10, 4);
-%first three of stroke subjects
+
+% video stuff
+k = 1;
+clear movieVector;
+
 for i=1:240
-	D(:, 1) = mean_posture(:,1);
-	D(:, 2) = data.s.coeff(:, 1, i);
-	D_mean(:, 2) = D_mean(:, 2) + data.s.coeff(:, 1, i);
+% 	D(:, 1) = mean_posture(:,1);
+	D(:, 1) = data.s.coeff(:, 1, i);
+	D_mean(:, 1) = D_mean(:, 1) + data.s.coeff(:, 1, i);
+	D(:, 2) = data.s.coeff(:, 2, i);
+	D_mean(:, 2) = D_mean(:, 3) + data.s.coeff(:, 2, i);
 	D(:, 3) = data.s.coeff(:, 3, i);
-	D_mean(:, 3) = D_mean(:, 3) + data.s.coeff(:, 2, i);
-	D(:, 4) = data.s.coeff(:, 3, i);
-	D_mean(:, 4) = D_mean(:, 4) + data.s.coeff(:, 3, i);
-	spider_plot_rPCs(D, 'khsl')
+	D_mean(:, 3) = D_mean(:, 4) + data.s.coeff(:, 3, i);
+	spider_plot_rPCs(D, 'hsl')
 	title(['first 3 rPC of strokes. Frame: ' num2str(i)])
 	drawnow
+	
+	% set width
+	f_width		= 650;
+	f_heigth	= 650;
+	dim_font	= 13;
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
+	
+	if movie_mode
+% 		figh.WindowState = 'maximize';
+		movieVector(k) = getframe(figh);
+		%open to fullscreen figure(1) before using the next line
+% 		movieVector(k) = getframe(figh, [10,10,1910,960]);
+		k = k+1;
+	end
+	
 end
-figure(11)
-clf;
-D_mean(:, 1) = mean_posture(:,1);
-D_mean(:, 2) = D_mean(:, 2)./240;
-D_mean(:, 3) = D_mean(:, 3)./240;
-D_mean(:, 4) = D_mean(:, 4)./240;
-spider_plot_rPCs(D_mean, 'khsl')
-title('mean of first 3 rPC of strokes')
+
+if movie_mode
+  movie = VideoWriter('first three rPCs stroke', 'MPEG-4');
+  movie.FrameRate = movie_fps;
+
+  open(movie);
+  writeVideo(movie, movieVector);
+  close(movie);
+end
+
+% figure(11)
+% clf;
+% D_mean(:, 1) = mean_posture(:,1);
+% D_mean(:, 2) = D_mean(:, 2)./240;
+% D_mean(:, 3) = D_mean(:, 3)./240;
+% D_mean(:, 4) = D_mean(:, 4)./240;
+% spider_plot_rPCs(D_mean, 'khsl')
+% title('mean of first 3 rPC of strokes')
 %%
 figure(7);
 clf;
@@ -184,25 +281,31 @@ movie_fps = 20;
 
 figh = figure(6);
 clf;
-D = zeros(10, 4);
+D = zeros(10, 3);
 k = 1;
 %first rPC of healthy, less affected and strokes subjects
 for i=1:240
 	D(:, 1) = data.h.coeff(:, 1, i);
 	D(:, 2) = data.s.coeff(:, 1, i);
 	D(:, 3) = data.la.coeff(:, 1, i);
-	D(:, 4) = mean_posture(:,1);
-	spider_plot_rPCs(D, 'hslm')
+	%D(:, 4) = mean_posture(:,1);
+	spider_plot_rPCs(D, 'hsl')
 	title(['first rPC of healthy, stroke and less affected. Frame: ' num2str(i)])
 	drawnow
 	
+	% set width
+	f_width		= 650;
+	f_heigth	= 650;
+	dim_font	= 13;
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 	set(findall(gcf,'type','text'),'FontSize', dim_font)           
 	set(gca,'FontSize', dim_font) 
+	
 	if movie_mode
-		figh.WindowState = 'maximize';
+% 		figh.WindowState = 'maximize';
 		movieVector(k) = getframe(figh);
 		%open to fullscreen figure(1) before using the next line
-		%movieVector(k) = getframe(figh, [10,10,1910,960]);
+% 		movieVector(k) = getframe(figh, [10,10,1910,960]);
 		k = k+1;
 	end
 end

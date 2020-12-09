@@ -34,9 +34,6 @@ function [mean_post_h, mean_post_s, mean_post_la] = mean_postHSLA(ngroup, flag_m
 		end
 	end
 
-	% qua fai tutti i soggetti insieme per avere un'unica PCA di riferimento
-	% finale
-	%mean_mat = [mean_mat_h, mean_mat_s, mean_mat_la];
 
 	if ~flag_mean		% PC of means
 		[mean_post_h,	~, ~, ~, ~, ~] = pca(mean_mat_h');
