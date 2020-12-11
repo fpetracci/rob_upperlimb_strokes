@@ -26,7 +26,7 @@ qv1(6) = pi/2;
 
 t_in	= 0;	% [s]
 t_end	= 10;	% [s]
-delta_t = 0.001;% [s]
+delta_t = 0.000001;% [s]
 timeSpan= t_end - t_in;
 
 % vettore tempo
@@ -105,7 +105,8 @@ if exist('traj_fpc_3') == 0
 else
 	load trajectory.mat
 end
-traj_real(1:3,4,:) = traj_real(1:3,4,:) + [0.3; 0.1; -0.4];% traslazione della traiettoria 
+trasl = ones(3, 1, length(traj_real));
+traj_real(1:3,4,:) = traj_real(1:3,4,:) + [0.3; 0.1; -0.4].*trasl;% traslazione della traiettoria 
 traj_real = traj_real(:,:,60:220); % selezione dei punti di interesse al movimento
 pos_EE = hgmat2pos(traj_real); %estrapolazione posizione EE dalla matrice di rotoTrasl traj_real
 eul_EE = hgmat2eul(traj_real); %estrapolazione angoli eulero EE dalla matrice di rotoTrasl traj_real,Da rivedere
@@ -114,18 +115,21 @@ theta = zeros(1,size(traj_real,3));
 phi =  zeros(1,size(traj_real,3));
 psi = zeros(1,size(traj_real,3));
 %prova2
-% theta = eul_EE(3,:);
-% phi = eul_EE(2,:);
-% psi = eul_EE(1,:);
-p = [pos_EE(1,:);pos_EE(2,:);pos_EE(3,:)];
+%  theta = eul_EE(3,:);
+%  phi = eul_EE(2,:);
+%  psi = eul_EE(1,:);
+p = [pos_EE(1,:);pos_EE(2,:);pos_EE(3,:)]; %a che serve?
 xi_EE =[pos_EE;theta;phi;psi];
-qv1 = franka.ikunc(traj_real(:,:,1));
-franka.plot(qv1)
- [q_des, dq_des, ddq_des] = ikine_franka(xi_EE, qv1, franka,delta_t);
-% plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), '-k')
-% hold on
-% franka.plot(q_des')
 
+traj_init = traj_real(:,:,1);
+traj_init(1:3,1:3) = rotx(pi)*roty(pi/2);
+qv1 = franka.ikunc(traj_init);
+
+franka.plot(qv1)
+[q_des, dq_des, ddq_des] = ikine_franka(xi_EE, qv1, franka,delta_t);
+plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), '-k')
+hold on
+franka.plot(q_des')
 %% clotoide
 
 % punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
@@ -315,6 +319,19 @@ hold on
 axis equal
 franka.plot(results_backstepping', 'trail', '--r');
 
+figure(2)
+clf
+franka.plot(results_backstepping(:,3)', 'trail', '--r');
+
+fig3 = figure(3);
+subplot(1,2,1)
+plot(q_des');
+title('desired joint angles');
+subplot(1,2,2)
+plot(results_backstepping');
+title('bs joint angles');
+
+
 %% Plot computed torque results for backstepping control
 figure(3)
 clf
@@ -325,6 +342,7 @@ for j=1:njoints
     plot(results_backstepping(j,:))
     hold on
     plot (q_des(j,:))
+	axis tight
 %     hold on
 %     plot(t,results_computed_torque(:,j))
     

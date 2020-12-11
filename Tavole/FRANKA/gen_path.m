@@ -55,14 +55,14 @@ fPCA_struct = fpca_hsla(ngroup);
 q_stacked =  fpca_stacker_hsla(ngroup);
 nobs = 135;
 
-q_real = q_stacked.q_matrix_h(nobs,:,:);
-[temp, n, njoints] = size(q_real);
-q_real = reshape(q_real, n, njoints, temp);
+q_real = q_stacked.q_matrix_h(nobs,:,:); % seleziono un singolo trial, angoli in gradi
+[temp, n, njoints] = size(q_real); % n = time
+q_real = reshape(q_real, n, njoints, temp); % time x joints
 
 % arm fkine
-traj_real	= zeros(4, 4, n);	% human EE 
+traj_real	= zeros(4, 4, n);	% Pose of human EE: Homogeneous matrices 
 for i = 1:n
-	traj_real(:,:, i) = arm_fkine(arm_right, q_real(i,:)./180*pi, 10);
+	traj_real(:,:, i) = arm_fkine(arm_right, q_real(i,:).*(pi/180), 10); %fkine want angles in rad
 	% 10 ottiene matrice omogenea della mano
 end
 
@@ -84,52 +84,52 @@ end
 % arm fkine
 traj_fpc	= zeros(4, 4, n);	% human EE 
 for i = 1:n
-	traj_fpc(:,:, i) = arm_fkine(arm_right, q_fpc(i,:)./180*pi, 10);
+	traj_fpc(:,:, i) = arm_fkine(arm_right, q_fpc(i,:).*(pi/180), 10);
 	% 10 ottiene matrice omogenea della mano
 end
 
 %% Plot & Debug
 if plot_mode == 1
 
-pos_real = hgmat2pos(traj_real)';
-pos_fpc = hgmat2pos(traj_fpc)';
+	pos_real = hgmat2pos(traj_real)';
+	pos_fpc = hgmat2pos(traj_fpc)';
 
-dim_linea = 1;
+	dim_linea = 1;
 
-figure(1)
-clf
-axis equal
-plot3(  pos_fpc(:,1), pos_fpc(:,2),pos_fpc(:,3),...
-            '-','color', [0, 0, 255]./255, 'LineWidth', dim_linea,...
-			'DisplayName','Traj fPCs')
-hold on
-plot3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
-			'-','color', [255, 0, 0]./255, 'LineWidth', dim_linea,...
-			'DisplayName','Traj real')
-legend
+	figure(1)
+	clf
+	axis equal
+	plot3(  pos_fpc(:,1), pos_fpc(:,2),pos_fpc(:,3),...
+				'-','color', [0, 0, 255]./255, 'LineWidth', dim_linea,...
+				'DisplayName','Traj fPCs')
+	hold on
+	plot3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
+				'-','color', [255, 0, 0]./255, 'LineWidth', dim_linea,...
+				'DisplayName','Traj real')
+	legend
 
-figure(2)
-clf
-axis equal
-plot3(  pos_fpc(:,1), pos_fpc(:,2),pos_fpc(:,3),...
-            '-','color', [0, 0, 255]./255, 'LineWidth', dim_linea/10,...
-			'DisplayName','Traj fPCs')
-hold on
-plot3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
-			'-','color', [255, 0, 0]./255, 'LineWidth', dim_linea/10,...
-			'DisplayName','Traj real')
-quiver3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
-	pos_fpc(:,1)-pos_real(:,1), pos_fpc(:,2)-pos_real(:,2),pos_fpc(:,3)-pos_real(:,3), 0, 'g',...
-	'DisplayName','Vettore Differenza')
-for i = 1:2:n
-	txt = num2str(norm([pos_fpc(i,1)-pos_real(i,1),...
-				pos_fpc(i,2)-pos_real(i,2),...
-				pos_fpc(i,3)-pos_real(i,3)],2), 3);
-	text(pos_real(i,1), pos_real(i,2), pos_real(i,3),txt)
-end
+	figure(2)
+	clf
+	axis equal
+	plot3(  pos_fpc(:,1), pos_fpc(:,2),pos_fpc(:,3),...
+				'-','color', [0, 0, 255]./255, 'LineWidth', dim_linea/10,...
+				'DisplayName','Traj fPCs')
+	hold on
+	plot3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
+				'-','color', [255, 0, 0]./255, 'LineWidth', dim_linea/10,...
+				'DisplayName','Traj real')
+	quiver3(pos_real(:,1), pos_real(:,2), pos_real(:,3),...
+		pos_fpc(:,1)-pos_real(:,1), pos_fpc(:,2)-pos_real(:,2),pos_fpc(:,3)-pos_real(:,3), 0, 'g',...
+		'DisplayName','Vettore Differenza')
+	for i = 1:2:n
+		txt = num2str(norm([pos_fpc(i,1)-pos_real(i,1),...
+					pos_fpc(i,2)-pos_real(i,2),...
+					pos_fpc(i,3)-pos_real(i,3)],2), 3);
+		text(pos_real(i,1), pos_real(i,2), pos_real(i,3),txt)
+	end
 
-legend
-axis equal
+	legend
+	axis equal
 end
 
 
