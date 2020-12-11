@@ -1,4 +1,4 @@
-OSSERVAZIONI
+﻿OSSERVAZIONI
 
 Ricostruzione segnale fPCA:
 HEALTHY ricostruito
@@ -47,10 +47,18 @@ var expl fPCA
 		giunti convolti nel movimento attivo. Stroke/sani muovono molto e ci aspettiamo che var_expl sia maggiore negli stroke rispetto agli healthy perche` pensiamo che stroke facciano movimenti piu` semplici
 		Questo si verifica tra Stroke e  Sani in tutti i giunti
 		Introducendo i LA non si verifica l'ipotesi che avevamo
+		Flesso estensione LA < S come ci aspettavamo, magari dovremmo fare analisi giunto giunto e non in generale
 	hdnd
 		LAd/ Land maggior differenza rispetto a Ad/LAd. lato sano soggetto colpito mostra piu` differenze rispetto al lato colpito. -> Discorso riabilitazione
 		Discorso riabilitazione -> Ci aspettiamo che Ad > And. E` cosi` apparte giunti 7/9/10
-		
+
+CONCLUSIONI:
+GIUNTO GIUNTO
+SOGGETTO SOGGETO
+
+
+
+%------------------------------------		
 RE fPCA
 	soggetti 18/24
 	ci aspettiamo che RE abbia un andamento opposto rispetto alla varianza spiegata ovvero:
@@ -61,6 +69,8 @@ RE fPCA
 		10 e 7 opposti a come ci aspettiamo, 3 invece come ci aspettiamo
 	lato LA di entrambi i soggetti e` sovrapposto a quello degli healthy (che sembra un buon risultato ma in realta` vorremmo che LA sia nel mezzo. 
 		Forse dovuto al fatto che stiamo confrontando persone diverse. Potrebbe essere che per gli healthy prendiamo una media dei soggeti e la confrontiamo con un solo soggetto stroke
+
+
 	hsla media e std dev
 		in media abbiamo l'andamento ipotizzato ( H > LA > S)
 		le std si sovrappongo tanto: gia` visivamente possiamo dire che non c'e` molta differenza statistica tra le varie popolazioni
