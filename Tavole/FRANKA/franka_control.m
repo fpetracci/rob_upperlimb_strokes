@@ -26,7 +26,7 @@ qv1(6) = pi/2;
 
 t_in	= 0;	% [s]
 t_end	= 10;	% [s]
-delta_t = 0.000001;% [s]
+delta_t = 0.1;% [s]
 timeSpan= t_end - t_in;
 
 % vettore tempo
@@ -97,7 +97,7 @@ r = 0.1; % raggio del cerchio
 % plot3(p(1,:),p(2,:),p(3,:), ':c')
 % franka.plot(q_des')
 %% traiettoria fpc
-if exist('traj_fpc_3') == 0
+if exist('trajectory.mat') ~= 2 % vede se è presente il file mat nel current folder 
 	[arm_right, traj_real, traj_fpc_1] = gen_path(1);
 	[~, ~, traj_fpc_2] = gen_path(2);
 	[~, ~, traj_fpc_3] = gen_path(3);
@@ -106,26 +106,32 @@ else
 	load trajectory.mat
 end
 trasl = ones(3, 1, length(traj_real));
-traj_real(1:3,4,:) = traj_real(1:3,4,:) + [0.3; 0.1; -0.4].*trasl;% traslazione della traiettoria 
+traj_real(1:3,4,:) = traj_real(1:3,4,:) + [0.25; 0.2; -0.3].*trasl;% traslazione della traiettoria 
 traj_real = traj_real(:,:,60:220); % selezione dei punti di interesse al movimento
 pos_EE = hgmat2pos(traj_real); %estrapolazione posizione EE dalla matrice di rotoTrasl traj_real
 eul_EE = hgmat2eul(traj_real); %estrapolazione angoli eulero EE dalla matrice di rotoTrasl traj_real,Da rivedere
+pos_res_EE = resample(pos_EE',1000,length(pos_EE));
+pos_res_EE = pos_res_EE(30:900,:);
+% plot(pos_res_EE)
+% hold on
+% plot(pos_EE')
+% eul_res_EE
 %prova
-theta = zeros(1,size(traj_real,3));
-phi =  zeros(1,size(traj_real,3));
-psi = zeros(1,size(traj_real,3));
+theta = zeros(1,size(pos_res_EE,1));
+phi =  zeros(1,size(pos_res_EE,1));
+psi = zeros(1,size(pos_res_EE,1));
 %prova2
 %  theta = eul_EE(3,:);
 %  phi = eul_EE(2,:);
 %  psi = eul_EE(1,:);
 p = [pos_EE(1,:);pos_EE(2,:);pos_EE(3,:)]; %a che serve?
-xi_EE =[pos_EE;theta;phi;psi];
+xi_EE =[pos_res_EE';theta;phi;psi];
 
 traj_init = traj_real(:,:,1);
-traj_init(1:3,1:3) = rotx(pi)*roty(pi/2);
+% traj_init(1:3,1:3) = rotx(pi)*roty(pi/2);
 qv1 = franka.ikunc(traj_init);
 
-franka.plot(qv1)
+franka.plot(qv)
 [q_des, dq_des, ddq_des] = ikine_franka(xi_EE, qv1, franka,delta_t);
 plot3(pos_EE(1,:),pos_EE(2,:),pos_EE(3,:), '-k')
 hold on
@@ -311,7 +317,7 @@ for i=1:size(q_des,2)
     results_backstepping(:, index) = q;
     index = index + 1;
 end
-
+%%
 fig1 = figure(1);
 clf
 plot3(p(1,:),p(2,:),p(3,:), ':c')
