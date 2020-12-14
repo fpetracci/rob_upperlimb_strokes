@@ -4,7 +4,7 @@ function [B]=linrows(A)
 
 Ares = A(1,:);
 
-% Add columns and see if rank increases
+% Add rows and see if rank increases
 for i = 2 : size(A,1)
    if rank([Ares; A(i,:)]) > rank(Ares)
        Ares = [Ares; A(i,:)];

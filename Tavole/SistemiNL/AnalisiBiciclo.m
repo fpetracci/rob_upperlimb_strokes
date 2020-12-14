@@ -41,6 +41,8 @@ switch choiche
 	fprintf('Studio OSSERVABILITA'' \n')
 	[Lfw] = derivative_covector([cos(theta);sin(theta);0],[x_p y_p 0],x)
 	[Lfw] = derivative_covector_dist([[cos(theta);sin(theta);0] [0;0;1]],[x_p y_p 0],x)
+	[Lfw] = chow_filtration_obs([[cos(theta);sin(theta);0] [0;0;1]],[x_p y_p 0],x)
+
 	case 2
 	%% Analisi proprietà Biciclo
 	clear all
