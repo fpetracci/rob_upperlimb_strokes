@@ -1,5 +1,5 @@
 clc; clear all; close all;
-fprintf('Choose system: \n');
+fprintf('Choose system for controllability analysis: \n');
 
 fprintf('1: cycle \n');
 
@@ -13,14 +13,14 @@ choiche = input(' ... ');
 switch choiche
 	case 1
 	%% Analisi proprietà uniciclo
-	syms x y theta real
-	x = [x y theta];
+	syms x_p y_p theta real
+	x = [x_p y_p theta];
 	fprintf('lo stato iniziale considerato è \n:')
 	x0 = [0 0 0]
 	fprintf('il sistema è dato da:')
 	g1 = [cos(theta); sin(theta); 0]
 	g2 = [0;0;1]
-	fprintf('STUDIO DELLA CONTROLLABILITA' \n')
+	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 
 	fprintf('la filtrazione di chow porta a : \n')
 	[Dfull, Dfull_1] = chow_filtration([g1 g2],[g1 g2],x);
@@ -38,7 +38,9 @@ switch choiche
 	else
 		fprintf('vedere una delle altre proprietà da rispettare \n')
 	end
-
+	fprintf('Studio OSSERVABILITA'' \n')
+	[Lfw] = derivative_covector([cos(theta);sin(theta);0],[x_p y_p 0],x)
+	[Lfw] = derivative_covector_dist([[cos(theta);sin(theta);0] [0;0;1]],[x_p y_p 0],x)
 	case 2
 	%% Analisi proprietà Biciclo
 	clear all
@@ -156,5 +158,6 @@ switch choiche
 	else
 		fprintf('il sistema preso in analisi,SCRIVERE PAG 136, no STLA per quel x0 \n');
 	end
-	
 end
+
+
