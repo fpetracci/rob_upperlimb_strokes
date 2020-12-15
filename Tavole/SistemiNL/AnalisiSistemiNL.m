@@ -14,30 +14,33 @@ switch choiche
 	case 1
 	%% Analisi proprietà uniciclo
 	syms x_p y_p theta real
-	x = [x_p y_p theta];
+	x = [x_p; y_p; theta];
 	fprintf('lo stato iniziale considerato è \n:')
-	x0 = [0 0 0]
+	x0 = [0; 0; 0]
 	fprintf('il sistema è dato da:')
 	g1 = [cos(theta); sin(theta); 0]
 	g2 = [0;0;1]
 	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 
 	fprintf('la filtrazione di chow porta a : \n')
-	[Dfull, Dfull_1] = chow_filtration([g1 g2],[g1 g2],x);
+	Dfull = chow_filtration([g1 g2],[g1 g2],x);
 	D_full_x0 = subs(Dfull,x,x0)
 	if rank(D_full_x0) == length(x)
 		fprintf('il sistema preso in analisi è STLA \n');
 		STLA = 1;
 	else
 		fprintf('il sistema preso in analisi non è STLA \n');
+		STLA = 0;
 	end
+	
 	if exist('f') == 1
 		f_x0 = subs(f,x,x0);
-	elseif STLA ==1
+	elseif STLA == 1
 		fprintf('il sistema preso in analisi è anche STLC in un intorno di x0 \n')
 	else
 		fprintf('vedere una delle altre proprietà da rispettare \n')
 	end
+	
 	fprintf('Studio OSSERVABILITA'' \n')
 	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
 	h = (x_p^2+y_p^2)/2
@@ -75,7 +78,7 @@ switch choiche
 
 	fprintf('la filtrazione di chow porta a : \n')
 
-	[Dfull, Dfull_1] = chow_filtration([g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
+	Dfull = chow_filtration([g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
 	
 	D_full_x0 = subs(Dfull,x,x0)
 	fprintf('il rango di D_full_xo è : \n');
@@ -85,6 +88,7 @@ switch choiche
 		STLA = 1;
 	else
 		fprintf('il sistema preso in analisi non è STLA \n');
+		STLA = 0;
 	end
 	if exist('f') == 1
 		f_x0 = subs(f,x,x0);
@@ -151,7 +155,7 @@ switch choiche
 	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 	fprintf('la filtrazione di chow porta a : \n')
 
-	[Dfull, Dfull_1] = chow_filtration([f g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
+	Dfull = chow_filtration([f g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
 	D_full_x0 = subs(Dfull,x,x0)
 	fprintf('il rango di D_full_xo è : \n');
 	rank(D_full_x0)

@@ -1,6 +1,6 @@
 function [Lfw] = derivative_covector(f,w,x)
-
-%LIE_BRACKET Computes lie bracket between vector fields f and g w.r.t. x.
+%LIE_BRACKET Computes lie bracket between vector fields f and covector field g w.r.t. x.
+% output Lfw= covector field
 
 %Check if f and g are vectors
 if ~iscolumn(f) || isscalar(f)
@@ -10,7 +10,8 @@ elseif ~isrow(w) || isscalar(w)
 end
 
 % Compute the bracket
-Lfw = transpose(f)*((jacobian(transpose(w),x))) + w*jacobian(f,x);
+Lfw = transpose(f)*(transpose(jacobian(transpose(w),x))) + w*jacobian(f,x);
 
+% output is a covector field
 end
 

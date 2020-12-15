@@ -1,6 +1,6 @@
 function [Lfg] = lie_bracket(f,g,x)
-
 %LIE_BRACKET Computes lie bracket between vector fields f and g w.r.t. x.
+% % output Lfg= vector field
 
 % Check if f and g are vectors
 if ~iscolumn(f) || isscalar(f)
@@ -10,7 +10,7 @@ elseif ~iscolumn(g) || isscalar(g)
 end
 
 % Compute the bracket
-Lfg = jacobian(g,x)*f - jacobian(f,x)*g;
+Lfg = jacobian(g,x)*f - jacobian(f,x)*g; % Lfg = [f, g]
 
 end
 
