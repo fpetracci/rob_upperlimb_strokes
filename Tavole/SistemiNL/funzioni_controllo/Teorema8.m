@@ -18,11 +18,9 @@ second_condition = 1;
 for i = 0:n-1
 	for j = 0:n-1
 		result = lie_bracket_dist(lie_bracket_n(f,g,x,i), lie_bracket_n(f,g,x,j),x);
-		if result ~= 0
+		if involutive([0;0;0],result) == 0 %se il risultato non è involutivo a [0;0;0]la seconda condizione non è rispettata
 			second_condition = 0;
 			break
 		end
 	end
 end
-		
-

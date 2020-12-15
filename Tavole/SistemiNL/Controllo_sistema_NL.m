@@ -22,6 +22,6 @@ switch choiche
 	g2 = [0;0;1]
 	fprintf('dal momento che f è nulla,non viene rispettata la prima \n condizione del teorema 8 pag.165, no linearizzazione per cambiamento di variabili')
 	[condizione_1_T8,condizione_2_T8] = Teorema8(zeros(length(x),1),[g1 g2],x)
-	[condizione_1_T9,condizione_2_T9] = Teorema8(zeros(length(x),1),[g1 g2],x)
+	[condizione_1_T9,condizione_2_T9] = Teorema9(zeros(length(x),1),[g1 g2],x)
 
 end

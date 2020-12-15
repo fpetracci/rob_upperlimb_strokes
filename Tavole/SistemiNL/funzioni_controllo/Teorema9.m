@@ -18,7 +18,7 @@ for i = 0:n-1
 	for j = 0:n-1
 		result = lie_bracket_dist(lie_bracket_n(f,g,x,i), lie_bracket_n(f,g,x,j),x);
 		inv = involutive([lie_bracket_n(f,g,x,i) lie_bracket_n(f,g,x,j)],result);
-		if inv ~= 0
+		if inv == 0
 			second_condition = 0;
 			break
 		end
