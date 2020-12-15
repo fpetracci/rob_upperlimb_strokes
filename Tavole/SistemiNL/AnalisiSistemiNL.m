@@ -1,5 +1,5 @@
 clc; clear all; close all;
-fprintf('Choose system for controllability analysis: \n');
+fprintf('Choose system for analysis: \n');
 
 fprintf('1: cycle \n');
 
@@ -39,9 +39,12 @@ switch choiche
 		fprintf('vedere una delle altre proprietà da rispettare \n')
 	end
 	fprintf('Studio OSSERVABILITA'' \n')
-	[Lfw] = derivative_covector([cos(theta);sin(theta);0],[x_p y_p 0],x)
-	[Lfw] = derivative_covector_dist([[cos(theta);sin(theta);0] [0;0;1]],[x_p y_p 0],x)
-	[Lfw] = chow_filtration_obs([[cos(theta);sin(theta);0] [0;0;1]],[x_p y_p 0],x)
+	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
+	h = (x_p^2+y_p^2)/2
+	[cod_full] = chow_filtration_obs([g1 g2],jacobian(h,x),x)
+	fprintf('il rango è : \n')
+	rank(cod_full)
+
 
 	case 2
 	%% Analisi proprietà Biciclo
@@ -68,7 +71,7 @@ switch choiche
 	% è espresso nella forma x_dot = g1(x)u1+g2(x)u2
 	% come prima cosa va applicato il teorema di Chow per verificare la
 	% s.t.l.a.
-	fprintf('STUDIO DELLA CONTROLLABILITA' \n')
+	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 
 	fprintf('la filtrazione di chow porta a : \n')
 
@@ -91,6 +94,13 @@ switch choiche
 		fprintf('vedere una delle altre proprietà da rispettare \n')
 	end
 	%% studio dell'osservabilità
+	fprintf('Studio OSSERVABILITA'' \n')
+	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
+	h = (x_M^2+y_M^2)/2
+	[cod_full] = chow_filtration_obs([g1 g2],jacobian(h,x),x)
+	fprintf('il rango è : \n')
+	rank(cod_full)
+
 	case 3
 	%% analisi Gru
 	filename = 'system_model.png';

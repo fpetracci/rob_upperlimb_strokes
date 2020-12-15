@@ -6,6 +6,7 @@ end
 
 script_path = fileparts( mfilename('fullpath') );
 
-addpath(genpath(fullfile(script_path, 'funzioni')));
+addpath(genpath(fullfile(script_path, 'funzioni_analisi')));
+addpath(genpath(fullfile(script_path, 'funzioni_controllo')));
 
 clear script_path
