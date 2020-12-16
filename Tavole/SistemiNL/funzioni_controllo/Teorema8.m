@@ -4,6 +4,7 @@ function [first_condition,second_condition] = Teorema8(f,g,x)
 %rispettate 2 condizioni, la 1 chiede che il linearizzato approssimante
 %sia controllabile, la 2 condizione analoga a quella di rettificazione
 %simultanea dei campi gi(x)
+% condizioni necessarie e sufficienti, teorema 
 %% 1 condizione
 first_condition = 0;
 n = length(x);

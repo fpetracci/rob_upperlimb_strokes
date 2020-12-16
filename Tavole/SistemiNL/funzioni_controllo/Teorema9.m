@@ -1,8 +1,20 @@
 function [first_condition,second_condition] = Teorema9(f,g,x)
+%i casi in cui il teorema 8 sono veramente pochi.Avendo il controllista a
+%disposizione gli ingressi, ha anche la possibilità di sfruttare la
+%retroazione per portare il sistema ad una forma lineare.
 %Teorema che permette di vedere se il sistema NL può essere reso
 %lineare tramite un opportuno cambiamento di variabili, devono essere
 %rispettate 2 condizioni, la 1 chiede che il linearizzato approssimante
 %sia controllabile, 
+%			Sistema di partenza		
+%				x_dot = f(x)+g(x)u; x(0) = x0
+%			legge di retroazione dello stato con v nuovo riferimento
+%				u = α(x) + β(x)*v
+%			cambio di variabili	
+%				z = Φ(x) tali per cui si abbia
+%				z_dot = Az + Bv
+%condizioni necessarie e sufficienti, per l'esistenza di α,β,Φ.
+%esempio:
 %% 1 condizione
 first_condition = 0;
 n = length(x);
