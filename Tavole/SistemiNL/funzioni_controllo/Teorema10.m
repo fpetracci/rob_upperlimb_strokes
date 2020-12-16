@@ -30,7 +30,7 @@ function [first_condition,second_condition] = Teorema10(f,g,x,x0)
 % Φ(x).Per verificare che esista una Φ1(x) tale per cui siano verificate le
 % condizioni imposte,8.8-8.9 bicchi, tali condizioni vanno verificate.
 
-%% 1 condizione
+%% 1 condizione completa controllabilità approsimazione lineare
 first_condition = 0;
 n = length(x);
 filtration = lie_bracket_n(f,g,x,n-1);
@@ -41,6 +41,7 @@ end
 %% 2 condizione
 % da come è scritto nelle dispense non riesco a capire se si debba fare
 % ogni possibile combinazione
+% N.B. va valutata in un intorno di x0,BHO
 second_condition = 1;
 for i = 0:n-1
 	for j = 0:n-1
