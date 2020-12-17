@@ -10,20 +10,26 @@ fprintf('3: overhead crane \n');
 
 choiche = input(' ... ');
 
-switch choiche
+switch choiche 
 	case 1
 	%% Analisi proprietà uniciclo
 	syms x_p y_p theta real
 	x = [x_p; y_p; theta];
+	
 	fprintf('lo stato iniziale considerato è \n:')
 	x0 = [0; 0; 0]
+	lim_inf = x0 - 0.1;
+	lim_sup = x0 + 0.1;
 	fprintf('il sistema è dato da:')
+	f = [0; 0; 0];
 	g1 = [cos(theta); sin(theta); 0]
 	g2 = [0;0;1]
+	G = [g1 g2];
+	fG = G;
 	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 
 	fprintf('la filtrazione di chow porta a : \n')
-	Dfull = chow_filtration([g1 g2],[g1 g2],x);
+	Dfull = chow_filtration(G, G, x);
 	D_full_x0 = subs(Dfull,x,x0)
 	if rank(D_full_x0) == length(x)
 		fprintf('il sistema preso in analisi è STLA \n');
@@ -33,12 +39,25 @@ switch choiche
 		STLA = 0;
 	end
 	
-	if exist('f') == 1
+	% weak controllability check
+	 if exist('f')
 		f_x0 = subs(f,x,x0);
+		% check delle proprietà
+		[STLC, prop] = weak_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA);
+		if STLA
+			if STLC
+				fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
+				fprintf(['la proprietà verificata è la numero ' num2str(prop) '\n']);
+			else
+				fprintf('il sistema preso in analisi è STLA ma non STLC \n')
+			end
+		else
+			fprintf('il sistema preso in analisi non è STLA né STLC \n')
+		end	
 	elseif STLA == 1
-		fprintf('il sistema preso in analisi è anche STLC in un intorno di x0 \n')
+		fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
 	else
-		fprintf('vedere una delle altre proprietà da rispettare \n')
+		fprintf('il sistema non è STLA quindi non può essere STLC \n')
 	end
 	
 	fprintf('Studio OSSERVABILITA'' \n')
@@ -53,9 +72,11 @@ switch choiche
 	%% Analisi proprietà Biciclo
 	clear all
 	syms x_M y_M theta_A theta_P
-	x = [x_M y_M theta_A theta_P];
+	x = [x_M; y_M; theta_A; theta_P];
 	fprintf('lo stato iniziale considerato è \n:')
-	x0 = [0 0 0 0];
+	x0 = [0; 0; 0; 0];
+	lim_inf = x0 - 0.1;
+	lim_sup = x0 + 0.1;
 	Lm = 0.2;
 	L = 3;
 	phi = theta_A-theta_P;
@@ -69,6 +90,9 @@ switch choiche
 		   0;...
 		   1;...
 		   0];
+	   
+	   G = [g1 g2];
+	   fG = G;
 	%% studio della raggiungibilità
 	% Da notare come il sistema del biciclo presenta f(x)=0,
 	% è espresso nella forma x_dot = g1(x)u1+g2(x)u2
@@ -78,7 +102,7 @@ switch choiche
 
 	fprintf('la filtrazione di chow porta a : \n')
 
-	Dfull = chow_filtration([g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
+	Dfull = chow_filtration(G, G, x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
 	
 	D_full_x0 = subs(Dfull,x,x0)
 	fprintf('il rango di D_full_xo è : \n');
@@ -90,12 +114,26 @@ switch choiche
 		fprintf('il sistema preso in analisi non è STLA \n');
 		STLA = 0;
 	end
-	if exist('f') == 1
+	
+	% weak controllability check
+	if exist('f')
 		f_x0 = subs(f,x,x0);
-	elseif STLA ==1
-		fprintf('il sistema preso in analisi è anche STLC in un intorno di x0 dal momento che la f è nulla \n')
+		% check delle proprietà
+		[STLC, prop] = weak_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA);
+		if STLA
+			if STLC
+				fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
+				fprintf(['la proprietà verificata è la numero ' num2str(prop) '\n']);
+			else
+				fprintf('il sistema preso in analisi è STLA ma non STLC \n')
+			end
+		else
+			fprintf('il sistema preso in analisi non è STLA né STLC \n')
+		end	
+	elseif STLA == 1
+		fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
 	else
-		fprintf('vedere una delle altre proprietà da rispettare \n')
+		fprintf('il sistema non è STLA quindi non può essere STLC \n')
 	end
 	%% studio dell'osservabilità
 	fprintf('Studio OSSERVABILITA'' \n')
@@ -120,10 +158,12 @@ switch choiche
 	g = 9.81;
 	fprintf('lo stato iniziale considerato è \n:')
 
-	x0 = [0 0 0 0 pi/4 pi/20 pi/4 pi/20];
+	x0 = [0; 0; 0; 0; pi/4; pi/20; pi/4; pi/20];
+	lim_inf = x0 - 0.1*x0;
+	lim_sup = x0 + 0.1*x0;
 	x10 = 0;
 	x9 = 2;
-	x = [x1 x2 x3 x4 x5 x6 x7 x8]; 
+	x = [x1; x2; x3; x4; x5; x6; x7; x8]; 
 	fprintf('il sistema è dato da: \n')
 
 	f = [ x2;...
@@ -150,29 +190,45 @@ switch choiche
 		  -cos(x5)*cos(x7)/x9;...
 		  0;...
 		  -sin(x7)/(sin(x5)*x9)];
+	  
+	  G = [g1 g2];
+	  fG = [f g1 g2];
 	% eq1 = f == zeros(8,1)
 	% S = solve(eq1);
 	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
 	fprintf('la filtrazione di chow porta a : \n')
 
-	Dfull = chow_filtration([f g1 g2],[g1 g2],x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
-	D_full_x0 = subs(Dfull,x,x0)
+	Dfull = chow_filtration(fG, G, x);%% sembra avere dimensione 4, il che significa che è accessibile Rivedere
+	D_full_x0 = subs(Dfull, x, x0)
 	fprintf('il rango di D_full_xo è : \n');
 	rank(D_full_x0)
 	if rank(D_full_x0) == length(x)
 		fprintf('il sistema preso in analisi è STLA \n');
-		if exist('f') == 1
-			f_x0 = subs(f,x,x0);
-			if  f_x0 == 0 
-				fprintf('verificare se possibile una delle ipotesi \n');
-			else
-				fprintf('verificare se possibile l''ultima ipotesi, non so come si faccia, molto probabile non riuscire a \n concludere, ipotesi solo sufficienti \n');
-			end
-		else
-			fprintf('il sistema preso in analisi è anche STLC in un intorno di x0 dal momento che la f è nulla \n')
-		end
+		STLA = 1;
 	else
 		fprintf('il sistema preso in analisi,SCRIVERE PAG 136, no STLA per quel x0 \n');
+		STLA = 0;
+	end
+	
+	% weak controllability check
+	if exist('f')
+		f_x0 = subs(f,x,x0);
+		% check delle proprietà
+		[STLC, prop] = weak_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA);
+		if STLA
+			if STLC
+				fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
+				fprintf(['la proprietà verificata è la numero ' num2str(prop) '\n']);
+			else
+				fprintf('il sistema preso in analisi è STLA ma non STLC \n')
+			end
+		else
+			fprintf('il sistema preso in analisi non è STLA né STLC \n')
+		end	
+	elseif STLA == 1
+		fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
+	else
+		fprintf('il sistema non è STLA quindi non può essere STLC \n')
 	end
 end
 
