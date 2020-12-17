@@ -42,6 +42,7 @@
 % lineare originale se la zero dinamica η_dot = q(0,η) è A.S. in η0 = 0
 %-------------------------------------------------------------------------
 % esempio pag 179
+clear all; clc
 syms x1 x2 x3 syms
 x = [x1;x2;x3];
 fprintf('lo stato iniziale del sistema è: \n')
@@ -69,4 +70,12 @@ fprintf(['ne mancano ',num2str(length(x)-n)])
 fprintf('per trovarle va risolta quest''equazione jacobian(η1)*g = 0, per trovare η1')
 eq = transpose(x)*g == 0
 % non sono riuscito ad automatizzare la procedura
-fprintf(' jacobian(η1) puo'' valere sia [α 0 0] che [0 α α] \n ne segue che η1 può essere sia αx1 che αx2+αx3 ')
+fprintf(' jacobian(η1) puo'' valere sia [α 0 0] che [0 α α] \n ne segue che η1 può essere sia αx1 che αx2+αx3 \n scegliamo la seconda perchè indipendente da phi ')
+
+phi = [phi ; x2+x3]
+det = det(jacobian(phi,x));
+if det~= 0
+	fprintf('bravo buona scelta')
+else
+	fprintf('ritenta')
+end
