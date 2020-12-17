@@ -58,16 +58,31 @@ switch choiche
 		fprintf('il sistema preso in analisi è STLA e anche STLC in un intorno di x0 \n')
 	else
 		fprintf('il sistema non è STLA quindi non può essere STLC \n')
-	end
+	 end
 	
 	fprintf('Studio OSSERVABILITA'' \n')
-	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
-	h = (x_p^2+y_p^2)/2
-	[cod_full] = chow_filtration_obs([g1 g2],jacobian(h,x),x)
+	fprintf('Se in uscita prendiamo la posizione dell''uniciclo: \n ')
+	h = [x_p y_p]
+	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x)
 	fprintf('il rango è : \n')
 	rank(cod_full)
-
-
+	if rank(cod_full) == length(x)
+		fprintf('il sistema per questi ingressi e uscite è osservabile \n')
+	else
+		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
+	end
+	
+	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
+	h = (x_p^2+y_p^2)/2
+	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x)
+	fprintf('il rango è : \n')
+	rank(cod_full)
+	if rank(cod_full) == length(x)
+		fprintf('il sistema per questi ingressi e uscite è osservabile \n')
+	else
+		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
+	end
+	
 	case 2
 	%% Analisi proprietà Biciclo
 	clear all
@@ -139,10 +154,14 @@ switch choiche
 	fprintf('Studio OSSERVABILITA'' \n')
 	fprintf('In uscita prendiamo la velocità dell''uniciclo: \n ')
 	h = (x_M^2+y_M^2)/2
-	[cod_full] = chow_filtration_obs([g1 g2],jacobian(h,x),x)
+	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x)
 	fprintf('il rango è : \n')
 	rank(cod_full)
-
+	if rank(cod_full) == length(x)
+		fprintf('il sistema per questi ingressi e uscite è osservabile \n')
+	else
+		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
+	end
 	case 3
 	%% analisi Gru
 	filename = 'system_model.png';

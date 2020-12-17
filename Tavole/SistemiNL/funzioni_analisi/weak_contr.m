@@ -36,7 +36,8 @@ elseif STLA == 1
 	end
 	STLC = STLC * stlc;
 	for s = 1:num_sample
-		if (subs(f, x, x0_neigh(:, s)) == 0)
+		a = f;
+		if (subs(a, x, x0_neigh(:, s)) == 0)
 			stlc = 1;
 		else
 			stlc = 0;

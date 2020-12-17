@@ -1,7 +1,9 @@
 function [Dfull, Dfull_1] = chow_filtration_obs(D,D0,x)
 %CHOW_FILTRATION observability Filtration
 
-Dfull = D0;
+Dfull = D0;		% dh, a lui appartengono i differenziali delle funzioni di uscita
+				% Al suo annichilatore invece appartengono le CI tra loro
+				% indistinguibili.
 Dfull_1 = [];
 
 disp('D0 ='); disp(D0);

@@ -1,15 +1,14 @@
-function DL = DL_comp(f, G)
+function DL = lie_bracket_n_corr(f, G, x)
 	m = size(G, 2);
 	n = size(f,1);
 	
-	max_iter = 100;
+	max_iter = n-1;
 	lie_b = zeros(n, max_iter);
 	count = 0;
 	
 	DL = G; % metto già tutte le gi
 	for i = 1:m
-		while size(lincols(lie_b,2))<n || (count < max_iter)
-			count = count + 1;
+		for count= 1:(n-1)
 			if count == 1
 				lie_b(:,count) = lie_bracket(f, G(:,count), x);
 			else
@@ -18,7 +17,6 @@ function DL = DL_comp(f, G)
 		end
 		DL = [DL lie_b];
 		lie_b = zeros(n, max_iter);
-		count = 0;
 	end
 	DL = lincols(DL);
 end
