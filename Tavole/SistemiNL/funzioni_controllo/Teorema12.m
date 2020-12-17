@@ -50,6 +50,23 @@ f = [x3-x2^3;-x2;x1^2-x3]
 g = [0;-1;1]
 fprintf('l''uscita del sistema è data da: \n')
 y = x1
-Lf_y = jacobian(y,x)*f
-Lg_y = jacobian(y,x)*g
-[condizione1_T10,condizione2_T10] = Teorema10(f,g,x,x0)
+[n,Lf_full,Lg_full] = relative_degree(f,g,y,x);
+fprintf('il grado relativo è : \n')
+n
+if n<length(x)
+	fprintf('per l''uscita selezionata non si ha grado relativo pari a n: \n applichiamo il teorema 11 per vedere se esiste un''uscita che ammetta grado relativo pari ad n ')
+	[condizione1_T10,condizione2_T10] = Teorema10(f,g,x,x0)
+end
+if sum(condizione1_T10,condizione2_T10) == 2
+	fprintf('esiste un ingresso che ammette grado n : \n')
+else
+	fprintf('non esiste!!! \n sei stato sfortunato.... \n non preoccuparti c''è la zero dinamica a salvarti')
+end
+phi = [y;transpose(Lf_full(1,1:n-1))];
+fprintf([' abbiamo già ',num2str(n),' variabili per completare la Φ, e sono : \n '])
+phi
+fprintf(['ne mancano ',num2str(length(x)-n)])
+fprintf('per trovarle va risolta quest''equazione jacobian(η1)*g = 0, per trovare η1')
+eq = transpose(x)*g == 0
+% non sono riuscito ad automatizzare la procedura
+fprintf(' jacobian(η1) puo'' valere sia [α 0 0] che [0 α α] \n ne segue che η1 può essere sia αx1 che αx2+αx3 ')
