@@ -1,8 +1,8 @@
-function DL = lie_bracket_n_corr(f, G, x)
+function DL = lie_bracket_n_corr(f, G, x, iter)
 	m = size(G, 2);
 	n = size(f,1);
 	
-	max_iter = n-1;
+	max_iter = iter;
 	lie_b = zeros(n, max_iter);
 	count = 0;
 	

@@ -14,16 +14,16 @@ switch choiche
 	case 1
 	%% Controllo uniciclo
 	syms x_p y_p theta real
-	x = [x_p y_p theta];
+	x = [x_p; y_p; theta];
 	fprintf('lo stato iniziale considerato è \n:')
-	x0 = [0 0 0]
+	x0 = [0; 0; 0]
 	fprintf('il sistema è dato da:')
 	g1 = [cos(theta); sin(theta); 0]
 	g2 = [0;0;1]
 	G = [g1, g2];
 	fG = G; % perché qua non ho f
 	fprintf('dal momento che f è nulla,non viene rispettata la prima \n condizione del teorema 8 pag.165, no linearizzazione per cambiamento di variabili')
-	[condizione_1_T8,condizione_2_T8] = Teorema8(zeros(length(x),1), fG, x, x0)
-	[condizione_1_T9,condizione_2_T9] = Teorema9(zeros(length(x),1), fG, x, x0)
+	[condizione_1_T8,condizione_2_T8] = Teorema8(zeros(size(x,1),1), G, x, x0)
+	[condizione_1_T9,condizione_2_T9] = Teorema9(zeros(size(x,1),1), G, x, x0)
 
 end
