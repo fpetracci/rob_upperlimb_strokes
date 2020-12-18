@@ -1,5 +1,5 @@
-function [first_condition,second_condition] = Teorema9(f,g,x)
-%i casi in cui il teorema 8 sono veramente pochi.Avendo il controllista a
+function [first_condition,second_condition] = Teorema9(f,g,x,x0)
+%i casi in cui il teorema 8 sono veramente pochi. Avendo il controllista a
 %disposizione gli ingressi, ha anche la possibilità di sfruttare la
 %retroazione per portare il sistema ad una forma lineare.
 %Teorema che permette di vedere se il sistema NL può essere reso
@@ -18,8 +18,9 @@ function [first_condition,second_condition] = Teorema9(f,g,x)
 %% 1 condizione
 first_condition = 0;
 n = length(x);
-filtration = lie_bracket_n(f,g,x,n-1);
-if rank(filtration) == n 
+% filtration = lie_bracket_n(f,g,x,n-1);
+filtration = lie_bracket_n_corr(f,g,x,n-1);
+if rank(subs(filtration, x, x0) == n) 
 	first_condition = 1;
 end
 %% 2 condizione

@@ -16,18 +16,18 @@ n = length(x);
 filtration = lie_bracket_n_corr(f,G,x,(n-1));
 x0_neigh = neigh_gen(x0, num_sample, lim_inf, lim_sup);
 first_condition = 1;
+
 for s = 1:num_sample
-	if first_condition == 1
-		a = filtration;
-		subs(a, x, x0_neigh(:, s));
-		if rank(a) == n 
-			first_cond = 1;
-		else
-			first_cond = 0;
-		end
-		first_condition = first_condition * first_cond;
+	a = filtration;
+	subs(a, x, x0_neigh(:, s));
+	if rank(a) == n 
+		first_cond = 1;
 	else
-		s = num_sample;
+		first_cond = 0;
+	end
+	first_condition = first_condition * first_cond;
+	if first_condition == 0
+		break
 	end
 end
 %% 2 condizione
@@ -61,11 +61,15 @@ for i = 1:size(filtration_2,2)
 			end
 			second_condition = second_condition * second_cond;
 			if second_condition == 0
-				s = num_sample;
-				i = size(filtration_2,2);
-				j = size(filtration_2,2);
-			end
+				break;
+			end	
 		end
+		if second_condition == 0
+			break;
+		end	 
+	end
+	if second_condition == 0
+		break;
 	end
 end
 end
