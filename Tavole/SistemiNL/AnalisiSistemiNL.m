@@ -14,10 +14,13 @@ switch choiche
 	case 1
 	%% Analisi proprietà uniciclo
 	syms x_p y_p theta real
+	syms x_p0 y_p0 theta0 real
+	syms t
 	x = [x_p; y_p; theta];
-	
+	x_0 = [x_p0; y_p0; theta0];
 	fprintf('lo stato iniziale considerato è \n:')
-	x0 = [0; 0; 0]
+	x0 = subs(x_0, x_0, [0; 0; 0]);
+	
 	lim_inf = x0 - 0.1;
 	lim_sup = x0 + 0.1;
 	fprintf('il sistema è dato da:')
@@ -83,7 +86,65 @@ switch choiche
 		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
 	end
 	
-	case 2
+	fprintf('Approccio integrale e Gramiano di Osservabilità \n')
+	fprintf('intervallo temporale: \n')
+	Tinf = 0;
+	Tsup = 100;
+	Tstep = 0.1;
+	T = Tinf+Tstep:Tstep:Tsup;
+	fprintf('evoluzione dello stato è data da: \n')
+	x_t =@(t) [ x_p0 + integral(t*sin(theta(t))); y_p0 + integral(t*cos(theta(t))); theta0]; %esempio a caso per vedere se funziona il codice
+	fprintf('il primo stato è: \n')
+	x1 = [1; 2; 3]
+	fprintf('il secondo stato è: \n')
+	x2 = [1; 3; 2]
+	dx = x2-x1;
+	fprintf('si sceglie come uscita la velocità dell''uniciclo: \n ')
+	h = (x_p^2+y_p^2)/2
+	fprintf('la funzione di peso W è: \n ')
+	W = eye(size(h,1), size(h,1))
+	fprintf('il corrispondente Gramiano di osservabilità è: \n')
+	Go = gramian_oss(h, x, W, t, Tinf, Tsup, x1, 'o');
+	fprintf('analisi del rango del Gramiano: \n ')
+	if rank(Go(t)) == size(x,1)
+		fprintf('Gramiano ha rango pieno righe: il sistema è localmente osservabile in x1 \n ')
+		E = eig(Go);
+		eig_min = min(E);
+		eig_max = max(E);
+		fprintf('indice quantitativo di osservabilità: numero di condizionamento del Gramiano \n ')
+		num_cond = eig_max/eig_min;
+		fprintf(['il numero di Condizionamento vale: ' num2str(num_cond) '\n'])
+	else
+		fprintf('il sistema perde osservabilità, infatti: \n ')
+		E = eig(Go);
+		eig_min = min(E);
+		eig_max = max(E);
+		num_cond = eig_max/eig_min;
+		fprintf(['il numero di Condizionamento vale: ' num2str(num_cond) '\n'])
+	end
+	
+	fprintf('Con la matrice di sensibilità: \n')
+	S = jacobian(x_t, x_0); %???not sure
+	fprintf('Gramiano calcolato con S: \n')
+	syms Go_s(t)
+	Go_s(t) =@(t) gramian_oss(h, x, W, t, Tinf, Tsup, S, 's');
+	fprintf('Valutazione del nullo del gramiano: se si ha intersezione non nulla tra i gramiani ad ogni t, perde di invertibilità. \n')
+	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
+	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
+	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
+	NGo_s =@(t) null(Go_s);
+	for i = 1:length(T)-1 %va rivisto qua
+		ssp = ssp + subspace(NGo_s(i*Tstep), NGo_s((i+1)*Tstep));
+	%angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
+	end
+	thr = (pi/18)*pi/180; % threshold a 10°
+	if ssp < thr
+		fprintf('non si ha sottospazio di inosservabilità \n')
+	else
+		fprintf('si ha sottospazio di inosservabilità \n')
+		% come cavolo lo valuto???
+	end
+		case 2
 	%% Analisi proprietà Biciclo
 	clear all
 	syms x_M y_M theta_A theta_P
