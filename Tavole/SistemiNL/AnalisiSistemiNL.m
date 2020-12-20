@@ -16,6 +16,8 @@ switch choiche
 	syms x_p y_p theta real
 	syms x_p0 y_p0 theta0 real
 	syms t
+	global t
+	global Tinf
 	x = [x_p; y_p; theta];
 	x_0 = [x_p0; y_p0; theta0];
 	fprintf('lo stato iniziale considerato è \n:')
@@ -29,8 +31,9 @@ switch choiche
 	g2 = [0;0;1]
 	G = [g1 g2];
 	fG = G;
+	
+	% check controllabilità
 	fprintf('STUDIO DELLA CONTROLLABILITA'' \n')
-
 	fprintf('la filtrazione di chow porta a : \n')
 	Dfull = chow_filtration(G, G, x);
 	D_full_x0 = subs(Dfull,x,x0)
@@ -42,10 +45,10 @@ switch choiche
 		STLA = 0;
 	end
 	
-	% weak controllability check
+	% check weak controllability 
 	 if exist('f')
 		f_x0 = subs(f,x,x0);
-		% check delle proprietà
+		% properties check
 		[STLC, prop] = weak_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA);
 		if STLA
 			if STLC
@@ -63,6 +66,7 @@ switch choiche
 		fprintf('il sistema non è STLA quindi non può essere STLC \n')
 	 end
 	
+	 % check osservabilità
 	fprintf('Studio OSSERVABILITA'' \n')
 	fprintf('Se in uscita prendiamo la posizione dell''uniciclo: \n ')
 	h = [x_p y_p]
@@ -88,53 +92,59 @@ switch choiche
 	
 	fprintf('Approccio integrale e Gramiano di Osservabilità \n')
 	fprintf('intervallo temporale: \n')
-	Tinf = 0;
-	Tsup = 100;
-	Tstep = 0.1;
-	T = Tinf+Tstep:Tstep:Tsup;
+	tinf = 0;
+	tsup = 100;
+	tstep = 0.1;
+	T = (tinf+tstep) : tstep : tsup;
 	fprintf('evoluzione dello stato è data da: \n')
-	x_t =@(t) [ x_p0 + integral(t*sin(theta(t))); y_p0 + integral(t*cos(theta(t))); theta0]; %esempio a caso per vedere se funziona il codice
+	x_t =[ x_p0 + int(t*sin(theta), t, 0, t); y_p0 + int(t*cos(theta), t, 0, t); theta0]; %esempio a caso per vedere se funziona il codice
 	fprintf('il primo stato è: \n')
 	x1 = [1; 2; 3]
 	fprintf('il secondo stato è: \n')
 	x2 = [1; 3; 2]
 	dx = x2-x1;
 	fprintf('si sceglie come uscita la velocità dell''uniciclo: \n ')
-	h = (x_p^2+y_p^2)/2
+	h = (x_p^2+y_p^2)*t/2
 	fprintf('la funzione di peso W è: \n ')
 	W = eye(size(h,1), size(h,1))
 	fprintf('il corrispondente Gramiano di osservabilità è: \n')
-	Go = gramian_oss(h, x, W, t, Tinf, Tsup, x1, 'o');
+	Go = gramian_oss(h, x, W, x1, 'o');
 	fprintf('analisi del rango del Gramiano: \n ')
-	if rank(Go(t)) == size(x,1)
+	oss = 1;
+	for i = 1:length(T)-1
+		Go_t = subs(Go, t, i*tstep);
+		if rank(Go_t) < size(x,1)
+			fprintf('il sistema perde osservabilità, infatti: \n ')
+			E = eig(Go_t);
+			eig_min = min(E);
+			eig_max = max(E);
+			num_cond = eig_max/eig_min;
+			oss = 0;
+			fprintf(['il minimo valore singolare vale ' num2str(eval(eig_min)) ' e il numero di condizionamento è ' num2str(eval(num_cond)) '\n'])
+			break
+		end
+	end
+	if oss ==1
 		fprintf('Gramiano ha rango pieno righe: il sistema è localmente osservabile in x1 \n ')
-		E = eig(Go);
+		E = eig(Go_t);
 		eig_min = min(E);
 		eig_max = max(E);
 		fprintf('indice quantitativo di osservabilità: numero di condizionamento del Gramiano \n ')
 		num_cond = eig_max/eig_min;
-		fprintf(['il numero di Condizionamento vale: ' num2str(num_cond) '\n'])
-	else
-		fprintf('il sistema perde osservabilità, infatti: \n ')
-		E = eig(Go);
-		eig_min = min(E);
-		eig_max = max(E);
-		num_cond = eig_max/eig_min;
-		fprintf(['il numero di Condizionamento vale: ' num2str(num_cond) '\n'])
+		fprintf(['il numero di Condizionamento vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+			
 	fprintf('Con la matrice di sensibilità: \n')
 	S = jacobian(x_t, x_0); %???not sure
 	fprintf('Gramiano calcolato con S: \n')
-	syms Go_s(t)
-	Go_s(t) =@(t) gramian_oss(h, x, W, t, Tinf, Tsup, S, 's');
+	Go_s = gramian_oss(h, x, W, S, 's');
 	fprintf('Valutazione del nullo del gramiano: se si ha intersezione non nulla tra i gramiani ad ogni t, perde di invertibilità. \n')
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	NGo_s =@(t) null(Go_s);
+	NGo_s = null(Go_s);
 	for i = 1:length(T)-1 %va rivisto qua
-		ssp = ssp + subspace(NGo_s(i*Tstep), NGo_s((i+1)*Tstep));
+		ssp = ssp + subspace(NGo_s(i*tstep), NGo_s((i+1)*tstep));
 	%angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
 	end
 	thr = (pi/18)*pi/180; % threshold a 10°
