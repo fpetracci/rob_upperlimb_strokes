@@ -12,18 +12,18 @@ if type ~= 'o' && type ~= 's'
 else
 	global t;
 	global Tinf;
-	syms dh(t)
+	syms dh(t) 
 	dh(t) = jacobian(h, x);
 	% in dh deve esserci la dipendenza dal tempo
 	if type == 'o'
 		x1 = a;
 		% dh = subs(dh, x, x1);
 		dh = subs(dh, x, x1);
-		fun = dh' * W * dh;
+		fun = transpose(dh) * W * dh;
 		gramian = int(fun, t, 0, t);
 	elseif type == 's'
 		S = a;
-		fun = S' * dh' * W * dh * S;
+		fun = transpose(S) * transpose(dh) * W * dh * S;
 		gramian = int(fun, t, 0, t);
 	end
 end

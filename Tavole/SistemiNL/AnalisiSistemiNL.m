@@ -15,7 +15,9 @@ switch choiche
 	%% Analisi proprietà uniciclo
 	syms x_p y_p theta real
 	syms x_p0 y_p0 theta0 real
-	syms t
+	syms v(t) w(t) real % azioni di controllo
+	syms t real
+	syms Tinf real
 	global t
 	global Tinf
 	x = [x_p; y_p; theta];
@@ -90,71 +92,105 @@ switch choiche
 		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
 	end
 	
+	%% approccio integrale e gramiano di osservabilità
 	fprintf('Approccio integrale e Gramiano di Osservabilità \n')
 	fprintf('intervallo temporale: \n')
-	tinf = 0;
-	tsup = 100;
+	tinf = 0
+	tsup = 100
 	tstep = 0.1;
 	T = (tinf+tstep) : tstep : tsup;
+	fprintf('lo stato è dato da: \n')
+	x = [x_p; y_p; theta]
+	x_0 = [x_p0; y_p0; theta0];
 	fprintf('evoluzione dello stato è data da: \n')
-	x_t =[ x_p0 + int(t*sin(theta), t, 0, t); y_p0 + int(t*cos(theta), t, 0, t); theta0]; %esempio a caso per vedere se funziona il codice
-	fprintf('il primo stato è: \n')
-	x1 = [1; 2; 3]
-	fprintf('il secondo stato è: \n')
-	x2 = [1; 3; 2]
-	dx = x2-x1;
-	fprintf('si sceglie come uscita la velocità dell''uniciclo: \n ')
-	h = (x_p^2+y_p^2)*t/2
+	% x_t =[ x_p0 + int(v*cos(theta), t, 0, t); y_p0 + int(v*sin(theta), t, 0, t); theta0 + int(w, t, 0, t)]; 
+	x_t =[ x_p0 + int(v*cos(theta0 + int(w, t, 0, t)), t, 0, t); y_p0 + int(v*sin(theta0 + int(w, t, 0, t)), t, 0, t); theta0 + int(w, t, 0, t)] 	
+	fprintf('lo stato iniziale è: \n')
+	x1 = [0; 0; 0]
+	%fprintf('il secondo stato è: \n')
+	%x2 = [1; 3; 2]
+	%dx = x2-x1;
+	fprintf('si sceglie come uscite le posizioni x e y dell''uniciclo: \n ')
+	h = [x_p y_p]
 	fprintf('la funzione di peso W è: \n ')
 	W = eye(size(h,1), size(h,1))
 	fprintf('il corrispondente Gramiano di osservabilità è: \n')
-	Go = gramian_oss(h, x, W, x1, 'o');
+	Go = gramian_oss(h, x, W, x1, 'o')
 	fprintf('analisi del rango del Gramiano: \n ')
 	oss = 1;
 	for i = 1:length(T)-1
 		Go_t = subs(Go, t, i*tstep);
 		if rank(Go_t) < size(x,1)
-			fprintf('il sistema perde osservabilità, infatti: \n ')
-			E = eig(Go_t);
+			E = (svd(Go_t));
 			eig_min = min(E);
 			eig_max = max(E);
 			num_cond = eig_max/eig_min;
 			oss = 0;
-			fprintf(['il minimo valore singolare vale ' num2str(eval(eig_min)) ' e il numero di condizionamento è ' num2str(eval(num_cond)) '\n'])
+			fprintf(['il sistema perde osservabilità: il minimo valore singolare vale ' num2str(eval(eig_min)) ' e il numero di condizionamento è ' num2str(eval(num_cond)) '\n'])
 			break
 		end
 	end
 	if oss ==1
 		fprintf('Gramiano ha rango pieno righe: il sistema è localmente osservabile in x1 \n ')
-		E = eig(Go_t);
+		E = svd(Go_t);
 		eig_min = min(E);
 		eig_max = max(E);
-		fprintf('indice quantitativo di osservabilità: numero di condizionamento del Gramiano \n ')
 		num_cond = eig_max/eig_min;
-		fprintf(['il numero di Condizionamento vale: ' num2str(eval(num_cond)) '\n'])
+		fprintf(['indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
 			
 	fprintf('Con la matrice di sensibilità: \n')
-	S = jacobian(x_t, x_0); %???not sure
+	S = jacobian(x_t, x_0) 
 	fprintf('Gramiano calcolato con S: \n')
-	Go_s = gramian_oss(h, x, W, S, 's');
+	Go_s = gramian_oss(h, x, W, S, 's')
 	fprintf('Valutazione del nullo del gramiano: se si ha intersezione non nulla tra i gramiani ad ogni t, perde di invertibilità. \n')
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	NGo_s = null(Go_s);
-	for i = 1:length(T)-1 %va rivisto qua
-		ssp = ssp + subspace(NGo_s(i*tstep), NGo_s((i+1)*tstep));
-	%angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-	end
+	fprintf('si cerca lo spazio nullo del gramiano \n')
+	%NGo_s = null(Go_s);
+	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	if ssp < thr
-		fprintf('non si ha sottospazio di inosservabilità \n')
+	fprintf('valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho modo di controllare la velocità del veicolo \n')
+	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	if rank(NGo_sv)>0
+		for i = 1:length(T)-1 %va rivisto qua
+			if i == 1
+				ssp = subspace(subs(NGo_sv,t,(i*tstep)), (subs(NGo_sv, t,(i+1)*tstep)));
+			else
+				ssp = ssp + subspace(subs(NGo_sv,t,(i*tstep)), (subs(NGo_sv, t,(i+1)*tstep)));
+			end
+		end
 	else
-		fprintf('si ha sottospazio di inosservabilità \n')
-		% come cavolo lo valuto???
+		ssp = 100*thr;
 	end
-		case 2
+	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
+		fprintf('si ha sottospazio di inosservabilità \n')
+	else
+		fprintf('non si ha sottospazio di inosservabilità \n')
+	end
+	
+	fprintf('valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho modo di controllare la rotazione del veicolo \n')
+	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	if rank(NGo_sw)>0
+		for i = 1:length(T)-1 %va rivisto qua
+			if i == 1
+				ssp = subspace(subs(NGo_sw,t,(i*tstep)), (subs(NGo_sw, t,(i+1)*tstep)));
+			else
+				ssp = ssp + subspace(subs(NGo_sw,t,(i*tstep)), (subs(NGo_sw, t,(i+1)*tstep)));
+			end
+		end
+	else
+		ssp = 100*thr;
+	end
+	
+	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
+		fprintf('si ha sottospazio di inosservabilità \n')
+	else
+		fprintf('non si ha sottospazio di inosservabilità \n')
+	end	
+
+	case 2
 	%% Analisi proprietà Biciclo
 	clear all
 	syms x_M y_M theta_A theta_P
