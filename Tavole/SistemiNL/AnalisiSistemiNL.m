@@ -166,8 +166,10 @@ switch choiche
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
 		fprintf('si ha sottospazio di inosservabilità \n')
+		noss_v = 1;
 	else
 		fprintf('non si ha sottospazio di inosservabilità \n')
+		noss_v = 0;
 	end
 	
 	fprintf('valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho modo di controllare la rotazione del veicolo \n')
@@ -186,10 +188,21 @@ switch choiche
 	
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
 		fprintf('si ha sottospazio di inosservabilità \n')
+		noss_w = 1;
 	else
 		fprintf('non si ha sottospazio di inosservabilità \n')
+		noss_w = 0;
 	end	
-
+	
+	if noss_v && noss_w
+		fprintf('sistema non completamente osservabile a prescindere dai controlli \n')
+	elseif noss_v && ~noss_w
+		fprintf('ho spazio di inosservabilità se posso variare solo w(t) \n')
+	elseif ~noss_v && noss_w
+		fprintf('ho spazio di inosservabilità se posso variare solo v(t) \n')
+	else
+		fprintf('sistema completamente osservabile a prescindere dai controlli \n')	
+	end
 	case 2
 	%% Analisi proprietà Biciclo
 	clear all
