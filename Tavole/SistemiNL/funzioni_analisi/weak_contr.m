@@ -81,6 +81,9 @@ elseif STLA == 1
 					STLC = 1;
 				% v)
 				else % DA IMPLEMENTARE LA v) E LA vi)
+					% lie bracket date da un numero di f e un numero di g
+					% devono essere combinazioni lineari delle relative
+					% good brackets
 					prop = 5;
 					STLC = 0;
 					prop = 0;
