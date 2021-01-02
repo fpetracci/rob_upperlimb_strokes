@@ -52,6 +52,7 @@ if subj_status == 0
 	a = plot(E_h, 'db' );
 	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlim([1,10])
+	ylim([0 inf])
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
 	grid on
@@ -85,6 +86,7 @@ if subj_status == 0
 	a = plot(E_h, 'db' );
 	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlim([1,10])
+	ylim([0 inf])
 
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
@@ -122,6 +124,7 @@ if subj_status == 0
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
 	xlim([1,10])
+	ylim([0 inf])
 	legend
 	title(['Stroke subj ' num2str(nsubj) ' ID '   num2str(ID) ': first 3 DOFs'])
 	
@@ -147,6 +150,8 @@ elseif subj_status == 1
 	a.Annotation.LegendInformation.IconDisplayStyle = 'off';
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
+	xlim([1,10])
+	ylim([0 inf])
 	legend
 	title(['Healthy subj ' num2str(nsubj) ': all 10 DOFs'])
 	
@@ -163,6 +168,7 @@ elseif subj_status == 1
 	subplot(1,3,2)
 	plot(E_h_7(nsubj,:), 'g', 'DisplayName', 'Healthy' )
 	xlim([1,10])
+	ylim([0 inf])
 	hold on
 	plot(E_h, 'b', 'DisplayName', 'Healthy mean')
 	a = plot(E_h_7(nsubj,:), 'dg' );
@@ -192,6 +198,7 @@ elseif subj_status == 1
 	xlabel('Number of fPCs used')
 	ylabel('Reconstruction Error [deg]')
 	xlim([1,10])
+	ylim([0 inf])
 	legend
 	title(['Healthy subj ' num2str(nsubj) ': first 3 DOFs'])
 else 

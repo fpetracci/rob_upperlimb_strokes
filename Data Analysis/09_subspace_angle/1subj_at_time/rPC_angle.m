@@ -130,7 +130,6 @@ else
 	for i = t0 : tf
 		[coeff_rPCs, ~, ~, dom] = rPC_t_subj(i, struct_rPCA, nsubj, sel_rPC);
 	
-		% stroke side
 		coeff_h_tmp			= coeff_rPCs(:, :, 1);
 		angles(:, i)		= subspacea(mean_posture, coeff_h_tmp);
 		rPC_coeff_h(:,:,i)	= coeff_h_tmp;

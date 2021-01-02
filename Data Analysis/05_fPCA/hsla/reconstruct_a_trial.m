@@ -5,7 +5,7 @@
 clear; clc;
 ngroup = 1;
 
-save_mode = 0;  %save option
+save_mode = 1;  %save option
 
 fPCA_struct = fpca_hsla(ngroup);
 
@@ -15,7 +15,7 @@ q_stacked =  fpca_stacker_hsla(ngroup);
 % we decided to reconstruct an healthy subject trial and the 'nobs' in the
 % stacked matrix
 
-nobs = 135;
+nobs = 200;
 
 q_real = q_stacked.q_matrix_h(nobs,:,:);
 q_real = reshape(q_real, 240,10,1);
@@ -39,12 +39,12 @@ for j = 1:10 % joint
 	hold on
 	plot(qmat(:,nobs,2)+mean_tmp,...
 		 'Linewidth',0.5,'DisplayName','Mean + fPC1')
-	 plot(qmat(:,nobs,3)+mean_tmp,...
-		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
+ 	 plot(qmat(:,nobs,3)+mean_tmp,...
+ 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2')
 	 plot(qmat(:,nobs,4)+mean_tmp,...
 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3')
-	 plot(qmat(:,nobs,5)+mean_tmp,...
-		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3 + fPC4')
+% 	 plot(qmat(:,nobs,5)+mean_tmp,...
+% 		 'Linewidth',0.5,'DisplayName','Mean + fPC1 + fPC2 + fPC3 + fPC4')
 	 
 	 plot(q_stacked.q_matrix_h(nobs,:,j), ...
 			'k--', 'Linewidth',1.5,'DisplayName','Actual Signal')

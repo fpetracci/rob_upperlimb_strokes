@@ -7,8 +7,12 @@ set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 set(findall(gcf,'type','text'),'FontSize', dim_font)           
 set(gca,'FontSize', dim_font) 
 
-%% export
-filename = 'single_s.pdf';
-f = gcf;
-exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
+%% supersizeme
+% fh = figure(24);
+% supersizeme(1.5, fh)
 
+%% export
+filename = 'temp_export.pdf';
+f = gcf;
+% exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
+exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','image')
