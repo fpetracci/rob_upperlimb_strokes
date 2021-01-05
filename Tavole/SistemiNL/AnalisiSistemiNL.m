@@ -7,7 +7,6 @@ fprintf('2: bicycle \n');
 
 fprintf('3: overhead crane \n');
 
-
 choiche = input(' ... ');
 
 switch choiche 

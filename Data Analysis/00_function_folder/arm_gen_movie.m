@@ -1,4 +1,4 @@
-function arm_gen_movie(q, rep, nfig, movie_mode, movie_title)
+function arm_gen_movie(q, rep, nfig, movie_mode, movie_title, spins, View)
 %ARM_GEN_MOVIE generates a movie in which a general right arm does the 
 % movement with given q as input. It also puts in the scene a hand and a 
 % head.
@@ -12,6 +12,9 @@ function arm_gen_movie(q, rep, nfig, movie_mode, movie_title)
 %							matlab animation. Default = 1
 %			movie_title - string with title of the movie we want to save.
 %							Default = 'movie_hand'
+%			spins		- vector containing azimuth and elevation spin
+%							angles
+%			View		- initial view angles 
 %			
 %
 %% check input
@@ -30,6 +33,19 @@ end
 if nargin < 5
 	movie_title = 'movie_hand';
 end
+
+if nargin < 6
+	spinlon = -90;
+	spinlat = 0;
+else
+	spinlon = spins(1);
+	spinlat = spins(2);
+end
+
+if nargin < 7
+	View = [110 10];
+end
+
 
 %% parameter of trial = healthy_task(1).subject(1).left_side_trial(1);
 
@@ -90,11 +106,7 @@ fr_skip = 1;
 % pause time in the animation
 time_pause = 0;
 
-% view angles
-View = [110 10];				% initial view
 
-spinlon = -90;
-spinlat = 0;
 
 % movie parameters
 k = 1;				% init of movie's frames counter
@@ -146,7 +158,6 @@ hand_traj = [];				% hand trajectory
 figh = figure(nfig);
 clf
 
-
 % figure settings
 %set(gca, 'drawmode', 'fast');
 lighting phong;
@@ -155,8 +166,6 @@ axis equal
 axis tight
 hold on
 grid on
-
-
 
 % init head model
 p_head = patch(stlread('HEAD_low_poly.stl'));
@@ -178,8 +187,7 @@ set(p_hand, 'FaceColor', col_hand_face);	% Set the face colour
 set(p_hand, 'EdgeColor', col_hand_edge);	% Set the edge colour
 set(p_hand, 'EdgeAlpha', alpha_edge/2);		% Set the edge transparency (0 transparent)
 
-% 
-
+% iteration
 
 for i = 1:fr_skip:t_tot
 	if i ~= 1
