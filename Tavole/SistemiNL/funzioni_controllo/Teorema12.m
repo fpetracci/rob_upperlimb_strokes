@@ -43,7 +43,7 @@
 %-------------------------------------------------------------------------
 % esempio pag 179
 clear all; clc
-syms x1 x2 x3 syms
+syms x1 x2 x3 u syms
 x = [x1;x2;x3];
 fprintf('lo stato iniziale del sistema è: \n')
 x0 = [0;0;0]
@@ -79,3 +79,8 @@ if det~= 0
 else
 	fprintf('ritenta')
 end
+fprintf('per il teorema 12 andiamo a studiare la zero dinamica e vediamo se è A.S.')
+epsilon1_dot = phi(2)
+epsilon2_dot = jacobian(phi(2),x)*f + jacobian(phi(2),x)*g*u
+fprintf('si può ricavere la u')
+etha1_dot = jacobian(phi(3),x)*f + jacobian(phi(3),x)*g 
