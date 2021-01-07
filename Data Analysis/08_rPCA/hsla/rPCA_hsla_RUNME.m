@@ -10,6 +10,7 @@ ngroup = 1;
 %ngroup = 'all';
 data = rpca_hsla(ngroup);
 [mean_posture] = mean_post(ngroup);
+movie_mode = 0;
 
 %% Analysis sum
 
@@ -81,8 +82,7 @@ ylabel('number of used rPCs')
 figh = figure(3);
 clf;
 D = zeros(10, 3);
-
-
+D_mean = zeros(10, 4);
 % video stuff
 k = 1;
 clear movieVector movie;
@@ -128,11 +128,13 @@ end
 
 figure(11)
 clf;
-D_mean(:, 1) = mean_posture(:,1);
+%D_mean(:, 1) = mean_posture(:,1);
 D_mean(:, 2) = D_mean(:, 2)./240;
 D_mean(:, 3) = D_mean(:, 3)./240;
 D_mean(:, 4) = D_mean(:, 4)./240;
-spider_plot_rPCs(D_mean, 'khsl')
+
+D_mean(:, 1) = [];
+spider_plot_rPCs(D_mean, 'hsl')
 title('mean of first 3 rPC of healthy')
 
 %% first three of less affected subjects
@@ -191,7 +193,10 @@ D_mean(:, 1) = mean_posture(:,1);
 D_mean(:, 2) = D_mean(:, 2)./240;
 D_mean(:, 3) = D_mean(:, 3)./240;
 D_mean(:, 4) = D_mean(:, 4)./240;
-spider_plot_rPCs(D_mean, 'khsl')
+
+
+D_mean(:, 1) = []; % no mean posture in plot
+spider_plot_rPCs(D_mean, 'hsl')
 title('mean of first 3 rPC of less affected')
 
 %% first three of stroke subjects
@@ -207,11 +212,11 @@ clear movieVector;
 for i=1:240
 % 	D(:, 1) = mean_posture(:,1);
 	D(:, 1) = data.s.coeff(:, 1, i);
-	D_mean(:, 1) = D_mean(:, 1) + data.s.coeff(:, 1, i);
+	D_mean(:, 2) = D_mean(:, 2) + data.s.coeff(:, 1, i);
 	D(:, 2) = data.s.coeff(:, 2, i);
-	D_mean(:, 2) = D_mean(:, 3) + data.s.coeff(:, 2, i);
+	D_mean(:, 3) = D_mean(:, 3) + data.s.coeff(:, 2, i);
 	D(:, 3) = data.s.coeff(:, 3, i);
-	D_mean(:, 3) = D_mean(:, 4) + data.s.coeff(:, 3, i);
+	D_mean(:, 4) = D_mean(:, 4) + data.s.coeff(:, 3, i);
 	spider_plot_rPCs(D, 'hsl')
 	title(['first 3 rPC of strokes. Frame: ' num2str(i)])
 	drawnow
@@ -243,14 +248,17 @@ if movie_mode
   close(movie);
 end
 
-% figure(11)
-% clf;
-% D_mean(:, 1) = mean_posture(:,1);
-% D_mean(:, 2) = D_mean(:, 2)./240;
-% D_mean(:, 3) = D_mean(:, 3)./240;
-% D_mean(:, 4) = D_mean(:, 4)./240;
-% spider_plot_rPCs(D_mean, 'khsl')
-% title('mean of first 3 rPC of strokes')
+figure(11)
+clf;
+D_mean(:, 1) = mean_posture(:,1);
+D_mean(:, 2) = D_mean(:, 2)./240;
+D_mean(:, 3) = D_mean(:, 3)./240;
+D_mean(:, 4) = D_mean(:, 4)./240;
+
+D_mean(:, 1) = []; % no mean posture in plot
+spider_plot_rPCs(D_mean, 'hsl')
+title('mean of first 3 rPC of strokes')
+
 %%
 figure(7);
 clf;
@@ -275,6 +283,7 @@ D_mean(:, 2) = D_mean(:, 2)./240;
 D_mean(:, 3) = D_mean(:, 3)./240;
 spider_plot_rPCs(D_mean, 'hsl')	
 title('mean of first rPC of healthy, stroke and less affected')
+
 %% video
 movie_mode = 1;
 movie_fps = 20;

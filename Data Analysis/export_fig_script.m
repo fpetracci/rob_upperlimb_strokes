@@ -14,5 +14,5 @@ set(gca,'FontSize', dim_font)
 %% export
 filename = 'temp_export.pdf';
 f = gcf;
-% exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
-exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','image')
+exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','vector')
+% exportgraphics(f, filename, 'BackgroundColor','none', 'ContentType','image')

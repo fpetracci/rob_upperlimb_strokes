@@ -34,7 +34,7 @@ timeSpan= t_end - t_in;
 
 njoints = 7;
 n_steps = timeSpan/delta_t;
-n_steps_appr = n_steps/100;
+n_steps_appr = 20;
 
 % posizioni iniziali
 pos1 = franka.fkine(qv1);
@@ -138,80 +138,80 @@ hold on
 franka.plot(q_des')
 %% clotoide
 
-% punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
-% 
-% fig2 = figure(2);
-% clf
-% hold on
-% x_shaded = [-0.5 0.5 0.5 -0.5];
-% y_shaded = [0.5 0.5 1 1];
-% fill(x_shaded, y_shaded, 'g' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-% 
-% x_shaded = [-0.5 0.5 0.5 -0.5];
-% y_shaded = [0 0 0.5 0.5];
-% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-% 
-% x_shaded = [-0.5 0.5 0.5 -0.5];
-% y_shaded = [1 1 1.2 1.2];
-% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-% 
-% x_shaded = [-0.6 -0.5 -0.5 -0.6];
-% y_shaded = [0 0 1.2 1.2];
-% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-% 
-% x_shaded = [0.6 0.5 0.5 0.6];
-% y_shaded = [0 0 1.2 1.2];
-% fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
-% 
-% xlim([-0.6 0.6]);
-% ylim([0 1.2]);
-% xlabel('-Y [m]')
-% ylabel('Z [m]')
-% grid on
-% 
-% points_clot = ginput;
-% 
-% % handling ginput_frame to franka globalframe
-% for i = 1 :size(points_clot,1)
-% 	points_clot(i,:) = [cos(-pi/2) -sin(-pi/2); sin(-pi/2) cos(-pi/2)] * points_clot(i,:)';
-% end
-% 
-% % gen points on clothoid and path
-% dx = 0.3;
-% zy_clot = gen_clot(points_clot);
-% clot_sizes = size(zy_clot,1);
-% 
-% x_clot = 0.3 * ones(1, clot_sizes);
-% for i = 2:clot_sizes
-% 	x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
-% end
-% 
-% p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
-% 
-% posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
-% T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
-% 											% iniziale clotoide
-% p_appr = hgmat2pos(T_appr);
-% eul_appr = hgmat2eul(T_appr);
-% p = [p_appr, p_clot];
-% 
-% % generating xi
-% theta	= zeros(size(p(1,:)));
-% phi		= zeros(size(p(1,:)));
-% psi		= zeros(size(p(1,:)));
-% 
-% xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
-% t_end = size(xi,2)*delta_t;
-% t = (t_in+delta_t):delta_t:t_end;
-% 
-% [q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
-% % figure
-% fig1 = figure(1);
-% clf
-% plot3(p(1,:),p(2,:),p(3,:), ':c')
-% hold on
-% axis equal
-% franka.plot(q_des', 'trail', ':b')
+punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
+
+fig2 = figure(2);
+clf
+hold on
+x_shaded = [-0.5 0.5 0.5 -0.5];
+y_shaded = [0.5 0.5 1 1];
+fill(x_shaded, y_shaded, 'g' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+
+x_shaded = [-0.5 0.5 0.5 -0.5];
+y_shaded = [0 0 0.5 0.5];
+fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+
+x_shaded = [-0.5 0.5 0.5 -0.5];
+y_shaded = [1 1 1.2 1.2];
+fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+
+x_shaded = [-0.6 -0.5 -0.5 -0.6];
+y_shaded = [0 0 1.2 1.2];
+fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+
+x_shaded = [0.6 0.5 0.5 0.6];
+y_shaded = [0 0 1.2 1.2];
+fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+
+xlim([-0.6 0.6]);
+ylim([0 1.2]);
+xlabel('-Y [m]')
+ylabel('Z [m]')
+grid on
+
+points_clot = ginput;
+
+% handling ginput_frame to franka globalframe
+for i = 1 :size(points_clot,1)
+	points_clot(i,:) = [cos(-pi/2) -sin(-pi/2); sin(-pi/2) cos(-pi/2)] * points_clot(i,:)';
+end
+
+% gen points on clothoid and path
+dx = 0.3;
+zy_clot = gen_clot(points_clot);
+clot_sizes = size(zy_clot,1);
+
+x_clot = 0.3 * ones(1, clot_sizes);
+for i = 2:clot_sizes
+	x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
+end
+
+p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
+
+posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
+T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
+											% iniziale clotoide
+p_appr = hgmat2pos(T_appr);
+eul_appr = hgmat2eul(T_appr);
+p = [p_appr, p_clot];
+
+% generating xi
+theta	= zeros(size(p(1,:)));
+phi		= zeros(size(p(1,:)));
+psi		= zeros(size(p(1,:)));
+
+xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
+t_end = size(xi,2)*delta_t;
+t = (t_in+delta_t):delta_t:t_end;
+
+[q_des, dq_des, ddq_des] = ikine_franka(xi, qv1, franka, delta_t);
+% figure
+fig1 = figure(1);
+clf
+plot3(p(1,:),p(2,:),p(3,:), ':c')
+hold on
+axis equal
+franka.plot(q_des', 'trail', ':b')
 
 % ho ottenuto la traiettoria desiderata da far seguire al Franka, ora devo
 % controllarlo in modo tale che la segua davvero

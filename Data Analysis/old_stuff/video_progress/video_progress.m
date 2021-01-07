@@ -19,7 +19,7 @@ clc;
 %	ntrial:			1-3 trial number
 
 task	= 7;	% task number
-subject	= 8;	% subject number (subj 8 is P10)
+subject	= 10;	% subject number (subj 8 is P10)
 hORs	= 's';
 lORr	= 'r';
 ntrial	= 1;	% trial number (1 to 6)
