@@ -89,8 +89,7 @@ switch choiche
 		fprintf('il sistema per questi ingressi e uscite è osservabile \n')
 	else
 		fprintf('il sistema per questi ingressi e uscite non è osservabile \n')	
-	end
-	
+	end	
 	%% approccio integrale e gramiano di osservabilità
 	fprintf('Approccio integrale e Gramiano di Osservabilità \n')
 	fprintf('intervallo temporale: \n')
