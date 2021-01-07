@@ -8,7 +8,7 @@ disp('Caricamento Uniciclo')
 %% parametri simulazione
 
 t_end		= 20;		% simulation time
-threshold	= 1e-5;		% soglia numerica
+threshold	= 1e-3;		% soglia numerica
 %% stato iniziale
 
 x_p_iniziale	= 10;	% posizione asse x iniziale [m]
@@ -18,11 +18,11 @@ theta_iniziale	= pi/3;	% angolo iniziale [rad]
 
 x_p_finale	= 0;	% posizione asse x finale [m]
 y_p_finale	= 0;	% posizione asse y finale [m]
-
+v_rif		= 10;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 %% parametri controllo
 
-K1 = [100; 100];	% error on x_p, y_p
-K2 = [100; 100];	% error on x_p dot, y_p dot
+K1 = [10; 10];	% error on x_p, y_p
+K2 = [50; 50];	% error on x_p dot, y_p dot
 
 %% Clotoidi
 % %%%   ginput
