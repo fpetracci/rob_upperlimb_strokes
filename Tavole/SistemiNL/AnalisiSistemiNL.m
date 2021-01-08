@@ -1,11 +1,11 @@
 clc; clear all; close all;
-fprintf('Choose system for analysis: \n');
+fprintf('Scegli un sistema da analizzare: \n');
 
-fprintf('1: cycle \n');
+fprintf('1: uniciclo \n');
 
-fprintf('2: bicycle \n');
+fprintf('2: biciclo \n');
 
-fprintf('3: overhead crane \n');
+fprintf('3: Ponte/gru \n');
 
 choiche = input(' ... ');
 
