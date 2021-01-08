@@ -14,12 +14,13 @@ n_in = size(G, 2);
 r_mimo = zeros(n_out, n_in);
 for i=1:n_out
 	r_min = 100;
+	clear E_tmp
 	for j=1:n_in
 		[r_mimo(i, j),Lf_full,Lg_full] = relative_degree(f,G(:,j),H(i,:),x);
 		if j==1
 			E_tmp(:, j) = transpose(Lg_full);
 		end
-		if r_mimo(i, j) < r_min && r_mimo(i, j)>0
+		if r_mimo(i, j) < r_min && r_mimo(i, j)>=0
 			in_r = j;
 			Lf_full_min = Lf_full;
 			r_min = r_mimo(i, j);

@@ -12,6 +12,7 @@ tipo_perc = input(' Scegli un percorso da far fare all''uniciclo: \n 1: Raggiung
 Punto			= Simulink.Variant('tipo_perc == 1');
 Circonferenza	= Simulink.Variant('tipo_perc == 2');
 Clotoidi		= Simulink.Variant('tipo_perc == 3');
+Retta			= Simulink.Variant('tipo_perc == 4');
 
 %% parametri simulazione
 
@@ -24,10 +25,14 @@ L = 1;			% interasse [m]
 v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 %% parametri controllo biciclo
 
-K1 = [500; 500];		% error on x_M, y_M
-K2 = [200; 200];	% error on x_M dot, y_M dot
-K3 = [500; 500];	% error on x_M ddot, y_M ddot
+% K1 = [20; 20];		% error on x_M, y_M
+% K2 = [100; 100];	% error on x_M dot, y_M dot
+% K3 = [10; 10];		% error on x_M ddot, y_M ddot
 
+
+K1 = [20; 20];		% error on x_M, y_M
+K2 = [100; 100];	% error on x_M dot, y_M dot
+K3 = [10; 10];		% error on x_M ddot, y_M ddot
 %% stato iniziale
 figure(1)
 clf
@@ -40,7 +45,7 @@ grid on
 daspect([1 1 1])
 title('Clickare su da dove si vuole far partire l''uniciclo! Poi premere invio')
 points = ginput;
-if size(points,1) > 1
+if size(points,1) > 1 || size(points,1) < 1
 	warning('Hai inserito troppi punti iniziali! Partira` dall''origine')
 	x_M_iniziale	= 0;	% posizione asse x iniziale [m]
 	y_M_iniziale	= 0;	% posizione asse y iniziale [m]
@@ -54,7 +59,7 @@ end
 v_P_iniziale		= 1;	% velocita` piano iniziale [m\s]
 v_P_dot_iniziale	= 0.1;	% derivata velocita` piano iniziale [m\s]
 theta_P_iniziale	= 0;	% angolo heading iniziale [rad]
-phi_iniziale		= 0;	% angolo sterzo iniziale [rad]
+phi_iniziale		= pi/18;% angolo sterzo iniziale [rad]
 
 
 %% PERCORSI
@@ -72,7 +77,7 @@ switch tipo_perc
 		daspect([1 1 1])
 		title('Clickare su da dove si vuole far arrivare l''uniciclo! Poi premere invio')
 		points = ginput;
-		if size(points,1) > 1
+		if size(points,1) > 1 || size(points,1) < 1
 			warning('Hai inserito troppi punti finali! Arrivera` al punto [30;-20]')
 			x_M_finale	= 30;	% posizione asse x iniziale [m]
 			y_M_finale	= -20;	% posizione asse y iniziale [m]
@@ -154,5 +159,9 @@ switch tipo_perc
 	end
 
 	Ltot=sum(Lenghts); %Lunghezza totale percorso
+	
+	%% retta
+	case 4 
+		dir_retta = [cos(pi/4); sin(pi/4)];
 
 end

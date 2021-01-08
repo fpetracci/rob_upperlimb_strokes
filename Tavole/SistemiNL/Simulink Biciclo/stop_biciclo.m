@@ -39,19 +39,19 @@ xlabel('Tempo [s]')
 ylabel('Uscite [m]')
 
 %% Stato: velocità
-% figure(2)
-% clf
-% plot(time, v, 'b', 'DisplayName', 'velocità')
-% hold on
-% plot(time, ds, 'r', 'DisplayName', 'vel lungo la traiettoria')
-% title('Velocità')
-% xlim([0  inf])
-% ylim([0 inf])
-% 
-% grid on
-% legend
-% xlabel('Tempo [s]')
-% ylabel('velocità [m/s]')
+figure(2)
+clf
+plot(time, v_P, 'b', 'DisplayName', 'velocità')
+hold on
+plot(time, ds, 'r', 'DisplayName', 'vel lungo la traiettoria')
+title('Velocità')
+xlim([0  inf])
+ylim([-inf inf])
+
+grid on
+legend
+xlabel('Tempo [s]')
+ylabel('velocità [m/s]')
 
 %% Stato: Theta
 figure(3)
@@ -64,9 +64,20 @@ legend
 xlabel('Tempo [s]')
 ylabel('\theta [grad]')
 
+%% Stato: Phi
+figure(4)
+clf
+plot(time, phi*180/pi, 'r', 'DisplayName', '\phi angolo sterzo')
+title('\phi')
+axis tight
+grid on
+legend
+xlabel('Tempo [s]')
+ylabel('\phi [grad]')
+
 %% errore di inseguimento
 
-figure(4)
+figure(5)
 clf
 plot(time, x_e, 'r', 'DisplayName', 'error_x')
 hold on
@@ -79,7 +90,7 @@ xlabel('Tempo [s]')
 ylabel('Errore [m]')
 
 %% Mappa
-figure(5)
+figure(6)
 clf
 if size(x_rif,1) == 1
 	plot(x_rif, y_rif, 'rd', 'Linewidth', 1.0, 'DisplayName', 'Riferimento' )
