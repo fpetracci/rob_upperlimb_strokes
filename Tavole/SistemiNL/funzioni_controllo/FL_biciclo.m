@@ -68,9 +68,9 @@ fprintf('cambio rimanente indipendente dalle variabili precedenti e dall''ingres
 % [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 %% doppio integratore velocità commentare il blocco precedente
 clearvars -except x f g1 g2 y
-syms v_dot
-x = [x ; v_dot]
-f = [f+g1*v_dot;...
+syms v_P_dot
+x = [x ; v_P_dot]
+f = [f+g1*v_P_dot;...
 	 0]
 g1 = [0;...
 	  0;...
@@ -86,3 +86,4 @@ g2 = [ 0;...
 	   0]
 G = [g1 g2];
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
+clearvars -except T E
