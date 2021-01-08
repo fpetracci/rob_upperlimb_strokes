@@ -6,23 +6,25 @@ clear all; close all; clc;
 disp('Caricamento Biciclo')
 %% scelta percorso
 
-tipo_perc = input(' Scegli un percorso da far fare all''uniciclo: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n... ');
+tipo_perc = input(' Scegli un percorso da far fare all''uniciclo: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
 
 % Simulink Variant settings
 Punto			= Simulink.Variant('tipo_perc == 1');
 Circonferenza	= Simulink.Variant('tipo_perc == 2');
 Clotoidi		= Simulink.Variant('tipo_perc == 3');
 Retta			= Simulink.Variant('tipo_perc == 4');
+Sinusoide		= Simulink.Variant('tipo_perc == 5');
 
 %% parametri simulazione
 
 t_end		= 20;		% simulation time
-threshold	= 1e-3;		% soglia numerica
+threshold	= 1e-2;		% soglia numerica
 
 %% parametri biciclo
 
-L = 1;			% interasse [m]
-v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+L			= 1;	% interasse [m]
+v_rif		= 0.1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+
 %% parametri controllo biciclo
 
 % K1 = [20; 20];		% error on x_M, y_M
@@ -33,6 +35,7 @@ v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 K1 = [20; 20];		% error on x_M, y_M
 K2 = [100; 100];	% error on x_M dot, y_M dot
 K3 = [10; 10];		% error on x_M ddot, y_M ddot
+
 %% stato iniziale
 figure(1)
 clf
@@ -85,6 +88,11 @@ switch tipo_perc
 			x_M_finale	= points(1);	% posizione asse x iniziale [m]
 			y_M_finale	= points(2);	% posizione asse y iniziale [m]
 		end
+		
+		offset_iniziale = 0.5;
+		x_M_iniziale = x_M_iniziale + offset_iniziale;
+		y_M_iniziale = y_M_iniziale + offset_iniziale*2;
+		
 	%% Circonferenza
 	case 2
 		figure(1)
@@ -160,8 +168,12 @@ switch tipo_perc
 
 	Ltot=sum(Lenghts); %Lunghezza totale percorso
 	
-	%% retta
+	%% Retta
 	case 4 
 		dir_retta = [cos(pi/4); sin(pi/4)];
+	
+	%% Sinusoide su una retta
+	case 5 
+		dir_retta = [1; 0];
 
 end

@@ -92,19 +92,31 @@ ylabel('Errore [m]')
 %% Mappa
 figure(6)
 clf
+
+clf
 if size(x_rif,1) == 1
 	plot(x_rif, y_rif, 'rd', 'Linewidth', 1.0, 'DisplayName', 'Riferimento' )
 else
 	plot(x_rif, y_rif, 'r--', 'Linewidth', 1.0, 'DisplayName', 'Riferimento' )
 end
+
 hold on
+
+if tipo_perc == 3 %clotoidi
+	plot(xp, yp, 'co', 'DisplayName', 'Punti Inseriti')
+elseif tipo_perc == 1 %punto
+	plot(x_M_finale, y_M_finale, 'co', 'DisplayName', 'Punto finale')
+end
+
 plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
+
 plot(x_M, y_M, 'b', 'DisplayName', 'Percorso')
+
 title('Mappa')
 axis equal
-% xlim([-30 30])
-% ylim([-30 30])
-axis tight
+gap = 5;
+xlim([min(min(x_M), min(x_rif)) - gap , max(max(x_M), max(x_rif)) + gap ])
+ylim([min(min(y_M), min(y_rif)) - gap , max(max(y_M), max(y_rif)) + gap ])
 grid on
 legend
 xlabel('Asse X [m]')
