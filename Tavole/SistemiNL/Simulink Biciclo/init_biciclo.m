@@ -6,24 +6,24 @@ clear all; close all; clc;
 disp('Caricamento Biciclo')
 %% scelta percorso
 
-tipo_perc = input(' Scegli un percorso da far fare all''uniciclo: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
+tipo_perc = input(' Scegli un percorso da far fare al biciclo: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
 
 % Simulink Variant settings
-Punto			= Simulink.Variant('tipo_perc == 1');
-Circonferenza	= Simulink.Variant('tipo_perc == 2');
-Clotoidi		= Simulink.Variant('tipo_perc == 3');
-Retta			= Simulink.Variant('tipo_perc == 4');
-Sinusoide		= Simulink.Variant('tipo_perc == 5');
+Punto			= Simulink.Variant('tipo_perc == 1'); % non funziona
+Circonferenza	= Simulink.Variant('tipo_perc == 2'); % okay se non troppo rapida
+Clotoidi		= Simulink.Variant('tipo_perc == 3'); % okay se non troppo rapida
+Retta			= Simulink.Variant('tipo_perc == 4'); % okay
+Sinusoide		= Simulink.Variant('tipo_perc == 5'); % okay
 
 %% parametri simulazione
 
-t_end		= 20;		% simulation time
+t_end		= 200;		% simulation time % era 20 prima
 threshold	= 1e-2;		% soglia numerica
 
 %% parametri biciclo
 
 L			= 1;	% interasse [m]
-v_rif		= 0.1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 
 %% parametri controllo biciclo
 
@@ -46,7 +46,7 @@ xlim([-l_ginput l_ginput]);
 ylim([-h_ginput h_ginput]);
 grid on
 daspect([1 1 1])
-title('Clickare su da dove si vuole far partire l''uniciclo! Poi premere invio')
+title('Clickare su da dove si vuole far partire il biciclo! Poi premere invio')
 points = ginput;
 if size(points,1) > 1 || size(points,1) < 1
 	warning('Hai inserito troppi punti iniziali! Partira` dall''origine')
@@ -78,7 +78,7 @@ switch tipo_perc
 		ylim([-h_ginput h_ginput]);
 		grid on
 		daspect([1 1 1])
-		title('Clickare su da dove si vuole far arrivare l''uniciclo! Poi premere invio')
+		title('Clickare su da dove si vuole far arrivare il biciclo! Poi premere invio')
 		points = ginput;
 		if size(points,1) > 1 || size(points,1) < 1
 			warning('Hai inserito troppi punti finali! Arrivera` al punto [30;-20]')
@@ -112,7 +112,10 @@ switch tipo_perc
 		else
 			centro	= [points(1); points(2)];	% posizione del centro [m]
 		end
-		
+		if v_rif > 0.1
+			v_rif = 0.1;
+		end
+		v_r = v_rif; % raggio dipende dalla velocità di rif
 	%% Clotoidi
 	case 3
 	%%%   ginput
