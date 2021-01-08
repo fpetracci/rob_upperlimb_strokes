@@ -13,7 +13,7 @@ n_out = size(H, 1); %output in riga
 n_in = size(G, 2);
 r_mimo = zeros(n_out, n_in);
 for i=1:n_out
-	r_min = 100;
+	r_min = length(x);
 	clear E_tmp
 	for j=1:n_in
 		[r_mimo(i, j),Lf_full,Lg_full] = relative_degree(f,G(:,j),H(i,:),x);
