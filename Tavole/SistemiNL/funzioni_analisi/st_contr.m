@@ -1,9 +1,9 @@
-function [STLC, prop] = weak_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA)
+function [STLC, prop] = st_contr(G, fG, f, f_x0, x, x0, lim_inf, lim_sup, STLA)
 %WEAK_CONTR evaluate if a system match necessary properties in order to be
-%classifiable as weak controllable small time (STLC).
+%classifiable as small time controllable (STLC).
 %
 %NOTE: controllability may appears only when vector fields in the control
-%distribution have the possibility to contribute the same orientation of 
+% distribution have the possibility to contribute the same orientation of 
 % motion afforded by drift, but in arbitrary sense.
 %
 %   The following conditions are sufficient to affirm that a system which
