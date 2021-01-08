@@ -1,11 +1,11 @@
 %% Analisi proprietà Biciclo
 clear all
-syms x_M y_M phi theta_P
+syms x_M y_M phi theta_P L
 x = [x_M; y_M; phi; theta_P];
 fprintf('lo stato iniziale considerato è \n:')
 x0 = [0; 0; 0; 0];
 Lm = 0;
-L = 3;
+% L = 3;
 fprintf('il sistema è dato da:')
 f = [0;...
 	 0;...

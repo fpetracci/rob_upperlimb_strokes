@@ -57,7 +57,7 @@ switch tipo_perc
 		clf
 		l_ginput = 30; 
 		h_ginput = 20;
-
+		plot(x_p_iniziale, y_p_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
 		xlim([-l_ginput l_ginput]);
 		ylim([-h_ginput h_ginput]);
 		grid on
