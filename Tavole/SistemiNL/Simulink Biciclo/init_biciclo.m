@@ -112,8 +112,8 @@ switch tipo_perc
 		else
 			centro	= [points(1); points(2)];	% posizione del centro [m]
 		end
-		if v_rif > 0.1
-			v_rif = 0.1;
+		if v_rif > 1
+			v_rif = 1;
 		end
 		v_r = v_rif; % raggio dipende dalla velocità di rif
 	%% Clotoidi
