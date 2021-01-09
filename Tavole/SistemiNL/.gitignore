@@ -1,4 +1,7 @@
 *.mat
 *.asv
 *.mp4
+*.slxc
+slprj/
+*.slx.autosave
 funzioni_clotoidi/
