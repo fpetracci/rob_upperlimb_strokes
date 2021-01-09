@@ -6,7 +6,9 @@ clear all; close all; clc;
 disp('Caricamento Gru')
 %% scelta percorso
 
-tipo_perc = input(' Scegli un percorso da far fare al carico della gru: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
+%tipo_perc = input(' Scegli un percorso da far fare al carico della gru: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
+% TEMPORANEO
+tipo_perc = 4;
 
 % Simulink Variant settings
 Punto			= Simulink.Variant('tipo_perc == 1'); % non funziona
@@ -48,7 +50,11 @@ ylim([-h_ginput h_ginput]);
 grid on
 daspect([1 1 1])
 title('Clickare dove si vuole far partire il carrello! Poi premere invio')
-points = ginput;
+
+%points = ginput;
+% TEMPORANEO
+points = [0;0];
+
 if size(points,1) > 1 || size(points,1) < 1
 	warning('Hai inserito troppi punti o nessun punto iniziale! Partira` dall''origine')
 	x_t_iniziale	= 0;	% posizione asse x iniziale [m]
@@ -58,14 +64,14 @@ else
 	y_t_iniziale	= points(2);	% posizione asse y iniziale [m]
 end
 
-x_t_iniziale		= 0;	% posizione asse x iniziale [m]
-y_t_iniziale		= 0;	% posizione asse y iniziale [m]
-x_t_dot_iniziale	= 0;	% velocita` piano iniziale [m\s]
-y_t_dot_iniziale	= 0;	% derivata velocita` piano iniziale [m\s]
-theta_iniziale		= pi/4;	% angolo heading iniziale [rad]     metti a zero per partire col carico sotto al carrello
-theta_dot_iniziale	= pi/20;	
-phi_iniziale		= pi/4;% angolo sterzo iniziale [rad]		metti a zero per partire col carico sotto al carrello
-phi_dot_iniziale	= pi/20;
+x_t_iniziale		= 0;		% posizione asse x iniziale [m]
+y_t_iniziale		= 0;		% posizione asse y iniziale [m]
+x_t_dot_iniziale	= 0;		% velocita` piano iniziale [m\s]
+y_t_dot_iniziale	= 0;		% derivata velocita` piano iniziale [m\s]
+theta_iniziale		= 20/180*pi;	% angolo heading iniziale [rad]     metti a zero per partire col carico sotto al carrello
+theta_dot_iniziale	= pi/8;	
+phi_iniziale		= 30/180*pi;% angolo sterzo iniziale [rad]		metti a zero per partire col carico sotto al carrello
+phi_dot_iniziale	= 360/180*pi;
 L_iniziale			= 2;
 L_dot_iniziale		= 0;
 

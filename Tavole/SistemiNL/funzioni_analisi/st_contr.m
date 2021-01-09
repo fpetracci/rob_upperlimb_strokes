@@ -22,6 +22,7 @@ if STLA ~= 0 && STLA~=1
 	error('no valid value about STLA: previous accessibility analysis is needed')
 elseif STLA == 0
 	STLC = 0;
+	prop = 0;
 elseif STLA == 1
 	num_sample = 100;
 	% verify properties
