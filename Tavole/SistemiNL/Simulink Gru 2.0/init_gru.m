@@ -8,7 +8,7 @@ disp('Caricamento Gru')
 
 %tipo_perc = input(' Scegli un percorso da far fare al carico della gru: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
 % TEMPORANEO
-tipo_perc = 4;
+tipo_perc = 1;
 
 % Simulink Variant settings
 Punto			= Simulink.Variant('tipo_perc == 1'); % non funziona
@@ -25,8 +25,14 @@ threshold	= 1e-2;		% soglia numerica
 %% parametri gru
 
 g			= 9.81; % siamo sulla Terra
-z_t			= 0;
+% z_t		= 0;	% definita sotto
 v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+a_rif		= 0.5; % accelerazione di riferimento lungo la traiettoria curvilinea [m/s^2]
+
+% azioni di controllo saturazione
+x_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+y_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+L_ddot_sat		= Inf;	% [m/s^2] suggested 0.5
 
 %% parametri controllo gru
 
@@ -34,76 +40,64 @@ v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 % K2 = [100; 100];	% error on x_M dot, y_M dot
 % K3 = [10; 10];		% error on x_M ddot, y_M ddot
 
-
-K1 = [0.5; 0.5; 1];		% error on x_M, y_M
-K2 = [0.1; 0.1; 0.1];	% error on x_M dot, y_M dot
+K1 = [1; 1; 1];		% error on x_M, y_M
+K2 = [0.5; 0.5; 0.5];	% error on x_M dot, y_M dot
 % K3 = [10; 10];		% error on x_M ddot, y_M ddot
 
 %% stato iniziale
-figure(1)
-clf
-l_ginput = 30; 
-h_ginput = 20;
 
-xlim([-l_ginput l_ginput]);
-ylim([-h_ginput h_ginput]);
-grid on
-daspect([1 1 1])
-title('Clickare dove si vuole far partire il carrello! Poi premere invio')
+% statico
+% x_t_iniziale		= 0;		% posizione asse x iniziale [m]
+% y_t_iniziale		= 0;		% posizione asse y iniziale [m]
+% x_t_dot_iniziale	= 0;		% velocita` piano iniziale [m\s]
+% y_t_dot_iniziale	= 0;		% derivata velocita` piano iniziale [m\s]
+% theta_iniziale		= 20/180*pi;	% angolo heading iniziale [rad]     metti a zero per partire col carico sotto al carrello
+% theta_dot_iniziale	= pi/8;	
+% phi_iniziale		= 30/180*pi;% angolo sterzo iniziale [rad]		metti a zero per partire col carico sotto al carrello
+% phi_dot_iniziale	= 10/180*pi;
+% L_iniziale			= 2;
+% L_dot_iniziale		= 0;
 
-%points = ginput;
-% TEMPORANEO
-points = [0;0];
+% stato iniziale funzione di posizione palla
+x_b_iniziale = 0;
+y_b_iniziale = 0;
+z_b_iniziale = 2;
+% L = z_b_iniziale;
 
-if size(points,1) > 1 || size(points,1) < 1
-	warning('Hai inserito troppi punti o nessun punto iniziale! Partira` dall''origine')
-	x_t_iniziale	= 0;	% posizione asse x iniziale [m]
-	y_t_iniziale	= 0;	% posizione asse y iniziale [m]
-else
-	x_t_iniziale	= points(1);	% posizione asse x iniziale [m]
-	y_t_iniziale	= points(2);	% posizione asse y iniziale [m]
-end
+theta_iniziale		= 20/180*pi;	% stato 5	(Non puo` essere 90 gradi!)
+phi_iniziale		= 30/180*pi;	% stato 7
+L_iniziale = z_b_iniziale/cos(theta_iniziale);
 
-x_t_iniziale		= 0;		% posizione asse x iniziale [m]
-y_t_iniziale		= 0;		% posizione asse y iniziale [m]
-x_t_dot_iniziale	= 0;		% velocita` piano iniziale [m\s]
-y_t_dot_iniziale	= 0;		% derivata velocita` piano iniziale [m\s]
-theta_iniziale		= 20/180*pi;	% angolo heading iniziale [rad]     metti a zero per partire col carico sotto al carrello
-theta_dot_iniziale	= pi/8;	
-phi_iniziale		= 30/180*pi;% angolo sterzo iniziale [rad]		metti a zero per partire col carico sotto al carrello
-phi_dot_iniziale	= 10/180*pi;
-L_iniziale			= 2;
-L_dot_iniziale		= 0;
+x_t_iniziale = x_b_iniziale - L_iniziale * sin(theta_iniziale) * sin(phi_iniziale);  % stato 1
+y_t_iniziale = y_b_iniziale - L_iniziale * sin(theta_iniziale) * cos(phi_iniziale);	% stato 3
+z_t = 0;
+
+% derivate
+x_t_dot_iniziale	= 0;		 % stato 2
+y_t_dot_iniziale	= 0;		 % stato 4
+theta_dot_iniziale	= pi/8;		 % stato 6
+phi_dot_iniziale	= 10/180*pi; % stato 8
+L_dot_iniziale		= 0;		 % stato 10
 
 
-% x0 = [0; 0; 0; 0; pi/4; pi/20; pi/4; pi/20; 2; 0]
 %% PERCORSI
 switch tipo_perc
 	%% Raggiungimento punto
 	case 1
-		figure(1)
-		clf
-		l_ginput = 30; 
-		h_ginput = 20;
-		plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
-		xlim([-l_ginput l_ginput]);
-		ylim([-h_ginput h_ginput]);
-		grid on
-		daspect([1 1 1])
-		title('Clickare su da dove si vuole far arrivare il biciclo! Poi premere invio')
-		points = ginput;
-		if size(points,1) > 1 || size(points,1) < 1
-			warning('Hai inserito troppi punti finali! Arrivera` al punto [30;-20]')
-			x_M_finale	= 30;	% posizione asse x iniziale [m]
-			y_M_finale	= -20;	% posizione asse y iniziale [m]
-		else
-			x_M_finale	= points(1);	% posizione asse x iniziale [m]
-			y_M_finale	= points(2);	% posizione asse y iniziale [m]
-		end
+		x_b_finale = 2;
+		y_b_finale = 2;
+		z_b_finale = 2;
 		
-		offset_iniziale = 0.5;
-		x_M_iniziale = x_M_iniziale + offset_iniziale;
-		y_M_iniziale = y_M_iniziale + offset_iniziale*2;
+		traslazione = [	x_b_finale - x_b_iniziale;...
+						y_b_finale - y_b_iniziale;...
+						z_b_finale - z_b_iniziale];
+		
+		dir_retta = traslazione/ norm(traslazione,2);
+		
+		s_finale = norm(traslazione,2);
+					
+		
+		
 		
 	%% Circonferenza
 	case 2

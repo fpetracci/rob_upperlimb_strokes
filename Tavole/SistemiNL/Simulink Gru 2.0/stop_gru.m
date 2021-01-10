@@ -1,154 +1,101 @@
 % Questo script plotta alcuni plot interessanti
 
-time	= out.state_ts.Time;
-x_M		= out.state_ts.Data(:,1);
-y_M		= out.state_ts.Data(:,2);
-phi		= out.state_ts.Data(:,3);
-theta_p	= out.state_ts.Data(:,4);
-v_P		= out.state_ts.Data(:,5);
-v_P_dot	= out.state_ts.Data(:,6);
+%% get signals
+% stato
+time		= out.state_ts.Time;
+x_t			= out.state_ts.Data(:,1);
+x_t_dot		= out.state_ts.Data(:,2);
+y_t			= out.state_ts.Data(:,3);
+y_t_dot		= out.state_ts.Data(:,4);
+theta		= out.state_ts.Data(:,5);		% uscita(1)
+theta_dot	= out.state_ts.Data(:,6);
+phi			= out.state_ts.Data(:,7);		% uscita(2)
+phi_dot		= out.state_ts.Data(:,8);
+L			= out.state_ts.Data(:,9);		% uscita(3)
+L_dot		= out.state_ts.Data(:,10);		
+z_t			= z_t(1)*ones(length(time),1);
 
-x_rif   = out.rif.Data(:,1);
-y_rif   = out.rif.Data(:,2);
+% pos palla
+x_b			= out.pos_ball.Data(:,1);
+y_b			= out.pos_ball.Data(:,2);
+z_b			= out.pos_ball.Data(:,3);
 
-x_e		= out.err.Data(:,1);
-y_e		= out.err.Data(:,2);
+% riferimenti "interno"
+theta_rif   = out.rif_interno.Data(:,1);
+phi_rif		= out.rif_interno.Data(:,2);
+L_rif		= out.rif_interno.Data(:,3);
+if length(theta_rif) == 1
+	theta_rif	= theta_rif(1)*ones(length(time),1);
+	phi_rif		= phi_rif(1)*ones(length(time),1);
+	L_rif		= L_rif(1)*ones(length(time),1);
+end
 
-s		= out.curv_coord.Data(:,1);
-ds		= out.curv_coord.Data(:,2);
-dds		= out.curv_coord.Data(:,3);
+% errore "interno"
+theta_err   = out.err_interno.Data(:,1);
+phi_err		= out.err_interno.Data(:,2);
+L_err		= out.err_interno.Data(:,3);
 
-%% Uscite
+% riferimenti palla
+x_b_rif		= out.rif_ball.Data(:,1);
+y_b_rif		= out.rif_ball.Data(:,2);
+z_b_rif		= out.rif_ball.Data(:,3);
+
+% errore palla
+x_b_err		= out.err_ball.Data(:,1);
+y_b_err		= out.err_ball.Data(:,2);
+z_b_err		= out.err_ball.Data(:,3);
+
+%% Plot 3D Palla e Carretto 
 figure(1)
 clf
-plot(time, x_M, 'r', 'DisplayName', 'x_p')
-hold on
-plot(time, y_M, 'b', 'DisplayName', 'y_p')
-if size(x_rif,1) == 1
-	plot(time, ones(length(time),1)*x_rif, 'm', 'DisplayName', 'x_{rif}')
-	plot(time, ones(length(time),1)*y_rif, 'c', 'DisplayName', 'y_{rif}')
-else
-	plot(time, x_rif, 'm', 'DisplayName', 'x_{rif}')
-	plot(time, y_rif, 'c', 'DisplayName', 'y_{rif}')
-end
-title('Uscite')
-axis tight
-grid on
-legend
-xlabel('Tempo [s]')
-ylabel('Uscite [m]')
 
-%% Stato: velocità
+plot3(x_b, y_b, -z_b, 'ro', 'DisplayName', 'Palla','MarkerFaceColor','r')
+hold on
+plot3(x_t, y_t, -z_t, 'bd', 'DisplayName', 'Carretto')
+% axis equal
+gap = 2;
+xlim([min([min(x_b) min(x_t)])-gap, max([max(x_b) max(x_t)])+gap]);
+ylim([min([min(y_b) min(y_t)])-gap, max([max(y_b) max(y_t)])+gap]);
+zlim([min([min(-z_b) min(-z_t)])-gap, max([max(-z_b) max(-z_t)])+gap]);
+grid on
+xlabel('X')
+ylabel('Y')
+zlabel('-Z')
+title('CLAP CLAP')
+legend
+
+%% Riferimenti interni vs uscita interna
 figure(2)
 clf
-plot(time, v_P, 'b', 'DisplayName', 'velocità')
+subplot(1,3,1)
+plot(time, theta_rif.*180/pi, 'c--', 'DisplayName', '\theta_{rif}')
 hold on
-plot(time, ds, 'r', 'DisplayName', 'vel lungo la traiettoria')
-title('Velocità')
-xlim([0  inf])
-ylim([-inf inf])
-
-grid on
+plot(time, theta*180/pi, 'b-', 'DisplayName', '\theta')
+xlabel('time [s]')
+ylabel('\theta [deg]')
+title('\theta vs rif')
 legend
-xlabel('Tempo [s]')
-ylabel('velocità [m/s]')
-
-%% Stato: Theta
-figure(3)
-clf
-plot(time, theta_p*180/pi, 'r', 'DisplayName', '\theta')
-title('\theta')
+grid on
 axis tight
-grid on
-legend
-xlabel('Tempo [s]')
-ylabel('\theta [grad]')
 
-%% Stato: Phi
-figure(4)
-clf
-plot(time, phi*180/pi, 'r', 'DisplayName', '\phi angolo sterzo')
-title('\phi')
-axis tight
-grid on
-legend
-xlabel('Tempo [s]')
-ylabel('\phi [grad]')
-
-%% errore di inseguimento
-
-figure(5)
-clf
-plot(time, x_e, 'r', 'DisplayName', 'error_x')
+subplot(1,3,2)
+plot(time, phi_rif*180/pi, '--',  'Color', [0.49 1 0.63], 'DisplayName', '\phi_{rif}')
 hold on
-plot(time, y_e, 'b', 'DisplayName', 'error_y')
-title('Errore di tracking')
+plot(time, phi*180/pi, 'g-', 'DisplayName', '\phi')
+xlabel('time [s]')
+ylabel('\phi [deg]')
+title('\phi vs rif')
+legend
+grid on
 axis tight
-grid on
-legend
-xlabel('Tempo [s]')
-ylabel('Errore [m]')
 
-%% Mappa
-figure(6)
-clf
-
-clf
-if size(x_rif,1) == 1
-	plot(x_rif, y_rif, 'rd', 'Linewidth', 1.0, 'DisplayName', 'Riferimento' )
-else
-	plot(x_rif, y_rif, 'r--', 'Linewidth', 1.0, 'DisplayName', 'Riferimento' )
-end
-
+subplot(1,3,3)
+plot(time, L_rif, 'm--', 'DisplayName', 'L_{rif}')
 hold on
-
-if tipo_perc == 3 %clotoidi
-	plot(xp, yp, 'co', 'DisplayName', 'Punti Inseriti')
-elseif tipo_perc == 1 %punto
-	plot(x_M_finale, y_M_finale, 'co', 'DisplayName', 'Punto finale')
-end
-
-plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
-
-plot(x_M, y_M, 'b', 'DisplayName', 'Percorso')
-
-title('Mappa')
-axis equal
-gap = 5;
-xlim([min(min(x_M), min(x_rif)) - gap , max(max(x_M), max(x_rif)) + gap ])
-ylim([min(min(y_M), min(y_rif)) - gap , max(max(y_M), max(y_rif)) + gap ])
-grid on
+plot(time, L, 'r-', 'DisplayName', 'L')
+xlabel('time [s]')
+ylabel('L [m]')
+title('L vs rif')
 legend
-xlabel('Asse X [m]')
-ylabel('Asse Y [m]')
-
-%% mappa2
-if 0
-	figure(6)
-	clf
-
-	for i=1:10:length(time)
-		if i~=1
-			delete(freccia);
-			delete(p1);
-		else
-			plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
-		end
-		hold on
-		d = abs(v_P(i));
-		x_v = d*cos(theta_p(i));
-		y_v = d*sin(theta_p(i));
-		freccia=quiver(x_M(i), y_M(i), x_v, y_v, 'r');
-		p1 = plot(x_M(1:i), y_M(1:i), 'b', 'DisplayName', 'Percorso');
-		xlim([min(x_M)-max(v_P) max(x_M)+max(v_P)])
-		ylim([min(y_M)-max(v_P) max(y_M)+max(v_P)])
-		grid on
-		title(['Animazione, tempo ' num2str(time(i)) ' di ' num2str(time(end))])
-		legend
-		xlabel('Asse X [m]')
-		ylabel('Asse Y [m]')
-
-		drawnow
-	end
-end
-
+grid on
+axis tight
