@@ -63,9 +63,12 @@ G = [g1 g2 g3];
 x_ball = x_t + L*sin(theta)*sin(phi)
 y_ball = y_t + L*sin(theta)*cos(phi)
 z_ball = L*cos(theta) + z_t
+
+% USCITE
 %y = [x_ball;y_ball; z_ball];
 %y = [x_t; y_t; L]
-y = [x_ball; y_ball; theta];
+% y = [x_ball; y_ball; theta];
+y = [theta;phi;L]
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 
 %% aumentiamo il sistema
