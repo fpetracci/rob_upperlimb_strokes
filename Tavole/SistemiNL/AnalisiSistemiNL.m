@@ -469,8 +469,9 @@ switch choiche
 	x_ball = x_t + L*sin(theta)*sin(phi)
 	y_ball = y_t + L*sin(theta)*cos(phi)
 	z_ball = L*cos(theta) + z_t
-% 	h = [x_ball y_ball  z_ball];
-	h = [theta phi L];
+	h = [x_ball-x_t y_ball-y_t  z_ball-z_t, x_t, y_t];
+% 	h = [theta phi L];
+
 	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n ')
 	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x);
 	cod_full = simplify(cod_full)
