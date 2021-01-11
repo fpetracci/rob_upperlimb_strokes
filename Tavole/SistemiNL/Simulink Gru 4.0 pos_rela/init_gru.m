@@ -30,9 +30,9 @@ v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 a_rif		= 0.5; % accelerazione di riferimento lungo la traiettoria curvilinea [m/s^2]
 
 % azioni di controllo saturazione
-x_t_ddot_sat	= 10;	% [m/s^2] suggested 0.3
-y_t_ddot_sat	= 10;	% [m/s^2] suggested 0.3
-L_ddot_sat		= 10;	% [m/s^2] suggested 0.5
+x_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+y_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+L_ddot_sat		= Inf;	% [m/s^2] suggested 0.5
 
 b_smorza	= 3;  % coefficiente di smorzamento su theta
 
@@ -47,10 +47,10 @@ Lmax = 5;
 
 %% parametri controllo gru
 
-K1 = [1; 1;	  1;   1;   1];
-K2 = [0.5; 0.5;	0.5; 0.5; 0.5];
-% K1 = [1; 1; 1];
-% K2 = [0.5; 0.5; 0.5];
+% K1 = [1; 1;	  1;   1;   1];
+% K2 = [0.5; 0.5;	0.5; 0.5; 0.5];
+K1 = [1; 1; 1];
+K2 = [0.5; 0.5; 0.5];
 
 %% stato iniziale
 

@@ -468,9 +468,13 @@ switch choiche
 	% Uscite
 	x_ball = x_t + L*sin(theta)*sin(phi)
 	y_ball = y_t + L*sin(theta)*cos(phi)
-	z_ball = L*cos(theta) + z_t
-	h = [x_ball-x_t y_ball-y_t  z_ball-z_t, x_t, y_t];
-% 	h = [theta phi L];
+	z_ball = z_t + L*cos(theta) 
+	
+%	h = [x_ball, y_ball,  z_ball];						% osservabile r = 10
+% 	h = [theta phi L];									% non osservabile r = 6
+%	h = [x_ball-x_t, y_ball-y_t,  z_ball-z_t];			% non osservabile r = 6
+% 	h = [x_ball-x_t y_ball-y_t  z_ball-z_t, x_t, y_t];	% osservabile r = 10
+	h = [x_ball-x_t y_ball-y_t  z_ball-z_t, x_t_dot, y_t_dot];	% osservabile r = 8
 
 	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n ')
 	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x);
