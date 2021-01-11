@@ -43,7 +43,10 @@ end
 
 v_iniziale		= 1;	% velocita` piano iniziale [m\s]
 theta_iniziale	= pi/3;	% angolo iniziale [rad]
-v_rif		= 10;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+v_rif			= 5;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+%% parametri di saturazione
+v_dot_sat = 5;			% saturazione controllo sull'accelerazione lineare[m/s^2]
+w_sat = 3*pi;				% saturazione controllo sulla velocità angolare[rad/s]
 %% parametri controllo
 
 K1 = [10; 10];	% error on x_p, y_p
@@ -55,6 +58,9 @@ switch tipo_perc
 	case 1
 		figure(1)
 		clf
+		%% controlli raggiungimento punto
+		K1 = [20; 20];	% error on x_p, y_p
+		K2 = [10; 10];	% error on x_p dot, y_p dot
 		l_ginput = 30; 
 		h_ginput = 20;
 		plot(x_p_iniziale, y_p_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
@@ -72,6 +78,12 @@ switch tipo_perc
 			x_p_finale	= points(1);	% posizione asse x iniziale [m]
 			y_p_finale	= points(2);	% posizione asse y iniziale [m]
 		end
+		traslazione = [	x_p_finale - x_p_iniziale;...
+						y_p_finale - y_p_iniziale];
+		
+		dir_retta = traslazione/ norm(traslazione,2);
+		
+		s_finale = norm(traslazione,2);
 	%% Circonferenza
 	case 2
 		figure(1)
