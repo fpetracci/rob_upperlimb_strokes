@@ -106,7 +106,7 @@ switch choiche
 	
 	%% Analisi osservabilità
 	n_trial = 2;
-	OSS = zeros(n_trial);
+	OSS = zeros(n_trial,1);
 	fprintf('\nSTUDIO OSSERVABILITA'' \n')
 %%%1	
 	OSS(1) = 0;
@@ -159,7 +159,8 @@ switch choiche
 	end
 	
 	%% Approccio integrale e Gramiano di osservabilità
-	oss = zeros(ntrial);
+	ntrial = 2;
+	oss = zeros(ntrial,1);
 	fprintf('\nAPPROCCIO INTEGRALE e GRAMIANO di OSSERVABILITA'' \n')
 	tinf = 0;
 	tsup = 100;
@@ -384,10 +385,10 @@ switch choiche
 	%% Analisi proprietà Biciclo
 	clear all
 % setting variabili del sistema		
-	syms x_M y_M theta_A theta_P real
-	syms x_M0 y_M0 theta_A0 theta_P0 real
+	syms x_M y_M phi theta_P real
+	syms x_M0 y_M0 phi0 theta_P0 real
 	
-	% syms v(t) w(t) real % azioni di controllo
+	syms v_M(t) w_M(t) real % azioni di controllo
 	syms t real
 	syms Tinf real
 	global t
@@ -398,12 +399,12 @@ switch choiche
 	% parametri
 	Lm = 0.2;				% distanza di M dal centro dell'assale posteriore
 	L = 3;					% lunghezza interasse
-	phi = theta_A-theta_P;	% angolo di sterzo
+	% phi = theta_A-theta_P;	% angolo di sterzo
 	
 	%% Definizione della dinamica del sistema e delle condizioni iniziali
 	fprintf('Consideriamo il sistema BICICLO \n')
-	x = [x_M; y_M; theta_A; theta_P];
-	x_0 = [x_M0; y_M0; theta_A0; theta_P0];
+	x = [x_M; y_M; phi; theta_P];
+	x_0 = [x_M0; y_M0; phi0; theta_P0];
 	
 	fprintf('Il sistema non lineare nella forma di stato è dato da:')
 	f = [0; 0; 0; 0]
@@ -413,8 +414,8 @@ switch choiche
 		  cos(phi)*sin(theta_P)+(Lm/L)*sin(phi)*cos(theta_P);...
 										0					;...
 								(1/L)*sin(phi)					]
-	% velocità di rotazione punto M
-	fprintf('in: velocità rotazione M \n')
+	% velocità di rotazione di theta_A
+	fprintf('in: velocità rotazione di theta_A \n')
 	g2 = [ 0;...
 		   0;...
 		   1;...
@@ -491,7 +492,7 @@ switch choiche
 	 
 	%% Analisi dell'osservabilità
 	n_trial = 2;
-	OSS = zeros(n_trial);
+	OSS = zeros(n_trial,1);
 	fprintf('Studio OSSERVABILITA'' \n')
 %%%1
 	OSS(1)=0;
@@ -544,31 +545,28 @@ switch choiche
 		OSS(2) = 0;
 	end
 	
-	%% Approccio integrale e Gramiano di osservabilità DA FAREEEE
-	oss = zeros(ntrial);
+	%% Approccio integrale e Gramiano di osservabilità 
+	ntrial = 2;
+	oss = zeros(ntrial,1);
 	fprintf('\nAPPROCCIO INTEGRALE e GRAMIANO di OSSERVABILITA'' \n')
 	tinf = 0;
 	tsup = 100;
 	
 	fprintf(['\nintervallo temporale: [' num2str(tinf) ', ' num2str(tsup) ']\n'])
-	tstep = 0.1;
+	tstep = 0.33;
 	T = (tinf+tstep) : tstep : tsup;
 	
 	fprintf('Ricordiamo che lo stato è dato da: \n')
-	x = [x_M; y_M; theta_A; theta_P];
-	x_0 = [x_M0; y_M0; theta_A0; theta_P0];
-	
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%% DA FAREEEEE %%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
+	x = [x_M; y_M; phi; theta_P];
+	x_0 = [x_M0; y_M0; phi0; theta_P0];
 	
 	fprintf('L''evoluzione dello stato è quindi data da: \n')
-	% x_t =[ x_p0 + int(v*cos(theta), t, 0, t); y_p0 + int(v*sin(theta), t, 0, t); theta0 + int(w, t, 0, t)]; 
 	
-	x_t =[ x_p0 + int(v*cos(theta0 + int(w, t, 0, t)), t, 0, t); y_p0 + int(v*sin(theta0 + int(w, t, 0, t)), t, 0, t); theta0 + int(w, t, 0, t)] 	
-	
+	x_t = [	x_M0 + int(v_M*(cos(phi0 + int(w_M, t, 0, t))*cos(theta_P0 + int(v_M*(1/L)*sin((phi0 + int(w_M, t, 0, t))), t, 0, t))-(Lm/L)*sin(phi0 + int(w_M, t, 0, t))*sin(theta_P0 + int(v_M*(1/L)*sin((phi0 + int(w_M, t, 0, t))), t, 0, t))), t, 0, t);...
+			y_M0 + int(v_M*(cos(phi0 + int(w_M, t, 0, t))*sin(theta_P0 + int(v_M*(1/L)*sin((phi0 + int(w_M, t, 0, t))), t, 0, t))+(Lm/L)*sin(phi0 + int(w_M, t, 0, t))*cos(theta_P0 + int(v_M*(1/L)*sin((phi0 + int(w_M, t, 0, t))), t, 0, t))), t, 0, t);...
+			phi0 + int(w_M, t, 0, t);...
+			theta_P0 + int(v_M*(1/L)*sin((phi0 + int(w_M, t, 0, t))), t, 0, t)]
+		
 	fprintf('Lo stato iniziale considerato è: \n')
 	x0 = subs(x_0, x_0, x0_num)
 %%%1
@@ -618,7 +616,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	
+	Go_sv = subs(Go_s, v_M, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v_M, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -640,7 +645,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w_M=0, v_M(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	
+	Go_sw = subs(Go_s, w_M, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w_M, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -720,7 +732,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	
+	Go_sv = subs(Go_s, v_M, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v_M, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -742,7 +761,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w_M=0, v_M(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	
+	Go_sw = subs(Go_s, w_M, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w_M, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -781,7 +807,7 @@ switch choiche
 	syms x_M y_M phi theta_P real
 	syms x_M0 y_M0 phi0 theta_P0 real
 	
-	% syms v(t) w(t) real % azioni di controllo
+	syms v_M(t) w_M(t) real % azioni di controllo
 	syms t real
 	syms Tinf real
 	global t
@@ -810,8 +836,8 @@ switch choiche
 		  sin(theta_P);...
 				0	  ;...
 		 (1/L)*tan(phi)]
-	% velocità avanzamento punto M sull'assale posteriore
-	fprintf('in: velocità rotazione M = punto sull''assale posteriore \n') 	 
+	% velocità di rotazione di (theta_A-theta_P) = velocità di sterzata
+	fprintf('in: velocità rotazione di (theta\_A-theta\_P) = velocità di sterzata \n') 	 
 	g2 = [ 0;...
 		   0;...
 		   1;...
@@ -888,7 +914,7 @@ switch choiche
 	 
 	%% Analisi dell'osservabilità
 	n_trial = 2;
-	OSS = zeros(n_trial);
+	OSS = zeros(n_trial,1);
 	fprintf('Studio OSSERVABILITA'' \n')
 %%%1
 	OSS(1) = 0;
@@ -942,7 +968,8 @@ switch choiche
 	end
 
 	%% Approccio integrale e Gramiano di osservabilità DA FAREEEE
-	oss = zeros(ntrial);
+	ntrial = 2;
+	oss = zeros(ntrial,1);
 	fprintf('\nAPPROCCIO INTEGRALE e GRAMIANO di OSSERVABILITA'' \n')
 	tinf = 0;
 	tsup = 100;
@@ -955,17 +982,13 @@ switch choiche
 	x = [x_M; y_M; phi; theta_P];
 	x_0 = [x_M0; y_M0; phi0; theta_P0];
 	
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%% DA FAREEEEE %%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%
-	
 	fprintf('L''evoluzione dello stato è quindi data da: \n')
-	% x_t =[ x_p0 + int(v*cos(theta), t, 0, t); y_p0 + int(v*sin(theta), t, 0, t); theta0 + int(w, t, 0, t)]; 
 	
-	x_t =[ x_p0 + int(v*cos(theta0 + int(w, t, 0, t)), t, 0, t); y_p0 + int(v*sin(theta0 + int(w, t, 0, t)), t, 0, t); theta0 + int(w, t, 0, t)] 	
-	
+   x_t = [	x_M0 + int(v_M*(cos(theta_P0 + int(v_M*(1/L)*tan((phi0 + int(w_M, t, 0, t))), t, 0, t))), t, 0, t);...
+		y_M0 + int(v_M*(sin(theta_P0 + int(v_M*(1/L)*tan((phi0 + int(w_M, t, 0, t))), t, 0, t))), t, 0, t);...
+		phi0 + int(w_M, t, 0, t);...
+		theta_P0 + int(v_M*(1/L)*tan((phi0 + int(w_M, t, 0, t))), t, 0, t)]
+
 	fprintf('Lo stato iniziale considerato è: \n')
 	x0 = subs(x_0, x_0, x0_num)
 %%%1
@@ -1015,7 +1038,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	
+	Go_sv = subs(Go_s, v_M, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v_M, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1037,7 +1067,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w_M=0, v_M(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	
+	Go_sw = subs(Go_s, w_M, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w_M, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1117,7 +1154,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	
+	Go_sv = subs(Go_s, v_M, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v_M, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1139,7 +1183,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w_M=0, v_M(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	
+	Go_sw = subs(Go_s, w_M, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w_M, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1327,7 +1378,7 @@ switch choiche
 	
 	%% Analisi osservabilità
 	n_trial = 6;
-	OSS = zeros(n_trial);
+	OSS = zeros(n_trial,1);
 	fprintf('\nSTUDIO OSSERVABILITA'' \n')
 	
 % Uscite provate
