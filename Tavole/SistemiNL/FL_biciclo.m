@@ -1,5 +1,7 @@
 
-%% Analisi proprietà Biciclo
+%% Analisi proprietà Biciclo per il controllo
+
+% scelta biciclo a trazione posteriore
 clear all
 syms x_M y_M phi theta_P L
 x = [x_M; y_M; phi; theta_P];
@@ -25,6 +27,7 @@ G = [g1 g2];
 y1 = x_M
 y2 = y_M
 y = [y1;y2];
+
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 fprintf('il rango di E è :\n')
 rank(E)
