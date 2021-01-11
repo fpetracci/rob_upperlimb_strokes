@@ -9,7 +9,7 @@ disp('Caricamento Biciclo')
 tipo_perc = input(' Scegli un percorso da far fare al biciclo: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
 
 % Simulink Variant settings
-Punto			= Simulink.Variant('tipo_perc == 1'); % non funziona
+Punto			= Simulink.Variant('tipo_perc == 1'); % okay
 Circonferenza	= Simulink.Variant('tipo_perc == 2'); % okay se non troppo rapida
 Clotoidi		= Simulink.Variant('tipo_perc == 3'); % okay se non troppo rapida
 Retta			= Simulink.Variant('tipo_perc == 4'); % okay
@@ -23,7 +23,8 @@ threshold	= 1e-2;		% soglia numerica
 %% parametri biciclo
 
 L			= 1;	% interasse [m]
-v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+v_rif		= 10/3.6;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+a_rif		= 10;	% accelerazione di riferimento lungo traiett curv [m/s^2]
 
 %% parametri controllo biciclo
 
@@ -32,9 +33,9 @@ v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 % K3 = [10; 10];		% error on x_M ddot, y_M ddot
 
 
-K1 = [20; 20];		% error on x_M, y_M
-K2 = [100; 100];	% error on x_M dot, y_M dot
-K3 = [10; 10];		% error on x_M ddot, y_M ddot
+K1 = [20; 20];			% error on x_M, y_M
+K2 = [100; 100];			% error on x_M dot, y_M dot
+K3 = [100; 100];		% error on x_M ddot, y_M ddot
 
 %% stato iniziale
 figure(1)
@@ -62,7 +63,7 @@ end
 v_P_iniziale		= 1;	% velocita` piano iniziale [m\s]
 v_P_dot_iniziale	= 0.1;	% derivata velocita` piano iniziale [m\s]
 theta_P_iniziale	= 0;	% angolo heading iniziale [rad]
-phi_iniziale		= pi/18;% angolo sterzo iniziale [rad]
+phi_iniziale		= 0;	% angolo sterzo iniziale [rad]
 
 
 %% PERCORSI
@@ -88,10 +89,14 @@ switch tipo_perc
 			x_M_finale	= points(1);	% posizione asse x iniziale [m]
 			y_M_finale	= points(2);	% posizione asse y iniziale [m]
 		end
+					
+		traslazione = [	x_M_finale - x_M_iniziale;...
+						y_M_finale  - y_M_iniziale];
 		
-		offset_iniziale = 0.5;
-		x_M_iniziale = x_M_iniziale + offset_iniziale;
-		y_M_iniziale = y_M_iniziale + offset_iniziale*2;
+		dir_retta = traslazione/ norm(traslazione,2);
+		
+		s_finale = norm(traslazione,2);
+		
 		
 	%% Circonferenza
 	case 2
@@ -132,10 +137,11 @@ switch tipo_perc
 	title('Clickare sui punti che si vuole raggiungere poi premere invio')
 	points = ginput;
 	%%% Points
+	points = [x_M_iniziale, y_M_iniziale ; points];
 	n_p = length(points);    %numero di punti
 	xp  = points(:,1);
 	yp  = points(:,2);
-
+	
 	npts = 400;             %risoluzione
 	theta_rette = zeros(n_p-1,1);
 	for i= 1:(n_p-1)        %creazione angoli per le rette
@@ -178,5 +184,6 @@ switch tipo_perc
 	%% Sinusoide su una retta
 	case 5 
 		dir_retta = [1; 0];
+		apertura = 2;
 
 end
