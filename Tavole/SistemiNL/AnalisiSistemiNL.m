@@ -1622,7 +1622,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%1S
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -1631,12 +1631,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1656,9 +1664,17 @@ switch choiche
 		noss_v = 0;
 	end
 	
-	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
+	
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1722,7 +1738,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%2S	
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -1731,12 +1747,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1756,9 +1780,17 @@ switch choiche
 		noss_v = 0;
 	end
 	
-	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
+	
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1822,7 +1854,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%3S	
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -1831,12 +1863,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1855,10 +1895,18 @@ switch choiche
 		fprintf('Non si ha sottospazio di inosservabilità \n')
 		noss_v = 0;
 	end
+
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
 	
-	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1890,7 +1938,6 @@ switch choiche
 		fprintf('	sistema completamente osservabile a prescindere dai controlli \n')	
 	end
 	
-	%%
 %%%4 
 	fprintf('\n4) Se come uscita prendiamo la posizione relativa della palla rispetto al carrello: \n')
 	h = [x_ball-x_t, y_ball-y_t,  z_ball-z_t] 			% non osservabile r = 6
@@ -1923,7 +1970,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%4S	
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -1932,12 +1979,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -1957,9 +2012,17 @@ switch choiche
 		noss_v = 0;
 	end
 	
-	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
+	
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -2023,7 +2086,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%5S	
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -2032,12 +2095,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -2057,9 +2128,17 @@ switch choiche
 		noss_v = 0;
 	end
 	
-	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
+	
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -2123,7 +2202,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-	
+%%%6S	
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_T, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -2132,12 +2211,20 @@ switch choiche
 	% trova modo di calcolare il nullo del gramiano per ogni intervallo di
 	% tempo e vedere se tutti gli spazi nulli intersecati insieme danno un
 	% sottospazio non nullo. Se sì, lì giacciono gli stati non osservabili.
-	fprintf('\n1) Spazio nullo del Gramiano: v=0, w(t) generica \n')
-	%NGo_s = null(Go_s);
+	fprintf('\n1) Spazio nullo del Gramiano: x_t_ddot=y_t_ddot=0, L_ddot(t) generica \n')
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni del carrello \n')
+	
+	Go_svv = subs(Go_s, x_t_ddot, 0);
+	Go_sv = subs(Go_svv, y_t_ddot, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_svv = null(subs(Go_s, x_t_ddot, 0)); 
+		NGo_sv = null(subs(Go_s, y_t_ddot, 0)); 
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -2156,11 +2243,18 @@ switch choiche
 		fprintf('Non si ha sottospazio di inosservabilità \n')
 		noss_v = 0;
 	end
+
+	fprintf('\n2) Spazio nullo del Gramiano: L_ddot=0, x_t_ddot e t_t_ddot generiche \n')
 	
-	fprintf('\n2) Spazio nullo del Gramiano: x_t_ddot=0, y_t_ddot=0, L_ddot(t) generica \n')
-	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, x_t_ddot, 0)); %non ho modo di controllare la rotazione del veicolo
-	NGo_sw = null(subs(Go_s, y_t_ddot, 0));
+	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulle accelerazioni dell''asta \n')
+	
+	Go_sw = subs(Go_s, L_ddot, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, L_ddot, 0));
+	end
+
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
