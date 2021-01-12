@@ -836,7 +836,7 @@ switch choiche
 	clear all
 % setting variabili del sistema		
 	syms t real
-	syms x_M(t) y_M(t) phi(t) theta_P(t) real
+	syms x_M y_M phi theta_P real
 	syms x_M0 y_M0 phi0 theta_P0 real
 	syms v_M(t) w_M(t) real % azioni di controllo
 	syms Tinf real
@@ -1054,7 +1054,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%1S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -1170,7 +1170,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%2S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
