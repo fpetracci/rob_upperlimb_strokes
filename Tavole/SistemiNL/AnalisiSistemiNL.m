@@ -16,7 +16,7 @@ switch choiche
 	%% Analisi proprietà Uniciclo
 	% setting variabili del sistema	
 	syms t real	
-	syms x_p(t) y_p(t) theta(t) real
+	syms x_p y_p theta real
 	syms x_p0 y_p0 theta0 real
 	syms v(t) w(t) real % azioni di controllo
 
@@ -58,7 +58,7 @@ switch choiche
 		fprintf(['Il sistema preso in analisi è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', uguale alle dim dello stato \n']);
 		STLA = 1;
 	else
-		fprintf(['Il sistema preso in analisi non è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', minore delle dim dello stato \n'] \n');
+		fprintf(['Il sistema preso in analisi non è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', minore delle dim dello stato \n']);
 		STLA = 0;
 	end
 	
@@ -78,7 +78,7 @@ switch choiche
 			fprintf(['Il sistema preso in analisi è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', uguale alle dim dello stato \n']);
 			WA = 1;
 		else
-			fprintf(['Il sistema preso in analisi non è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', minore delle dim dello stato\n'] \n');
+			fprintf(['Il sistema preso in analisi non è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', minore delle dim dello stato\n']);
 			WA = 0;
 		end
 	end
@@ -106,6 +106,7 @@ switch choiche
 	 end
 	
 	%% Analisi osservabilità
+
 	n_trial = 2;
 	OSS = zeros(n_trial,1);
 	fprintf('\nSTUDIO OSSERVABILITA'' \n')
@@ -114,7 +115,7 @@ switch choiche
 	fprintf('\n1) Se come uscita prendiamo la posizione dell''uniciclo: \n')
 	h = [x_p y_p]
 	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n')
-	[cod_full] = chow_filtration_obs(fG,jacobian(h,x),x)
+	[cod_full] = chow_filtration_obs(fG,jacobian(h, x),x)
 	fprintf('Valutiamone il rango \n')
 	r = rank(cod_full)
 	if r == length(x)
@@ -160,6 +161,7 @@ switch choiche
 	end
 	
 	%% Approccio integrale e Gramiano di osservabilità
+	
 	ntrial = 2;
 	oss = zeros(ntrial,1);
 	fprintf('\nAPPROCCIO INTEGRALE e GRAMIANO di OSSERVABILITA'' \n')
@@ -213,7 +215,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%1S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -227,7 +229,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	
+	Go_sv = subs(Go_s, v, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -249,7 +258,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+	
+	Go_sw = subs(Go_s, w, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -315,7 +331,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%2S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -329,7 +345,14 @@ switch choiche
 	
 	thr = (pi/18)*pi/180; % threshold a 10°
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla velocità del veicolo \n')
-	NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del veicolo
+	
+	Go_sv = subs(Go_s, v, 0);
+	if rank(Go_sv) == size(Go_sv,1)
+		NGo_sv = [];
+	else
+		NGo_sv = null(subs(Go_s, v, 0)); %non ho modo di controllare la velocità del punto M del veicolo
+	end
+	
 	if rank(NGo_sv)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -351,7 +374,14 @@ switch choiche
 	
 	fprintf('\n2) Spazio nullo del Gramiano: w=0, v(t) generica \n')
 	fprintf('Valutazione dell''intersezione tra i nulli ai vari istanti temporali se non ho controllo sulla rotazione del veicolo \n')
-	NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del veicolo
+		
+	Go_sw = subs(Go_s, w, 0);
+	if rank(Go_sw) == size(Go_sw,1)
+		NGo_sw = [];
+	else
+		NGo_sw = null(subs(Go_s, w, 0)); %non ho modo di controllare la rotazione del punto M del veicolo
+	end
+	
 	if rank(NGo_sw)>0
 		for i = 1:length(T)-1 %va rivisto qua
 			if i == 1
@@ -388,7 +418,7 @@ switch choiche
 	clear all
 % setting variabili del sistema		
 	syms t real
-	syms x_M(t) y_M(t) phi(t) theta_P(t) real
+	syms x_M y_M phi theta_P real
 	syms x_M0 y_M0 phi0 theta_P0 real
 	syms v_M(t) w_M(t) real % azioni di controllo
 	syms Tinf real
@@ -444,7 +474,7 @@ switch choiche
 		fprintf(['Il sistema preso in analisi è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', uguale alle dim dello stato \n']);
 		STLA = 1;
 	else
-		fprintf(['Il sistema preso in analisi non è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', minore delle dim dello stato \n'] \n');
+		fprintf(['Il sistema preso in analisi non è STLA: <∆|∆_𝟎> in x_0 ha rango ' num2str(rank(D_full_x0)) ', minore delle dim dello stato \n']);
 		STLA = 0;
 	end
 	
@@ -464,7 +494,7 @@ switch choiche
 			fprintf(['Il sistema preso in analisi è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', uguale alle dim dello stato \n']);
 			WA = 1;
 		else
-			fprintf(['Il sistema preso in analisi non è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', minore delle dim dello stato\n'] \n');
+			fprintf(['Il sistema preso in analisi non è WA: <∆|∆> in x_0 ha rango ' num2str(rank(D_full_w_x0)) ', minore delle dim dello stato\n']);
 			WA = 0;
 		end
 	end
@@ -603,7 +633,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%1S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
@@ -719,7 +749,7 @@ switch choiche
 		num_cond = eig_max/eig_min;
 		fprintf(['Un indice quantitativo di osservabilità è il numero di Condizionamento. Qua vale: ' num2str(eval(num_cond)) '\n'])
 	end
-			
+%%%2S			
 	fprintf('\nOsservabilità con la matrice di sensibilità S: \n')
 	S = jacobian(x_t, x_0) 
 	fprintf('Il Gramiano calcolato con S sarà: \n')
