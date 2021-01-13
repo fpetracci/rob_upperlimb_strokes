@@ -70,7 +70,7 @@ z_ball = L*cos(theta) + z_t
 % y = [x_ball; y_ball; theta];
 % y = [theta;phi;L]
 % y = [x_t; y_t; theta;phi;L]
-y = [x_ball - x_t; y_ball - y_t; z_ball-z_t; x_t; y_t]
+y = [x_ball - x_t; y_ball - y_t; z_ball-z_t]%; x_t; y_t]
 
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 

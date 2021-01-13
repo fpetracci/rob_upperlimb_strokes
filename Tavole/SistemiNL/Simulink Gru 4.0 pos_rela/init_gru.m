@@ -24,13 +24,13 @@ threshold	= 1e-2;		% soglia numerica
 
 g			= 9.81; % acc gravita [m/s^2]
 % z_t		= 0;	% definita sotto
-v_rif		= 3;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 a_rif		= 0.5; % accelerazione di riferimento lungo la traiettoria curvilinea [m/s^2]
 
 % azioni di controllo saturazione
-x_t_ddot_sat	= 3;	% [m/s^2] suggested 0.3
-y_t_ddot_sat	= 3;	% [m/s^2] suggested 0.3
-L_ddot_sat		= 0.5;	% [m/s^2] suggested 0.5
+x_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+y_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
+L_ddot_sat		= Inf;	% [m/s^2] suggested 0.5
 
 b_smorza	= 3;  % coefficiente di smorzamento su theta
 
@@ -47,8 +47,12 @@ Lmax = 5;
 
 % K1 = [1; 1;	  1;   1;   1];
 % K2 = [0.5; 0.5;	0.5; 0.5; 0.5];
-K1 = [100; 100; 100];
-K2 = [50; 50; 50];
+% K1 = [100; 100; 100];
+% K2 = [50; 50; 50];
+K_pos = 10*ones(3,1);
+K_der = 10*ones(3,1);
+K1 = [K_pos, K_der,K_pos, K_der,K_pos, K_der];
+K2 = 0 * ones(3,6);
 
 %% stato iniziale
 

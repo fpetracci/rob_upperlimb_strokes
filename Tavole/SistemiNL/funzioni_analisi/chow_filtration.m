@@ -10,7 +10,7 @@ while (rank(Dfull) < length(x)) && (rank(Dfull) ~= rank(Dfull_1))% controllare
     Dfull_1 = Dfull;
     Dfull = [Dfull_1 lie_bracket_dist(Dfull_1, D, x)];
     Dfull = lincols(Dfull);
-%     disp('Di ='); disp(Dfull);
+    disp('Di ='); disp(Dfull);
 end
 % disp('Dfull ='); disp(Dfull);
 end

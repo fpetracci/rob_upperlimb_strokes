@@ -1266,7 +1266,9 @@ switch choiche
 	
 	% setting variabili del sistema	
 	syms t real
-	syms x_t(t) x_t_dot(t) y_t(t) y_t_dot(t) theta(t) theta_dot(t) phi(t) phi_dot(t) L(t) L_dot(t) real
+% 	syms x_t(t) x_t_dot(t) y_t(t) y_t_dot(t) theta(t) theta_dot(t) phi(t) phi_dot(t) L(t) L_dot(t) real
+	syms x_t x_t_dot y_t y_t_dot theta theta_dot phi phi_dot L L_dot real
+
 	syms  g b_smorza real % parametri del sistema
 	z_t = 0;
 	syms x_t_0 x_t_dot_0 y_t_0 y_t_dot_0 theta_0 theta_dot_0 phi_0 phi_dot_0 L_0 L_dot_0 real
