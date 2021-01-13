@@ -1,4 +1,4 @@
-function gru_gen_movie(out, flag_rel, rep, nfig, movie_mode, movie_title, spins, View)
+function gru_gen_movie(out, flag_rel, rep, nfig, movie_mode, movie_title, spins, View, fr_skip)
 % questa funzione genera l'animazione della gru
 %IN:		out			- output simulazione da simulink
 %			flag_rel	- flag per animare o meno la palla in posizione
@@ -45,6 +45,11 @@ if nargin < 8
 	View = [45 12];
 end
 
+if nargin < 9
+	% how many frames we want to skip
+	fr_skip = 30;
+end
+
 %% Get signals
 % stato
 time		= out.state_ts.Time;
@@ -63,8 +68,7 @@ end
 
 %% animation parameters
 
-% how many frames we want to skip
-fr_skip = 30;
+
 
 % pause time in the animation
 time_pause = 0;
@@ -110,7 +114,7 @@ for i = 1:fr_skip:nsteps
 
 	%----------------------------------------------------------------------
 	% lims  plot
-	[xlims, ylims, zlims] = get_lims(ball_traj);
+	[xlims, ylims, zlims] = get_lims(ball_traj, flag_rel);
 	xlim(xlims)
 	ylim(ylims)
 	zlim(zlims)
@@ -261,9 +265,12 @@ p5 = plot3(x_t, y_t, -z_t, 'rd', 'Markersize', dim_cart, 'DisplayName', 'Cart');
 
 end
 
-function [xlims, ylims, zlims] = get_lims(ball_traj)
-	
-	gap = 2;
+function [xlims, ylims, zlims] = get_lims(ball_traj, flag_rel)
+	if flag_rel == 1
+		gap = 1;
+	else
+		gap = 2;
+	end
 	xlims = [min(ball_traj(:,1))-gap, max(ball_traj(:,1))+gap];
 	ylims = [min(ball_traj(:,2))-gap, max(ball_traj(:,2))+gap];
 	zlims = [min(-ball_traj(:,3))-gap, max(-ball_traj(:,3))+gap];

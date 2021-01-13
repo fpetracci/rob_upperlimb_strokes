@@ -6,16 +6,14 @@ clear all; close all; clc;
 disp('Caricamento Gru')
 %% scelta percorso
 
-%tipo_perc = input(' Scegli un percorso da far fare al carico della gru: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
-% TEMPORANEO
-tipo_perc = 1;
+tipo_perc = input(' Scegli un percorso da far fare al carico della gru: \n 1: Raggiungimento di un punto \n 2: Circonferenza di raggio fissato \n 3: Percorso con clotoidi \n 4: Retta passante origine \n 5: Sinusoide \n... ');
 
 % Simulink Variant settings
-Punto			= Simulink.Variant('tipo_perc == 1'); % non funziona
-Circonferenza	= Simulink.Variant('tipo_perc == 2'); % okay se non troppo rapida
-Clotoidi		= Simulink.Variant('tipo_perc == 3'); % okay se non troppo rapida
-Retta			= Simulink.Variant('tipo_perc == 4'); % okay
-Sinusoide		= Simulink.Variant('tipo_perc == 5'); % okay
+Punto			= Simulink.Variant('tipo_perc == 1'); % 
+Circonferenza	= Simulink.Variant('tipo_perc == 2'); % 
+Clotoidi		= Simulink.Variant('tipo_perc == 3'); % 
+Retta			= Simulink.Variant('tipo_perc == 4'); % 
+Sinusoide		= Simulink.Variant('tipo_perc == 5'); %
 
 %% parametri simulazione
 
@@ -26,7 +24,7 @@ threshold	= 1e-2;		% soglia numerica
 
 g			= 9.81; % acc gravita [m/s^2]
 % z_t		= 0;	% definita sotto
-v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
+v_rif		= 3;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 a_rif		= 0.5; % accelerazione di riferimento lungo la traiettoria curvilinea [m/s^2]
 
 % azioni di controllo saturazione
@@ -54,6 +52,27 @@ K2 = [50; 50; 50];
 
 %% stato iniziale
 
+figure(1)
+clf
+l_ginput = 15; 
+h_ginput = 10;
+
+xlim([-l_ginput l_ginput]);
+ylim([-h_ginput h_ginput]);
+grid on
+daspect([1 1 1])
+title('Clickare da dove si vuole far partire la palla! Poi premere invio')
+points = ginput;
+if size(points,1) > 1 || size(points,1) < 1
+	warning('Hai inserito troppi punti iniziali! Partira` dall''origine')
+	x_b_iniziale	= 0;	% posizione asse x iniziale [m]
+	y_b_iniziale	= 0;	% posizione asse y iniziale [m]
+else
+	x_b_iniziale	= points(1);	% posizione asse x iniziale [m]
+	y_b_iniziale	= points(2);	% posizione asse y iniziale [m]
+end
+
+
 % statico
 % x_t_iniziale		= 0;		% posizione asse x iniziale [m]
 % y_t_iniziale		= 0;		% posizione asse y iniziale [m]
@@ -67,12 +86,12 @@ K2 = [50; 50; 50];
 % L_dot_iniziale		= 0;
 
 % stato iniziale funzione di posizione palla
-x_b_iniziale = 0;
-y_b_iniziale = 0;
+% x_b_iniziale = 0;
+% y_b_iniziale = 0;
 z_b_iniziale = 2;
 % L = z_b_iniziale;
 
-theta_iniziale		= 1e-2/180*pi;	% stato 5	(Non puo` essere 90 gradi!)
+theta_iniziale		= 1e-2/180*pi;	% stato 5	(Non puo` essere 0 o 90 gradi!)
 phi_iniziale		= 30/180*pi;	% stato 7
 L_iniziale = z_b_iniziale/cos(theta_iniziale);
 
@@ -87,14 +106,31 @@ theta_dot_iniziale	= 0;		% stato 6
 phi_dot_iniziale	= 0;		% stato 8
 L_dot_iniziale		= 0;		% stato 10
 
-
 %% PERCORSI
 switch tipo_perc
 	%% Raggiungimento punto
 	case 1
-		x_b_finale = 2;
-		y_b_finale = 2;
-		z_b_finale = 2;
+	figure(1)
+	clf
+	l_ginput = 15; 
+	h_ginput = 10;
+	plot(x_b_iniziale, y_b_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
+	xlim([-l_ginput l_ginput]);
+	ylim([-h_ginput h_ginput]);
+	grid on
+	daspect([1 1 1])
+	title('Clickare a dove si vuole far arrivare la palla! Poi premere invio')
+	
+	points = ginput;
+	if size(points,1) > 1 || size(points,1) < 1
+		warning('Hai inserito troppi punti iniziali! Arrivera` in (10, 10)')
+		x_b_finale	= 10;	% posizione asse x iniziale [m]
+		y_b_finale	= 10;	% posizione asse y iniziale [m]
+	else
+		x_b_finale	= points(1);	% posizione asse x iniziale [m]
+		y_b_finale	= points(2);	% posizione asse y iniziale [m]
+	end
+	z_b_finale = 2;
 		
 		traslazione = [	x_b_finale - x_b_iniziale;...
 						y_b_finale - y_b_iniziale;...
@@ -104,21 +140,19 @@ switch tipo_perc
 		
 		s_finale = norm(traslazione,2);
 					
-		
-		
-		
 	%% Circonferenza
 	case 2
 		figure(1)
 		clf
 		l_ginput = 30; 
 		h_ginput = 20;
-		plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
+		plot(x_b_iniziale, y_b_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
+		hold on
 		xlim([-l_ginput l_ginput]);
 		ylim([-h_ginput h_ginput]);
 		grid on
 		daspect([1 1 1])
-		title('Clickare su da dove si vuole il centro della circonferenza! Poi premere invio')
+		title('Clickare dove si vuole il centro della circonferenza! Poi premere invio')
 		points = ginput;
 		if size(points,1) > 1
 			warning('Hai inserito troppi punti come centri! Il centro sara` il punto [ 0; 0]')
@@ -130,21 +164,26 @@ switch tipo_perc
 			v_rif = 1;
 		end
 		v_r = v_rif; % raggio dipende dalla velocità di rif
+		
+		s_finale = 1000;
+		z_b_rif = 2;
+
 	%% Clotoidi
 	case 3
 	%%%   ginput
 	figure(1)
 	clf
-	l_ginput = 30; 
-	h_ginput = 20;
+	l_ginput = 15; 
+	h_ginput = 10;
 
-	plot(x_M_iniziale, y_M_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
+	plot(x_b_iniziale, y_b_iniziale, 'b*', 'DisplayName', 'Punto Iniziale' )
 	xlim([-l_ginput l_ginput]);
 	ylim([-h_ginput h_ginput]);
 	grid on
 	daspect([1 1 1])
 	title('Clickare sui punti che si vuole raggiungere poi premere invio')
 	points = ginput;
+	points = [x_b_iniziale, y_b_iniziale ; points];
 	%%% Points
 	n_p = length(points);    %numero di punti
 	xp  = points(:,1);
@@ -182,15 +221,21 @@ switch tipo_perc
 		end
 
 	end
-
-	Ltot=sum(Lenghts); %Lunghezza totale percorso
+	
+	s_finale=sum(Lenghts); %Lunghezza totale percorso
+	Ltot = s_finale;
+	z_b_rif = 2.5;
 	
 	%% Retta
 	case 4 
 		dir_retta = [cos(pi/4); sin(pi/4)];
+		s_finale = 1000;
+		z_b_rif = 2;
 	
 	%% Sinusoide su una retta
 	case 5 
 		dir_retta = [1; 0];
+		s_finale = 1000;
+		z_b_rif = 2;
 
 end
