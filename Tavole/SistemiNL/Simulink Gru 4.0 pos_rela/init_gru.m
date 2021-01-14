@@ -28,9 +28,9 @@ v_rif		= 1;	% velocità di riferimento lungo la traiettoria curvilinea [m/s]
 a_rif		= 0.5; % accelerazione di riferimento lungo la traiettoria curvilinea [m/s^2]
 
 % azioni di controllo saturazione
-x_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
-y_t_ddot_sat	= Inf;	% [m/s^2] suggested 0.3
-L_ddot_sat		= Inf;	% [m/s^2] suggested 0.5
+x_t_ddot_sat	= 100;	% [m/s^2] suggested 0.3
+y_t_ddot_sat	= 100;	% [m/s^2] suggested 0.3
+L_ddot_sat		= 10;	% [m/s^2] suggested 0.5
 
 b_smorza	= 3;  % coefficiente di smorzamento su theta
 
@@ -49,10 +49,14 @@ Lmax = 5;
 % K2 = [0.5; 0.5;	0.5; 0.5; 0.5];
 % K1 = [100; 100; 100];
 % K2 = [50; 50; 50];
-K_pos = 10*ones(3,1);
-K_der = 10*ones(3,1);
-K1 = [K_pos, K_der,K_pos, K_der,K_pos, K_der];
-K2 = 0 * ones(3,6);
+K_pos = 2*ones(3,1);
+K_der = 2*ones(3,1);
+K1 = [100 ,50, 0, 0, 0, 0;...
+	  0, 0 , 100, 50, 0 ,0;...
+	  0 , 0 , 0, 0, 100, 50];
+K2 = [0.1 ,0.5, 0, 0, 0, 0;...
+	  0, 0 , 0.1, 0.5, 0 ,0;...
+	  0 , 0 , 0, 0, 0.1, 0.5];
 
 %% stato iniziale
 
