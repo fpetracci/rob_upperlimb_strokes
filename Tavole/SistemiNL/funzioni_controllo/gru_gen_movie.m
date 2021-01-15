@@ -85,7 +85,7 @@ width_traj	= 0.5;
 
 figh = figure(nfig);
 clf
-
+for rep_i = 1:rep
 % figure settings
 axis equal
 hold on
@@ -162,6 +162,7 @@ for i = 1:fr_skip:nsteps
 		k = k+1;
 	end
 	
+end
 end
 
 %--------------------------------------------------------------------------
