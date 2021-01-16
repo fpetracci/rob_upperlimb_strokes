@@ -69,7 +69,7 @@ switch choiche
 	figure(1) 
 	hold on
 	plot3(p(1,:),p(2,:),p(3,:), ':c')
-	franka.plot(q_des')
+	franka.plot(q_des(:,1:50:end)')
 	%% Trajectory tracking: Backstepping control
 
 	Mat = 1;
