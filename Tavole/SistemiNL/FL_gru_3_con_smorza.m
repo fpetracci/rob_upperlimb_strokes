@@ -75,6 +75,23 @@ y = [x_ball - x_t; y_ball - y_t; z_ball-z_t ]% x_t; y_t
 
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 
+%% Zero dinamica
+syms x_t_ddot y_t_ddot L_ddot
+u = [x_t_ddot; y_t_ddot; L_ddot]
+
+upsi = T + E * u
+% zeta =[x_t; x_t_dot; y_t; y_t_dot]
+% zeta_dot = [jacobian(x_t,x)*(f + G*u);...
+% 	jacobian(x_t_dot,x)*(f + G*u);...
+% 	jacobian(y_t,x)*(f + G*u);...
+% 	jacobian(y_t_dot,x)*(f + G*u)]
+
+% % zeta_dot_mat = 
+PHI_full = jacobian([Lf_full_mimo;zeta],x)
+rank(PHI_full)
+
+
+
 %% aumentiamo il sistema
 syms x_t_ddot
 x = [x;...
