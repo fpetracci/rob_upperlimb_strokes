@@ -32,7 +32,7 @@ x_t_ddot_sat	= 100;	% [m/s^2] suggested 0.3
 y_t_ddot_sat	= 100;	% [m/s^2] suggested 0.3
 L_ddot_sat		= 10;	% [m/s^2] suggested 0.5
 
-b_smorza	= 30;  % coefficiente di smorzamento su theta
+b_smorza	= 3;  % coefficiente di smorzamento su theta
 
 % limiti ambiente di lavoro
 xmin_workplace = -Inf;

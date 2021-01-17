@@ -1,10 +1,11 @@
 clear all
 syms x_t x_t_dot y_t y_t_dot theta theta_dot phi phi_dot L L_dot real
-syms  g b_smorza real
+syms  g b real
 fprintf('lo stato iniziale considerato è \n:')
 % L_dot = 0;
 z_t = 0;
 x0 = [0; 0; 0; 0; pi/4; pi/20; pi/4; pi/20; 2; 0]
+
 %% grafici sistema
 % filename = 'system_model.png';
 % filename2 = 'system_state.png';
@@ -24,7 +25,7 @@ f = [ x_t_dot;...
 	  y_t_dot;...
 	  0;...
 	  theta_dot;...
-	  -2*(L_dot/L)*theta_dot+0.5*phi_dot^2*sin(2*theta)-(g/L)*sin(theta) - b_smorza * theta_dot;...
+	  -2*(L_dot/L)*theta_dot+0.5*phi_dot^2*sin(2*theta)-(g/L)*sin(theta) - b * theta_dot;...
 	  phi_dot;...
 	  -2*(L_dot/L)*phi_dot-2*phi_dot*theta_dot*cot(theta);...
 	  L_dot;...
@@ -73,6 +74,23 @@ z_ball = L*cos(theta) + z_t
 y = [x_ball - x_t; y_ball - y_t; z_ball-z_t ]% x_t; y_t
 
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
+
+%% Zero dinamica
+syms x_t_ddot y_t_ddot L_ddot
+u = [x_t_ddot; y_t_ddot; L_ddot]
+
+upsi = T + E * u
+% zeta =[x_t; x_t_dot; y_t; y_t_dot]
+% zeta_dot = [jacobian(x_t,x)*(f + G*u);...
+% 	jacobian(x_t_dot,x)*(f + G*u);...
+% 	jacobian(y_t,x)*(f + G*u);...
+% 	jacobian(y_t_dot,x)*(f + G*u)]
+
+% % zeta_dot_mat = 
+PHI_full = jacobian([Lf_full_mimo;zeta],x)
+rank(PHI_full)
+
+
 
 %% aumentiamo il sistema
 syms x_t_ddot
