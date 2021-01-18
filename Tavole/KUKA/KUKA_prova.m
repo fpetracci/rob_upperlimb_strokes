@@ -16,8 +16,8 @@ choiche = input(' ... ');
 
 %% Setup
  
-load('robot.mat')
-load('robotmodel.mat')
+load('KUKA.mat')
+load('KUKAmodel.mat')
 %% plot options
 light_grey	= [0.99, 0.99, 0.99];
 black		= [0, 0, 0];
@@ -71,7 +71,7 @@ switch choiche
         xi = [x; y; z; theta; phi; psi]; % twist
         
         
-        q_des = generate_trajectory2(xi,q0,KUKA);
+        q_des = generate_trajectoryKUKA(xi,q0,KUKA);
         dq_des = gradient(q_des)*1000;
         ddq_des = gradient(dq_des)*1000;
         
@@ -130,6 +130,8 @@ switch choiche
 	%% clotoide
 
 end
+
+%% ---------------------COMPUTED TORQUE_NO_ADAPTIVE------------------------
 %% Trajectory Tracking: Computed Torque Method
 
 n = 5;
@@ -216,9 +218,10 @@ for i=1:length(t)
     index = index + 1;
 
 end
-
 %% Plot computed torque results for trajectory tracking
-
+%save('computed_torque_NO_adaptive','results_computed_torque1','results_computed_torque2','q_des')
+load('computed_torque_NO_adaptive.mat')
+num_of_joints = 5;
 figure
 for j=1:num_of_joints
     subplot(4,2,j);
@@ -229,3 +232,109 @@ for j=1:num_of_joints
     legend ('Computed Torque','Desired angle', 'Computed Torque with wrong estimation')
     grid;
 end
+%
+
+%% ---------------------BACKSTEPPING_NO_ADAPTIVE---------------------------
+%% Trajectory Tracking: Backstepping Method
+n = 5;
+d = 1;
+for j = 1:n 
+    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
+end
+
+% 
+% Gain circumference parameters matrix
+Kp = 0.1*diag([1 5 5 5 1 ]);
+%% Trajectory tracking: Backstepping control good parameter estimation
+
+results_backstepping1 = q0;
+index = 1;
+q = q0;
+dq = q_dot0;
+ddq = [0 0 0 0 0 ];
+for i=1:length(t)
+
+   % Error and derivate of the error   
+    err = transpose(q_des(:,i)) - q;
+    derr = transpose(dq_des(:,i)) - dq;
+    
+    dqr = transpose(dq_des(:,i)) + err*(Kp);
+    ddqr = transpose(ddq_des(:,i)) + derr*(Kp);
+    s = derr + err*(Kp');
+     
+    %Get dynamic matrices
+	M = KUKAmodel.inertia(q); 
+    C = KUKAmodel.coriolis(q,dq); 
+    G = KUKAmodel.gravload(q); 
+
+    % Backstepping Controller
+    tau = (M*(ddqr') + C*(dqr') + G' + Kp*(s') + err')';        
+    
+    % Robot joint accelerations
+    ddq_old = ddq;
+    ddq = (pinv(M)*(tau - (C*(dq'))'- G)')';
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+    results_backstepping1(index,  :) = q;
+    index = index + 1;
+end
+ %% Trajectory tracking: Backstepping control wrong parameter estimation
+% Good Circumference parameters
+Kp = 0.1* diag([1 5 5 5 1 ]);
+
+results_backstepping2 = q0;
+index = 1;
+q = q0;
+dq = q_dot0;
+ddq = [0 0 0 0 0 ];
+for i=1:length(t)
+
+   % Error and derivate of the error   
+    err = transpose(q_des(:,i)) - q;
+    derr = transpose(dq_des(:,i)) - dq;
+    
+    dqr = transpose(dq_des(:,i)) + err*(Kp);
+    ddqr = transpose(ddq_des(:,i)) + derr*(Kp);
+    s = derr + err*(Kp');
+     
+    %Get dynamic matrices
+	M1 = KUKAmodel.inertia(q); 
+    C1 = KUKAmodel.coriolis(q,dq); 
+    G1 = KUKAmodel.gravload(q); 
+
+    % Backstepping Controller
+    tau = (M1*(ddqr') + C1*(dqr') + G' + Kp*(s') + err')';        
+    
+    % Robot joint accelerations
+    ddq_old = ddq;
+    ddq = (pinv(M)*(tau - (C*(dq'))'- G)')';
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+    results_backstepping2(index,  :) = q;
+    index = index + 1;
+end
+%% Plot backstepping results for trajectory tracking
+save('backstepping_NO_adaptive','results_backstepping1','results_backstepping2','q_des')
+%load('backstepping_NO_adaptive.mat')
+num_of_joints = 5;
+figure
+for j=1:num_of_joints
+    subplot(4,2,j);
+    plot(t(1:10001), results_backstepping1(1:10001,j))
+    hold on
+    plot (t,q_des(j,1:length(t)))
+    plot(t(1:10001), results_backstepping2(1:10001,j))
+    legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
+    grid;
+end
+%
