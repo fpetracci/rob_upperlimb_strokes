@@ -23,7 +23,7 @@ light_grey	= [0.99, 0.99, 0.99];
 black		= [0, 0, 0];
 KUKA.plotopt = {	'workspace',[-1,1,-1,1,0,1.5],...
 					'floorlevel',0,...
-					'trail','b',...
+					'trail','r',...
 					'linkcolor',light_grey,...
 					'jointcolor',black,...
 					'view', [-49.1620,25.8980],...
@@ -77,10 +77,10 @@ switch choiche
         
         figure
         KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
-        KUKA.plot(q0,'floorlevel',0,'linkcolor',orange,'jointcolor',grey)
+        KUKA.plot(q0)
         hold
-        plot3(x,y,z,'k','Linewidth',1.5)
-        KUKA.plot(q_des(:,1:50:end)','floorlevel',0,'linkcolor',orange,'jointcolor',grey)
+        plot3(x,y,z,'b','Linewidth',1.5)
+        KUKA.plot(q_des(:,1:50:end)')
 
     case 2 % Traiettoria elicoidale
         
@@ -129,71 +129,103 @@ switch choiche
 	case 3
 	%% clotoide
 
-	punto1zy = hgmat2pos(pos1); punto1zy = flip(punto1zy(2:3));
+end
+%% Trajectory Tracking: Computed Torque Method
 
-	fig2 = figure(2);
-	clf
-	hold on
-	x_shaded = [-0.5 0.5 0.5 -0.5];
-	y_shaded = [0.5 0.5 1 1];
-	fill(x_shaded, y_shaded, 'g' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+n = 5;
+d = 1;
+for j = 1:n 
+    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
+end
 
-	x_shaded = [-0.5 0.5 0.5 -0.5];
-	y_shaded = [0 0 0.5 0.5];
-	fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% 
+% Gain circumference parameters matrix
+Kp = 20*diag([3 3 3 3 5 ]);
+Kv = 10*diag([1 1 1 1 1]);
 
-	x_shaded = [-0.5 0.5 0.5 -0.5];
-	y_shaded = [1 1 1.2 1.2];
-	fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+% Good Helix parameters matrix
+% Kp = 200*diag([3 3 3 3 5 3 5]);
+% Kv = 25*diag([1 1 1 1 70 2 70]);
+%% Computed torque with correct estimation
+results_computed_torque1 = q0;
+index = 1;
+q = q0;
+dq = q_dot0;
+ddq = [0 0 0 0 0 ];
+for i=1:length(t)
 
-	x_shaded = [-0.6 -0.5 -0.5 -0.6];
-	y_shaded = [0 0 1.2 1.2];
-	fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+   % Error and derivate of the error  
+   
+    err = transpose(q_des(:,i)) - q;
+    derr = transpose(dq_des(:,i)) - dq;
+    
+%     %Get dynamic matrices
 
-	x_shaded = [0.6 0.5 0.5 0.6];
-	y_shaded = [0 0 1.2 1.2];
-	fill(x_shaded, y_shaded, 'r' , 'EdgeAlpha', 0, 'FaceAlpha', 0.1);
+    M = KUKA.inertia(q); 
+    C = KUKA.coriolis(q,dq); 
+    G = KUKA.gravload(q); 
+    
+    tau = ( M*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C)' + G' )';
+      
+    % Robot joint accelerations
+    ddq_old = ddq;
+    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+    results_computed_torque1(index,:) = q;
+    index = index + 1;
 
-	xlim([-0.6 0.6]);
-	ylim([0 1.2]);
-	xlabel('-Y [m]')
-	ylabel('Z [m]')
-	grid on
+end
+%% Computed torque with wrong estimation
+results_computed_torque2 = q0;
+index = 1;
+q = q0;
+dq = q_dot0;
+ddq = [0 0 0 0 0 ];
+for i=1:length(t)
 
-	points_clot = ginput;
+   % Error and derivate of the error   
+    err = transpose(q_des(:,i)) - q;
+    derr = transpose(dq_des(:,i)) - dq;
+    
+%     %Get dynamic matrices
+    M1 = KUKAmodel.inertia(q); 
+    C1 = KUKAmodel.coriolis(q,dq); 
+    G1 = KUKAmodel.gravload(q); 
+    
+    %% Computed Torque Controller with wrong estimation'
+    
+    tau = ( M1*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C1)' + G1' )';
+      
+    % Robot joint accelerations
+    ddq_old = ddq;
+    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+    results_computed_torque2(index,:) = q;
+    index = index + 1;
 
-	% handling ginput_frame to franka globalframe
-	for i = 1 :size(points_clot,1)
-		points_clot(i,:) = [cos(-pi/2) -sin(-pi/2); sin(-pi/2) cos(-pi/2)] * points_clot(i,:)';
-	end
+end
 
-	% gen points on clothoid and path
-	dx = 0.3;
-	zy_clot = gen_clot(points_clot);
-	clot_sizes = size(zy_clot,1);
+%% Plot computed torque results for trajectory tracking
 
-	x_clot = 0.3 * ones(1, clot_sizes);
-	for i = 2:clot_sizes
-		x_clot(i) = x_clot(i-1) + dx/(clot_sizes-1);
-	end
-
-	p_clot = [x_clot;zy_clot(:,2)';zy_clot(:,1)'];
-
-	posclot_ini = [pos1(1:3,1:3) , p_clot(:,1); [0 0 0 1] ];
-	T_appr = ctraj(pos1, posclot_ini, n_steps_appr);	% matrix hom approach al punto 
-												% iniziale clotoide
-	p_appr = hgmat2pos(T_appr);
-	eul_appr = hgmat2eul(T_appr);
-	p = [p_appr, p_clot];
-
-	% generating xi
-	theta	= zeros(size(p(1,:)));
-	phi		= zeros(size(p(1,:)));
-	psi		= zeros(size(p(1,:)));
-
-	xi		= [p(1,:);p(2,:);p(3,:); theta; phi; psi];
-	t_end = size(xi,2)*delta_t;
-	t = (t_in+delta_t):delta_t:t_fin;
-
-	[q_des, dq_des, ddq_des] = generate_trajectory2(xi, qv1, franka, delta_t);
+figure
+for j=1:num_of_joints
+    subplot(4,2,j);
+    plot(t(1:10001),results_computed_torque1(1:10001,j))
+    hold on
+    plot (t,q_des(j,1:length(t)))
+    plot(t(1:10001),results_computed_torque2(1:10001,j))
+    legend ('Computed Torque','Desired angle', 'Computed Torque with wrong estimation')
+    grid;
 end
