@@ -1,18 +1,17 @@
-function [q] = generate_trajectory(xi,q0, franka)
-%GENERATE_TRAJECTORY Summary of this function goes here
+function [q] = generate_trajectory(xi,q0, franka, dt)
 
-%   Detailed explanation goes here
+    % t_in = 0; % [s]
+	% t_fin = 10; % [s]
+    % delta_t = 0.001; % [s]
+	% timeSpan= 10;
+    delta_t = dt;
+	
+	n = size(franka.links, 2);
+    % xi_dot= gradient(xi)*1000;
+	xi_dot= gradient(xi)/delta_t;
 
-    t_in = 0; % [s]
-    t_fin = 10; % [s]
-    delta_t = 0.001; % [s]
-    timeSpan= 10;
-    
-    xi_dot= gradient(xi)*1000;
-
-
-    q_dot=zeros(7,length(xi)+1);
-    q=zeros(7,length(xi)+1);
+    q_dot=zeros(n, length(xi)+1);
+    q=zeros(n, length(xi)+1);
 
     q(:,1)=q0;
 

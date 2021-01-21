@@ -38,7 +38,7 @@ timeSpan= 10;
 t = t_in:delta_t:t_fin;
 
 % Kuka parameters
-num_of_joints = 5;
+num_of_joints = size(KUKA.links, 2);
 
 % matrices initialization
 Q = zeros(num_of_joints,length(t));
@@ -51,8 +51,8 @@ switch choiche
                     
     case 1 % Circonferenza
         
-        q0 = [0 pi/2 pi/2 pi/2 0 ];
-        q_dot0 = [0 0 0 0 0 ];
+        q0 = [0 pi/2 pi/2 pi/2 0]';
+        q_dot0 = [0 0 0 0 0]';
         
         pos0 = KUKA.fkine(q0);
 
@@ -72,9 +72,9 @@ switch choiche
 
         xi = [x; y; z; theta; phi; psi]; 
         
-        q_des = generate_trajectoryKUKA(xi,q0,KUKA, delta_t);
-        dq_des = gradient(q_des)/delta_t;
-        ddq_des = gradient(dq_des)/delta_t;
+        q_des = (generate_trajectoryKUKA(xi,q0,KUKA, delta_t))';
+        dq_des = (gradient(q_des)/delta_t)';
+        ddq_des = (gradient(dq_des)/delta_t)';
         
         figure
         KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
@@ -580,29 +580,3 @@ end
 	end
 end
 %% plot
-% q = q';
-% q_des = q_des';
-for j=1:num_of_joints
-    subplot(4,2,j);
-	
-    plot(t(1:10001), q(1:10001,j))
-    hold on
-	
-    plot (t(1:10001), q_des(1:10001,j))
-    %plot(t(1:10001), results_backstepping2(1:10001,j))
-    %legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
-    grid;
-end
-
-figure
-set(gcf,'Position',[300 400 1200 400])
-plot(piArray(:,1),'b')
-hold on
-plot(piArray(:,11),'r')
-plot(piArray(:,21),'g')
-plot(piArray(:,31),'k')
-plot(piArray(:,41),'m')
-grid on
-xlabel('time [s]')
-ylabel('mass [kg]')
-legend('link 1','link 2','link 3','link 4','link 5')

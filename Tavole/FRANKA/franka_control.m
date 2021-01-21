@@ -32,7 +32,7 @@ timeSpan= t_end - t_in;
 % vettore tempo
 %t = t_in:delta_t:t_fin;
 
-njoints = 7;
+njoints = size(franka.links, 2);
 n_steps = timeSpan/delta_t;
 n_steps_appr = n_steps/100;
 
@@ -45,7 +45,7 @@ r = 0.1; % raggio del cerchio
 %% parto dalla posizione iniziale pos0, raggiungo pos1 
 
 % Per prima cosa vi è la necessità di passare da una configurazione
-% iniziale ad una finale, path planning point to point.Per il momento
+% iniziale ad una finale, path planning point to point. Per il momento
 % lascio jtraj, ma non vi è alcuna menzione del jacobiano. Per questo credo
 % sia meglio utilizzare ctraj, in modo da ottenere una traiettoria in cui
 % la velocità ha andamento trapezoidale e subito dopo inversione cinematica 
@@ -68,7 +68,7 @@ r = 0.1; % raggio del cerchio
 % phi =  zeros(size(p(1,:)));
 % psi =  zeros(size(p(1,:)));
 % xi = [p(1,:);p(2,:);p(3,:); theta; phi; psi]; % twist
-% q_des = generate_trajectory(xi,qv1,franka);
+% q_des = generate_trajectory(xi,qv1,franka, delta_t);
 % dq_des = gradient(q_des)*1000;
 % ddq_des = gradient(dq_des)*1000;
 % figure(1) 
@@ -87,7 +87,7 @@ theta = zeros(size(p(1,:)));
 phi =  zeros(size(p(1,:)));
 psi =  zeros(size(p(1,:)));
 xi = [p(1,:);p(2,:);p(3,:); theta; phi; psi]; % pose ee nel tempo
-%q_des = generate_trajectory(xi,qv1,franka);
+%q_des = generate_trajectory(xi,qv1,franka, delta_t);
 [q_des, dq_des, ddq_des] = ikine_franka(xi,qv1,franka, delta_t);
 % dq_des = gradient(q_des)*1000;
 % ddq_des = gradient(dq_des)*1000;
@@ -290,9 +290,9 @@ for i=1:size(q_des,2)
     
    dq_ref = dq_des(:,i) + Mat*err;
    ddq_ref = ddq_des(:,i) + Mat*derr;
-   s = derr + Mat*err;
    % s = dq_ref - dq;
-     
+    s = derr + Mat*err;
+	
     %Get dynamic matrices
     F = get_FrictionTorque(dq);
     G = get_GravityVector(q);

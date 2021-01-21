@@ -30,7 +30,7 @@ timeSpan= t_end - t_in;
 % vettore tempo
 %t = t_in:delta_t:t_fin;
 
-njoints = 7;
+njoints = size(franka.links, 2);
 n_steps = timeSpan/delta_t;
 n_steps_appr = n_steps/100;
 
