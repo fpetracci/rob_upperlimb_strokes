@@ -3,7 +3,6 @@
 clear all;
 close all;
 clc;
-
 %% Choose Trajectory
 
 fprintf('Choose trajectory: \n');
@@ -13,7 +12,6 @@ fprintf('1: Circumference \n');
 fprintf('2: Helix \n');
 
 choiche = input(' ... ');
-
 %% Setup
  
 load('KUKA.mat')
@@ -44,7 +42,6 @@ Q = zeros(num_of_joints,length(t));
 dQ = zeros(num_of_joints,length(t));
 ddQ = zeros(num_of_joints,length(t));
 TAU = zeros(num_of_joints,length(t));
-
 %% Select Trajectory
 
 switch choiche
@@ -77,10 +74,10 @@ switch choiche
         
         figure
         KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
-        KUKA.plot(q0)
-        hold
-        plot3(x,y,z,'b','Linewidth',1.5)
-        KUKA.plot(q_des(:,1:50:end)')
+%         KUKA.plot(q0)
+%         hold
+%         plot3(x,y,z,'b','Linewidth',1.5)
+%         KUKA.plot(q_des(:,1:50:end)')
 
     case 2 % Traiettoria elicoidale
         
@@ -130,7 +127,6 @@ switch choiche
 	%% clotoide
 
 end
-
 %% Select controller
 
 fprintf('Choose controller: \n');
@@ -139,9 +135,9 @@ fprintf('1: COMPUTED TORQUE_NO_ADAPTIVE \n');
 
 fprintf('2: BACKSTEPPING_NO_ADAPTIVE \n');
 
-fprintf('3 COMPUTED TORQUE_ADAPTIVE \n');
+fprintf('3:	BACKSTEPPING_ADAPTIVE \n');
 
-fprintf('4: BACKSTEPPING_ADAPTIVE \n');
+fprintf('4: COMPUTED TORQUE_ADAPTIVE \n');
 controller = input(' ... ');
 switch controller
                     
@@ -357,7 +353,8 @@ end
 KUKA.plot(q_des(:,1:50:end)','trail','black')
 	case 3
 %% ---------------------BACKSTEPPING_ADAPTIVE------------------------------
-%% Trajectory Tracking: Computed Torque Method
+%% Trajectory Tracking:Backstepping Method
+n = 5;
 for j = 1:n 
     KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
 end
@@ -389,15 +386,14 @@ Kp = 1*diag([200 200 200 20 10]);
 R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
 P = 0.01*eye(10);
 lambda = diag([200, 200, 200, 200, 200])*0.03;
-
 %% calcolo q
-for i = 2:length(t)
+% for i = 2:length(t)
     %% Interruzione della simulazione se q diverge
     if any(isnan(q(i-1,:)))
         fprintf('Simulazione interrotta! \n')
         return
     end
-%% Computed torque with correct estimation
+%% Backstepping with correct estimation
 results_computed_torque1 = q0;
 index = 1;
 q = q0;
@@ -432,13 +428,13 @@ for i=1:length(t)
     index = index + 1;
 
 end
-%% Computed torque with wrong estimation
+%% Backstepping with wrong estimation
 results_computed_torque2 = q0;
 index = 1;
 q = q0;
 dq = q_dot0;
 ddq = [0 0 0 0 0 ];
-for i=1:length(t)
+for i = 1:length(t)
 
    % Error and derivate of the error   
     err = transpose(q_des(:,i)) - q;
@@ -449,7 +445,7 @@ for i=1:length(t)
     C1 = KUKAmodel.coriolis(q,dq); 
     G1 = KUKAmodel.gravload(q); 
     
-    %% Computed Torque Controller with wrong estimation'
+    %% BackStepping Controller with wrong estimation'
     
     tau = ( M1*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C1)' + G1' )';
       
@@ -467,29 +463,32 @@ for i=1:length(t)
     index = index + 1;
 
 end
-%% Plot computed torque results for trajectory tracking
-%save('computed_torque_NO_adaptive','results_computed_torque1','results_computed_torque2','q_des')
-load('computed_torque_NO_adaptive.mat')
+%% Plot backstepping results for trajectory tracking
+%save('backstepping_adaptive','results_backstepping1','results_backstepping2','q_des')
+%load('backstepping_adaptive.mat')
 num_of_joints = 5;
 figure
 for j=1:num_of_joints
     subplot(4,2,j);
-    plot(t(1:10001),results_computed_torque1(1:10001,j))
+    plot(t(1:10001), results_backstepping1(1:10001,j))
     hold on
     plot (t,q_des(j,1:length(t)))
-    plot(t(1:10001),results_computed_torque2(1:10001,j))
-    legend ('Computed Torque','Desired angle', 'Computed Torque with wrong estimation')
+    plot(t(1:10001), results_backstepping2(1:10001,j))
+    legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
     grid;
 end
-%	
 	case 4
-%% ---------------------COMPUTED_TORQUE_ADAPTIVE------------------------------
-	%% Perturbazione iniziale dei parametri
-	int = 0; % intensità percentuale della perturbazione sui parametri
+%%---------------------COMPUTED_TORQUE_ADAPTIVE---------------------------
+%%	Perturbazione iniziale dei parametri
+	n = 5;
+	int = 2.5; % intensità percentuale della perturbazione sui parametri
 	for j = 1:n 
-		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100*0.5); 
+		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
 	end
-	q = zeros(length(t),n); 
+	q_des = q_des';
+	dq_des  = dq_des';
+	ddq_des = ddq_des';
+	q = zeros(length(t),n);
 	q_dot = zeros(length(t),n); 
 	tau = zeros(length(t),n); 
 	piArray = zeros(length(t),n*10); % vettore dei parametri dinamici 
@@ -509,20 +508,20 @@ end
 
 	Kp = 1*diag([200 200 200 20 10]);
 	Kv = 0.1*diag([200 200 200 10 1]); 
-	Kd = 0.1*diag([200 200 200 20 1]);
-
+% 	Kd = 0.1*diag([200 200 200 20 1]);
+ 
 	% P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
 	R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
-	P = 0.01*eye(10);
+	P = 0.005*eye(10);
 	lambda = diag([200, 200, 200, 200, 200])*0.03;
 	tic
 	for i = 2:length(t)
-		%% Interruzione della simulazione se q diverge
+%% Interruzione della simulazione se q diverge
 		if any(isnan(q(i-1,:)))
 			fprintf('Simulazione interrotta! \n')
 			return
 		end
-		%% Calcolo dell'errore: e, e_dot
+%% Calcolo dell'errore: e, e_dot
 		e = q_des(i-1,:) - q(i-1,:); 
 		e_dot = dq_des(i-1,:) - q_dot(i-1,:); 
 		s = (e_dot + e*lambda);
@@ -531,7 +530,7 @@ end
 		if (i > 2)
 			qr_ddot(i-1,:) = (qr_dot(i-1) - qr_dot(i-2)) / delta_t;
 		end
-		%% Calcolo della coppia (a partire dal modello)
+%% Calcolo della coppia (a partire dal modello)
 		for j = 1:n
             KUKAmodel.links(j).m = piArray(i-1,(j-1)*10+1); % elemento 1 di pi
 		 end
@@ -539,7 +538,7 @@ end
 		Ctilde = KUKAmodel.coriolis(q(i-1,:),q_dot(i-1,:)); 
 		Gtilde = KUKAmodel.gravload(q(i-1,:)); 
 		tau(i,:) = ddq_des(i-1,:)*Mtilde' + q_dot(i-1,:)*Ctilde' + Gtilde + e_dot*Kv' + e*Kp'; 
-		%% Dinamica del manipolatore (reale)
+%% Dinamica del manipolatore (reale)
 		% entrano tau, q e q_dot, devo calcolare M, C e G e ricavare q_ddot
 		% integro q_ddot due volte e ricavo q e q_dot
 		M = KUKA.inertia(q(i-1,:)); 
@@ -550,29 +549,57 @@ end
 
 		q_dot(i,:) = q_dot(i-1,:) + delta_t*q_ddot; 
 		q(i,:) = q(i-1,:) + delta_t*q_dot(i,:); 
-		 %% Dinamica dei parametri
+%% Dinamica dei parametri
         q1 = q(i,1); q2 = q(i,2); q3 = q(i,3); q4 = q(i,4); q5 = q(i,5);
 
         q1_dot = q_dot(i,1); q2_dot = q_dot(i,2); q3_dot = q_dot(i,3); 
         q4_dot = q_dot(i,4); q5_dot = q_dot(i,5);
 
-        qd1_dot = qd_dot(i,1); qd2_dot = qd_dot(i,2); qd3_dot = qd_dot(i,3);
-        qd4_dot = qd_dot(i,4); qd5_dot = qd_dot(i,5);
+        qd1_dot = dq_des(i,1); qd2_dot = dq_des(i,2); qd3_dot = dq_des(i,3);
+        qd4_dot = dq_des(i,4); qd5_dot = dq_des(i,5);
 
-        qd1_ddot = qd_ddot(i,1); qd2_ddot = qd_ddot(i,2); qd3_ddot = qd_ddot(i,3); 
-        qd4_ddot = qd_ddot(i,4); qd5_ddot = qd_ddot(i,5);
+        qd1_ddot = ddq_des(i,1); qd2_ddot = ddq_des(i,2); qd3_ddot = ddq_des(i,3); 
+        qd4_ddot = ddq_des(i,4); qd5_ddot = ddq_des(i,5);
 
         g = 9.81;
 
         regressore;
 		piArray_dot = ( R^(-1) * Y' * (Mtilde')^(-1) * [zeros(n) eye(n)] * P * [e e_dot]' )'; 
         piArray(i,:) = piArray(i-1,:) + delta_t*piArray_dot; 
-		%% Progresso Simulazione 
+%% Progresso Simulazione 
 		if mod(i,100) == 0
         
         fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
         hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
         fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
             hms(1),hms(2),hms(3));
-    end
-	end 
+		end
+	end
+end
+%% plot
+% q = q';
+% q_des = q_des';
+for j=1:num_of_joints
+    subplot(4,2,j);
+	
+    plot(t(1:10001), q(1:10001,j))
+    hold on
+	
+    plot (t(1:10001), q_des(1:10001,j))
+    %plot(t(1:10001), results_backstepping2(1:10001,j))
+    %legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
+    grid;
+end
+
+figure
+set(gcf,'Position',[300 400 1200 400])
+plot(piArray(:,1),'b')
+hold on
+plot(piArray(:,11),'r')
+plot(piArray(:,21),'g')
+plot(piArray(:,31),'k')
+plot(piArray(:,41),'m')
+grid on
+xlabel('time [s]')
+ylabel('mass [kg]')
+legend('link 1','link 2','link 3','link 4','link 5')
