@@ -1,5 +1,4 @@
 %% Intro
-
 clear all ; clc ;close all
 % modello cinematico e generazione traiettoria
 
@@ -7,7 +6,6 @@ mdl_franka
 
 light_grey	= [0.99, 0.99, 0.99];
 black		= [0, 0, 0];
-
 
 franka.plotopt = {	'workspace',[-1,1,-1,1,0,1.5],...
 					'floorlevel',0,...
@@ -26,7 +24,7 @@ qv1(6) = pi/2;
 
 t_in	= 0;	% [s]
 t_end	= 10;	% [s]
-delta_t = 0.001;% [s]
+delta_t = 0.01;	% [s]
 timeSpan= t_end - t_in;
 
 % vettore tempo
@@ -54,7 +52,7 @@ switch choiche
 	case 2
 	%% a seguito del raggiungimento punto pos1 eseguo un cerchio di raggio r
 	t = t_in:delta_t:t_end;
-	center = pos1(1:3,4) - [0;0;r];% partendo dal punto pos1 calcolo il cerchio nel pianonel piano XZ
+	center = pos1(1:3,4) - [0;0;r];% partendo dal punto pos1 calcolo il cerchio nel piano XZ
 	p = zeros(3,size(t,2));
 	for i=1:size(t,2)
 		p(:,i) = center + rotx(t(i)/t(end)*2*pi)*[0;0;r] +[2*r;r;0]*t(i)/t(end)  ;
@@ -71,7 +69,7 @@ switch choiche
 	plot3(p(1,:),p(2,:),p(3,:), ':c')
 	franka.plot(q_des(:,1:50:end)')
 	%% Trajectory tracking: Backstepping control
-
+	
 	Mat = 1;
 	Kp = diag([1 1 1 1 3 1 1]);
 
@@ -102,7 +100,6 @@ switch choiche
 		G = get_GravityVector(q);
 		C = get_CoriolisMatrix(q,dq);
 		M = get_MassMatrix(q);
-
 
 		% Backstepping Controller
 		tau = M*(ddq_ref) + C*(dq_ref) ...
