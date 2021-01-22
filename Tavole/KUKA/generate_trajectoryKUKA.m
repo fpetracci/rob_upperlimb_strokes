@@ -4,7 +4,11 @@ function [q] = generate_trajectoryKUKA(xi,q0, KUKA, dt)
 	% t_fin = 10; % [s]
     % delta_t = 0.001; % [s]
 	% timeSpan= 10;
-    
+    tr = 0;
+	if size(q0, 1)==1 % se do vettore riga
+		tr = 1;
+		q0 = q0';
+	end
 	delta_t = dt;
 	m = size(KUKA.links, 2);
 	
@@ -24,7 +28,10 @@ function [q] = generate_trajectoryKUKA(xi,q0, KUKA, dt)
         J=KUKA.jacob0(q(:,i));
         q_dot(:,i)=pinv(J)*xi_dot(1:6,i);
         q(:,i+1)=q(:,i)+q_dot(:,i)*delta_t;
-    end
-
+	end
+	
+% 	if tr == 1
+% 		q = q';
+% 	end
 end
 
