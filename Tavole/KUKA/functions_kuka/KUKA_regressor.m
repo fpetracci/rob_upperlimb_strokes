@@ -1,4 +1,15 @@
 function Y = KUKA_regressor(q, dq, dq_des, ddq_des)
+	% each column of pi contains for all joints:
+	% 1.	mass
+	% 2.	mass * x of Center Of Gravity
+	% 3.	mass * y of Center Of Gravity
+	% 4.	mass * z of Center Of Gravity
+	% 5.	Element 1,1, inertial tensor
+	% 6.	?
+	% 7.	?
+	% 8.	Element 2,2, inertial tensor
+	% 9.	?
+	% 10.	Element 2,3, inertial tensor
 
 	q1 = q(1); q2 = q(2); q3 = q(3); 
 	q4 = q(4); q5 = q(5);
