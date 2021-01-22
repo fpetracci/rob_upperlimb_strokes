@@ -1,99 +1,223 @@
+%% ---------------------COMPUTED_TORQUE_ADAPTIVE---------------------------
+%% Init per simulazione adaptive
 
-%%---------------------COMPUTED_TORQUE_ADAPTIVE---------------------------
-%%	Perturbazione iniziale dei parametri
-	n = size(KUKA.links, 2);
-	int = 2.5; % intensità percentuale della perturbazione sui parametri
-	for j = 1:n 
-		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
-	end
-% 	q_des = q_des';
-% 	dq_des  = dq_des';
-% 	ddq_des = ddq_des';
-	q = zeros(n, length(t));
-	dq = zeros(n, length(t)); 
-	tau = zeros(n, length(t)); 
-	piArray = zeros(length(t),n*10); % vettore dei parametri dinamici 
-	q0 = ([0 pi/2 -pi/2 0 0] + pi/6*[0.3 0.4 0.2 0.8 0] - pi/12)'; % partiamo in una posizione diversa da quella di inizio traiettoria
-	q(:, 1) = q0; 
-	dq(:, 1) = q_dot0; 
+% joints
+n = size(KUKA.links, 2);
+results_q = zeros(n, length(t));	% angles for export
+results_dq = zeros(n, length(t));	% dangles for export
+results_ddq = zeros(n, length(t));	% ddangles for export
+q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
+q = q0;								% joint angle vector	
+dq = q_dot0;						% joint dangle vector
+ddq = [0 0 0 0 0]';					% joint ddangle vector
 
-	q_ref_dot = zeros(n, length(t)); 
-	q_ref_ddot = zeros(n, length(t)); 
+% tau
+tau_save = zeros(n, length(t));		% torques vector for export
+soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
+	
+% pi vettore dei parametri dinamici 
+piArray = zeros(n*10, length(t)); 
+	% each column of pi contains for all joints:
+	% 1.	mass
+	% 2.	mass * x of Center Of Gravity
+	% 3.	mass * y of Center Of Gravity
+	% 4.	mass * z of Center Of Gravity
+	% 5.	Element 1,1, inertial tensor
+	% 6.	Element 1,2, inertial tensor
+	% 7.	Element 1,3, inertial tensor
+	% 8.	Element 2,2, inertial tensor
+	% 9.	Element 2,3, inertial tensor
+	% 10.	Element 3,3, inertial tensor
+	
 
-	pi0 = zeros(1,n*10); 
-	for j = 1:n
-		pi0((j-1)*10+1:j*10) = [KUKAmodel.links(j).m KUKAmodel.links(j).m*KUKAmodel.links(j).r ...
-			KUKAmodel.links(j).I(1,1) 0 0 KUKAmodel.links(j).I(2,2) 0 KUKAmodel.links(j).I(3,3)];
-	end
-	piArray(1,:) = pi0; 
+pi0 = zeros(n*10, 1); % starting dynamic parameters vector
+for j = 1:n
+	pi0((j-1)*10+1:j*10, 1) = [KUKAmodel.links(j).m KUKAmodel.links(j).m*KUKAmodel.links(j).r ...
+        KUKAmodel.links(j).I(1,1) 0 0 KUKAmodel.links(j).I(2,2) 0 KUKAmodel.links(j).I(3,3)]';
+end
+piArray(:, 1) = pi0;
 
-	Kp = 1*diag([200 200 200 20 10]);
-	Kv = 0.1*diag([200 200 200 10 1]); 
+% gains
+Kp = 1*diag([200 200 200 20 10]);
+Kv = 0.1*diag([200 200 200 10 1]); 
 % 	Kd = 0.1*diag([200 200 200 20 1]);
  
-	% P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
-	R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
-	P = 0.005*eye(10);
-	lambda = diag([200, 200, 200, 200, 200])*0.03;
-	tic
-	for i = 2:length(t)
+% P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
+R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
+P = 0.005*eye(10);
+	
+	% code stuff
+index = 1;
+
+%% Simulazione adaptive
+tic
+for i = 1:length(t)
 %% Interruzione della simulazione se q diverge
-		if any(isnan(q(:, i-1)))
+		if any(isnan(q)) && (i ~= 1)
 			fprintf('Simulazione interrotta! \n')
 			return
 		end
-%% Calcolo dell'errore: e, e_dot
-		e = q_des(:, i-1) - q(:, i-1); 
-		e_dot = dq_des(:, i-1) - dq(:, i-1); 
-		s = (e_dot + lambda*e);
+	%% Calcolo dell'errore: e, e_dot
+	% Error and derivate of the error  
+	err = q_des(:, i) - q;
+	derr = dq_des(:, i) - dq; 
 
-		q_ref_dot(:, i-1) = dq_des(:, i-1) + lambda*e;
-		if (i > 2)
-			q_ref_ddot(:, i-1) = (q_ref_dot(:, i-1) - q_ref_dot(:, i-2)) / delta_t;
+	%% update KUKAmodel and get robotic matrices
+	for j = 1:n
+		% link mass
+		KUKAmodel.links(j).m = piArray((j-1)*10+1, i); % elemento 1 di pi
+		
+		% link inertia
+		KUKAmodel.links(1).I = diag([	piArray((j-1)*10+5, i), ...
+										piArray((j-1)*10+8, i), ...
+										piArray((j-1)*10+10, i) ]);
+	end
+	
+	Mtilde = (KUKAmodel.inertia(q'))'; 
+    Ctilde = (KUKAmodel.coriolis(q',dq'))'; 
+    Gtilde = (KUKAmodel.gravload(q'))'; 
+	tau = Mtilde * (ddq_des(:, i)+ Kv*derr + Kp*err) + Ctilde*dq + Gtilde ; 
+	
+% 	% saturazione tau
+	for j = 1:n
+		if tau(j) > soglia_sat
+			tau(j) = soglia_sat;
+		elseif tau(j) < -soglia_sat
+			tau(j) = -soglia_sat;
 		end
-%% Calcolo della coppia (a partire dal modello)
-		for j = 1:n
-            KUKAmodel.links(j).m = piArray(i-1,(j-1)*10+1); % elemento 1 di pi
-		 end
-		Mtilde = (KUKAmodel.inertia(q(:, i-1)'))'; 
-		Ctilde = (KUKAmodel.coriolis(q(:, i-1)',dq(:, i-1)'))'; 
-		Gtilde = (KUKAmodel.gravload(q(:, i-1)'))'; 
-		tau(:, i) = Mtilde*ddq_des(:, i-1) + Ctilde*dq(:, i-1) + Gtilde + Kv*e_dot + Kp*e; 
-%% Dinamica del manipolatore (reale)
-		% entrano tau, q e dq, devo calcolare M, C e G e ricavare ddq
-		% integro ddq due volte e ricavo q e dq
-		M = (KUKA.inertia(q(:, i-1)'))'; 
-		C = (KUKA.coriolis(q(:, i-1)',dq(:, i-1)'))'; 
-		G = (KUKA.gravload(q(:, i-1)'))'; 
+	end
 
-		ddq = pinv(M)*(tau(:, i) - C*dq(:, i-1) - G); 
+	%% Dinamica del manipolatore (reale)
+	% entrano tau, q e dq, devo calcolare M, C e G e ricavare ddq
+	% integro ddq due volte e ricavo q e dq
+	M = (KUKA.inertia(q'))'; 
+    C = (KUKA.coriolis(q',dq'))'; 
+    G = (KUKA.gravload(q'))'; 
 
-		dq(:, i) = dq(:, i-1) + delta_t*ddq; 
-		q(:, i) = q(:, i-1) + delta_t*dq(:, i); 
-%% Dinamica dei parametri
-        q1 = q(1, i); q2 = q(2, i); q3 = q(3, i); q4 = q(4, i); q5 = q(5, i);
+	ddq_old = ddq;
+    ddq = pinv(M)*(tau - C*dq - G); 
 
-        q1_dot = dq(1, i); q2_dot = dq(2, i); q3_dot = dq(3, i); 
-        q4_dot = dq(4, i); q5_dot = dq(5, i);
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+	
+	%% store result for the final plot
+	results_q(:, index) = q;
+	results_dq(:, index) = dq;
+	results_ddq(:, index) = ddq;
+	tau_save(:, index)= tau;
+	index = index + 1;
+	
+	%% Dinamica dei parametri
+	Y = KUKA_regressor(q, dq, dq_des(:,i), ddq_des(:,i));
 
-        qd1_dot = dq_des(1, i); qd2_dot = dq_des(2, i); qd3_dot = dq_des(3, i);
-        qd4_dot = dq_des(4, i); qd5_dot = dq_des(5, i);
+	% controllo sulla pi
+	piArray_dot = R^(-1) * Y' * (Mtilde')^(-1) * [zeros(n); eye(n)]' * P * [err; derr]; 
+	
+	if i<length(t)
+		piArray(:, i+1) = piArray(:, i) + delta_t*piArray_dot;
+	end
+	%% Progresso Simulazione 
+	if mod(i,100) == 0
 
-        qd1_ddot = ddq_des(1, i); qd2_ddot = ddq_des(2, i); qd3_ddot = ddq_des(3, i); 
-        qd4_ddot = ddq_des(4, i); qd5_ddot = ddq_des(5, i);
+		fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
+		hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
+		fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
+			hms(1),hms(2),hms(3));
+	end
+end
 
-        g = 9.81;
+%% Init per simulazione "sbagliata" _wr
 
-        regressore;
-		% controllo sulla pi
-		piArray_dot = R^(-1) * Y' * (Mtilde')^(-1) * [zeros(n); eye(n)] * P * [e; e_dot]; 
-        piArray(:, i) = piArray(:, i-1) + delta_t*piArray_dot; 
-%% Progresso Simulazione 
-		if mod(i,100) == 0
+% joints
+n = size(KUKA.links, 2);			% number of joints
+results_q_wr = zeros(n, length(t));	% angles for export
+results_dq_wr = zeros(n, length(t));	% dangles for export
+results_ddq_wr = zeros(n, length(t));	% ddangles for export
+q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
+q = q0;								% joint angle vector	
+dq = q_dot0;						% joint dangle vector
+ddq = [0 0 0 0 0]';					% joint ddangle vector
+
+% tau
+tau_save_wr = zeros(n, length(t));		% torques vector for export
+soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
+
+% code stuff
+index = 1;
+
+% Gain circumference parameters matrix
+Kp = 20*diag([3 3 3 3 5]);
+Kv = 10*diag([1 1 1 1 1]);
+
+%% Simulazione "sbagliata" _wr
+tic
+
+for i=1:length(t)
+	% Interruzione della simulazione se q diverge
+	if any(isnan(q)) && (i ~= 1)
+	   fprintf('Simulazione interrupted! \n')
+	   return
+	end
+
+	% Error and derivate of the error  
+	err = q_des(:, i) - q;
+	derr = dq_des(:, i) - dq;
+   
+	%Get dynamic matrices
+	M = (KUKAmodel.inertia(q'))'; 
+	C = (KUKAmodel.coriolis(q', dq'))'; 
+	G = (KUKAmodel.gravload(q'))'; 
+    
+    tau = M*(ddq_des(:, i) + Kv*(derr) + Kp*(err)) + (C*dq) + G;
+      
+    % Robot joint accelerations
+	% Get "right" dynamic matrices
+	M = (KUKA.inertia(q'))'; 
+	C = (KUKA.coriolis(q', dq'))'; 
+	G = (KUKA.gravload(q'))'; 
+    ddq_old = ddq;
+    ddq = pinv(M)*(tau - (C*dq)- G);
+        
+    % Tustin integration
+    dq_old = dq;
+    dq = dq + (ddq_old + ddq) * delta_t / 2;
+    q = q + (dq + dq_old) * delta_t /2;
+    
+    % Store result for the final plot
+	results_q_wr(:, index) = q;
+	results_dq_wr(:, index) = dq;
+	results_ddq_wr(:, index) = ddq;
+	tau_save(:, index)= tau;
+    index = index + 1;
+	
+	%% Progresso Simulazione
+    if mod(i,100) == 0
         
         fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
         hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
         fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
             hms(1),hms(2),hms(3));
-		end
 	end
+	
+end
+
+%% Export for plots
+
+if ~exist('results', 'var')
+	results = struct();
+end
+results.q		= results_q;
+results.dq		= results_dq;
+results.ddq		= results_ddq;
+results.tau		= tau_save;
+results.piArray = piArray;
+results.name	= 'Adaptive ComputedTorque';
+
+results.model_wr		= struct();
+results.model_wr.q		= results_q_wr;
+results.model_wr.dq		= results_dq_wr;
+results.model_wr.ddq	= results_ddq_wr;
+results.model_wr.tau	= tau_save_wr;
+results.model_wr.name	= 'ComputedTorque Wrong Model';

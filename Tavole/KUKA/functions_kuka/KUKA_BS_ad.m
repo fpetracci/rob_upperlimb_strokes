@@ -158,7 +158,7 @@ lambda = diag([5 0.8 0.5 0.3 0.3]);
 % code stuff
 index = 1;
 
- %% Simulazione "Sbagliata" _wr
+%% Simulazione "Sbagliata" _wr
 tic
 for i=1:length(t)
 	% Interruzione della simulazione se q diverge
@@ -182,9 +182,9 @@ for i=1:length(t)
 	%% Dinamica del manipolatore
     % entrano tau, q e dq, devo calcolare M, C e G e ricavare q_ddot
     % integro q_ddot due volte e ricavo q e dq
-	M = (KUKA.inertia(q'))'; 
-	C = (KUKA.coriolis(q',dq'))'; 
-	G = (KUKA.gravload(q'))'; 
+	M = (KUKAmodel.inertia(q'))'; 
+	C = (KUKAmodel.coriolis(q',dq'))'; 
+	G = (KUKAmodel.gravload(q'))'; 
 
 	% Backstepping Controller
 	tau = M*(ddq_ref) + C*(dq_ref) + G + lambda*(s) + err;        
@@ -199,9 +199,9 @@ for i=1:length(t)
 	
 	% Real model accelerations
 	ddq_old = ddq;
-	M = (KUKAmodel.inertia(q'))'; 
-	C = (KUKAmodel.coriolis(q',dq'))'; 
-	G = (KUKAmodel.gravload(q'))'; 
+	M = (KUKA.inertia(q'))'; 
+	C = (KUKA.coriolis(q',dq'))'; 
+	G = (KUKA.gravload(q'))'; 
 	ddq = pinv(M)*(tau - C*dq- G);
 
 	% Tustin integration

@@ -1,6 +1,5 @@
 %% ---------------------BACKSTEPPING---------------------------
 
-
 %% Init per simulazione
 
 % joints
@@ -98,5 +97,4 @@ results.q		= results_q;
 results.dq		= results_dq;
 results.ddq		= results_ddq;
 results.tau		= tau_save;
-results.piArray = piArray;
 results.name	= 'BackStepping';
