@@ -72,9 +72,9 @@ switch choiche
 
         xi = [x; y; z; theta; phi; psi]; 
         
-        q_des = (generate_trajectoryKUKA(xi,q0,KUKA, delta_t))';
-        dq_des = (gradient(q_des)/delta_t)';
-        ddq_des = (gradient(dq_des)/delta_t)';
+        q_des = generate_trajectoryKUKA(xi,q0,KUKA, delta_t);
+        dq_des = gradient(q_des)/delta_t;
+        ddq_des = gradient(dq_des)/delta_t;
         
         figure
         KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
@@ -85,8 +85,8 @@ switch choiche
 
     case 2 % Traiettoria elicoidale
         
-%         q0 = [0 2/3*pi 2/3*pi pi/3 0 ];
-%         q_dot0 = [0 0 0 0 0 ];
+%         q0 = [0 2/3*pi 2/3*pi pi/3 0]';
+%         q_dot0 = [0 0 0 0 0]';
 %         pos0 = KUKA.fkine(q0);
 %        
 %         shift = 0.1; % passo dell'elica [m] 
@@ -100,8 +100,8 @@ switch choiche
 %         theta = zeros(size(x));
 %         phi = zeros(size(x));
 %         psi = zeros(size(x));
-		q0 = [0 pi/4 -pi/4 pi/4 0 ];
-        q_dot0 = [0 0 0 0 0 ];
+		q0 = [0 pi/4 -pi/4 pi/4 0]';
+        q_dot0 = [0 0 0 0 0]';
         pos1 = KUKA.fkine(q0);
 		radius = 0.05; % raggio dell'elica [m]
 		num = 1; % numero di giri [#]
@@ -158,35 +158,31 @@ end
 
 % 
 % Gain circumference parameters matrix
-Kp = 20*diag([3 3 3 3 5 ]);
+Kp = 20*diag([3 3 3 3 5]);
 Kv = 10*diag([1 1 1 1 1]);
-
-% Good Helix parameters matrix
-% Kp = 200*diag([3 3 3 3 5 3 5]);
-% Kv = 25*diag([1 1 1 1 70 2 70]);
 %% Computed torque with correct estimation
 results_computed_torque1 = q0;
 index = 1;
 q = q0;
 dq = q_dot0;
-ddq = [0 0 0 0 0 ];
+ddq = [0 0 0 0 0]';
 
 for i=1:length(t)
 	
    % Error and derivate of the error  
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
+    err = q_des(:,i) - q;
+    derr = dq_des(:,i) - dq;
     
 %     %Get dynamic matrices
     M = KUKA.inertia(q); 
     C = KUKA.coriolis(q, dq); 
     G = KUKA.gravload(q); 
     
-    tau = (M*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C)' + G')';
+    tau = M*(ddq_des(:,i) + Kv*(derr) + Kp*(err)) + (C*dq) + G;
       
     % Robot joint accelerations
     ddq_old = ddq;
-    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
+    ddq = pinv(M)*(tau - (C*dq)- G);
         
     % Tustin integration
     dq_old = dq;
@@ -194,7 +190,7 @@ for i=1:length(t)
     q = q + (dq + dq_old) * delta_t /2;
     
     % Store result for the final plot
-    results_computed_torque1(index,:) = q;
+    results_computed_torque1(:, index) = q;
     index = index + 1;
 
 end
@@ -203,12 +199,12 @@ results_computed_torque2 = q0;
 index = 1;
 q = q0;
 dq = q_dot0;
-ddq = [0 0 0 0 0 ];
+ddq = [0 0 0 0 0]';
 for i=1:length(t)
 
    % Error and derivate of the error   
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
+    err = q_des(:,i) - q;
+    derr = dq_des(:,i) - dq;
     
 %     %Get dynamic matrices
     M1 = KUKAmodel.inertia(q); 
@@ -217,11 +213,11 @@ for i=1:length(t)
     
     %% Computed Torque Controller with wrong estimation'
     
-    tau = ( M1*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C1)' + G1' )';
+    tau = M1*(ddq_des(:,i) + Kv*(derr) + Kp*(err)) + (C1*dq) + G1;
       
     % Robot joint accelerations
     ddq_old = ddq;
-    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
+    ddq = pinv(M)*(tau - (C*dq)- G);
         
     % Tustin integration
     dq_old = dq;
@@ -229,7 +225,7 @@ for i=1:length(t)
     q = q + (dq + dq_old) * delta_t /2;
     
     % Store result for the final plot
-    results_computed_torque2(index,:) = q;
+    results_computed_torque2(:, index) = q;
     index = index + 1;
 
 end
@@ -240,10 +236,10 @@ num_of_joints = size(KUKA.links, 2);
 figure
 for j=1:num_of_joints
     subplot(4,2,j);
-    plot(t(1:length(t)),results_computed_torque1(1:length(t),j))
+    plot(t(1:length(t)),results_computed_torque1(j, 1:length(t)))
     hold on
-    plot (t,q_des(j,1:length(t)))
-    plot(t(1:length(t)),results_computed_torque2(1:length(t),j))
+    plot (t,q_des(j, 1:length(t)))
+    plot(t(1:length(t)),results_computed_torque2(j, 1:length(t)))
     legend ('Computed Torque','Desired angle', 'Computed Torque with wrong estimation')
     grid;
 end
@@ -259,35 +255,41 @@ end
 
 % 
 % Gain circumference parameters matrix
-Kp = 0.1*diag([1 1 1 1 1 ]);
+% Kp = 0.1*diag([1 1 1 1 1 ]);
 %% Trajectory tracking: Backstepping control good parameter estimation
-
+Mat = 1;
 results_backstepping1 = q0;
 index = 1;
 q = q0;
 dq = q_dot0;
-ddq = [0 0 0 0 0 ];
+ddq = [0 0 0 0 0]';
 for i=1:length(t)
 
-   % Error and derivate of the error   
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
+   % Error and derivate of the error
+   
+   q_ref = q;
+   dq_ref = dq;
+   ddq_ref = ddq;
+   
+   err = q_des(:,i) - q_ref;
+   derr = dq_des(:,i) - dq_ref;
     
-    dqr = transpose(dq_des(:,i)) + err*(Kp);
-    ddqr = transpose(ddq_des(:,i)) + derr*(Kp);
-    s = derr + err*(Kp');
+   dq_ref = dq_des(:,i) + Mat*err;
+   ddq_ref = ddq_des(:,i) + Mat*derr;
+   % s = dq_ref - dq;
+   s = derr + Mat*err;
      
     %Get dynamic matrices
-	M = KUKAmodel.inertia(q); 
-    C = KUKAmodel.coriolis(q,dq); 
-    G = KUKAmodel.gravload(q); 
+	M = KUKAmodel.inertia(q'); 
+    C = KUKAmodel.coriolis(q',dq'); 
+    G = KUKAmodel.gravload(q'); 
 
     % Backstepping Controller
-    tau = (M*(ddqr') + C*(dqr') + G' + Kp*(s') + err')';        
+    tau = M*(ddq_ref) + C*(dq_ref) + G + Mat*(s) + err;        
     
     % Robot joint accelerations
     ddq_old = ddq;
-    ddq = (pinv(M)*(tau - (C*(dq'))'- G)')';
+    ddq = pinv(M)*(tau - C*dq- G);
         
     % Tustin integration
     dq_old = dq;
@@ -295,39 +297,44 @@ for i=1:length(t)
     q = q + (dq + dq_old) * delta_t /2;
     
     % Store result for the final plot
-    results_backstepping1(index,  :) = q;
+    results_backstepping1(:, index) = q;
     index = index + 1;
 end
  %% Trajectory tracking: Backstepping control wrong parameter estimation
 % Good Circumference parameters
-Kp = 0.1* diag([1 5 5 5 1 ]);
+Kp = 0.1* diag([1 5 5 5 1]);
 
 results_backstepping2 = q0;
 index = 1;
 q = q0;
 dq = q_dot0;
-ddq = [0 0 0 0 0 ];
+ddq = [0 0 0 0 0]';
 for i=1:length(t)
-
-   % Error and derivate of the error   
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
+	% prima fase: controllo velocità ai giunti dqr
+	% Error and derivate of the error   
     
-    dqr = transpose(dq_des(:,i)) + err*(Kp);
-    ddqr = transpose(ddq_des(:,i)) + derr*(Kp);
-    s = derr + err*(Kp');
-     
+	q_ref = q;
+	dq_ref = dq;
+	ddq_ref = ddq;
+	
+	err = q_des(:,i) - q_ref;
+    derr = dq_des(:,i) - dq_ref;
+    
+    dqr = dq_des(:,i) + Mat*err;
+    ddqr = ddq_des(:,i) + Mat*derr;
+    s = derr + Mat*err;
+  
     %Get dynamic matrices
 	M1 = KUKAmodel.inertia(q); 
     C1 = KUKAmodel.coriolis(q,dq); 
     G1 = KUKAmodel.gravload(q); 
 
     % Backstepping Controller
-    tau = (M1*(ddqr') + C1*(dqr') + G' + Kp*(s') + err')';        
+    tau = M1*(ddq_ref) + C1*(dq_ref) + G + Mat*(s) + err;        
     
     % Robot joint accelerations
     ddq_old = ddq;
-    ddq = (pinv(M)*(tau - (C*(dq'))'- G)')';
+    ddq = pinv(M)*(tau - C*(dq)- G);
         
     % Tustin integration
     dq_old = dq;
@@ -335,20 +342,20 @@ for i=1:length(t)
     q = q + (dq + dq_old) * delta_t /2;
     
     % Store result for the final plot
-    results_backstepping2(index,  :) = q;
+    results_backstepping2(:, index) = q;
     index = index + 1;
 end
 %% Plot backstepping results for trajectory tracking
 %save('backstepping_NO_adaptive','results_backstepping1','results_backstepping2','q_des')
 %load('backstepping_NO_adaptive.mat')
-num_of_joints = 5;
+num_of_joints = size(KUKA.links, 2);
 figure
 for j=1:num_of_joints
     subplot(4,2,j);
-    plot(t(1:length(t)), results_backstepping1(1:10001,j))
+    plot(t(1:length(t)), results_backstepping1(j, 1:length(t)))
     hold on
     plot (t,q_des(j,1:length(t)))
-    plot(t(1:length(t)), results_backstepping2(1:length(t),j))
+    plot(t(1:length(t)), results_backstepping2(j, 1:length(t)))
     legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
     grid;
 end
@@ -356,151 +363,140 @@ end
 KUKA.plot(q_des(:,1:50:end)','trail','black')
 	case 3
 %% ---------------------BACKSTEPPING_ADAPTIVE------------------------------
-%% Trajectory Tracking:Backstepping Method
-n = 5;
-for j = 1:n 
-    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
-end
-q = zeros(length(t),n); 
-q_dot = zeros(length(t),n); 
-tau = zeros(length(t),n); 
-piArray = zeros(length(t),n*10); % vettore dei parametri dinamici 
-q0 = [0 pi/2 -pi/2 0 0] + pi/6*[0.3 0.4 0.2 0.8 0] - pi/12; % partiamo in una posizione diversa da quella di inizio traiettoria
-q(1,:) = q0; 
-q_dot(1,:) = q_dot0; 
+%% Perturbazione iniziale dei parametri
+% 	q_des = q_des';
+% 	dq_des  = dq_des';
+% 	ddq_des = ddq_des';
+	int = 2.5; % intensità percentuale della perturbazione sui parametri
+	n = size(KUKA.links, 2);
+	for j = 1:n 
+		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
+	end
+%% Simulazione
+q = zeros(n, length(t)); 
+q_dot = zeros(n, length(t)); 
+tau = zeros(n, length(t)); 
+piArray = zeros(length(t), n*10); % vettore dei parametri dinamici 
+q0 = ([0 pi/2 -pi/2 0 0] + pi/6*[0.3 0.4 0.2 0.8 0] - pi/12)'; % partiamo in una posizione diversa da quella di inizio traiettoria
+q(:, 1) = q0; 
+q_dot(:, 1) = q_dot0; 
 
-qr_dot = zeros(length(t),n); 
-qr_ddot = zeros(length(t),n); 
+q_ref_dot = zeros(n, length(t)); 
+q_ref_ddot = zeros(n, length(t)); 
 
-pi0 = zeros(1,n*10);
+pi0 = zeros(1,n*10); 
 for j = 1:n
     pi0((j-1)*10+1:j*10) = [KUKAmodel.links(j).m KUKAmodel.links(j).m*KUKAmodel.links(j).r ...
         KUKAmodel.links(j).I(1,1) 0 0 KUKAmodel.links(j).I(2,2) 0 KUKAmodel.links(j).I(3,3)];
 end
-n = 5;
-piArray(1,:) = pi0;
-for j = 1:n 
-    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
-end
-% Gain circumference parameters matrix
-Kd = 0.1*diag([200 200 200 20 1]);
+piArray(1,:) = pi0; 
+
 Kp = 1*diag([200 200 200 20 10]);
+Kv = 0.1*diag([200 200 200 10 1]); 
+Kd = 0.1*diag([200 200 200 20 1]);
+
 % P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
 R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
 P = 0.01*eye(10);
 lambda = diag([200, 200, 200, 200, 200])*0.03;
-%% calcolo q
-% for i = 2:length(t)
-    %% Interruzione della simulazione se q diverge
+
+
+
+tic
+for i = 2:length(t)
+%% Interruzione della simulazione se q diverge
     if any(isnan(q(i-1,:)))
         fprintf('Simulazione interrotta! \n')
         return
+	end
+	
+%% Calcolo dell'errore: e, e_dot
+    e = q_des(:, i-1) - q(:, i-1); 
+    e_dot = dq_des(:, i-1) - q_dot(:, i-1); 
+    s = (e_dot + e*lambda);
+    
+    q_ref_dot(:, i-1) = dq_des(:, i-1) + e*lambda;
+    if (i > 2)
+        q_ref_ddot(:, i-1) = (q_ref_dot(:, i-1) - q_ref_dot(:, i-2)) / delta_t;
+	end
+	
+	for j = 1:n 
+		KUKAmodel.links(j).m = piArray(i-1,(j-1)*10+1); % elemento 1 di pi
+	end
+	Mtilde = KUKAmodel.inertia(q(:, i-1)'); 
+    Ctilde = KUKAmodel.coriolis(q(:, i-1)',q_dot(:, i-1)'); 
+    Gtilde = KUKAmodel.gravload(q(:, i-1)'); 
+	tau(:, i) = Mtilde*q_ref_ddot(:, i-1) + Ctilde*q_ref_dot(:, i-1) + Gtilde + Kd*s + Kp*e;
+	%% Dinamica del manipolatore (reale)
+    % entrano tau, q e q_dot, devo calcolare M, C e G e ricavare q_ddot
+    % integro q_ddot due volte e ricavo q e q_dot
+    M = KUKA.inertia(q(:, i-1)'); 
+    C = KUKA.coriolis(q(:, i-1)',q_dot(:, i-1)'); 
+    G = KUKA.gravload(q(:, i-1)'); 
+    
+    q_ddot = pinv(M)*(tau(:, i) - C*q_dot(:, i-1) - G); 
+    
+    q_dot(:, i) = q_dot(:, i-1) + delta_t*q_ddot; 
+    q(:, i) = q(:, i-1) + delta_t*q_dot(:, i);
+	 %% Dinamica dei parametri
+	q1 = q(1, i); q2 = q(2, i); q3 = q(3, i); q4 = q(4, i); q5 = q(5, i);
+	q1_dot = q_dot(1, i); q2_dot = q_dot(2, i); q3_dot = q_dot(3, i); 
+	q4_dot = q_dot(4, i); q5_dot = q_dot(5, i);
+
+	qd1_dot = dq_des(1, i); qd2_dot = dq_des(2, i); qd3_dot = dq_des(3, i);
+	qd4_dot = dq_des(4, i); qd5_dot = dq_des(5, i);
+
+	qd1_ddot = ddq_des(1, i); qd2_ddot = ddq_des(2, i); qd3_ddot = ddq_des(3, i); 
+	qd4_ddot = ddq_des(4, i); qd5_ddot = ddq_des(5, i);
+	g = 9.81;
+
+	regressore;
+	piArray_dot = (R^(-1) * Y' * s)';  
+    piArray(i,:) = piArray(i-1,:) + delta_t*piArray_dot;
+	%% Progresso Simulazione
+    if mod(i,100) == 0
+        
+        fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
+        hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
+        fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
+            hms(1),hms(2),hms(3));
     end
-%% Backstepping with correct estimation
-results_computed_torque1 = q0;
-index = 1;
-q = q0;
-dq = q_dot0;
-ddq = [0 0 0 0 0 ];
-for i=1:length(t)
-
-   % Error and derivate of the error  
-   
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
     
-%     %Get dynamic matrices
-
-    M = KUKA.inertia(q); 
-    C = KUKA.coriolis(q,dq); 
-    G = KUKA.gravload(q); 
-    
-    tau = ( M*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C)' + G' )';
-      
-    % Robot joint accelerations
-    ddq_old = ddq;
-    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
-        
-    % Tustin integration
-    dq_old = dq;
-    dq = dq + (ddq_old + ddq) * delta_t / 2;
-    q = q + (dq + dq_old) * delta_t /2;
-    
-    % Store result for the final plot
-    results_computed_torque1(index,:) = q;
-    index = index + 1;
-
-end
-%% Backstepping with wrong estimation
-results_computed_torque2 = q0;
-index = 1;
-q = q0;
-dq = q_dot0;
-ddq = [0 0 0 0 0 ];
-for i = 1:length(t)
-
-   % Error and derivate of the error   
-    err = transpose(q_des(:,i)) - q;
-    derr = transpose(dq_des(:,i)) - dq;
-    
-%     %Get dynamic matrices
-    M1 = KUKAmodel.inertia(q); 
-    C1 = KUKAmodel.coriolis(q,dq); 
-    G1 = KUKAmodel.gravload(q); 
-    
-    %% BackStepping Controller with wrong estimation'
-    
-    tau = ( M1*(ddq_des(:,i) + Kv*(derr') + Kp*(err')) + (dq*C1)' + G1' )';
-      
-    % Robot joint accelerations
-    ddq_old = ddq;
-    ddq = (pinv(M)*(tau' - (dq*C)'- G'))';
-        
-    % Tustin integration
-    dq_old = dq;
-    dq = dq + (ddq_old + ddq) * delta_t / 2;
-    q = q + (dq + dq_old) * delta_t /2;
-    
-    % Store result for the final plot
-    results_computed_torque2(index,:) = q;
-    index = index + 1;
-
 end
 %% Plot backstepping results for trajectory tracking
 %save('backstepping_adaptive','results_backstepping1','results_backstepping2','q_des')
 %load('backstepping_adaptive.mat')
-num_of_joints = 5;
-figure
-for j=1:num_of_joints
-    subplot(4,2,j);
-    plot(t(1:10001), results_backstepping1(1:10001,j))
-    hold on
-    plot (t,q_des(j,1:length(t)))
-    plot(t(1:10001), results_backstepping2(1:10001,j))
-    legend ('BackStepping','Desired angle', 'BackStepping with wrong estimation')
-    grid;
-end
+% num_of_joints = 5;
+% figure
+% for j=1:num_of_joints
+%     subplot(4,2,j);
+%     plot(t(1:10001), q(1:10001,j))
+%     hold on
+%     plot (t,q_des(j,1:length(t)))
+%     legend ('BackStepping_adattivo','Desired angle')
+%     grid;
+% end
 	case 4
 %%---------------------COMPUTED_TORQUE_ADAPTIVE---------------------------
 %%	Perturbazione iniziale dei parametri
-	n = 5;
+	n = size(KUKA.links, 2);
 	int = 2.5; % intensità percentuale della perturbazione sui parametri
 	for j = 1:n 
 		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
 	end
-	q_des = q_des';
-	dq_des  = dq_des';
-	ddq_des = ddq_des';
-	q = zeros(length(t),n);
-	q_dot = zeros(length(t),n); 
-	tau = zeros(length(t),n); 
+% 	q_des = q_des';
+% 	dq_des  = dq_des';
+% 	ddq_des = ddq_des';
+	q = zeros(n, length(t));
+	q_dot = zeros(n, length(t)); 
+	tau = zeros(n, length(t)); 
 	piArray = zeros(length(t),n*10); % vettore dei parametri dinamici 
-	q0 = [0 pi/2 -pi/2 0 0] + pi/6*[0.3 0.4 0.2 0.8 0] - pi/12; % partiamo in una posizione diversa da quella di inizio traiettoria
-	q(1,:) = q0; 
-	q_dot(1,:) = q_dot0; 
+	q0 = ([0 pi/2 -pi/2 0 0] + pi/6*[0.3 0.4 0.2 0.8 0] - pi/12)'; % partiamo in una posizione diversa da quella di inizio traiettoria
+	q(:, 1) = q0; 
+	q_dot(:, 1) = q_dot0; 
 
-	qr_dot = zeros(length(t),n); 
-	qr_ddot = zeros(length(t),n); 
+	q_ref_dot = zeros(n, length(t)); 
+	q_ref_ddot = zeros(n, length(t)); 
 
 	pi0 = zeros(1,n*10); 
 	for j = 1:n
@@ -520,54 +516,54 @@ end
 	tic
 	for i = 2:length(t)
 %% Interruzione della simulazione se q diverge
-		if any(isnan(q(i-1,:)))
+		if any(isnan(q(:, i-1)))
 			fprintf('Simulazione interrotta! \n')
 			return
 		end
 %% Calcolo dell'errore: e, e_dot
-		e = q_des(i-1,:) - q(i-1,:); 
-		e_dot = dq_des(i-1,:) - q_dot(i-1,:); 
+		e = q_des(:, i-1) - q(:, i-1); 
+		e_dot = dq_des(:, i-1) - q_dot(:, i-1); 
 		s = (e_dot + e*lambda);
 
-		qr_dot(i-1,:) = dq_des(i-1,:) + e*lambda;
+		q_ref_dot(:, i-1) = dq_des(:, i-1) + e*lambda;
 		if (i > 2)
-			qr_ddot(i-1,:) = (qr_dot(i-1) - qr_dot(i-2)) / delta_t;
+			q_ref_ddot(:, i-1) = (q_ref_dot(:, i-1) - q_ref_dot(:, i-2)) / delta_t;
 		end
 %% Calcolo della coppia (a partire dal modello)
 		for j = 1:n
             KUKAmodel.links(j).m = piArray(i-1,(j-1)*10+1); % elemento 1 di pi
 		 end
-		Mtilde = KUKAmodel.inertia(q(i-1,:)); 
-		Ctilde = KUKAmodel.coriolis(q(i-1,:),q_dot(i-1,:)); 
-		Gtilde = KUKAmodel.gravload(q(i-1,:)); 
-		tau(i,:) = ddq_des(i-1,:)*Mtilde' + q_dot(i-1,:)*Ctilde' + Gtilde + e_dot*Kv' + e*Kp'; 
+		Mtilde = KUKAmodel.inertia(q(:, i-1)'); 
+		Ctilde = KUKAmodel.coriolis(q(:, i-1)',q_dot(:, i-1)'); 
+		Gtilde = KUKAmodel.gravload(q(:, i-1)'); 
+		tau(:, i) = Mtilde*ddq_des(:, i-1) + Ctilde*q_dot(:, i-1) + Gtilde + Kv*e_dot + Kp*e; 
 %% Dinamica del manipolatore (reale)
 		% entrano tau, q e q_dot, devo calcolare M, C e G e ricavare q_ddot
 		% integro q_ddot due volte e ricavo q e q_dot
-		M = KUKA.inertia(q(i-1,:)); 
-		C = KUKA.coriolis(q(i-1,:),q_dot(i-1,:)); 
-		G = KUKA.gravload(q(i-1,:)); 
+		M = KUKA.inertia(q(:, i-1)'); 
+		C = KUKA.coriolis(q(:, i-1)',q_dot(:, i-1)'); 
+		G = KUKA.gravload(q(:, i-1)'); 
 
-		q_ddot = (tau(i,:) - q_dot(i-1,:)*C' - G) * (M')^(-1); 
+		q_ddot = pinv(M)*(tau(:, i) - C*q_dot(:, i-1) - G); 
 
-		q_dot(i,:) = q_dot(i-1,:) + delta_t*q_ddot; 
-		q(i,:) = q(i-1,:) + delta_t*q_dot(i,:); 
+		q_dot(:, i) = q_dot(:, i-1) + delta_t*q_ddot; 
+		q(:, i) = q(:, i-1) + delta_t*q_dot(:, i); 
 %% Dinamica dei parametri
-        q1 = q(i,1); q2 = q(i,2); q3 = q(i,3); q4 = q(i,4); q5 = q(i,5);
+        q1 = q(1, i); q2 = q(2, i); q3 = q(3, i); q4 = q(4, i); q5 = q(5, i);
 
-        q1_dot = q_dot(i,1); q2_dot = q_dot(i,2); q3_dot = q_dot(i,3); 
-        q4_dot = q_dot(i,4); q5_dot = q_dot(i,5);
+        q1_dot = q_dot(1, i); q2_dot = q_dot(2, i); q3_dot = q_dot(3, i); 
+        q4_dot = q_dot(4, i); q5_dot = q_dot(5, i);
 
-        qd1_dot = dq_des(i,1); qd2_dot = dq_des(i,2); qd3_dot = dq_des(i,3);
-        qd4_dot = dq_des(i,4); qd5_dot = dq_des(i,5);
+        qd1_dot = dq_des(1, i); qd2_dot = dq_des(2, i); qd3_dot = dq_des(3, i);
+        qd4_dot = dq_des(4, i); qd5_dot = dq_des(5, i);
 
-        qd1_ddot = ddq_des(i,1); qd2_ddot = ddq_des(i,2); qd3_ddot = ddq_des(i,3); 
-        qd4_ddot = ddq_des(i,4); qd5_ddot = ddq_des(i,5);
+        qd1_ddot = ddq_des(1, i); qd2_ddot = ddq_des(2, i); qd3_ddot = ddq_des(3, i); 
+        qd4_ddot = ddq_des(4, i); qd5_ddot = ddq_des(5, i);
 
         g = 9.81;
 
         regressore;
-		piArray_dot = ( R^(-1) * Y' * (Mtilde')^(-1) * [zeros(n) eye(n)] * P * [e e_dot]' )'; 
+		piArray_dot = ( R^(-1) * Y' * (Mtilde')^(-1) * [zeros(n) eye(n)] * P * [e; e_dot] )'; 
         piArray(i,:) = piArray(i-1,:) + delta_t*piArray_dot; 
 %% Progresso Simulazione 
 		if mod(i,100) == 0

@@ -21,7 +21,6 @@ franka.plotopt = {	'workspace',[-1,1,-1,1,0,1.5],...
 % qualche configurazione iniziale, utile per dopo
 qv1 = qv;
 qv1(6) = pi/2;
-
 %% Setup e parametri
 
 t_in	= 0;	% [s]
@@ -41,7 +40,6 @@ pos1 = franka.fkine(qv1);
 
 % parametri curve
 r = 0.1; % raggio del cerchio
-
 %% parto dalla posizione iniziale pos0, raggiungo pos1 
 
 % Per prima cosa vi è la necessità di passare da una configurazione
@@ -279,7 +277,7 @@ ddq = [0 0 0 0 0 0 0]';
 
 for i=1:size(q_des,2)
 	% prima fase: controllo velocità ai giunti dqr
-   % Error and derivate of the error 
+	% Error and derivate of the error 
    
    q_ref = q;
    dq_ref = dq;

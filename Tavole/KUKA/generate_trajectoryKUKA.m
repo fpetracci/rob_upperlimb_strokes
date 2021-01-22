@@ -10,11 +10,11 @@ function [q] = generate_trajectoryKUKA(xi,q0, KUKA, dt)
 	
     xi_dot= gradient(xi)/delta_t;
 
-    q_dot=zeros(m, length(xi)+1);
-    q=zeros(m, length(xi)+1);
+    q_dot = zeros(m, length(xi)+1);
+    q = zeros(m, length(xi)+1);
 
     q(:,1)=q0;
-    q_old = q0';
+    q_old = q0;
 
     J=KUKA.jacob0(q_old);
     q_dot(:,1)=pinv(J)*xi_dot(1:6,1);
