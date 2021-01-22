@@ -46,8 +46,8 @@ L = 5;             % number of harmonics
 N = 5;             % number of joints
 Tr = 2;            % number of exciting trajectories to be generated
 T = 1;             % total time for velocity rising and falling [s]
-dt = 0.01;         % trajectory sampling rate [s]
-Trj_duration = 20; % trajectory duration unless T [s]
+dt = 0.001;         % trajectory sampling rate [s]
+Trj_duration = 10; % trajectory duration unless T [s]
 
 a_k_l = zeros(N,L,Tr);
 b_k_l = zeros(N,L,Tr);
@@ -57,7 +57,7 @@ B = zeros(N,1);
 
 %% Generation of time dipendent trajectories for each joint
 
-tt = 0:dt:Trj_duration + T;
+tt = 0:dt:Trj_duration ;
 tr = 1;
 while tr <= Tr
     j=1;

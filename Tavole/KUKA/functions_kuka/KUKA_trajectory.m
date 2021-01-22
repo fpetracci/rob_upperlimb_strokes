@@ -4,9 +4,10 @@
 fprintf('Choose trajectory by typing the number associated: \n');
 fprintf('1: Circumference \n');
 fprintf('2: Helix \n');
+fprintf('3: Triettoria eccitante \n');
 traj_choice = input('');
 
-if traj_choice ~= 1 && traj_choice ~= 2
+if traj_choice ~= 1 && traj_choice ~= 2 && traj_choice ~= 3
 	error('Trajectory Number inserted is not supported')
 end
 
@@ -134,6 +135,18 @@ switch traj_choice
 		KUKA.plot(q_des(:,1:50:end)')
 		
 	case 3
-	%% clotoide
-
+	q0 = [0 pi/2 pi/2 pi/2 0]';
+    q_dot0 = [0 0 0 0 0]';
+	load('traiettorie eccitanti.mat')
+	q_des = q(:,:,1);
+	dq_des = dq(:,:,1);
+	ddq_des = ddq(:,:,1);
+	
+	% matrices initialization
+	t_in = 0; % [s]
+	t_fin = 10; % [s]
+	delta_t = (t_fin-t_in)/length(q); % [s]
+	timeSpan= 10;
+	clear q dq ddq
+	t = t_in:delta_t:t_fin;
 end
