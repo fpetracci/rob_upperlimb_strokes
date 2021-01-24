@@ -2,7 +2,7 @@
 f_width		= 650;
 f_heigth	= 650;
 dim_font	= 13;
-
+tail_cut	= 0;
 % set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 % set(findall(gcf,'type','text'),'FontSize', dim_font)           
 % set(gca,'FontSize', dim_font) 
@@ -22,11 +22,11 @@ figure(2)
 clf;
 for j=1:num_of_joints
     subplot(3,2,j);
-    plot(t(1:length(t)),results.q(j, 1:length(t))*180/pi, 'DisplayName', results.name)
+    plot(t(1:length(t)-tail_cut),results.q(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.name)
     hold on
-    plot(t,q_des(j, 1:length(t))*180/pi, 'DisplayName', 'Desired angle')
+    plot(t(1:length(t)-tail_cut), q_des(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', 'Desired angle')
 	if isfield(results,'model_wr')
-		plot(t(1:length(t)),results.model_wr.q(j, 1:length(t))*180/pi, 'DisplayName', results.model_wr.name)
+		plot(t(1:length(t)-tail_cut),results.model_wr.q(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.model_wr.name)
 	end
     grid on
 	axis tight
@@ -48,7 +48,7 @@ figure(3)
 clf;
 for j=1:num_of_joints
     subplot(3,2,j);
-    plot(t(1:length(t)),results.tau(j, 1:length(t))*180/pi, 'DisplayName', results.name)
+    plot(t(1:length(t)-tail_cut),results.tau(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.name)
     hold on
 	grid on
 	axis tight
@@ -72,9 +72,9 @@ if controller == 2 || controller == 4
 	clf
 	for j=1:num_of_joints
 		subplot(3,2,j);
-		plot(t(1:length(t)),results.piArray((j-1)*10 + 1, :), 'DisplayName', results.name)
+		plot(t(1:length(t)-tail_cut),results.piArray((j-1)*10 + 1, 1 : (end - tail_cut)), 'DisplayName', results.name)
 		hold on
-		plot(t(1:length(t)),ones(size(t)) * KUKA.links(j).m, 'DisplayName', 'Real Mass')
+		plot(t(1:length(t)-tail_cut),ones(size(t, 2)-tail_cut, 1) * KUKA.links(j).m, 'DisplayName', 'Real Mass')
 		grid on
 		% xlim([0 t(end)])
 		xlabel('Time [s]')
@@ -110,9 +110,9 @@ if controller == 2 || controller == 4
 					ine_pos = 10;
 					title_str = 'I_{z,z}';
 			end
-			plot(t(1:length(t)),results.piArray((j-1)*10 + ine_pos, :), 'DisplayName', results.name)
+			plot(t(1:length(t) - tail_cut),results.piArray((j-1)*10 + ine_pos, (1 : end - tail_cut)), 'DisplayName', results.name)
 			hold on
-			plot(t(1:length(t)),ones(size(t)) * KUKA.links(j).I(ii,ii), 'DisplayName', 'Real Inertia')
+			plot(t(1:length(t) - tail_cut),ones(size(t, 2)-tail_cut, 1) * KUKA.links(j).I(ii,ii), 'DisplayName', 'Real Inertia')
 			grid on
 			xlim([0 t(end)])
 			xlabel('Time [s]')
@@ -136,7 +136,7 @@ end
 %% Video
 
 fr_skip = ceil(length(results.q)/250);
-q_plot = results.q(:,1:fr_skip:length(results.q));
+q_plot = results.q(:,1:fr_skip:(length(results.q) - tail_cut));
 
 robot_gen_movie(KUKA, q_plot, 1, 1, 0, [results.name traj_str], [0,0], [-45, 12])
 

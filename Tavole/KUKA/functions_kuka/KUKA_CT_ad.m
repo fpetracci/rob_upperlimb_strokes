@@ -2,21 +2,22 @@
 %% Init per simulazione adaptive
 
 % joints
-n = size(KUKA.links, 2);
-results_q = zeros(n, length(t));	% angles for export
-results_dq = zeros(n, length(t));	% dangles for export
-results_ddq = zeros(n, length(t));	% ddangles for export
-q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
-q = q0;								% joint angle vector	
-dq = q_dot0;						% joint dangle vector
-ddq = [0 0 0 0 0]';					% joint ddangle vector
+n			= size(KUKA.links, 2);
+results_q	= zeros(n, length(t));			% angles for export
+results_dq	= zeros(n, length(t));			% dangles for export
+results_ddq = zeros(n, length(t));			% ddangles for export
+q0			= [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
+q			= q0;							% joint angle vector	
+dq			= q_dot0;						% joint dangle vector
+ddq			= [0 0 0 0 0]';					% joint ddangle vector
 
 % tau
-tau_save = zeros(n, length(t));		% torques vector for export
-soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
+tau_save	= zeros(n, length(t));			% torques vector for export
+soglia_sat	= Inf;							% soglia di saturazione (Inf, no sat)
 	
 % pi vettore dei parametri dinamici 
-piArray = zeros(n*10, length(t)); 
+piArray		= zeros(n*10, length(t));
+
 	% each column of pi contains for all joints:
 	% 1.	mass
 	% 2.	mass * x of Center Of Gravity
@@ -39,13 +40,13 @@ piArray(:, 1) = pi0;
 
 % gains
 Kp = 1*diag([200 200 200 200 100]);		% e
-Kv = 0.1*diag([200 200 200 100 100]);		% e_dot
+Kv = 0.1*diag([200 200 200 100 100]);	% e_dot
 % 	Kd = 0.1*diag([200 200 200 20 1]);
  
 % P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
-R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
+R	= diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
 % P = 0.005*eye(10);
-P = 0.005 * eye(10);
+P	= 0.005 * eye(10);
 	% code stuff
 index = 1;
 

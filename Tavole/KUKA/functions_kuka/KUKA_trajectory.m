@@ -96,7 +96,7 @@ switch traj_choice
         helix_step	= 0.2;
 		
 		% quante volte gliela facciamo fare
-		nrep = 3.5;
+		nrep = 3.4;
 		
 %       Fast Trajectory
         x		= center(1) + radius * cos(nrep * t/t(end)*2*pi);
@@ -130,9 +130,9 @@ switch traj_choice
 		q0		= [0 pi/2 pi/2 pi/2 0]';
 		q_dot0	= [0 0 0 0 0]';
 		load('traiettorie eccitanti.mat')
-		q_des	= q(:,:,1);
-		dq_des	= dq(:,:,1);
-		ddq_des = ddq(:,:,1);
+		q_des	= q(:, :, 1);
+		dq_des	= dq(:, :, 1);
+		ddq_des = ddq(:, :, 1);
 	
 	% matrices initialization
 		t_in	= 0; % [s]
