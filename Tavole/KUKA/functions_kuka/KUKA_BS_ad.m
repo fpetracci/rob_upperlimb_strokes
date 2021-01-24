@@ -1,6 +1,9 @@
 %% ---------------------BACKSTEPPING_ADAPTIVE------------------------------
 %% Init per simulazione adaptive
 
+% choice if also compute wrong CT (1 if yes)
+wr = 0;
+
 % joints
 n = size(KUKA.links, 2);			% number of joints
 results_q = zeros(n, length(t));	% angles for export
@@ -114,6 +117,7 @@ for i = 1:length(t)
 	if i<length(t)
 		piArray(:, i+1) = piArray(:, i) + delta_t*piArray_dot;
 	end
+	
 	%% Progresso Simulazione
     if mod(i,100) == 0
         
@@ -125,94 +129,95 @@ for i = 1:length(t)
     
 end
 
-%% Init Simulazione "Sbagliata" _wr
+ %% Init Simulazione "Sbagliata" _wr
 
-% joints
-results_q_wr = zeros(n, length(t));	% angles for export
-results_dq_wr = zeros(n, length(t));	% dangles for export
-results_ddq_wr = zeros(n, length(t));	% ddangles for export
-q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
-q = q0;								% joint angle vector	
-dq = q_dot0;						% joint dangle vector
-ddq = [0 0 0 0 0]';					% joint ddangle vector
-
-% tau
-tau_save_wr = zeros(n, length(t));		% torques vector for export
-
-% gains
-lambda = diag([5 0.8 0.5 0.3 0.3]);
-
-% code stuff
-index = 1;
-
-%% Simulazione "Sbagliata" _wr
-tic
-for i=1:length(t)
-	% Interruzione della simulazione se q diverge
-    if any(isnan(q)) && (i ~= 1)
-        fprintf('Simulazione interrupted! \n')
-        break
-	end
+ if wr == 1
+	% joints
+	results_q_wr = zeros(n, length(t));	% angles for export
+	results_dq_wr = zeros(n, length(t));	% dangles for export
+	results_ddq_wr = zeros(n, length(t));	% ddangles for export
+	q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
+	q = q0;								% joint angle vector	
+	dq = q_dot0;						% joint dangle vector
+	ddq = [0 0 0 0 0]';					% joint ddangle vector
 	
-	%% Calcolo dell'errore: e, e_dot
-	q_ref = q;
-	dq_ref = dq;
-	ddq_ref = ddq;
-
-	err = q_des(:, i) - q_ref; 
-    derr = dq_des(:, i) - dq_ref; 
-    
-    dq_ref = dq_des(:, i) + lambda*err;
-	ddq_ref = ddq_des(:,i) + lambda*derr;
-	s = derr + lambda*err;
-
-	%% Dinamica del manipolatore
-    % entrano tau, q e dq, devo calcolare M, C e G e ricavare q_ddot
-    % integro q_ddot due volte e ricavo q e dq
-	M = (KUKAmodel.inertia(q'))'; 
-	C = (KUKAmodel.coriolis(q',dq'))'; 
-	G = (KUKAmodel.gravload(q'))'; 
-
-	% Backstepping Controller
-	tau = M*(ddq_ref) + C*(dq_ref) + G + lambda*(s) + err;        
-% 	% saturazione tau
-	for j = 1:n
-		if tau(j) > soglia_sat
-			tau(j) = soglia_sat;
-		elseif tau(j) < -soglia_sat
-			tau(j) = -soglia_sat;
+	% tau
+	tau_save_wr = zeros(n, length(t));		% torques vector for export
+	
+	% gains
+	lambda = diag([5 0.8 0.5 0.3 0.3]);
+	
+	% code stuff
+	index = 1;
+ 
+ %% Simulazione "Sbagliata" _wr
+	tic
+	for i=1:length(t)
+		% Interruzione della simulazione se q diverge
+	    if any(isnan(q)) && (i ~= 1)
+	        fprintf('Simulazione interrupted! \n')
+	        break
+		end
+		
+		%% Calcolo dell'errore: e, e_dot
+		q_ref = q;
+		dq_ref = dq;
+		ddq_ref = ddq;
+	
+		err = q_des(:, i) - q_ref; 
+	    derr = dq_des(:, i) - dq_ref; 
+	    
+	    dq_ref = dq_des(:, i) + lambda*err;
+		ddq_ref = ddq_des(:,i) + lambda*derr;
+		s = derr + lambda*err;
+	
+		%% Dinamica del manipolatore
+	    % entrano tau, q e dq, devo calcolare M, C e G e ricavare q_ddot
+	    % integro q_ddot due volte e ricavo q e dq
+		M = (KUKAmodel.inertia(q'))'; 
+		C = (KUKAmodel.coriolis(q',dq'))'; 
+		G = (KUKAmodel.gravload(q'))'; 
+	
+		% Backstepping Controller
+		tau = M*(ddq_ref) + C*(dq_ref) + G + lambda*(s) + err;        
+	% 	% saturazione tau
+		for j = 1:n
+			if tau(j) > soglia_sat
+				tau(j) = soglia_sat;
+			elseif tau(j) < -soglia_sat
+				tau(j) = -soglia_sat;
+			end
+		end
+		
+		% Real model accelerations
+		ddq_old = ddq;
+		M = (KUKA.inertia(q'))'; 
+		C = (KUKA.coriolis(q',dq'))'; 
+		G = (KUKA.gravload(q'))'; 
+		ddq = pinv(M)*(tau - C*dq- G);
+	
+		% Tustin integration
+		dq_old = dq;
+		dq = dq + (ddq_old + ddq) * delta_t / 2;
+		q = q + (dq + dq_old) * delta_t /2;
+	
+		%% store result for the final plot
+	    results_q_wr(:, index) = q;
+		results_dq_wr(:, index) = dq;
+		results_ddq_wr(:, index) = ddq;
+		tau_save_wr(:, index)= tau;
+	    index = index + 1;
+		
+		%% Progresso Simulazione
+	    if mod(i,100) == 0
+	        
+	        fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
+	        hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
+	        fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
+	            hms(1),hms(2),hms(3));
 		end
 	end
-	
-	% Real model accelerations
-	ddq_old = ddq;
-	M = (KUKA.inertia(q'))'; 
-	C = (KUKA.coriolis(q',dq'))'; 
-	G = (KUKA.gravload(q'))'; 
-	ddq = pinv(M)*(tau - C*dq- G);
-
-	% Tustin integration
-	dq_old = dq;
-	dq = dq + (ddq_old + ddq) * delta_t / 2;
-	q = q + (dq + dq_old) * delta_t /2;
-
-	%% store result for the final plot
-    results_q_wr(:, index) = q;
-	results_dq_wr(:, index) = dq;
-	results_ddq_wr(:, index) = ddq;
-	tau_save_wr(:, index)= tau;
-    index = index + 1;
-	
-	%% Progresso Simulazione
-    if mod(i,100) == 0
-        
-        fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
-        hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
-        fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
-            hms(1),hms(2),hms(3));
-	end
-end
-
+ end	
 %% Export for plots
 
 if ~exist('results', 'var')
@@ -225,9 +230,11 @@ results.tau		= tau_save;
 results.piArray = piArray;
 results.name	= 'Adaptive BackStepping';
 
-results.model_wr		= struct();
-results.model_wr.q		= results_q_wr;
-results.model_wr.dq		= results_dq_wr;
-results.model_wr.ddq	= results_ddq_wr;
-results.model_wr.tau	= tau_save_wr;
-results.model_wr.name	= 'BackStepping Wrong Model';
+if wr == 1
+	results.model_wr		= struct();
+	results.model_wr.q		= results_q_wr;
+	results.model_wr.dq		= results_dq_wr;
+	results.model_wr.ddq	= results_ddq_wr;
+	results.model_wr.tau	= tau_save_wr;
+	results.model_wr.name	= 'BackStepping Wrong Model';
+end

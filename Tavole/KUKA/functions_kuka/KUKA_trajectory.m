@@ -126,19 +126,45 @@ switch traj_choice
 			KUKA.plot(q_des(:,1:50:end)')
 			
 	case 3 % traiettoria eccitante
+
+		% load('traiettorie eccitanti.mat')
+		% clear q dq ddq
 		
 		q0		= [0 pi/2 pi/2 pi/2 0]';
-		q_dot0	= [0 0 0 0 0]';
-		load('traiettorie eccitanti.mat')
-		q_des	= q(:, :, 1);
-		dq_des	= dq(:, :, 1);
-		ddq_des = ddq(:, :, 1);
-	
-	% matrices initialization
-		t_in	= 0; % [s]
-		t_fin	= 10; % [s]
-		delta_t = (t_fin-t_in)/length(q); % [s]
-		timeSpan= 10;
-		clear q dq ddq
-		t		= t_in:delta_t:t_fin;
+        q_dot0	= [0 0 0 0 0]';
+        
+        pos0	= KUKA.fkine(q0');
+
+        radius	= 0.1; % raggio della circonferenza [m]
+        center	= pos0(1:3,4) - [radius;0;0];
+        
+		% quante volte gliela facciamo fare
+		nrep = 5;
+		
+%       Fast Trajectory
+        x		= center(1) + radius * cos(nrep * t/t(end)*2*pi);
+        y		= center(2) * ones(size(x));
+        z		= center(3) + radius * sin(nrep * t/t(end)*2*pi);
+%       theta	= 0.5*sin(t/3*2*pi);
+       
+		% end effector orientation
+		theta	= zeros(size(x));
+        phi		= zeros(size(x));
+        psi		= zeros(size(x));
+
+        xi		= [x; y; z; theta; phi; psi]; 
+        
+        q_des	= generate_trajectoryKUKA(xi,q0,KUKA, delta_t);
+		q_des(1, :) = linspace(0, 2*pi, size(q_des(1, :), 2));
+        dq_des	= gradient(q_des)/delta_t;
+        ddq_des = gradient(dq_des)/delta_t;
+        
+        figure(1)
+			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
+			KUKA.plot(q0')
+			hold on
+			plot3(x,y,z,'b','Linewidth',1.5)
+			title('Desired trajectory: circumference')
+			view([-45, 20])
+			KUKA.plot(q_des(:,1:50:end)')
 end
