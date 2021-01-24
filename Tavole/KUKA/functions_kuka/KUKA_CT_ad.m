@@ -38,14 +38,14 @@ end
 piArray(:, 1) = pi0;
 
 % gains
-Kp = 1*diag([200 200 200 20 10]);
-Kv = 0.1*diag([200 200 200 10 1]); 
+Kp = 1*diag([200 200 200 200 100]);		% e
+Kv = 0.1*diag([200 200 200 100 100]);		% e_dot
 % 	Kd = 0.1*diag([200 200 200 20 1]);
  
 % P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
 R = diag(repmat([1e1 repmat(1e3,1,3) 1e2 1e7 1e7 1e2 1e7 1e2],1,n)); 
-P = 0.005*eye(10);
-	
+% P = 0.005*eye(10);
+P = 0.005 * eye(10);
 	% code stuff
 index = 1;
 
@@ -55,7 +55,7 @@ for i = 1:length(t)
 %% Interruzione della simulazione se q diverge
 		if any(isnan(q)) && (i ~= 1)
 			fprintf('Simulazione interrotta! \n')
-			return
+			break
 		end
 	%% Calcolo dell'errore: e, e_dot
 	% Error and derivate of the error  
@@ -68,7 +68,7 @@ for i = 1:length(t)
 		KUKAmodel.links(j).m = piArray((j-1)*10+1, i); % elemento 1 di pi
 		
 		% link inertia
-		KUKAmodel.links(1).I = diag([	piArray((j-1)*10+5, i), ...
+		KUKAmodel.links(j).I = diag([	piArray((j-1)*10+5, i), ...
 										piArray((j-1)*10+8, i), ...
 										piArray((j-1)*10+10, i) ]);
 	end
@@ -128,81 +128,81 @@ for i = 1:length(t)
 	end
 end
 
-%% Init per simulazione "sbagliata" _wr
-
-% joints
-n = size(KUKA.links, 2);			% number of joints
-results_q_wr = zeros(n, length(t));	% angles for export
-results_dq_wr = zeros(n, length(t));	% dangles for export
-results_ddq_wr = zeros(n, length(t));	% ddangles for export
-q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
-q = q0;								% joint angle vector	
-dq = q_dot0;						% joint dangle vector
-ddq = [0 0 0 0 0]';					% joint ddangle vector
-
-% tau
-tau_save_wr = zeros(n, length(t));		% torques vector for export
-soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
-
-% code stuff
-index = 1;
-
-% Gain circumference parameters matrix
-Kp = 20*diag([3 3 3 3 5]);
-Kv = 10*diag([1 1 1 1 1]);
-
-%% Simulazione "sbagliata" _wr
-tic
-
-for i=1:length(t)
-	% Interruzione della simulazione se q diverge
-	if any(isnan(q)) && (i ~= 1)
-	   fprintf('Simulazione interrupted! \n')
-	   return
-	end
-
-	% Error and derivate of the error  
-	err = q_des(:, i) - q;
-	derr = dq_des(:, i) - dq;
-   
-	%Get dynamic matrices
-	M = (KUKAmodel.inertia(q'))'; 
-	C = (KUKAmodel.coriolis(q', dq'))'; 
-	G = (KUKAmodel.gravload(q'))'; 
-    
-    tau = M*(ddq_des(:, i) + Kv*(derr) + Kp*(err)) + (C*dq) + G;
-      
-    % Robot joint accelerations
-	% Get "right" dynamic matrices
-	M = (KUKA.inertia(q'))'; 
-	C = (KUKA.coriolis(q', dq'))'; 
-	G = (KUKA.gravload(q'))'; 
-    ddq_old = ddq;
-    ddq = pinv(M)*(tau - (C*dq)- G);
-        
-    % Tustin integration
-    dq_old = dq;
-    dq = dq + (ddq_old + ddq) * delta_t / 2;
-    q = q + (dq + dq_old) * delta_t /2;
-    
-    % Store result for the final plot
-	results_q_wr(:, index) = q;
-	results_dq_wr(:, index) = dq;
-	results_ddq_wr(:, index) = ddq;
-	tau_save(:, index)= tau;
-    index = index + 1;
-	
-	%% Progresso Simulazione
-    if mod(i,100) == 0
-        
-        fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
-        hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
-        fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
-            hms(1),hms(2),hms(3));
-	end
-	
-end
-
+ %% Init per simulazione "sbagliata" _wr
+% 
+% % joints
+% n = size(KUKA.links, 2);			% number of joints
+% results_q_wr = zeros(n, length(t));	% angles for export
+% results_dq_wr = zeros(n, length(t));	% dangles for export
+% results_ddq_wr = zeros(n, length(t));	% ddangles for export
+% q0 = [pi/6 pi/2 pi/3 pi/2 pi/4]';	% initial pose
+% q = q0;								% joint angle vector	
+% dq = q_dot0;						% joint dangle vector
+% ddq = [0 0 0 0 0]';					% joint ddangle vector
+% 
+% % tau
+% tau_save_wr = zeros(n, length(t));		% torques vector for export
+% soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
+% 
+% % code stuff
+% index = 1;
+% 
+% % Gain circumference parameters matrix
+% Kp = 20*diag([3 3 3 3 5]);
+% Kv = 10*diag([1 1 1 1 1]);
+% 
+ %% Simulazione "sbagliata" _wr
+% tic
+% 
+% for i=1:length(t)
+% 	% Interruzione della simulazione se q diverge
+% 	if any(isnan(q)) && (i ~= 1)
+% 	   fprintf('Simulazione interrupted! \n')
+% 	   return
+% 	end
+% 
+% 	% Error and derivate of the error  
+% 	err = q_des(:, i) - q;
+% 	derr = dq_des(:, i) - dq;
+%    
+% 	%Get dynamic matrices
+% 	M = (KUKAmodel.inertia(q'))'; 
+% 	C = (KUKAmodel.coriolis(q', dq'))'; 
+% 	G = (KUKAmodel.gravload(q'))'; 
+%     
+%     tau = M*(ddq_des(:, i) + Kv*(derr) + Kp*(err)) + (C*dq) + G;
+%       
+%     % Robot joint accelerations
+% 	% Get "right" dynamic matrices
+% 	M = (KUKA.inertia(q'))'; 
+% 	C = (KUKA.coriolis(q', dq'))'; 
+% 	G = (KUKA.gravload(q'))'; 
+%     ddq_old = ddq;
+%     ddq = pinv(M)*(tau - (C*dq)- G);
+%         
+%     % Tustin integration
+%     dq_old = dq;
+%     dq = dq + (ddq_old + ddq) * delta_t / 2;
+%     q = q + (dq + dq_old) * delta_t /2;
+%     
+%     % Store result for the final plot
+% 	results_q_wr(:, index) = q;
+% 	results_dq_wr(:, index) = dq;
+% 	results_ddq_wr(:, index) = ddq;
+% 	tau_save(:, index)= tau;
+%     index = index + 1;
+% 	
+% 	%% Progresso Simulazione
+%     if mod(i,100) == 0
+%         
+%         fprintf('Percent complete: %0.1f%%.',100*i/(length(t)-1));
+%         hms = fix(mod(toc,[0, 3600, 60])./[3600, 60, 1]);
+%         fprintf(' Elapsed time: %0.0fh %0.0fm %0.0fs. \n', ...
+%             hms(1),hms(2),hms(3));
+% 	end
+% 	
+% end
+% 
 %% Export for plots
 
 if ~exist('results', 'var')
@@ -215,9 +215,9 @@ results.tau		= tau_save;
 results.piArray = piArray;
 results.name	= 'Adaptive ComputedTorque';
 
-results.model_wr		= struct();
-results.model_wr.q		= results_q_wr;
-results.model_wr.dq		= results_dq_wr;
-results.model_wr.ddq	= results_ddq_wr;
-results.model_wr.tau	= tau_save_wr;
-results.model_wr.name	= 'ComputedTorque Wrong Model';
+% results.model_wr		= struct();
+% results.model_wr.q		= results_q_wr;
+% results.model_wr.dq		= results_dq_wr;
+% results.model_wr.ddq	= results_ddq_wr;
+% results.model_wr.tau	= tau_save_wr;
+% results.model_wr.name	= 'ComputedTorque Wrong Model';

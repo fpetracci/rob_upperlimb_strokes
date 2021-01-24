@@ -76,11 +76,11 @@ if controller == 2 || controller == 4
 		hold on
 		plot(t(1:length(t)),ones(size(t)) * KUKA.links(j).m, 'DisplayName', 'Real Mass')
 		grid on
-		xlim([0 t(end)])
+		% xlim([0 t(end)])
 		xlabel('Time [s]')
-		ylim([0, Inf])
+		% ylim([0, Inf])
 		ylabel('Mass [kg]')
-		legend('Location', 'best')
+		axis tight
 		legend('Location', 'best')
 		title(['Link: ', num2str(j)])
 	end
@@ -138,11 +138,11 @@ end
 fr_skip = ceil(length(results.q)/250);
 q_plot = results.q(:,1:fr_skip:length(results.q));
 
-robot_gen_movie(KUKA, q_plot, 1, 1, 2, [results.name traj_str], [0,0], [-45, 12])
+robot_gen_movie(KUKA, q_plot, 1, 1, 0, [results.name traj_str], [0,0], [-45, 12])
 
 % controller adattivi plotto anche il wrong
-if controller == 2 || controller == 4
+if isfield(results,'model_wr')
 	q_plot_wr = results.model_wr.q(:,1:fr_skip:length(results.model_wr.q));
-	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 2, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
+	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 0, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
 end
 
