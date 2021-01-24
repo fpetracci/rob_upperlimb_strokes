@@ -14,8 +14,13 @@ fprintf('2: Helix \n');
 choiche = input(' ...\n');
 %% Setup
  
-load('KUKA.mat')
-load('KUKAmodel.mat')
+% load('KUKA.mat')
+% load('KUKAmodel.mat')
+
+addpath(genpath("functions_kuka"));
+
+KUKA_createmodels; % load KUKA and KUKAmodel robots in the workspace
+
 %% plot options
 light_grey	= [0.99, 0.99, 0.99];
 black		= [0, 0, 0];
@@ -158,9 +163,9 @@ switch controller
 
 n = size(KUKA.links, 2);
 d = 1;
-for j = 1:n 
-    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
-end
+% for j = 1:n 
+%     KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
+% end
 
 % 
 % Gain circumference parameters matrix
@@ -264,9 +269,9 @@ sgtitle('Computed torque')
 %% Trajectory Tracking: Backstepping Method
 n = size(KUKA.links, 2);
 d = 1;
-for j = 1:n 
-    KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
-end
+% for j = 1:n 
+%     KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1.1); 
+% end
 
 % 
 % Gain circumference parameters matrix
@@ -389,11 +394,11 @@ KUKA.plot(q_des(:,1:50:end)','trail','black')
 % 	dq_des  = dq_des';
 % 	ddq_des = ddq_des';
 
-	int = 2.5; % intensità percentuale della perturbazione sui parametri
+% 	int = 2.5; % intensità percentuale della perturbazione sui parametri
 	n = size(KUKA.links, 2);
-	for j = 1:n 
-		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
-	end
+% 	for j = 1:n 
+% 		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
+% 	end
 %% Simulazione
 % q = zeros(n, length(t)); 
 % dq = zeros(n, length(t)); 
@@ -531,10 +536,10 @@ sgtitle('Adaptive BackStepping')
 %%---------------------COMPUTED_TORQUE_ADAPTIVE---------------------------
 %%	Perturbazione iniziale dei parametri
 	n = size(KUKA.links, 2);
-	int = 2.5; % intensità percentuale della perturbazione sui parametri
-	for j = 1:n 
-		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
-	end
+% 	int = 2.5; % intensità percentuale della perturbazione sui parametri
+% 	for j = 1:n 
+% 		KUKAmodel.links(j).m = KUKAmodel.links(j).m .* (1+int/100); 
+% 	end
 % 	q_des = q_des';
 % 	dq_des  = dq_des';
 % 	ddq_des = ddq_des';
