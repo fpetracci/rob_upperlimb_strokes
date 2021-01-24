@@ -1,4 +1,23 @@
-% Angles
+%% export set current figure
+f_width		= 650;
+f_heigth	= 650;
+dim_font	= 13;
+
+% set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+% set(findall(gcf,'type','text'),'FontSize', dim_font)           
+% set(gca,'FontSize', dim_font) 
+% exportgraphics(gcf, [''], 'BackgroundColor','none', 'ContentType','vector')
+
+switch traj_choice
+	case 1
+		traj_str = 'circum';
+	case 2
+		traj_str = 'helix';
+	case 3
+		traj_str = 'exciting_traj';
+end
+
+%% Angles
 figure(2)
 clf;
 for j=1:num_of_joints
@@ -18,7 +37,13 @@ for j=1:num_of_joints
 end
 sgtitle(results.name)
 
-% Tau
+set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+set(findall(gcf,'type','text'),'FontSize', dim_font)           
+set(gca,'FontSize', dim_font) 
+exportgraphics(gcf, ['Angles ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
+
+
+%% Tau
 figure(3)
 clf;
 for j=1:num_of_joints
@@ -34,7 +59,12 @@ for j=1:num_of_joints
 end
 sgtitle(['\tau for ' results.name])
 
-% Controller adattivi PI
+set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+set(findall(gcf,'type','text'),'FontSize', dim_font)           
+set(gca,'FontSize', dim_font) 
+exportgraphics(gcf, ['Tau ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
+
+%% Controller adattivi PI
 if controller == 2 || controller == 4
 	
 	% mass
@@ -54,7 +84,13 @@ if controller == 2 || controller == 4
 		legend('Location', 'best')
 		title(['Link: ', num2str(j)])
 	end
-	sgtitle(['Mass Estimation: ', num2str(j)])
+	sgtitle(['Mass Estimation: ', results.name])
+	
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
+	exportgraphics(gcf, ['Mass_esti ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
+
 	
 	% inertia
 	figure(5)
@@ -87,9 +123,26 @@ if controller == 2 || controller == 4
 			title(['Link: ', num2str(j) title_str])
 		end
 	end
-	sgtitle('Inertia Estimation')
+	sgtitle(['Inertia Estimation' results.name])
+	
+	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+	set(gca,'FontSize', dim_font) 
+	exportgraphics(gcf, ['Iner_esti ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
+
 	
 end
 
-
 %% Video
+
+fr_skip = ceil(length(results.q)/250);
+q_plot = results.q(:,1:fr_skip:length(results.q));
+
+robot_gen_movie(KUKA, q_plot, 1, 1, 2, [results.name traj_str], [0,0], [-45, 12])
+
+% controller adattivi plotto anche il wrong
+if controller == 2 || controller == 4
+	q_plot_wr = results.model_wr.q(:,1:fr_skip:length(results.model_wr.q));
+	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 2, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
+end
+

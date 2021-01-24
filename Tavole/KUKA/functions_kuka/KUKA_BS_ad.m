@@ -17,18 +17,6 @@ soglia_sat = Inf;					% soglia di saturazione (Inf, no sat)
 
 % pi vettore dei parametri dinamici 
 piArray = zeros(n*10, length(t)); 
-	% each column of pi contains for all joints:
-	% 1.	mass
-	% 2.	mass * x of Center Of Gravity
-	% 3.	mass * y of Center Of Gravity
-	% 4.	mass * z of Center Of Gravity
-	% 5.	Element 1,1, inertial tensor
-	% 6.	?
-	% 7.	?
-	% 8.	Element 2,2, inertial tensor
-	% 9.	?
-	% 10.	Element 2,3, inertial tensor
-
 pi0 = zeros(n*10, 1); % starting dynamic parameters vector
 for j = 1:n
 	pi0((j-1)*10+1:j*10, 1) = [KUKAmodel.links(j).m KUKAmodel.links(j).m*KUKAmodel.links(j).r ...
@@ -76,7 +64,7 @@ for i = 1:length(t)
 		KUKAmodel.links(j).m = piArray((j-1)*10+1, i); % elemento 1 di pi
 		
 		% link inertia
-		KUKAmodel.links(1).I = diag([	piArray((j-1)*10+5, i), ...
+		KUKAmodel.links(j).I = diag([	piArray((j-1)*10+5, i), ...
 										piArray((j-1)*10+8, i), ...
 										piArray((j-1)*10+10, i) ]);
 	end
@@ -151,7 +139,6 @@ ddq = [0 0 0 0 0]';					% joint ddangle vector
 % tau
 tau_save_wr = zeros(n, length(t));		% torques vector for export
 
-
 % gains
 lambda = diag([5 0.8 0.5 0.3 0.3]);
 
@@ -164,7 +151,7 @@ for i=1:length(t)
 	% Interruzione della simulazione se q diverge
     if any(isnan(q)) && (i ~= 1)
         fprintf('Simulazione interrupted! \n')
-        return
+        break
 	end
 	
 	%% Calcolo dell'errore: e, e_dot
@@ -225,7 +212,6 @@ for i=1:length(t)
             hms(1),hms(2),hms(3));
 	end
 end
-
 
 %% Export for plots
 
