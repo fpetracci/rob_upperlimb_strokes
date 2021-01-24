@@ -1,4 +1,4 @@
-function robot_gen_movie(arm, q, rep, nfig, movie_mode, movie_title, spins, View)
+function robot_gen_movie(arm, q, rep, nfig, movie_mode, movie_title, spins, View, rob_col)
 %ARM_GEN_MOVIE generates a movie in which a given robotic arm execute the 
 % movement with given q as input. 
 %	INPUT:
@@ -15,6 +15,8 @@ function robot_gen_movie(arm, q, rep, nfig, movie_mode, movie_title, spins, View
 %			spins		- vector containing azimuth and elevation spin
 %							angles
 %			View		- initial view angles 
+%			rob_col		- changes the colour scheme of the robot. 0 default
+%							red and blue, 1 KUKA, 2 Franka
 %			
 %
 %% check input
@@ -76,12 +78,24 @@ col_traj	= [230, 153, 0]./255;
 width_traj	= 2;
 
 % robot
-	% KUKA
-	joint_col	= [51, 26, 0]./255;
-	link_col	= [255, 85, 0]./255;
-	joint_diam	= 0.5;
-	
-	% FRANKA
+switch rob_col
+	case 0
+		% Default
+		joint_col	= [255, 0, 0]./255;
+		link_col	= [0, 0, 255]./255;
+		joint_diam	= 0.5;
+		
+	case 1
+		% KUKA
+		joint_col	= [51, 26, 0]./255;
+		link_col	= [255, 85, 0]./255;
+		joint_diam	= 0.5;
+	case 2
+		% FRANKA
+		joint_col	= [161, 161, 161]./255;
+		link_col	= [255,247,230]./255;
+		joint_diam	= 0.5;
+end
 	
 	
 tile1_col	= [208, 208, 225]./255; 

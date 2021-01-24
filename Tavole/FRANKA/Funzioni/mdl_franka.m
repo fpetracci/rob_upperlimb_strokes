@@ -69,6 +69,8 @@ function r = mdl_franka()
 
     qv = [0 0 0 -4 0 0 0]*deg;
     qr = [0 -90 -90 90 0 -90 90]*deg;
+	qv1 = qv;
+	qv1(6) = pi/2;
         
     % place the variables into the global workspace
     if nargin == 1
@@ -77,5 +79,6 @@ function r = mdl_franka()
         assignin('caller', 'franka', robot);
         assignin('caller', 'qv', qv); % zero angles
         assignin('caller', 'qr', qr); 
+		assignin('caller', 'qv1', qv1);
     end
 end
