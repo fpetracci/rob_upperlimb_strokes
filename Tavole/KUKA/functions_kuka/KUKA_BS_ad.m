@@ -2,7 +2,7 @@
 %% Init per simulazione adaptive
 
 % choice if also compute wrong CT (1 if yes)
-wr = 0;
+wr = 1;
 
 % joints
 n = size(KUKA.links, 2);			% number of joints

@@ -2,7 +2,7 @@
 %% Init per simulazione adaptive
 
 % choice if also compute wrong CT (1 if yes)
-wr = 0;
+wr = 1;
 
 % joints
 n			= size(KUKA.links, 2);
@@ -42,8 +42,11 @@ end
 piArray(:, 1) = pi0;
 
 % gains
-Kp = 1*diag([200 200 200 20 10]);		% e
-Kv = 0.1*diag([200 200 200 10 10]);		% e_dot
+% Kp = 1*diag([200 200 200 20 10]);		% e
+% Kv = 0.1*diag([200 200 200 10 10]);		% e_dot
+
+ Kp = 20*diag([3 3 3 3 5]); 
+ Kv = 10*diag([1 1 1 1 1]);
 % 	Kd = 0.1*diag([200 200 200 20 1]);
  
 % P e R fanno parte della candidata di Lyapunov, quindi devono essere definite positive
@@ -153,9 +156,12 @@ if wr == 1
 	index = 1;
 	
 	% Gain circumference parameters matrix
-	Kp = 20*diag([3 3 3 3 5]);
-	Kv = 10*diag([1 1 1 1 1]);
-	
+ 	Kp = 20*diag([3 3 3 3 5]);
+ 	Kv = 10*diag([1 1 1 1 1]);
+
+% 	Kp = 1*diag([200 200 200 20 10]);		% e
+% 	Kv = 0.1*diag([200 200 200 10 10]);		% e_dot
+
  %% Simulazione "sbagliata" _wr
 	tic
 	
@@ -171,11 +177,11 @@ if wr == 1
 		derr = dq_des(:, i) - dq;
 	   
 		%Get dynamic matrices
-		M = (KUKAmodel.inertia(q'))'; 
-		C = (KUKAmodel.coriolis(q', dq'))'; 
-		G = (KUKAmodel.gravload(q'))'; 
+		M1 = (KUKAmodel.inertia(q'))'; 
+		C1 = (KUKAmodel.coriolis(q', dq'))'; 
+		G1 = (KUKAmodel.gravload(q'))'; 
 	    
-	    tau = M*(ddq_des(:, i) + Kv*(derr) + Kp*(err)) + (C*dq) + G;
+	    tau = M1*(ddq_des(:, i) + Kv*(derr) + Kp*(err)) + (C1*dq) + G1;
 	      
 	    % Robot joint accelerations
 		% Get "right" dynamic matrices

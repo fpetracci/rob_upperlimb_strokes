@@ -222,6 +222,9 @@ for i=1:length(t)
     tau = M1*(ddq_des(:,i) + Kv*(derr) + Kp*(err)) + (C1*dq) + G1;
       
     % Robot joint accelerations
+	M = (KUKA.inertia(q'))'; 
+    C = (KUKA.coriolis(q', dq'))'; 
+    G = (KUKA.gravload(q'))'; 
     ddq_old = ddq;
     ddq = pinv(M)*(tau - (C*dq)- G);
         

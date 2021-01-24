@@ -3,6 +3,7 @@ f_width		= 800;
 f_heigth	= 800;
 dim_font	= 10;
 
+tail_cut = 0;
 % set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 % set(findall(gcf,'type','text'),'FontSize', dim_font)           
 % set(gca,'FontSize', dim_font) 
@@ -141,11 +142,11 @@ end
 fr_skip = ceil(length(results.q)/250);
 q_plot = results.q(:,1:fr_skip:(length(results.q) - tail_cut));
 
-robot_gen_movie(KUKA, q_plot, 1, 1, 2, [results.name traj_str], [0,0], [-45, 12])
+robot_gen_movie(KUKA, q_plot, 1, 1, 0, [results.name traj_str], [0,0], [-45, 12])
 
 % controller adattivi plotto anche il wrong
 if isfield(results,'model_wr')
 	q_plot_wr = results.model_wr.q(:,1:fr_skip:length(results.model_wr.q));
-	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 2, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
+	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 0, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
 end
 

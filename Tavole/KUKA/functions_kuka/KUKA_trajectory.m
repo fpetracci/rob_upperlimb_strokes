@@ -75,15 +75,15 @@ switch traj_choice
         dq_des	= gradient(q_des)/delta_t;
         ddq_des = gradient(dq_des)/delta_t;
         
-        figure(1)
-			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
-			KUKA.plot(q0')
-			hold on
-			plot3(x,y,z,'b','Linewidth',1.5)
-			title('Desired trajectory: circumference')
-			view([-45, 20])
-			KUKA.plot(q_des(:,1:50:end)')
-		
+%         figure(1)
+% 			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
+% 			KUKA.plot(q0')
+% 			hold on
+% 			plot3(x,y,z,'b','Linewidth',1.5)
+% 			title('Desired trajectory: circumference')
+% 			view([-45, 20])
+% 			KUKA.plot(q_des(:,1:50:end)')
+% 		
     case 2 % Helix
         
         q0			= [0 pi/2 pi/2 pi/2 0]';
@@ -115,15 +115,15 @@ switch traj_choice
         dq_des	= gradient(q_des)/delta_t;
         ddq_des = gradient(dq_des)/delta_t;
         
-        figure(1)
-			clf
-			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
-			KUKA.plot(q0')
-			hold on
-			plot3(x,y,z,'b','Linewidth',1.5)
-			title('Desired trajectory: Helix')
-			view([-45, 20])
-			KUKA.plot(q_des(:,1:50:end)')
+%         figure(1)
+% 			clf
+% 			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
+% 			KUKA.plot(q0')
+% 			hold on
+% 			plot3(x,y,z,'b','Linewidth',1.5)
+% 			title('Desired trajectory: Helix')
+% 			view([-45, 20])
+% 			KUKA.plot(q_des(:,1:50:end)')
 			
 	case 3 % traiettoria eccitante
 
@@ -159,12 +159,12 @@ switch traj_choice
         dq_des	= gradient(q_des)/delta_t;
         ddq_des = gradient(dq_des)/delta_t;
         
-        figure(1)
-			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
-			KUKA.plot(q0')
-			hold on
-			plot3(x,y,z,'b','Linewidth',1.5)
-			title('Desired trajectory: circumference')
-			view([-45, 20])
-			KUKA.plot(q_des(:,1:50:end)')
+%         figure(1)
+% 			KUKA.plotopt = {'workspace',[-0.75,0.75,-0.75,0.75,0,1]};
+% 			KUKA.plot(q0')
+% 			hold on
+% 			plot3(x,y,z,'b','Linewidth',1.5)
+% 			title('Desired trajectory: circumference')
+% 			view([-45, 20])
+% 			KUKA.plot(q_des(:,1:50:end)')
 end
