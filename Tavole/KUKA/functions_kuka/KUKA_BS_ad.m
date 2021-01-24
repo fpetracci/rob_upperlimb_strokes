@@ -132,6 +132,10 @@ end
  %% Init Simulazione "Sbagliata" _wr
 
  if wr == 1
+	 
+	clear KUKA KUKAmodel
+	KUKA_createmodels;
+	
 	% joints
 	results_q_wr = zeros(n, length(t));	% angles for export
 	results_dq_wr = zeros(n, length(t));	% dangles for export
