@@ -1,9 +1,5 @@
 % KUKA KR 6 R700 fivve
 
-clear
-close all
-clc
-
 %% Parameters
 % lenghts [m]
 d1 = 0.400;
