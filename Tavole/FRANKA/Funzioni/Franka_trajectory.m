@@ -34,18 +34,29 @@ end
 
 %% Case
 switch traj_choice
-	case 1 % Punto
-		%error('DA FARE')
+	case 1 % Punto		
+% 		pq_i	= qv1';
+% 		pos_i	= hgmat2pos(franka.fkine(qv1))';
+% 		pq_f	= [30 90 45 90 30 45 -45]'/180*pi;%qr';
+% 		pos_f	= hgmat2pos(franka.fkine(pq_f))';
+% 		[q_des, dq_des, ddq_des] = jtraj(pq_i', pq_f', n_steps);
+% 		q_des	= q_des';
+% 		dq_des	= dq_des';
+% 		ddq_des	= ddq_des';
 		
-		pq_i	= qv1';
-		pos_i	= hgmat2pos(franka.fkine(qv1))';
-		pq_f	= [30 90 45 90 30 45 -45]'/180*pi;%qr';
-		pos_f	= hgmat2pos(franka.fkine(pq_f))';
-		[q_des, dq_des, ddq_des] = jtraj(pq_i', pq_f', n_steps);
+		T_i			= pos1;
+		T_f			= [eye(3), [0.5 0.5 0.5]'; [0 0 0 1]];
+		T_intime	= ctraj(T_i, T_f, n_steps);	% matrix hom approach al punto 
+												% iniziale clotoide
+		p		= hgmat2pos(T_intime);
+		theta = zeros(size(p(1,:)));
+		phi =  zeros(size(p(1,:)));
+		psi =  zeros(size(p(1,:)));
+		xi = [p(1,:);p(2,:);p(3,:); theta; phi; psi]; % pose ee nel tempo
+		[q_des, dq_des, ddq_des] = ikine_franka(xi,qv1,franka, delta_t);
 		
-		q_des	= q_des';
-		dq_des	= dq_des';
-		ddq_des	= ddq_des';
+		pos_i = hgmat2pos(T_i);
+		pos_f = hgmat2pos(T_f);
 		
 		figure(1)
 			clf
@@ -54,8 +65,7 @@ switch traj_choice
 			plot3(pos_f(1),pos_f(2),pos_f(3), '*c')
 			view([45 12])
 			franka.plot(q_des(:,1:50:end)')
-		
-		
+
 	case 2 % Cerchio
 		t = t_in:delta_t:t_end;
 % 		center = pos1(1:3,4) - [0;0;r];% partendo dal punto pos1 calcolo il cerchio nel piano XZ
@@ -162,7 +172,7 @@ switch traj_choice
 			plot3(p(1,:),p(2,:),p(3,:), ':c')
 			hold on
 			axis equal
-			franka.plot(q_des', 'trail', ':b')
+			franka.plot(q_des(:,1:50:end)', 'trail', ':b')
 
 		% ho ottenuto la traiettoria desiderata da far seguire al Franka, ora devo
 		% controllarlo in modo tale che la segua davvero

@@ -73,7 +73,11 @@ x_rif = [];
 y_rif = [];
 s_rif = [];
 
-for s = 0:0.1:Lsofar(end)
+% voglio almeno tot_frames di punti.
+tot_frames = 3000;
+s_incremento = Lsofar(end)/tot_frames;
+
+for s = 0:s_incremento:Lsofar(end)
 	% Parte per capire in che tratto sono
 	if s<Lsofar(1)
 		ntratto = 1;

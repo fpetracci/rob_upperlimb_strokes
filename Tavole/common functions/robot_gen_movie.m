@@ -124,7 +124,8 @@ for i = 1:fr_skip:t_tot
 	
 	% update now vectors
 	q_plot_now	= q_plot(i,:);
-	EE_pos_now	= hom2vett(arm_fkine(arm, q_plot_now, size(arm.links, 2)));
+% 	EE_pos_now	= hom2vett(arm_fkine(arm, q_plot_now, size(arm.links, 2)));
+	EE_pos_now	= hom2vett(arm.fkine(q_plot_now'));
 	EE_traj = cat(1, EE_traj, EE_pos_now');
 	
 	%----------------------------------------------------------------------
