@@ -76,9 +76,14 @@ col_traj	= [230, 153, 0]./255;
 width_traj	= 2;
 
 % robot
-joint_col	= [255, 0, 0]./255;
-link_col	= [102, 102, 153]./255;
-joint_diam	= 0.5;
+	% KUKA
+	joint_col	= [51, 26, 0]./255;
+	link_col	= [255, 85, 0]./255;
+	joint_diam	= 0.5;
+	
+	% FRANKA
+	
+	
 tile1_col	= [208, 208, 225]./255; 
 tile2_col	= [1 1 1];
 

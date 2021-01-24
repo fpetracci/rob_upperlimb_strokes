@@ -4,7 +4,7 @@
 fprintf('Choose trajectory by typing the number associated: \n');
 fprintf('1: Circumference \n');
 fprintf('2: Helix \n');
-fprintf('3: Triettoria eccitante \n');
+fprintf('3: Exciting Trajectory \n');
 traj_choice = input('');
 
 if traj_choice ~= 1 && traj_choice ~= 2 && traj_choice ~= 3

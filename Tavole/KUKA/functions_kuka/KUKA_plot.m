@@ -1,8 +1,8 @@
 %% export set current figure
-f_width		= 650;
-f_heigth	= 650;
-dim_font	= 13;
-tail_cut	= 0;
+f_width		= 800;
+f_heigth	= 800;
+dim_font	= 10;
+
 % set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 % set(findall(gcf,'type','text'),'FontSize', dim_font)           
 % set(gca,'FontSize', dim_font) 
@@ -41,7 +41,6 @@ set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 set(findall(gcf,'type','text'),'FontSize', dim_font)           
 set(gca,'FontSize', dim_font) 
 exportgraphics(gcf, ['Angles ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
-
 
 %% Tau
 figure(3)
@@ -86,6 +85,7 @@ if controller == 2 || controller == 4
 	end
 	sgtitle(['Mass Estimation: ', results.name])
 	
+	clear gcf
 	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
 	set(findall(gcf,'type','text'),'FontSize', dim_font)           
 	set(gca,'FontSize', dim_font) 
@@ -93,7 +93,7 @@ if controller == 2 || controller == 4
 
 	
 	% inertia
-	figure(5)
+	fig_ine = figure(5);
 	clf
 	for j=1:num_of_joints
 		for ii = 1:3
@@ -114,9 +114,10 @@ if controller == 2 || controller == 4
 			hold on
 			plot(t(1:length(t) - tail_cut),ones(size(t, 2)-tail_cut, 1) * KUKA.links(j).I(ii,ii), 'DisplayName', 'Real Inertia')
 			grid on
-			xlim([0 t(end)])
+% 			xlim([0 t(end)])
 			xlabel('Time [s]')
-			ylim([0, Inf])
+% 			ylim([0, Inf])
+			axis tight
 			ylabel('Inertia [kg m^2]')
 			legend('Location', 'best')
 			legend('Location', 'best')
@@ -125,10 +126,12 @@ if controller == 2 || controller == 4
 	end
 	sgtitle(['Inertia Estimation' results.name])
 	
-	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
-	set(findall(gcf,'type','text'),'FontSize', dim_font)           
-	set(gca,'FontSize', dim_font) 
-	exportgraphics(gcf, ['Iner_esti ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
+	clear gcf
+% 	set(gcf, 'Position',  [200, 0, f_width, f_heigth])
+	fig_ine.WindowState = 'maximize';
+% 	set(findall(gcf,'type','text'),'FontSize', dim_font)           
+% 	set(gca,'FontSize', dim_font) 
+	exportgraphics(fig_ine, ['Iner_esti ' results.name ' ' traj_str '.pdf'], 'BackgroundColor','none', 'ContentType','vector')
 
 	
 end
@@ -138,11 +141,11 @@ end
 fr_skip = ceil(length(results.q)/250);
 q_plot = results.q(:,1:fr_skip:(length(results.q) - tail_cut));
 
-robot_gen_movie(KUKA, q_plot, 1, 1, 0, [results.name traj_str], [0,0], [-45, 12])
+robot_gen_movie(KUKA, q_plot, 1, 1, 2, [results.name traj_str], [0,0], [-45, 12])
 
 % controller adattivi plotto anche il wrong
 if isfield(results,'model_wr')
 	q_plot_wr = results.model_wr.q(:,1:fr_skip:length(results.model_wr.q));
-	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 0, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
+	robot_gen_movie(KUKA, q_plot_wr, 1, 1, 2, [results.name ' wrong ' traj_str], [0,0], [-45, 12])
 end
 
