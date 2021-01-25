@@ -21,11 +21,17 @@ end
 %% Angles
 figure(2)
 clf;
+
 for j=1:num_of_joints
     subplot(3,2,j);
-    plot(t(1:length(t)-tail_cut),results.q(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.name)
-    hold on
-    plot(t(1:length(t)-tail_cut), q_des(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', 'Desired angle')
+	if isfield(results,'q')
+		plot(t(1:length(t)-tail_cut),results.q(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.name)
+		hold on
+		plot(t(1:length(t)-tail_cut), q_des(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', 'Desired angle')
+	else
+		plot(t(1:length(t)-tail_cut), q_des(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', 'Desired angle')
+		hold on
+	end
 	if isfield(results,'model_wr')
 		plot(t(1:length(t)-tail_cut),results.model_wr.q(j, 1:length(t)-tail_cut)*180/pi, 'DisplayName', results.model_wr.name)
 	end

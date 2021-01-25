@@ -55,7 +55,7 @@ KUKA.links(5).I = diag([m5*l5^2/12, m5*l5^2/12, m5*link_radius^2/2]); % long. z
 
 %% Set wrong link mass, lenght and inertia
 % int = 5; % intensità percentuale della perturbazione sui parametri
-int = 50;
+int = 20;
 
 m1_m = m1 * (1 + int/100);
 m2_m = m2 * (1 + int/100);
