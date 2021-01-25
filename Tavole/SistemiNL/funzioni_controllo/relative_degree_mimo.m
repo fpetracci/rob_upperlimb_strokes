@@ -29,6 +29,7 @@ for i=1:n_out
 		E_tmp(:, j) = transpose(Lg_full(1:r_min));
 	end
 	E(i,:) = E_tmp(r_min, :);
+	
 	if i==1
 		Lf_full_mimo = [H(i,:); transpose(Lf_full_min(:, 1:r_min-1))];
 		T = [Lf_full_min(:, r_min)];
@@ -37,3 +38,4 @@ for i=1:n_out
 		T = [T; Lf_full_min(:, r_min)];
 	end
 end
+

@@ -68,8 +68,6 @@ end
 
 %% animation parameters
 
-
-
 % pause time in the animation
 time_pause = 0;
 
@@ -121,7 +119,7 @@ for i = 1:fr_skip:nsteps
 	xlabel('X [m]')
 	ylabel('Y [m]')
 	zlabel('-Z [m]')
-	title(['Animazione, time: ' num2str(time(i)) ' di ' num2str(time(end))])
+	title(['Animation, time: ' num2str(time(i)) ' di ' num2str(time(end))])
 	%----------------------------------------------------------------------
 	% end stuff
 
@@ -270,9 +268,10 @@ function [xlims, ylims, zlims] = get_lims(ball_traj, flag_rel)
 	if flag_rel == 1
 		gap = 1;
 	else
-		gap = 2;
+		gap = 1;
 	end
+	
 	xlims = [min(ball_traj(:,1))-gap, max(ball_traj(:,1))+gap];
 	ylims = [min(ball_traj(:,2))-gap, max(ball_traj(:,2))+gap];
-	zlims = [min(-ball_traj(:,3))-gap, max(-ball_traj(:,3))+gap];
+	zlims = [min(-ball_traj(:,3))-gap, max(max(-ball_traj(:,3))+gap,gap)];
 end

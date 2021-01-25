@@ -63,7 +63,7 @@ g3 = [0;...
 G = [g1 g2 g3];
 x_ball = x_t + L*sin(theta)*sin(phi)
 y_ball = y_t + L*sin(theta)*cos(phi)
-z_ball = L*cos(theta) + z_t
+z_ball = z_t + L*cos(theta)
 
 % USCITE
 % y = [x_ball;y_ball; z_ball];
@@ -71,25 +71,53 @@ z_ball = L*cos(theta) + z_t
 % y = [x_ball; y_ball; theta];
 % y = [theta;phi;L]
 % y = [x_t; y_t; theta;phi;L]
-y = [x_ball - x_t; y_ball - y_t; z_ball-z_t ]% x_t; y_t
+y = [x_ball - x_t; y_ball - y_t; z_ball-z_t ]% x_t; y_t   % Pos Ball Relativa
 
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
 
 %% Zero dinamica
+
 syms x_t_ddot y_t_ddot L_ddot
 u = [x_t_ddot; y_t_ddot; L_ddot]
-
 upsi = T + E * u
-% zeta =[x_t; x_t_dot; y_t; y_t_dot]
-% zeta_dot = [jacobian(x_t,x)*(f + G*u);...
-% 	jacobian(x_t_dot,x)*(f + G*u);...
-% 	jacobian(y_t,x)*(f + G*u);...
-% 	jacobian(y_t_dot,x)*(f + G*u)]
+upsi = simplify(upsi,5)
+
+% creazione uspilon ingressi "linearizzati"
+ddy1 = L_dot*(phi_dot*cos(phi)*sin(theta) + theta_dot*cos(theta)*sin(phi)) + phi_dot*(L_dot*cos(phi)*sin(theta) + L*theta_dot*cos(phi)*cos(theta) - L*phi_dot*sin(phi)*sin(theta)) + theta_dot*(L_dot*cos(theta)*sin(phi) + L*phi_dot*cos(phi)*cos(theta) - L*theta_dot*sin(phi)*sin(theta)) - L*cos(theta)*sin(phi)*(b*theta_dot - (phi_dot^2*sin(2*theta))/2 + (g*sin(theta))/L + (2*L_dot*theta_dot)/L) - L*cos(phi)*sin(theta)*(2*phi_dot*theta_dot*cot(theta) + (2*L_dot*phi_dot)/L) + ...
+		(- cos(phi)^2 - cos(theta)^2*sin(phi)^2) * u(1,:) +...
+		(cos(phi)*sin(phi) - cos(phi)*cos(theta)^2*sin(phi)) * u(2,:) + ...
+		sin(phi)*sin(theta) * u(3,:);
+
+ddy2 = L_dot*(theta_dot*cos(phi)*cos(theta) - phi_dot*sin(phi)*sin(theta)) - theta_dot*(L*phi_dot*cos(theta)*sin(phi) - L_dot*cos(phi)*cos(theta) + L*theta_dot*cos(phi)*sin(theta)) - phi_dot*(L_dot*sin(phi)*sin(theta) + L*phi_dot*cos(phi)*sin(theta) + L*theta_dot*cos(theta)*sin(phi)) - L*cos(phi)*cos(theta)*(b*theta_dot - (phi_dot^2*sin(2*theta))/2 + (g*sin(theta))/L + (2*L_dot*theta_dot)/L) + L*sin(phi)*sin(theta)*(2*phi_dot*theta_dot*cot(theta) + (2*L_dot*phi_dot)/L)+...
+	(cos(phi)*sin(phi) - cos(phi)*cos(theta)^2*sin(phi))* u(1,:) +...
+	(- sin(phi)^2 - cos(phi)^2*cos(theta)^2)* u(2,:) + ...
+	cos(phi)*sin(theta) * u(3,:);
+
+ddy3 = L*sin(theta)*(b*theta_dot - (phi_dot^2*sin(2*theta))/2 + (g*sin(theta))/L + (2*L_dot*theta_dot)/L) - L_dot*theta_dot*sin(theta) - theta_dot*(L_dot*sin(theta) + L*theta_dot*cos(theta))+...
+	cos(theta)*sin(phi)*sin(theta) * u(1,:) + ...
+	cos(phi)*cos(theta)*sin(theta) * u(2,:) + ...
+	cos(theta) *u(3,:);
+
+% suffisso _lin per cercare retroazione linearizzante
+upsi_lin = [ddy1; ddy2; ddy3]
+upsi_lin = simplify(upsi_lin,5)
+u_lin = -inv(E) * T + inv(E) * upsi_lin;
+u_lin = simplify(u_lin,5)
+
+zeta =[x_t; x_t_dot; y_t; y_t_dot]
+zeta_dot = [jacobian(x_t,x)*(f + G*u);...
+	jacobian(x_t_dot,x)*(f + G*u);...
+	jacobian(y_t,x)*(f + G*u);...
+	jacobian(y_t_dot,x)*(f + G*u)]
 
 % % zeta_dot_mat = 
 PHI_full = jacobian([Lf_full_mimo;zeta],x)
 rank(PHI_full)
 
+%
+upsi_0	= subs(subs(upsi, x, x0), [b g], [1 9.81])
+upsi_00 = eval(subs(upsi_0, u, [0;0;0]))
+u_lin0	= eval(subs(subs(-inv(E) * T + inv(E) * upsi_00, x, x0), [b g], [1 9.81]) ) 
 
 
 %% aumentiamo il sistema

@@ -81,6 +81,8 @@ else
 end
 
 
+
+
 % statico
 % x_t_iniziale		= 0;		% posizione asse x iniziale [m]
 % y_t_iniziale		= 0;		% posizione asse y iniziale [m]
@@ -114,10 +116,12 @@ theta_dot_iniziale	= 0;		% stato 6
 phi_dot_iniziale	= 0;		% stato 8
 L_dot_iniziale		= 0;		% stato 10
 
+
+
 %% PERCORSI
 switch tipo_perc
 	%% Raggiungimento punto
-	case 1
+	case 1 
 	figure(1)
 	clf
 	l_ginput = 15; 
@@ -149,7 +153,7 @@ switch tipo_perc
 		s_finale = norm(traslazione,2);
 					
 	%% Circonferenza
-	case 2
+	case 2 
 		figure(1)
 		clf
 		l_ginput = 30; 
@@ -177,7 +181,7 @@ switch tipo_perc
 		z_b_rif = 2;
 
 	%% Clotoidi
-	case 3
+	case 3 
 	%%%   ginput
 	figure(1)
 	clf
@@ -232,7 +236,7 @@ switch tipo_perc
 	
 	s_finale=sum(Lenghts); %Lunghezza totale percorso
 	Ltot = s_finale;
-	z_b_rif = 2.5;
+	z_b_rif = 2;
 	
 	%% Retta
 	case 4 
