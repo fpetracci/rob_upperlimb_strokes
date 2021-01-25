@@ -217,7 +217,7 @@ if wr == 1
 		results_q_wr(:, index)		= q;
 		results_dq_wr(:, index)		= dq;
 		results_ddq_wr(:, index)	= ddq;
-		tau_save_wr(:, index)			= tau;
+		tau_save_wr(:, index)		= tau;
 	    index = index + 1;
 		
 		%% Progresso Simulazione
