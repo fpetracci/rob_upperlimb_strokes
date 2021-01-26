@@ -1576,23 +1576,24 @@ switch choiche
 	T = (tinf+tstep) : tstep : tsup;
 	
 	fprintf('Ricordiamo che lo stato è dato da: \n')
-	x	= [x_t; x_t_dot; y_t; y_t_dot; theta; theta_dot; phi; phi_dot; L ; L_dot]
+	x	%= [x_t; x_t_dot; y_t; y_t_dot; theta; theta_dot; phi; phi_dot; L ; L_dot]
 	x_0	= [x_t_0; x_t_dot_0; y_t_0; y_t_dot_0; theta_0; theta_dot_0; phi_0; phi_dot_0; L_0; L_dot_0];
 	
+	syms t
 	
 	fprintf('L''evoluzione dello stato è quindi data da: \n')
 	% x_t =[ x_p0 + int(v*cos(theta), t, 0, t); y_p0 + int(v*sin(theta), t, 0, t); theta0 + int(w, t, 0, t)]; 
 	
-	x_T = [	x_t0+int(x_t_dot0+int(x_t_ddot,t,0,t) ,t,0,t);...
-		x_t_dot0+int(x_t_ddot,t,0,t);...
-		y_t0+int(y_t_dot0 + int(y_t_ddot ,t,0,t) ,t,0,t);...
-		y_t_dot0+int(y_t_ddot ,t,0,t);...
-		theta0+int((exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L,t,0,t);...
-		(exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L
-		phi0+int((exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta)),t,0,t);...
-		(exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta));...
-		L0 + int(L_dot0 +int(L_ddot,t,0,t) ,t,0,t);...
-		L_dot0 +int(L_ddot,t,0,t)];
+	x_T(1) = x_t_0+int(x_t_dot_0+int(x_t_ddot,t,0,t) ,t,0,t);
+	x_T(2) = x_t_dot_0+int(x_t_ddot,t,0,t);
+	x_T(3) = y_t_0+int(y_t_dot_0 + int(y_t_ddot ,t,0,t) ,t,0,t);
+	x_T(4) = y_t_dot_0+int(y_t_ddot ,t,0,t);
+	x_T(5) = theta_0+int((exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x_t*(2*L_dot + L*b))/L)*(- L*cos(theta)*sin(theta)*phi_dot^2 + g*sin(theta) + cos(theta)*cos(phi)*y_t_ddot + cos(theta)*sin(phi)*x_t_ddot), t, 0, t, 'IgnoreSpecialCases', true)))/L,t,0,t);
+	x_T(6) = exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x_t*(2*L_dot + L*b))/L)*(- L*cos(theta)*sin(theta)*phi_dot^2 + g*sin(theta) + cos(theta)*cos(phi)*y_t_ddot + cos(theta)*sin(phi)*x_t_ddot), t, 0, t, 'IgnoreSpecialCases', true))/L;
+	x_T(7) = phi_0+int((exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x_t*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi)*x_t_ddot - sin(phi)*y_t_ddot), t, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta)),t,0,t);
+	x_T(8) = (exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x_t*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi)*x_t_ddot - sin(phi)*y_t_ddot), t, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta));
+	x_T(9) = L_0 + int(L_dot_0 +int(L_ddot,t,0,t) ,t,0,t);
+	x_T(10) = L_dot_0 +int(L_ddot,t,0,t);
 	
 	fprintf('Lo stato iniziale considerato è: \n')
 	x0 = subs(x_0, x_0, x0_num)
@@ -1663,7 +1664,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -1779,7 +1780,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -1895,7 +1896,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -2011,7 +2012,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -2127,7 +2128,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -2243,7 +2244,7 @@ switch choiche
 		ssp = 100*thr;
 	end
 	if ssp < thr %angoli molto piccoli dicono che sono lin dipendenti i due sottospazi
-		fprintf('Si ha sottospazio di inosservabilità: se la velocità v è nulla, il veicolo può solo ruotare su se stesso, ma in uscita io ho le posizioni sul piano, quindi non riesco a distinguere due stati che differiscono solo per l''orientazione, unica cosa che posso cambiare con il controllo \n')
+		fprintf('Si ha sottospazio di inosservabilità \n')
 		noss_v = 1;
 	else
 		fprintf('Non si ha sottospazio di inosservabilità \n')
@@ -2293,21 +2294,21 @@ switch choiche
 	end
 	%%
 	
-	x_T = [	x_t0+int(x_t_dot0+int(x_t_ddot,t,0,t) ,t,0,t);...
-		x_t_dot0+int(x_t_ddot,t,0,t);...
-		y_t0+int(y_t_dot0 + int(y_t_ddot ,t,0,t) ,t,0,t);...
-		y_t_dot0+int(y_t_ddot ,t,0,t);...
-		theta0+int((exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L,t,0,t);...
-		(exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L
-		phi0+int((exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta)),t,0,t);...
-		(exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta));...
-		L0 + int(L_dot0 +int(L_ddot,t,0,t) ,t,0,t);...
-		L_dot0 +int(L_ddot,t,0,t)]
+% 	x_T = [	x_t0+int(x_t_dot0+int(x_t_ddot,t,0,t) ,t,0,t);...
+% 		x_t_dot0+int(x_t_ddot,t,0,t);...
+% 		y_t0+int(y_t_dot0 + int(y_t_ddot ,t,0,t) ,t,0,t);...
+% 		y_t_dot0+int(y_t_ddot ,t,0,t);...
+% 		theta0+int((exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L,t,0,t);...
+% 		(exp(-(t*(2*L_dot + L*b))/L)*(L*theta_dot_0 - int(exp((x*(2*L_dot + L*b))/L)*(- L*cos(theta(x))*sin(theta(x))*phi_dot^2 + g*sin(theta(x)) + cos(theta(x))*cos(phi)*y_t_ddot(x) + cos(theta(x))*sin(phi)*x_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/L
+% 		phi0+int((exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta)),t,0,t);...
+% 		(exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta));...
+% 		L0 + int(L_dot0 +int(L_ddot,t,0,t) ,t,0,t);...
+% 		L_dot0 +int(L_ddot,t,0,t)]
 
 end
-   ciao = [0.2494         0         0    0.4320;...
-       0.9700   -0.0065   -0.0113    1.6801;...
-           -0.0003         0         0   -0.0005;...
-      42.0113   -0.2165   -0.1250  -24.4750]
-  
+%    ciao = [0.2494         0         0    0.4320;...
+%        0.9700   -0.0065   -0.0113    1.6801;...
+%            -0.0003         0         0   -0.0005;...
+%       42.0113   -0.2165   -0.1250  -24.4750]
+%   
 
