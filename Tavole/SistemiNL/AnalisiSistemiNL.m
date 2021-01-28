@@ -2304,8 +2304,113 @@ switch choiche
 % 		(exp(-(2*t*(L_dot + L*theta_dot*cot(theta)))/L)*(L*phi_dot_0*sin(theta) - int(exp((2*x*(L_dot + L*theta_dot*cot(theta)))/L)*(cos(phi(x))*x_t_ddot(x) - sin(phi(x))*y_t_ddot(x)), x, 0, t, 'IgnoreSpecialCases', true)))/(L*sin(theta));...
 % 		L0 + int(L_dot0 +int(L_ddot,t,0,t) ,t,0,t);...
 % 		L_dot0 +int(L_ddot,t,0,t)]
+	%% identificabilità
+	OSS_aug = zeros(3,1);
+	% proviamo a stimare il coefficiente di smorzamento b
+	syms b_0 real
+	syms b real
+	x_aug = [x; b]
+	x_0_aug =[x_0; b_0]
+	
+	f = [ x_t_dot;...
+		  0;...
+		  y_t_dot;...
+		  0;...
+		  theta_dot;...
+		  -2*(L_dot/L)*theta_dot+0.5*phi_dot^2*sin(2*theta)-(g/L)*sin(theta)- b * theta_dot;...
+		  phi_dot;...
+		  -2*(L_dot/L)*phi_dot-2*phi_dot*theta_dot*cot(theta);...
+		  L_dot;...
+		  0]
+	
+	f_aug = [f; 0]
+	  	% definizione distribuzione di controllo G e di drift+controllo fG
+	G_aug = [g1 g2 g3; [0 0 0]]
+	
+	x0_num = [0; 0; 0; 0; 3/180*pi;  1e-2;   30/180*pi;  1e-2; 2; 0];
+	b0 = 1;
+	x0_aug_num = [x0_num; b0];
+	
+	fprintf('\nLo stato iniziale considerato è: \n')
+	x0_aug = subs(x_0_aug, x_0_aug, x0_aug_num);
+	lim_inf = x0_aug - 0.1;
+	lim_sup = x0_aug + 0.1;
+	
+	
+	fG_aug = [f_aug G_aug];
+	
 
-end
+%%% 1_aug
+	OSS_aug(1) = 0;
+	fprintf('\n1) Se come uscita prendiamo la posizione del carico (massa appesa): \n')
+	h = [x_ball, y_ball,  z_ball]	% osservabile r = 10
+
+	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n ')
+	[cod_full] = chow_filtration_obs(fG_aug,jacobian(h, x_aug),x_aug)
+	fprintf('Valutiamone il rango \n')
+	r = rank(cod_full)
+	if r == length(x_aug)
+		fprintf('Con queste uscite, nel simbolico si ha rango pieno. Vediamo se vale anche nello stato iniziale scelto. \n')
+		cod_full_x0 = subs(cod_full, x_aug, x0_aug);
+		if rank(cod_full_x0) == length(x_aug)
+			fprintf(['Il sistema preso in analisi è osservabile in x_0 scelto, infatti ha rango ' num2str(rank(cod_full_x0)) ', uguale alle dim dello stato \n']);
+			OSS_aug(1) = 1;
+		else
+			fprintf(['Si ha perdita di rango in questo stato iniziale (r = ' num2str(rank(cod_full_x0)) '), provare a cambiare x_0 \n'])
+			OSS_aug(1) = 0;
+		end
+	else
+		fprintf('Il rango è sempre minore della dim dello stato: il sistema non è osservabile per nessun x_0, è necessario cambiare la scelta delle uscite \n')	
+		OSS_aug(1) = 0;
+	end
+%%% 2_aug
+	OSS_aug(2) = 0;
+	fprintf('\n2) Se come uscita prendiamo la posizione relativa del carico (massa appesa) rispetto al trailer: \n')
+	h = [x_ball-x_t, y_ball-y_t,  z_ball-z_t]	
+
+	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n ')
+	[cod_full] = chow_filtration_obs(fG_aug,jacobian(h, x_aug),x_aug)
+	fprintf('Valutiamone il rango \n')
+	r = rank(cod_full)
+	if r == length(x_aug)
+		fprintf('Con queste uscite, nel simbolico si ha rango pieno. Vediamo se vale anche nello stato iniziale scelto. \n')
+		cod_full_x0 = subs(cod_full, x_aug, x0_aug);
+		if rank(cod_full_x0) == length(x_aug)
+			fprintf(['Il sistema preso in analisi è osservabile in x_0 scelto, infatti ha rango ' num2str(rank(cod_full_x0)) ', uguale alle dim dello stato \n']);
+			OSS_aug(2) = 1;
+		else
+			fprintf(['Si ha perdita di rango in questo stato iniziale (r = ' num2str(rank(cod_full_x0)) '), provare a cambiare x_0 \n'])
+			OSS_aug(2) = 0;
+		end
+	else
+		fprintf('Il rango è sempre minore della dim dello stato: il sistema non è osservabile per nessun x_0, è necessario cambiare la scelta delle uscite \n')	
+		OSS_aug(2) = 0;
+	end
+%%% 3_aug
+	OSS_aug(3) = 0;
+	fprintf('\n3) Se come uscita prendiamo gli angoli theta e phi e la lunghezza dell''asta L: \n')
+	h = [theta, phi,  L]	
+
+	fprintf('Calcoliamo <∆|𝒅𝒉> per filtrazione: \n ')
+	[cod_full] = chow_filtration_obs(fG_aug,jacobian(h, x_aug),x_aug)
+	fprintf('Valutiamone il rango \n')
+	r = rank(cod_full)
+	if r == length(x_aug)
+		fprintf('Con queste uscite, nel simbolico si ha rango pieno. Vediamo se vale anche nello stato iniziale scelto. \n')
+		cod_full_x0 = subs(cod_full, x_aug, x0_aug);
+		if rank(cod_full_x0) == length(x_aug)
+			fprintf(['Il sistema preso in analisi è osservabile in x_0 scelto, infatti ha rango ' num2str(rank(cod_full_x0)) ', uguale alle dim dello stato \n']);
+			OSS_aug(3) = 1;
+		else
+			fprintf(['Si ha perdita di rango in questo stato iniziale (r = ' num2str(rank(cod_full_x0)) '), provare a cambiare x_0 \n'])
+			OSS_aug(3) = 0;
+		end
+	else
+		fprintf('Il rango è sempre minore della dim dello stato: il sistema non è osservabile per nessun x_0, è necessario cambiare la scelta delle uscite \n')	
+		OSS_aug(3) = 0;
+	end
+%%
+end %end of switch
 %    ciao = [0.2494         0         0    0.4320;...
 %        0.9700   -0.0065   -0.0113    1.6801;...
 %            -0.0003         0         0   -0.0005;...
