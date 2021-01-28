@@ -74,6 +74,54 @@ z_ball = z_t + L*cos(theta)
 y = [x_ball - x_t; y_ball - y_t; z_ball-z_t ]% x_t; y_t   % Pos Ball Relativa
 
 [r_mimo,Lf_full_mimo, T, E] = relative_degree_mimo(f,G,y,x)
+%% zero dinamica
+syms z_1 z_2 z_3 z_4
+zeta = [z_1; z_2; z_3; z_4];
+U = -inv(E)*T;
+U_1_2 = simplify(U(1:2,1));
+PHI = [x_t;x_t_dot;y_t;y_t_dot;Lf_full_mimo];
+X = [x; zeta]
+%% calcolo trasformazione inversa
+syms xi_1 xi_2 xi_3 xi_4 xi_5 xi_6
+
+XI = [xi_1; xi_2; xi_3;xi_4;xi_5; xi_6]
+% calcolo phi, theta ed L da xi_1,xi_3;xi_5 viene abbastanza semplice
+phi = atan(xi_1/xi_3)
+theta = atan(xi_3/(xi_5*cos(phi)))
+L = xi_5/cos(theta)
+
+% le dot vengono più complicate, ma prendendo i coefficienti che
+% moltiplicano le derivate, si può vedere come un sistema lineare, ora
+% prendiamo xi_2, xi_4, x_6
+% xi_2 = L_dot*sin(phi)*sin(theta) + L*phi_dot*cos(phi)*sin(theta) + L*theta_dot*cos(theta)*sin(phi)
+%	   = L_dot*alpha+phi_dot*beta+theta_dot*gamma
+% xi_4 = L_dot*cos(phi)*sin(theta) + L*theta_dot*cos(phi)*cos(theta) - L*phi_dot*sin(phi)*sin(theta)
+%	   = L_dot*a+phi_dot*b+theta_dot*c
+% xi_6 = L_dot*cos(theta) - L*theta_dot*sin(theta)
+%	   = L_dot*A+theta_dot*C
+alpha = sin(phi)*sin(theta);	% L_dot
+beta = L*cos(phi)*sin(theta);	% phi_dot
+gamma = L*cos(theta)*sin(phi);	% theta_dot
+a =	 cos(phi)*sin(theta);		% L_dot		
+b = - L*sin(phi)*sin(theta);	% phi_dot
+c = L*cos(phi)*cos(theta);		% theta_dot	
+A = cos(theta);					% L_dot
+C = -L*sin(theta);				% theta_dot
+
+M = [alpha beta gamma;...
+	a	b	c;...
+	A	0	C]
+
+B = [xi_2; xi_4; xi_6]
+X = linsolve(M,B)
+L_dot = simplify(X(1))
+phi_dot = simplify(X(2))
+theta_dot = simplify(X(3))
+U_1_2 = [-(sin(phi)*(g*sin(theta) + L*b*theta_dot))/cos(theta)...;
+		 -(cos(phi)*(g*sin(theta) + L*b*theta_dot))/cos(theta)];
+U_1_2 = simplify(U_1_2);
+%subs(U_1_2,XI,[0; 0; 0; 0; 0; 0]) error division by zero
+ 
 
 %% Zero dinamica
 

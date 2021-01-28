@@ -1,8 +1,9 @@
 % confronto pendolo
-syms x1 x2 x3 x4 real
-l = 2; % lunghezza pendolo
-m = 1;
-M = 19;
+syms x1 x2 x3 x4 g l m M real
+% l = 2; % lunghezza pendolo
+% m = 1;
+% M = 19;
+% g = 9.81;
 fprintf('il sistema del pendolo è dato da')
 f = [x3;...
 	 x4;...
@@ -13,3 +14,4 @@ g = [0;...
 	 1/(M+m*sin(x2));...
 	 -cos(x2)/(l*(M+m*sin(x2)))]
  y = x2
+jacobian(x3,[x1;x2;x3;x4])*f
