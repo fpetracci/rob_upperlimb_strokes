@@ -8,6 +8,5 @@ script_path = fileparts( mfilename('fullpath') );
 
 addpath(genpath(fullfile(script_path, 'funzioni_analisi')));
 addpath(genpath(fullfile(script_path, 'funzioni_controllo')));
-addpath(genpath(fullfile(script_path, 'funzioni_clotoidi')));
 
 clear script_path

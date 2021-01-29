@@ -115,7 +115,7 @@ u_zerodin_12 = simplify(u_zerodin(1:2,1));
 % calcolo della dinamica di zeta
 
 PHI = [Lf_full_mimo;x_t;x_t_dot;y_t;y_t_dot];
-% PHI = [zeta; xi]
+% PHI = [xi; zeta]
 % stato "completo" del sistema linearizzato
 
 
